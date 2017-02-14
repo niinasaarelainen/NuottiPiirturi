@@ -23,14 +23,10 @@ class nuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
   
    val inputTiedostosta = new TiedostonLukeminen
    inputTiedostosta.lueJaTarkistaVirheet()
-   
- //  print(inputTiedostosta.inputFromFile)
-    
-    kasitteleTunnisteetJaLuoNuottiPuskuri(inputTiedostosta.inputArray)
  
-    
+   kasitteleTunnisteetJaLuoNuottiPuskuri(inputTiedostosta.inputArray)
  
-  
+     
  def kasitteleTunnisteetJaLuoNuottiPuskuri(data: Array[String]) = {
      for (i <- 0 until data.size ){  
         if (data(i).head == '#'){     // parillisiin rivinumero Stringinä, parittomiin tunnisteen nimi
@@ -106,6 +102,7 @@ class nuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
     }  // for */
   
 } 
+  
   
   biisiLoppu = true
   var viivasto = new Viivasto(nuottiData)
