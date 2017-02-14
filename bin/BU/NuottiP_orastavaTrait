@@ -1,0 +1,281 @@
+import traitNuotti._
+
+import scala.collection.mutable.Buffer
+import scala.collection.mutable.Map
+
+
+class nuottiPiirturi(input: String, tahtilaji: Int, lyrics: String){
+  
+  def this(input: String, tahtilaji: Int) = this (input, tahtilaji, "")
+  def this(input: String) = this (input, 4, "")
+  
+ 
+ // var viivasto = Buffer[Array[Char]]()
+  var biisi = Buffer[Buffer[Array[Char]]]()
+  val viiva = "----------------------------------------------------------------------------------------------------------------------------------"    // 130
+  val vali =  "                                                                                                                                  "  
+  val nuotit = Map("lyr" -> 15, "c1" -> 14, "d1" -> 13,  "e1" -> 12,  "f1" -> 11,  "g1"-> 10,  "a1"-> 9,  "h1" -> 8, "c2" -> 7, "d2" -> 6,  "e2" -> 5,  "f2" -> 4,  "g2"-> 3,  "tila1"-> 2, "tila2" -> 1, "tila" -> 0)
+  val inputArray = input.split(" ")
+  var lyricsArray = lyrics.split(" ")                                     
+  var x = 14    // ekan nuotin x-akselilukema, nuottiavain vie tilaa
+  var biisiLoppu = false
+  var tahtiviivaLaskuri = 0.0        // laskee iskuja
+  var tahtiviivaLkm = 0             // halutaan max 4 tahtia riville
+  var onkoMinutJoPiirretty = false   // liittyy kahdeksasosapareihin
+  
+ 
+ 
+  var viivasto = muodostaViivasto
+  val gAvain = new Gavain(viivasto)
+  viivasto = gAvain.mergeViivastoJaGavain
+  for ( i<- 0 until inputArray.length){
+    if(!onkoMinutJoPiirretty){
+       var tavu = ""     
+       if(lyricsArray.isDefinedAt(i)){
+           tavu = lyricsArray(i)
+           piirraLyriikkaTavu(tavu)
+       }    
+       var solu = inputArray(i)    // esim. "g1#--"
+       var pituus = solu.count(_ == '-')       
+       var nuotinNimi = tutkiEtumerkit(solu, x)    // pitäisi olla if(onkoMinutJoPiirretty) !!!!!!!!
+     
+       if(x >= viiva.length() -10){      // nuottiviivasto alkaa olla lopuillaan
+         println(x)
+         x = 4
+         biisi += viivasto   
+         viivasto = muodostaViivasto
+       }      
+     
+       if (nuotinNimi == "z"){
+          piirraTauko
+          tahtiviivaLaskuri += 1
+          onkoMinutJoPiirretty = false
+       }   
+       if(pituus == 1){       
+          piirraNeljasOsaNuotti(nuotinNimi)
+          x += 1
+          onkoMinutJoPiirretty = false
+       } else if (pituus == 2){
+          piirraPuoliNuotti(nuotinNimi)
+          x += 2
+          onkoMinutJoPiirretty = false
+       } else if (pituus == 3){
+          piirraPisteellinenPuoliNuotti(nuotinNimi)
+          x += 3
+          onkoMinutJoPiirretty = false
+       }  else if (pituus == 4){
+          piirraKokoNuotti(nuotinNimi)
+          x += 4
+          onkoMinutJoPiirretty = false
+       } else if (pituus == 0 && !onkoMinutJoPiirretty){         // kahdeksasosa
+          if( i < inputArray.length -1 && inputArray(i+1).count(_ == '-') == 0 ){
+             piirraKahdeksasosaPari(nuotinNimi, inputArray(i+1))
+             tahtiviivaLaskuri += 1
+             onkoMinutJoPiirretty = !onkoMinutJoPiirretty
+             x += 2
+          }   
+          else {   
+            piirraKahdeksasosa(nuotinNimi)             
+            tahtiviivaLaskuri += 0.5
+          }  
+       }
+       else if (pituus == 0 && onkoMinutJoPiirretty)
+         onkoMinutJoPiirretty = !onkoMinutJoPiirretty
+       x += 4     
+       tahtiviivaLaskuri += pituus
+       if (tahtiviivaLaskuri == tahtilaji){
+          tahtiviivaLkm += 1
+           x += 6
+          piirraTahtiviiva(x)         
+          tahtiviivaLaskuri = 0
+       }  
+    } //if(onkoMinutJoPiirretty)  
+    else {
+       onkoMinutJoPiirretty = false   // seuraavaa kirerrosta varten järkevä arvo
+       x += 5
+    }
+  }   // end for solu
+  biisiLoppu = true
+  piirraTahtiviiva(x)   // biisin lopetusviiva, tekee turhaan uuden rivin !!!!
+  
+  for(i<-0 until biisi.size){
+       println("\n")
+       biisiNuoteiksi(biisi(i))
+  }
+  
+  val out = new tiedostoon(biisi)
+    
+    
+  //////////////     funktiot:     ////////////////////////////////////////////////////////////////////
+  
+  def tutkiEtumerkit(solu: String, x:Int) = {
+    var nuotinNimiTemp = ""
+    for(c<- solu){
+        if (c != '-'){
+          if(c == '#' )
+            piirraYlennysMerkki(nuotinNimiTemp, x)            
+          else if(c == 'b' )  
+            piirraAlennusMerkki(nuotinNimiTemp, x) 
+          else   nuotinNimiTemp += c.toString   
+        }   
+     }    
+     nuotinNimiTemp    
+  }
+  
+  def piirraLyriikkaTavu(tavu: String) = {
+   
+    var apuX = x
+    for(c<-tavu){
+       viivasto(13)(apuX) = c
+       apuX += 1
+    }   
+  }
+  
+  def piirraYlennysMerkki(nuotinNimi: String, x:Int) = {
+    viivasto(nuotit(nuotinNimi))(x) = '#'   
+    this.x += 1
+  }
+  
+  def piirraAlennusMerkki(nuotinNimi: String, x:Int) = {
+    viivasto(nuotit(nuotinNimi))(x) = 'b'   
+    this.x += 1
+  }
+
+  def piirraTauko = {
+    viivasto(nuotit("c2"))(x) = '\\'
+    viivasto(nuotit("c2")+1)(x) = '/'
+    viivasto(nuotit("c2")+2)(x) = '\\'
+    viivasto(nuotit("c2")+3)(x) = '/'    
+  }
+  
+  def piirraVarsi(nuotinNimi: String, x: Int, lisaPituus: Int) = {   
+     if(nuotit(nuotinNimi) < nuotit("h1")){       // varsi alas
+       viivasto(nuotit(nuotinNimi)+1)(x-1) = '|'
+       viivasto(nuotit(nuotinNimi)+2)(x-1) = '|'
+       viivasto(nuotit(nuotinNimi)+3)(x-1) = '|'
+       for(i<-1 to  lisaPituus)
+           viivasto(nuotit(nuotinNimi)+3+i)(x-1) = '|'
+    } else{
+       viivasto(nuotit(nuotinNimi)-1)(x+1) = '|'  // varsi ylös
+       viivasto(nuotit(nuotinNimi)-2)(x+1) = '|'
+       viivasto(nuotit(nuotinNimi)-3)(x+1) = '|'
+       for(i<-1 to  lisaPituus)
+           viivasto(nuotit(nuotinNimi)-3-i)(x+1) = '|'
+    }
+  }
+  
+  def piirraPalkki(ylosko: Boolean, y: Int) = {
+      if(!ylosko){
+        for(i<-1 to 6)
+           viivasto(y-4)(x+i)= '='
+      } else {
+         for(i<-1 to 6)
+           viivasto(y+4)(x-2+i)= '='
+     }   
+  }
+  
+  def piirraKahdeksasosaPari(nuotinNimi: String, toisenNuotinNimi: String) = {
+    val toisenNuotinNimiTutk = tutkiEtumerkit(toisenNuotinNimi, x+5) 
+    viivasto(nuotit(nuotinNimi))(x)='@'          // 1/8-nuottipari, varret ylös
+    viivasto(nuotit(toisenNuotinNimiTutk))(x+5)='@'     
+    if(nuotinNimi == "c1"){
+       viivasto(nuotit(nuotinNimi))(x-1) = '-'    // keski-c:lle apuviiva
+       viivasto(nuotit(nuotinNimi))(x+1) = '-'
+    }
+    if(toisenNuotinNimi == "c1"){
+       viivasto(nuotit(toisenNuotinNimi))(x+4) = '-'    // keski-c:lle apuviiva
+       viivasto(nuotit(toisenNuotinNimi))(x+6) = '-'
+    }
+    val korkeusero = nuotit(nuotinNimi) - nuotit(toisenNuotinNimiTutk)
+    println(korkeusero)
+    if(korkeusero >= 0 && nuotit(nuotinNimi) > nuotit("h1") || korkeusero < 0 && nuotit(nuotinNimi) < nuotit("h1")){   // parin eka nuotti on alempana, toinen korkeammalla
+        piirraVarsi(nuotinNimi, x, korkeusero)
+        piirraVarsi(toisenNuotinNimiTutk, x+5, 0)       
+        piirraPalkki(nuotit(nuotinNimi) < nuotit("h1"), nuotit(toisenNuotinNimiTutk))  // palkki 2. nuotin korkeudelle
+     
+    }     
+    else  {          // parin eka nuotti on korkeampi, toinen matalampi
+       piirraVarsi(nuotinNimi, x, 0)
+       piirraVarsi(toisenNuotinNimiTutk, x+5, Math.abs(korkeusero))
+       piirraPalkki(nuotit(nuotinNimi) < nuotit("h1"), nuotit(nuotinNimi))    // palkki 1. nuotin korkeudelle
+    }   
+   }
+  
+ def piirraKahdeksasosa(nuotinNimi: String) = {   
+    val kahdeksasosa = new KahdeksasosaNuotti (nuotit, nuotinNimi, viivasto, x) 
+//    kahdeksasosa.piirraVarsi(nuotit, nuotinNimi, viivasto, x, 0)
+    kahdeksasosa.piirraPallo
+ //   kahdeksasosa.piirraVaka
+ }
+  
+  def piirraNeljasOsaNuotti(nuotinNimi: String) = {                                 // 1/4
+      val neljasosa = new NeljasosaNuotti (nuotit, nuotinNimi, viivasto, x) 
+      neljasosa.piirraVarsi(nuotit, nuotinNimi, viivasto, x, 0)
+      neljasosa.piirraPallo
+    
+  }
+  
+  
+   def piirraPuoliNuotti(nuotinNimi: String) = {                  // 1/2    
+     val puoli = new PuoliNuotti 
+     puoli.piirraVarsi(nuotit, nuotinNimi, viivasto, x, 0)
+     puoli.piirraPallo(nuotit, nuotinNimi, viivasto, x) 
+     
+  }
+   
+   def piirraPisteellinenPuoliNuotti(nuotinNimi: String) = {                  // . 
+     piirraPuoliNuotti(nuotinNimi)
+     viivasto(nuotit(nuotinNimi))(x+3) = '.'      // piste eri paikassa jos apuviiva  TODO
+  }
+   
+   def piirraKokoNuotti(nuotinNimi: String) = {                         // koko     
+    val koko = new KokoNuotti
+    koko.piirraPallo(nuotit, nuotinNimi, viivasto, x)      
+  }
+   
+  
+    
+    def biisiNuoteiksi(staffi: Buffer[Array[Char]]) = {
+       for(i<-0 until nuotit.size){
+         for(c <- staffi(i)){
+            print(c)
+         }    
+        println
+       }   
+    }
+    
+    
+    
+    def piirraTahtiviiva (x:Int) = {
+       for(i<-4 to 12)   // piirtää f2:sta e1:een
+         viivasto(i)(x) = '|'
+       if(biisiLoppu){
+          for(i<-4 to 12)
+             viivasto(i)(x+1) = '|'
+       }    
+       if (x > viiva.length - 10 || tahtiviivaLkm == 4 || biisiLoppu){
+         for (i<- 1 to 5)
+           for(j<- x+2 until viiva.length)
+              viivasto(i*2 +2 )(j)= ' '
+         this.x = 0           
+         tahtiviivaLkm = 0
+         biisi += viivasto
+         viivasto = muodostaViivasto
+       }
+       this.x += 5
+    }
+  
+    
+    def muodostaViivasto = {  
+      var uusiViivasto = Buffer[Array[Char]]()
+      for ( i <- 1 to 3)
+          uusiViivasto += vali.toCharArray()          // ylös tyhjää varsia varten   
+      for(i <- 1 to 5){
+        uusiViivasto += vali.toCharArray()        // ylin paikka on g2
+        uusiViivasto += viiva.toCharArray()       // 5 viivaa
+       }
+       for ( i <- 1 to 3)
+          uusiViivasto += vali.toCharArray()         // d1, c & sanoille tila
+     uusiViivasto  
+  }
+}
