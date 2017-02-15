@@ -30,7 +30,7 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava]) {
        }
     } // for
      
-     if(tahtiaMennyt != 0.0)  // pelkkää G-avainta ei haluta mukaan kappaleeseen
+     if(tahtiaMennyt != 0.0 || riviaMennytMontakoTahtia > 0 )  // pelkkää G-avainta ei haluta mukaan kappaleeseen
         vaihdaRivi   // tulee ylimääräinen G-avain jos tahteja 4, 8, 12 etc   TODO
       
   }
