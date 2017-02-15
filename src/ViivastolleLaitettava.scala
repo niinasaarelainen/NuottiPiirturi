@@ -54,6 +54,12 @@ abstract class Nuotti extends ViivastolleLaitettava {
      def palautusmerkki = "§"
      
      def soiva = true
+     
+     def piirraApuviiva = {            // TODO
+      // if(nuotinNimi.contains("c1")){                 
+        //  viivasto.piirraApuviiva
+     //  }
+  }
   }
  
  abstract class Tauko extends ViivastolleLaitettava{

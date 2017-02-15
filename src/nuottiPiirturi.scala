@@ -60,7 +60,7 @@ class nuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
       
        var solu = inputBuffer(i)    // esim. "g1#--"
        var pituus = solu.count(_ == '-')  
-       println("solu: " + solu + ", pit:" + pituus)
+   //    println("solu: " + solu + ", pit:" + pituus)
        if (solu.head == '<'){
           sointu = solu.split(",")    // kesken
           nuottiData += new Sointu(Buffer(new PuoliNuotti("d1"), new PuoliNuotti ("f1")))
@@ -107,7 +107,7 @@ class nuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
   biisiLoppu = true
   var viivasto = new Viivasto(nuottiData)
   viivasto.piirraNuotit(nuottiData)
-  val out = new TiedostonTallennus(kappale)
+  val out = new TiedostonTallennus(viivasto.kappale)
     
     
 }

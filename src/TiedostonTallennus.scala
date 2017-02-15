@@ -10,6 +10,17 @@ class TiedostonTallennus(biisi: Kappale) {
    val kohdetiedosto = new PrintWriter("output/" + nimi+".txt")
    println("muista painaa F5, jotta tiedosto päivittyy Package Explorerissa.")
    
+   try {
+      for (viivasto <- biisi.kappale ){
+          for (i <- 0 until viivasto.size)     
+        kohdetiedosto.println(viivasto(i))
+      } 
+            
+   } finally {
+     kohdetiedosto.close()
+  }
+   
+   
 /*   
    try {
       for { 
