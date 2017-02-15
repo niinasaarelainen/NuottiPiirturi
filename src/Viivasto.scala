@@ -30,7 +30,8 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava]) {
        }
     } // for
      
-     vaihdaRivi    // tulee ylimääräinen G-avain jos tahteja 4, 8, 12 etc   TODO
+     if(tahtiaMennyt != 0.0)  // pelkkää G-avainta ei haluta mukaan kappaleeseen
+        vaihdaRivi   // tulee ylimääräinen G-avain jos tahteja 4, 8, 12 etc   TODO
       
   }
   
@@ -49,9 +50,11 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava]) {
    def vaihdaRivi = {     
      for (rivi <- this.viivasto)
               println(rivi)
-     kappale.lisaaViivasto(this.viivasto)   
-     viivasto = piirraGavain 
-     riviaMennytMontakoTahtia = 0
+     kappale.lisaaViivasto(this.viivasto)
+     if (riviaMennytMontakoTahtia == 4) {  // ollaan tultu for-luupin sisältä, eli alkioita on vielä käsiteltävänä
+       viivasto = piirraGavain 
+       this.riviaMennytMontakoTahtia = 0
+     }  
    }
     
  
