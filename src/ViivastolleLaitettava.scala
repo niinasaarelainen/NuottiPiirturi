@@ -7,6 +7,7 @@ import scala.collection.mutable.Map
   val y = Map("lyr" -> 16, "alatila" ->15, "c1" -> 14, "d1" -> 13,  "e1" -> 12,  "f1" -> 11,  "g1"-> 10,  "a1"->9,  "h1" -> 8, "c2" -> 7, "d2" -> 6,  "e2" -> 5,  "f2" -> 4,  "g2"-> 3,  "ylatila1"-> 2, "ylatila2" -> 1, "ylatila3" -> 0)
 
   def kuva: Buffer[String]   
+  def pituus : Double
   def soiva: Boolean    // tarvitaan tieto sanoja laittaessa, tauko= false
   
   def piirraTyhjaViivasto(pituus: Int) = {
@@ -39,7 +40,7 @@ import scala.collection.mutable.Map
    
      def kuva = aanet(0).kuva
      def soiva =  true
-  //   def pituus = aanet(0).pituus   // kaikkien soinnun sävelten tulee olla samanpituisia 
+     def pituus = aanet(0).pituus   // kaikkien soinnun sävelten tulee olla samanpituisia 
   }
  
  
@@ -63,7 +64,7 @@ abstract class Nuotti extends ViivastolleLaitettava {
  
  class KokoNuotti(nuotinNimi: String) extends Nuotti{    
     def korkeus = nuotinNimi
-    def pituus = 4
+    def pituus = 4.0
     
     def kuva = {
       var viivasto = piirraTyhjaViivasto(10)
@@ -75,7 +76,7 @@ abstract class Nuotti extends ViivastolleLaitettava {
 
   class PuoliNuotti(nuotinNimi: String) extends KokoNuotti(nuotinNimi: String){
     override def korkeus = nuotinNimi
-    override def pituus = 2
+    override def pituus = 2.0
     
     override def kuva = {
      piirraTyhjaViivasto(8)
@@ -98,7 +99,7 @@ abstract class Nuotti extends ViivastolleLaitettava {
   
 
    class PisteellinenPuoliNuotti(nuotinNimi: String) extends PuoliNuotti(nuotinNimi: String){
-      override def pituus = 3
+      override def pituus = 3.0
       
       override def kuva = {
         piirraTyhjaViivasto(8)

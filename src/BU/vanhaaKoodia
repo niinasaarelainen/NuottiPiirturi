@@ -1,3 +1,13 @@
+ for(j <- 0 until nuottiOliot(0).kuva.size ){ 
+           for (i <- 0 until nuottiOliot.size){                  // j= rivi    i = nuottikuva
+              print(nuottiOliot(i).kuva(j)) 
+           }  
+        println()   
+}
+
+
+        
+
 println("\n" +
   "    |\\    \n" +
   "----|/----\n" +

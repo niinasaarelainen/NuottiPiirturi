@@ -2,9 +2,10 @@ import scala.collection.mutable.Buffer
 
 class Kappale {
   
-  var kappale =  Buffer[Viivasto]()
+//  var kappale =  Buffer[Viivasto]()
+  var kappale =  Buffer[Buffer[String]]()
   
-  def lisaaViivastoRivi(v: Viivasto){
-    this.kappale += v
+  def lisaaViivasto(viivasto: Buffer[String]){
+    this.kappale += viivasto
   }
 }

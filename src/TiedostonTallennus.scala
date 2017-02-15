@@ -10,13 +10,14 @@ class TiedostonTallennus(biisi: Kappale) {
    val kohdetiedosto = new PrintWriter("output/" + nimi+".txt")
    println("muista painaa F5, jotta tiedosto päivittyy Package Explorerissa.")
    
+/*   
    try {
       for { 
         viivasto<- biisi.kappale      
-        rivi<-viivasto.viivasto
+        rivi<-viivasto.viivasto            // ei ole enää viivasto-olioita !!!
       }  kohdetiedosto.println(rivi)
    } finally {
      kohdetiedosto.close()
   }
-       
+  */     
 }
