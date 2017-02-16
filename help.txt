@@ -1,0 +1,22 @@
+Tässä esimerkki kuinka kirjoitat Ukko Nooan alkaen keski-c:stä:
+c1- c1- c1- e1- d1- d1- d1- f1- e1- e1- d1- d1- c1----
+
+Sama biisi oktaavia ylempää: 
+c2- c2- c2- e2- d2- d2- d2- f2- e2- e2- d2- d2- c2----
+
+Viivojen (----) määrä viittaa pituuteen, eli neljäsosanuotti on yhden iskun eli yhden viivan mittainen: c1-
+
+Tässä kaikki käytettävissä olevat pituudet:
+               |            |                     |          |            |\
+               |            |                     |          |            |
+() = ----     () = --      (). = --- tai --.     @@ = -     @@. = -.     @@ = (ei tarvita viivoja)
+
+
+Tauon symboli on z. Et tarvitse muita merkkejä. Perään muista laittaa pituus, esim.
+puolitauko merkitään z--
+
+
+Jos haluat kappaleeseen sanat, toimi seuraavasti: 
+1) tee nuotit (ja tauot) normaalisti, esim. c1 z d1 z e1 z 
+2) kun kaikki nuotit on laitetu, kirjoita seuraavalle riville tunniste #Sanat ja sen perään sanoja:
+   Jaak-ko kul-ta Jaak-ko kul-ta

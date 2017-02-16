@@ -25,14 +25,15 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava]) {
           tahtiaMennyt = 0.0
           lisaaTahtiviiva
        }
-       if (riviaMennytMontakoTahtia == 4 ){          
+       if (riviaMennytMontakoTahtia == 2 ){          
            vaihdaRivi
        }
     } // for
-     
-     if(tahtiaMennyt != 0.0 || riviaMennytMontakoTahtia > 0 )  // pelkkää G-avainta ei haluta mukaan kappaleeseen
-        vaihdaRivi   // tulee ylimääräinen G-avain jos tahteja 4, 8, 12 etc   TODO
-      
+    
+    if(tahtiaMennyt != 0.0 || riviaMennytMontakoTahtia > 0 ){  // pelkkää G-avainta ei haluta mukaan kappaleeseen
+        vaihdaRivi   
+        lisaaTahtiviiva
+    }    
   }
   
    def liita(liitosOlio: ViivastolleLaitettava) = {
@@ -43,45 +44,43 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava]) {
   
    def lisaaTahtiviiva = {
        for(i<-nuotitYAkselilla("ylatila3") to nuotitYAkselilla("g2"))   
-         viivasto(i) += "x"   // tänne tyhjää, jotta mahdollisesti tänne tuleva nuotti asemoituu oikein    
+         viivasto(i) += " "   // tänne tyhjää, jotta mahdollisesti tänne tuleva nuotti/varsi asemoituu oikein    
        for(i<-nuotitYAkselilla("f2") to nuotitYAkselilla("e1"))   // tahtiviiva menee ylimmästä viivasta alimpaan
          viivasto(i) += "|"  
        for(i<-nuotitYAkselilla("d1") to nuotitYAkselilla("lyr"))  
-         viivasto(i) += "x"   // tänne tyhjää, jotta mahdollisesti tänne tuleva nuotti/lyriikka asemoituu oikein      
+         viivasto(i) += " "   // tänne tyhjää, jotta mahdollisesti tänne tuleva nuotti/lyriikka asemoituu oikein      
     }
    
    
    def vaihdaRivi = {     
      for (rivi <- this.viivasto)
-              println(rivi)
-     kappale.lisaaViivasto(this.viivasto)
-     if (riviaMennytMontakoTahtia == 4) {  // ollaan tultu for-luupin sisältä, eli alkioita on vielä käsiteltävänä
-       viivasto = piirraGavain 
-       this.riviaMennytMontakoTahtia = 0
-     }  
+         println(rivi)
+     kappale.lisaaViivasto(this.viivasto)    
+     viivasto = piirraGavain 
+     this.riviaMennytMontakoTahtia = 0
    }
     
  
   def piirraGavain= {
     var g = Buffer[String]()                  
 
-  g +="            "
-  g +="            "
-  g +="            "
-  g +="    |\\     " 
-  g +="----|/-----" 
-  g +="    /      " 
-  g +="---/|------" 
-  g +="  / |      " 
-  g +="-|--|__----" 
-  g +=" | /|  \\   " 
-  g +="-\\-\\|---|--" 
-  g +="  \\_|__/   " 
-  g +="----|------" 
-  g +="  \\_/      " 
-  g += "           "
-  g += "           "
-  g += "           "
+  g +="          "
+  g +="          "
+  g +="          "
+  g +="    |\\    " 
+  g +="----|/----" 
+  g +="    /     " 
+  g +="---/|-----" 
+  g +="  / |     " 
+  g +="-|--|__---" 
+  g +=" | /|  \\  " 
+  g +="-\\-\\|---|-" 
+  g +="  \\_|__/  " 
+  g +="----|-----" 
+  g +="  \\_/     " 
+  g += "          "
+  g += "          "
+  g += "          "
  g
 }
  

@@ -58,14 +58,14 @@ class nuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
   for ( i<- 0 until inputBuffer.length){
       var tavu = ""     
       
-       var solu = inputBuffer(i)    // esim. "g1#--"
+       var solu = inputBuffer(i)    // esim. "g#1--"
        var pituus = solu.count(_ == '-')  
    //    println("solu: " + solu + ", pit:" + pituus)
        if (solu.head == '<'){
           sointu = solu.split(",")    // kesken
           nuottiData += new Sointu(Buffer(new PuoliNuotti("d1"), new PuoliNuotti ("f1")))
        }      
-       else nuotinNimi = solu.substring(0, 2)            //tutkiEtumerkit(solu, x)    
+       else nuotinNimi = solu.filter(_ != '-')           //tutkiEtumerkit(solu, x)    
        
        if (nuotinNimi == "z"){
    //      kasitteleTauot       // TODO

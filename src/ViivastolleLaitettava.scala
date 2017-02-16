@@ -45,12 +45,16 @@ import scala.collection.mutable.Map
 //}
 
 abstract class Nuotti extends ViivastolleLaitettava {
-     def nuppi = "()"
-     def ylennysmerkki = "#"
-     def alennusmerkki = "b"
-     def palautusmerkki = "§"
-     
+     def nuppi = "()"   
      def soiva = true
+     
+     def etumerkki(nuotinNimi: String): String = {  // ei mitään, #, b tai §     
+       if (nuotinNimi.contains('#'))
+         return "#"
+       else if (nuotinNimi.contains('b'))
+         return "b"
+       ""  
+     }
      
      def piirraApuviiva = {            // TODO
       // if(nuotinNimi.contains("c1")){                 
@@ -68,11 +72,15 @@ abstract class Nuotti extends ViivastolleLaitettava {
  class KokoNuotti(nuotinNimi: String) extends Nuotti{    
     def korkeus = nuotinNimi
     def pituus = 4.0
-    def kuvanLeveys = 22
-    
+    def kuvanLeveys = 20
+    def nimiMapissa = nuotinNimi.filter(_ !='#').filter(_ != 'b').filter(_ != '§')  // esim. gb1 --> g1
+  
     def kuva = {
       var viivasto = piirraTyhjaViivasto(kuvanLeveys)
-      viivasto(y(nuotinNimi)) = viivasto(y(nuotinNimi)).substring(0, 2) + nuppi + viivasto(y(nuotinNimi)).substring(4, kuvanLeveys)  
+      if(etumerkki(nuotinNimi).size == 0)  // ei etumerkkiä
+         viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 3) + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
+      else
+         viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 2) + etumerkki(nuotinNimi) + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
       viivasto
     }
  }   
@@ -81,23 +89,26 @@ abstract class Nuotti extends ViivastolleLaitettava {
   class PuoliNuotti(nuotinNimi: String) extends KokoNuotti(nuotinNimi: String){
     override def korkeus = nuotinNimi
     override def pituus = 2.0
-    override def kuvanLeveys = 14
+    override def kuvanLeveys = 12
     
     override def kuva = {
-      var viivasto = piirraTyhjaViivasto(kuvanLeveys)
-      viivasto(y(nuotinNimi)) = viivasto(y(nuotinNimi)).substring(0, 2) + nuppi + viivasto(y(nuotinNimi)).substring(4, kuvanLeveys)  
+    var viivasto = piirraTyhjaViivasto(kuvanLeveys)
+      if(etumerkki(nuotinNimi).size == 0)  // ei etumerkkiä
+         viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 3) + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
+      else
+         viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 2) + etumerkki(nuotinNimi) + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
       piirraVarsi
       viivasto
     }
     
     def piirraVarsi = {
-     if(y(nuotinNimi) >= y("h1")){  // varsi ylös  
+     if(y(nimiMapissa) >= y("h1")){  // varsi ylös  
       for (i <- 1 to 3)
-         viivasto(y(nuotinNimi)-i) = viivasto(y(nuotinNimi)-i).substring(0, 3) + "|" + viivasto(y(nuotinNimi)-i).substring(4, kuvanLeveys)  
+         viivasto(y(nimiMapissa)-i) = viivasto(y(nimiMapissa)-i).substring(0, 4) + "|" + viivasto(y(nimiMapissa)-i).substring(5, kuvanLeveys)  
      }  
      else {  // varsi alas 
        for (i <- 1 to 3)
-       viivasto(y(nuotinNimi)+i) = viivasto(y(nuotinNimi)+i).substring(0, 2) + "|" + viivasto(y(nuotinNimi)+i).substring(3, kuvanLeveys)  
+       viivasto(y(nimiMapissa)+i) = viivasto(y(nimiMapissa)+i).substring(0, 3) + "|" + viivasto(y(nimiMapissa)+i).substring(4, kuvanLeveys)  
      }
    }  
  }
@@ -105,7 +116,7 @@ abstract class Nuotti extends ViivastolleLaitettava {
 
    class PisteellinenPuoliNuotti(nuotinNimi: String) extends PuoliNuotti(nuotinNimi: String){
       override def pituus = 3.0
-      override def kuvanLeveys = 18
+      override def kuvanLeveys = 16
       
       override def kuva = {
         var viivasto = piirraTyhjaViivasto(kuvanLeveys)
@@ -135,24 +146,26 @@ abstract class Nuotti extends ViivastolleLaitettava {
    class KahdeksasosaNuotti(nuotinNimi: String) extends NeljasosaNuotti(nuotinNimi: String){
     override def korkeus = nuotinNimi
     override def pituus = 0.5
-    override def kuvanLeveys = 4
+    override def kuvanLeveys = 5
     
     override def kuva = {
       var viivasto = piirraTyhjaViivasto(kuvanLeveys)
       viivasto(y(nuotinNimi)) = viivasto(y(nuotinNimi)).substring(0, 2) + nuppi + viivasto(y(nuotinNimi)).substring(4, kuvanLeveys)  
+      piirraVarsi
       viivasto
     }
     
     override def piirraVarsi = {
      if(y(nuotinNimi) >= y("h1")){  // varsi ylös  
-      for (i <- 1 to 3)
-         viivasto(y(nuotinNimi)-i) = viivasto(y(nuotinNimi)-i).substring(0, 3) + "|" + viivasto(y(nuotinNimi)-i).substring(4, kuvanLeveys)  
-      viivasto(y(nuotinNimi)-3) = viivasto(y(nuotinNimi)-3).substring(0, 3) + "\\" + viivasto(y(nuotinNimi)-3).substring(4, kuvanLeveys)  
+        for (i <- 1 to 3)
+           viivasto(y(nuotinNimi)-i) = viivasto(y(nuotinNimi)-i).substring(0, 3) + "|" + viivasto(y(nuotinNimi)-i).substring(4, kuvanLeveys)  
+        viivasto(y(nuotinNimi)-3) = viivasto(y(nuotinNimi)-3).substring(0, 4) + "\\" + viivasto(y(nuotinNimi)-3).substring(5, kuvanLeveys)  
      } else {  // varsi alas 
        for (i <- 1 to 3)
-       viivasto(y(nuotinNimi)+i) = viivasto(y(nuotinNimi)+i).substring(0, 2) + "|" + viivasto(y(nuotinNimi)+i).substring(3, kuvanLeveys)  
-     }
-   }  
+           viivasto(y(nuotinNimi)+i) = viivasto(y(nuotinNimi)+i).substring(0, 2) + "|" + viivasto(y(nuotinNimi)+i).substring(3, kuvanLeveys)  
+       viivasto(y(nuotinNimi)+3) = viivasto(y(nuotinNimi)+3).substring(0, 3) + "/" + viivasto(y(nuotinNimi)+3).substring(4, kuvanLeveys)  
+       }
+     }  
   }   
   
    /*

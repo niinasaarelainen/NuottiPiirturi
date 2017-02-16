@@ -10,6 +10,8 @@ class TiedostonLukeminen  {
     
   val nykyinenHakemisto = new File("./input")
   val listaus = nykyinenHakemisto.listFiles()
+  
+  helppiTeksti
 
   for ( tiedosto <- listaus ) {
     if ( tiedosto.isFile ) {
@@ -45,8 +47,7 @@ class TiedostonLukeminen  {
        } else {
          val nimi = readLine("\nvirhe xxx. Korjaa tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")
        }
-       
-      
+            
    
      }
       
@@ -58,7 +59,19 @@ class TiedostonLukeminen  {
         println (inputArray(i))
  
         
-        
+  }
+  
+  def helppiTeksti = {
+     val helpFile = Source.fromFile("help.txt")
+  //   var helpBuffer = Buffer[String]()
+   
+    try {   
+      for (rivi <- helpFile.getLines) {
+         println(rivi)
+      }
+    } finally {
+      helpFile.close()
+    }
   }
   
   def oikeellisuusTesti(nuottiJaPituus: String) : Boolean = {
