@@ -72,7 +72,7 @@ class nuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
        }   
        
        else if(pituus == 1){       
-   //       nuottiData += new NeljasosaNuotti(nuotinNimi) 
+          nuottiData += new NeljasosaNuotti(nuotinNimi) 
        
        } else if (pituus == 2){
          nuottiData += new PuoliNuotti (nuotinNimi)  
@@ -85,13 +85,13 @@ class nuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
           nuottiData += new KokoNuotti(nuotinNimi)  
          
        } else if (pituus == 0 ){         // kahdeksasosa
-          if( i < inputArray.length -1 && inputArray(i+1).count(_ == '-') == 0 ){
+    //      if( i < inputArray.length -1 && inputArray(i+1).count(_ == '-') == 0 ){
           //   piirraKahdeksasosaPari(nuotinNimi, inputArray(i+1))
-          }   
-          else {   
-  //        nuottiData +=  new KahdeksasosaNuotti (nuotinNimi)   
+      //    }   
+        //  else {   
+         nuottiData +=  new KahdeksasosaNuotti (nuotinNimi)   
             
-          }  
+        //  }  
        }
        else if (pituus == 0){
        }  

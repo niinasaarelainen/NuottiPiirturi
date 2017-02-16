@@ -3,35 +3,31 @@ import scala.collection.mutable.Map
 
  trait ViivastolleLaitettava {  
   
-  var viivasto = Buffer[String]()   
-  val y = Map("lyr" -> 16, "alatila" ->15, "c1" -> 14, "d1" -> 13,  "e1" -> 12,  "f1" -> 11,  "g1"-> 10,  "a1"->9,  "h1" -> 8, "c2" -> 7, "d2" -> 6,  "e2" -> 5,  "f2" -> 4,  "g2"-> 3,  "ylatila1"-> 2, "ylatila2" -> 1, "ylatila3" -> 0)
+   var viivasto = Buffer[String]()   
+   val y = Map("lyr" -> 16, "alatila" ->15, "c1" -> 14, "d1" -> 13,  "e1" -> 12,  "f1" -> 11,  "g1"-> 10,  "a1"->9,  "h1" -> 8, "c2" -> 7, "d2" -> 6,  "e2" -> 5,  "f2" -> 4,  "g2"-> 3,  "ylatila1"-> 2, "ylatila2" -> 1, "ylatila3" -> 0)
 
-  def kuva: Buffer[String]   
-  def pituus : Double
-  def soiva: Boolean    // tarvitaan tieto sanoja laittaessa, tauko= false
+   def kuva: Buffer[String]   
+   def kuvanLeveys: Int   // tätä tarvitaan myöhemmin, kun laitetaan lyriikat paikoilleen
+   def pituus : Double
+   def soiva: Boolean    // tarvitaan tieto sanoja laittaessa, tauko= false
   
-  def piirraTyhjaViivasto(pituus: Int) = {
+  
+   def piirraTyhjaViivasto(pituus: Int) = {
     
-    var viiva = ""
-    for ( i <- 1 to pituus) viiva += "-"  // muodostetaan oikean mittainen viiva
-    var vali = ""
-    for ( i <- 1 to pituus) vali += " "   // muodostetaan oikean mittainen väli
+      var viiva = ""
+      for ( i <- 1 to pituus) viiva += "-"  // muodostetaan oikean mittainen viiva
+      var vali = ""
+      for ( i <- 1 to pituus) vali += " "   // muodostetaan oikean mittainen väli
     
-    
-    for ( i <- 1 to 3)
-        viivasto += vali      // ylös tyhjää varsia varten   
-    for(i <- 1 to 5){
+      for ( i <- 1 to 3) viivasto += vali      // ylös tyhjää varsia varten   
+      for(i <- 1 to 5){
         viivasto += vali      // ylin paikka on g2 = Map index 3
         viivasto += viiva      // 5 viivaa
-    }
-    for ( i <- 1 to 4)
-        viivasto += vali       // d1, c1, alavali & sanoille tila
+      } 
+      for ( i <- 1 to 4) viivasto += vali       // d1, c1, alavali & sanoille tila
         
     viivasto      
   }
- // def pituus : Int  
- // def korkeus: String
-  // def aanet: Buffer[Nuotti]   ??  huono design
 }
   
  class Sointu(aanet: Buffer[Nuotti]) extends ViivastolleLaitettava{
@@ -41,6 +37,7 @@ import scala.collection.mutable.Map
      def kuva = aanet(0).kuva
      def soiva =  true
      def pituus = aanet(0).pituus   // kaikkien soinnun sävelten tulee olla samanpituisia 
+     def kuvanLeveys =  aanet(0).kuvanLeveys
   }
  
  
@@ -71,10 +68,11 @@ abstract class Nuotti extends ViivastolleLaitettava {
  class KokoNuotti(nuotinNimi: String) extends Nuotti{    
     def korkeus = nuotinNimi
     def pituus = 4.0
+    def kuvanLeveys = 22
     
     def kuva = {
-      var viivasto = piirraTyhjaViivasto(10)
-      viivasto(y(nuotinNimi)) = viivasto(y(nuotinNimi)).substring(10-2) + nuppi + viivasto(y(nuotinNimi)).substring(4)  
+      var viivasto = piirraTyhjaViivasto(kuvanLeveys)
+      viivasto(y(nuotinNimi)) = viivasto(y(nuotinNimi)).substring(0, 2) + nuppi + viivasto(y(nuotinNimi)).substring(4, kuvanLeveys)  
       viivasto
     }
  }   
@@ -83,22 +81,23 @@ abstract class Nuotti extends ViivastolleLaitettava {
   class PuoliNuotti(nuotinNimi: String) extends KokoNuotti(nuotinNimi: String){
     override def korkeus = nuotinNimi
     override def pituus = 2.0
+    override def kuvanLeveys = 14
     
     override def kuva = {
-     piirraTyhjaViivasto(8)
-     viivasto(y(nuotinNimi)) = viivasto(y(nuotinNimi)).substring(8-2) + nuppi + viivasto(y(nuotinNimi)).substring(4) 
-     piirraVarsi
-     viivasto
-    }   
+      var viivasto = piirraTyhjaViivasto(kuvanLeveys)
+      viivasto(y(nuotinNimi)) = viivasto(y(nuotinNimi)).substring(0, 2) + nuppi + viivasto(y(nuotinNimi)).substring(4, kuvanLeveys)  
+      piirraVarsi
+      viivasto
+    }
     
     def piirraVarsi = {
      if(y(nuotinNimi) >= y("h1")){  // varsi ylös  
       for (i <- 1 to 3)
-         viivasto(y(nuotinNimi)-i) = viivasto(y(nuotinNimi)-i).substring(8-3) + "|" + viivasto(y(nuotinNimi)-i).substring(4)  
+         viivasto(y(nuotinNimi)-i) = viivasto(y(nuotinNimi)-i).substring(0, 3) + "|" + viivasto(y(nuotinNimi)-i).substring(4, kuvanLeveys)  
      }  
      else {  // varsi alas 
        for (i <- 1 to 3)
-       viivasto(y(nuotinNimi)+i) = viivasto(y(nuotinNimi)+i).substring(8-2) + "|" + viivasto(y(nuotinNimi)+i).substring(3)  
+       viivasto(y(nuotinNimi)+i) = viivasto(y(nuotinNimi)+i).substring(0, 2) + "|" + viivasto(y(nuotinNimi)+i).substring(3, kuvanLeveys)  
      }
    }  
  }
@@ -106,31 +105,57 @@ abstract class Nuotti extends ViivastolleLaitettava {
 
    class PisteellinenPuoliNuotti(nuotinNimi: String) extends PuoliNuotti(nuotinNimi: String){
       override def pituus = 3.0
+      override def kuvanLeveys = 18
       
       override def kuva = {
-        piirraTyhjaViivasto(8)
-        viivasto(y(nuotinNimi)) = viivasto(y(nuotinNimi)).substring(8-2) + nuppi +"." + viivasto(y(nuotinNimi)).substring(5) 
+        var viivasto = piirraTyhjaViivasto(kuvanLeveys)
+        viivasto(y(nuotinNimi)) = viivasto(y(nuotinNimi)).substring(0, 2) + nuppi + "."+ viivasto(y(nuotinNimi)).substring(5, kuvanLeveys)  
         piirraVarsi
         viivasto
-      }  
+    }
       
    }
    
-    /*
-  class NeljasosaNuotti(nuotinNimi: String)  extends PuoliNuotti(nuotit: Map[String, Int], nuotinNimi: String, viivasto: Buffer[Array[Char]], x: Int){ 
-       viivasto(nuotit(nuotinNimi))(x) = '@'     // piirtyvät perittyjen () päälle
-       viivasto(nuotit(nuotinNimi))(x+1) = '@' 
-       
-  }
+    
+  class NeljasosaNuotti(nuotinNimi: String) extends PuoliNuotti(nuotinNimi: String){
+    override def korkeus = nuotinNimi
+    override def pituus = 1.0
+    override def kuvanLeveys = 7
+    override def nuppi = "@@"
+    
+    override def kuva = {
+      var viivasto = piirraTyhjaViivasto(kuvanLeveys)
+      viivasto(y(nuotinNimi)) = viivasto(y(nuotinNimi)).substring(0, 2) + nuppi + viivasto(y(nuotinNimi)).substring(4, kuvanLeveys)  
+      piirraVarsi
+      viivasto
+    }
+  }   
   
-   class KahdeksasosaNuotti(nuotinNimi: String)  extends NeljasosaNuotti(nuotit: Map[String, Int], nuotinNimi: String, viivasto: Buffer[Array[Char]], x: Int){
-       if(nuotit(nuotinNimi) < nuotit("h1"))      
-          viivasto(nuotit(nuotinNimi)+3)(x) = '/'    // väkä 
-       else   
-          viivasto(nuotit(nuotinNimi)-3)(x+2) = '\\'
-       
-  }
+    
+   class KahdeksasosaNuotti(nuotinNimi: String) extends NeljasosaNuotti(nuotinNimi: String){
+    override def korkeus = nuotinNimi
+    override def pituus = 0.5
+    override def kuvanLeveys = 4
+    
+    override def kuva = {
+      var viivasto = piirraTyhjaViivasto(kuvanLeveys)
+      viivasto(y(nuotinNimi)) = viivasto(y(nuotinNimi)).substring(0, 2) + nuppi + viivasto(y(nuotinNimi)).substring(4, kuvanLeveys)  
+      viivasto
+    }
+    
+    override def piirraVarsi = {
+     if(y(nuotinNimi) >= y("h1")){  // varsi ylös  
+      for (i <- 1 to 3)
+         viivasto(y(nuotinNimi)-i) = viivasto(y(nuotinNimi)-i).substring(0, 3) + "|" + viivasto(y(nuotinNimi)-i).substring(4, kuvanLeveys)  
+      viivasto(y(nuotinNimi)-3) = viivasto(y(nuotinNimi)-3).substring(0, 3) + "\\" + viivasto(y(nuotinNimi)-3).substring(4, kuvanLeveys)  
+     } else {  // varsi alas 
+       for (i <- 1 to 3)
+       viivasto(y(nuotinNimi)+i) = viivasto(y(nuotinNimi)+i).substring(0, 2) + "|" + viivasto(y(nuotinNimi)+i).substring(3, kuvanLeveys)  
+     }
+   }  
+  }   
   
+   /*
   def piirraKahdeksasosaPari(nuotinNimi: String, toisenNuotinNimi: String) = {
     val toisenNuotinNimiTutk = tutkiEtumerkit(toisenNuotinNimi, x+5) 
     viivasto(nuotitYAkselilla(nuotinNimi))(x)='@'          // 1/8-nuottipari, varret ylös

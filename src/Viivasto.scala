@@ -42,8 +42,12 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava]) {
   
   
    def lisaaTahtiviiva = {
-       for(i<-nuotitYAkselilla("f2") to nuotitYAkselilla("e1"))   // ylimmästä viivasta alimpaan
-         viivasto(i) += "|"      
+       for(i<-nuotitYAkselilla("ylatila3") to nuotitYAkselilla("g2"))   
+         viivasto(i) += "x"   // tänne tyhjää, jotta mahdollisesti tänne tuleva nuotti asemoituu oikein    
+       for(i<-nuotitYAkselilla("f2") to nuotitYAkselilla("e1"))   // tahtiviiva menee ylimmästä viivasta alimpaan
+         viivasto(i) += "|"  
+       for(i<-nuotitYAkselilla("d1") to nuotitYAkselilla("lyr"))  
+         viivasto(i) += "x"   // tänne tyhjää, jotta mahdollisesti tänne tuleva nuotti/lyriikka asemoituu oikein      
     }
    
    
@@ -61,23 +65,23 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava]) {
   def piirraGavain= {
     var g = Buffer[String]()                  
 
-  g +="           "
-  g +="           "
-  g +="           "
-  g +="    |\\    " 
-  g +="----|/----" 
-  g +="    /     " 
-  g +="---/|-----" 
-  g +="  / |     " 
-  g +="-|--|__---" 
-  g +=" | /|  \\  " 
-  g +="-\\-\\|---|-" 
-  g +="  \\_|__/  " 
-  g +="----|-----" 
-  g +="  \\_/     " 
-  g += "          "
-  g += "          "
-  g += "          "
+  g +="            "
+  g +="            "
+  g +="            "
+  g +="    |\\     " 
+  g +="----|/-----" 
+  g +="    /      " 
+  g +="---/|------" 
+  g +="  / |      " 
+  g +="-|--|__----" 
+  g +=" | /|  \\   " 
+  g +="-\\-\\|---|--" 
+  g +="  \\_|__/   " 
+  g +="----|------" 
+  g +="  \\_/      " 
+  g += "           "
+  g += "           "
+  g += "           "
  g
 }
  
