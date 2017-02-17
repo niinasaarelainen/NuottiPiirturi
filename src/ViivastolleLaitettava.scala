@@ -48,13 +48,7 @@ abstract class Nuotti extends ViivastolleLaitettava {
      def nuppi = "()"   
      def soiva = true
      
-     def etumerkki(nuotinNimi: String): String = {  // ei mitään, #, b tai §     
-       if (nuotinNimi.contains('#'))
-         return "#"
-       else if (nuotinNimi.contains('b'))
-         return "b"
-       ""  
-     }
+     
      
      def piirraApuviiva = {            // TODO
       // if(nuotinNimi.contains("c1")){                 
@@ -74,13 +68,14 @@ abstract class Nuotti extends ViivastolleLaitettava {
     def pituus = 4.0
     def kuvanLeveys = 20
     def nimiMapissa = nuotinNimi.filter(_ !='#').filter(_ != 'b').filter(_ != '§')  // esim. gb1 --> g1
+    def etumerkki: String = if (nuotinNimi.filter(_ !='-').size == 3) return nuotinNimi(1).toString else ""
   
     def kuva = {
       var viivasto = piirraTyhjaViivasto(kuvanLeveys)
-      if(etumerkki(nuotinNimi).size == 0)  // ei etumerkkiä
+      if(etumerkki.size == 0)  // ei etumerkkiä
          viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 3) + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
       else
-         viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 2) + etumerkki(nuotinNimi) + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
+         viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 2) + etumerkki + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
       viivasto
     }
  }   
@@ -92,11 +87,7 @@ abstract class Nuotti extends ViivastolleLaitettava {
     override def kuvanLeveys = 12
     
     override def kuva = {
-    var viivasto = piirraTyhjaViivasto(kuvanLeveys)
-      if(etumerkki(nuotinNimi).size == 0)  // ei etumerkkiä
-         viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 3) + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
-      else
-         viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 2) + etumerkki(nuotinNimi) + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
+      super.kuva
       piirraVarsi
       viivasto
     }
@@ -119,11 +110,10 @@ abstract class Nuotti extends ViivastolleLaitettava {
       override def kuvanLeveys = 16
       
       override def kuva = {
-        var viivasto = piirraTyhjaViivasto(kuvanLeveys)
-        viivasto(y(nuotinNimi)) = viivasto(y(nuotinNimi)).substring(0, 2) + nuppi + "."+ viivasto(y(nuotinNimi)).substring(5, kuvanLeveys)  
-        piirraVarsi
+        super.kuva
+        viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 5) + "." + viivasto(y(nimiMapissa)).substring(6, kuvanLeveys)  
         viivasto
-    }
+      }
       
    }
    
@@ -131,13 +121,11 @@ abstract class Nuotti extends ViivastolleLaitettava {
   class NeljasosaNuotti(nuotinNimi: String) extends PuoliNuotti(nuotinNimi: String){
     override def korkeus = nuotinNimi
     override def pituus = 1.0
-    override def kuvanLeveys = 7
+    override def kuvanLeveys = 8
     override def nuppi = "@@"
     
-    override def kuva = {
-      var viivasto = piirraTyhjaViivasto(kuvanLeveys)
-      viivasto(y(nuotinNimi)) = viivasto(y(nuotinNimi)).substring(0, 2) + nuppi + viivasto(y(nuotinNimi)).substring(4, kuvanLeveys)  
-      piirraVarsi
+     override def kuva = {
+      super.kuva
       viivasto
     }
   }   
@@ -146,24 +134,23 @@ abstract class Nuotti extends ViivastolleLaitettava {
    class KahdeksasosaNuotti(nuotinNimi: String) extends NeljasosaNuotti(nuotinNimi: String){
     override def korkeus = nuotinNimi
     override def pituus = 0.5
-    override def kuvanLeveys = 5
+    override def kuvanLeveys = 6
     
-    override def kuva = {
-      var viivasto = piirraTyhjaViivasto(kuvanLeveys)
-      viivasto(y(nuotinNimi)) = viivasto(y(nuotinNimi)).substring(0, 2) + nuppi + viivasto(y(nuotinNimi)).substring(4, kuvanLeveys)  
+  override def kuva = {
+      super.kuva
       piirraVarsi
       viivasto
     }
     
     override def piirraVarsi = {
-     if(y(nuotinNimi) >= y("h1")){  // varsi ylös  
+     if(y(nimiMapissa) >= y("h1")){  // varsi ylös  
         for (i <- 1 to 3)
-           viivasto(y(nuotinNimi)-i) = viivasto(y(nuotinNimi)-i).substring(0, 3) + "|" + viivasto(y(nuotinNimi)-i).substring(4, kuvanLeveys)  
-        viivasto(y(nuotinNimi)-3) = viivasto(y(nuotinNimi)-3).substring(0, 4) + "\\" + viivasto(y(nuotinNimi)-3).substring(5, kuvanLeveys)  
+           viivasto(y(nimiMapissa)-i) = viivasto(y(nimiMapissa)-i).substring(0, 4) + "|" + viivasto(y(nimiMapissa)-i).substring(5, kuvanLeveys)  
+        viivasto(y(nimiMapissa)-3) = viivasto(y(nimiMapissa)-3).substring(0, 5) + "\\" + viivasto(y(nimiMapissa)-3).substring(6, kuvanLeveys)  
      } else {  // varsi alas 
        for (i <- 1 to 3)
-           viivasto(y(nuotinNimi)+i) = viivasto(y(nuotinNimi)+i).substring(0, 2) + "|" + viivasto(y(nuotinNimi)+i).substring(3, kuvanLeveys)  
-       viivasto(y(nuotinNimi)+3) = viivasto(y(nuotinNimi)+3).substring(0, 3) + "/" + viivasto(y(nuotinNimi)+3).substring(4, kuvanLeveys)  
+           viivasto(y(nimiMapissa)+i) = viivasto(y(nimiMapissa)+i).substring(0, 3) + "|" + viivasto(y(nimiMapissa)+i).substring(4, kuvanLeveys)  
+       viivasto(y(nimiMapissa)+3) = viivasto(y(nimiMapissa)+3).substring(0, 4) + "/" + viivasto(y(nimiMapissa)+3).substring(5, kuvanLeveys)  
        }
      }  
   }   
