@@ -34,7 +34,27 @@ import scala.collection.mutable.Map
      def nuotit = aanet   // korkeuden joutuu laskemaan jokaiselle nuotille erikseen
      
    
-     def kuva = aanet(0).kuva
+     println("aanet.size" + aanet.size)
+     println("aanet(0).kuva.size" + aanet(0).kuva.size)
+     println("aanet(0).kuva(0).size" + aanet(0).kuva(0).size)
+     
+     
+     def kuva = {
+    //   aanet(0).asInstanceOf[Nuotti].korkeus
+      var viivasto = piirraTyhjaViivasto(kuvanLeveys)
+      println("viivasto.size" + viivasto.size)
+       for(a <- 0 until aanet.size){             // äänet
+         for(r <- 0 until 17){   // rivit              // (aanet(a).kuva.size-2)
+           for(i <- 0 until aanet(a).kuva(r).size){  // rivin merkit
+              if (aanet(a).kuva(r).toCharArray().charAt(i) != '-' && aanet(a).kuva(r).toCharArray().charAt(i) != ' '){
+                println("true")              // ("a: " + a + "r: " + r + "i " + i)
+                viivasto(r).toCharArray()(i) =  aanet(a).kuva(r).toCharArray().charAt(i)  
+              }  
+           }     
+         } 
+       }
+     viivasto         //  aanet(0).kuva      
+     }
      def soiva =  true
      def pituus = aanet(0).pituus   // kaikkien soinnun sävelten tulee olla samanpituisia 
      def kuvanLeveys =  aanet(0).kuvanLeveys
@@ -47,7 +67,7 @@ import scala.collection.mutable.Map
 abstract class Nuotti extends ViivastolleLaitettava {
      def nuppi = "()"   
      def soiva = true
-     
+     def korkeus: String
      
      
      def piirraApuviiva = {            // TODO
