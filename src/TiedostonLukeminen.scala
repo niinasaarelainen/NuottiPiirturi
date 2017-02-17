@@ -33,20 +33,19 @@ class TiedostonLukeminen  {
       tiedosto.close()
     }
   
- 
     // splittaus & virheiden tarkistus:  
    
     
    for (i <- 0 until inputFromFile.size) { 
-     var  splitattuRivi = inputFromFile(i).split(" ")     // mieti tunnisteiden ja sointujen caset myöhemmin
-     for (alkio <-   splitattuRivi){
-       println("rivillä " + i + alkio)
-     
-       if(oikeellisuusTesti(alkio)){
-         inputArray = inputArray :+ alkio
-       } else {
-         val nimi = readLine("\nvirhe xxx. Korjaa tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")
-       }
+      var  splitattuRivi = inputFromFile(i).split(" ")     // mieti tunnisteiden ja sointujen caset myöhemmin
+      for (alkio <-   splitattuRivi){
+         println("rivillä " + i + alkio)
+         if(alkio == "" ) {}                            // ylimääräisiä välilyöntejä ei inputArray:hin
+         else if(oikeellisuusTesti(alkio)){
+           inputArray = inputArray :+ alkio
+         } else {
+           val nimi = readLine("\nvirhe xxx. Korjaa tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")
+         }
             
    
      }

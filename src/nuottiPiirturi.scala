@@ -49,24 +49,40 @@ class nuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
 //           tavu = lyricsArray(i)
 //       }           
              
-      kasitteleNuottiTieto(inputBuffer)       
+      kasitteleNuottiTieto(inputBuffer, false)       // oletusarvoisesti ei käsitellä sointua
   }
   
   
-  def kasitteleNuottiTieto(inputBuffer: Buffer[String]) = {   ////////////////////////////////////////////////////////////     
-      
+  def kasitteleNuottiTieto(inputBuffer: Buffer[String], tehdaankoSointua: Boolean): Buffer[ViivastolleLaitettava] = {        
+ 
+  var palautetaan = Buffer[ViivastolleLaitettava]() 
+  var dataTalteen = Buffer[ViivastolleLaitettava]() 
+ 
   for ( i<- 0 until inputBuffer.length){
-      var tavu = ""     
-      
+      if (tehdaankoSointua){
+         println("tehdaankoSointua iffissä: " + tehdaankoSointua)
+         palautetaan = Buffer[ViivastolleLaitettava]() 
+         dataTalteen =  nuottiData
+         nuottiData = palautetaan
+      } else nuottiData = dataTalteen
        var solu = inputBuffer(i)    // esim. "g#1--"
        var pituus = solu.count(_ == '-')  
    //    println("solu: " + solu + ", pit:" + pituus)
        if (solu.head == '<'){
-          sointu = solu.split(",")    // kesken
-          nuottiData += new Sointu(Buffer(new PuoliNuotti("d1"), new PuoliNuotti ("f1")))
+          println("tehdaankoSointua < alussa: " + tehdaankoSointua)
+          sointu =  solu.tail.substring(0, solu.size -2).split(",")    // kesken
+          var sointuBuffer = Buffer[String]()
+          for(aani <- sointu) 
+             sointuBuffer += aani
+          nuottiData += new Sointu(kasitteleNuottiTieto(sointuBuffer, true) ) 
+          
+    //      nuottiData += new Sointu(Buffer(new PuoliNuotti("d1"), new PuoliNuotti ("f1")))
        }      
-       else nuotinNimi = solu.filter(_ != '-')           //tutkiEtumerkit(solu, x)    
-       
+       else {
+         nuotinNimi = solu.filter(_ != '-')           //tutkiEtumerkit(solu, x)    
+         println("tehdaankoSointua < lopussa: " + tehdaankoSointua)
+       }
+        
        if (nuotinNimi == "z"){
    //      kasitteleTauot       // TODO
        }   
@@ -95,15 +111,17 @@ class nuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
        }
        else if (pituus == 0){
        }  
-      
-   //   for(rivi <- nuottiData(i).kuva)     //  PRINT!
-    //        println(rivi) 
+     
   
     }  // for */
-  
+  palautetaan   // tätä tarvitaan sointuja muodostetaaessa
 } 
   
+  println("after kasitteleNuottiTieto: " )
+     for(rivi <- nuottiData)     
+         println(rivi) 
   
+         
   biisiLoppu = true
   var viivasto = new Viivasto(nuottiData)
   viivasto.piirraNuotit(nuottiData)

@@ -30,7 +30,7 @@ import scala.collection.mutable.Map
   }
 }
   
- class Sointu(aanet: Buffer[Nuotti]) extends ViivastolleLaitettava{
+ class Sointu(aanet: Buffer[ViivastolleLaitettava]) extends ViivastolleLaitettava{
      def nuotit = aanet   // korkeuden joutuu laskemaan jokaiselle nuotille erikseen
      
    
