@@ -42,13 +42,14 @@ import scala.collection.mutable.Map
      def kuva = {
     //   aanet(0).asInstanceOf[Nuotti].korkeus
       var viivasto = piirraTyhjaViivasto(kuvanLeveys)
+      var viivastoArray = Array[Char]()
       println("viivasto.size" + viivasto.size)
        for(a <- 0 until aanet.size){             // äänet
          for(r <- 0 until 17){   // rivit              // (aanet(a).kuva.size-2)
            for(i <- 0 until aanet(a).kuva(r).size){  // rivin merkit
               if (aanet(a).kuva(r).toCharArray().charAt(i) != '-' && aanet(a).kuva(r).toCharArray().charAt(i) != ' '){
-                println("true")              // ("a: " + a + "r: " + r + "i " + i)
-                viivasto(r).toCharArray()(i) =  aanet(a).kuva(r).toCharArray().charAt(i)  
+                viivastoArray = viivasto(r).toCharArray()             // ("a: " + a + "r: " + r + "i " + i)
+                viivastoArray(i) =  aanet(a).kuva(r).toCharArray().charAt(i)  
               }  
            }     
          } 
