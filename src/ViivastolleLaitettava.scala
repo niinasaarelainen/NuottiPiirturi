@@ -32,6 +32,9 @@ import scala.collection.mutable.Map
   
  class Sointu(aanet: Buffer[ViivastolleLaitettava]) extends ViivastolleLaitettava{
      def nuotit = aanet   // korkeuden joutuu laskemaan jokaiselle nuotille erikseen
+     def soiva =  true
+     def pituus = aanet(0).pituus   // kaikkien soinnun sävelten tulee olla samanpituisia 
+     def kuvanLeveys =  aanet(0).kuvanLeveys
      
    
      println("aanet.size" + aanet.size)
@@ -39,9 +42,25 @@ import scala.collection.mutable.Map
      println("aanet(0).kuva(0).size" + aanet(0).kuva(0).size)
      
      
-     def kuva = {
-    //   aanet(0).asInstanceOf[Nuotti].korkeus
+     def kuva = {                // Viivasto.liita kutsuu tätä sikamonta kertaa
+//       for (aani <- aanet){
+//          println(aani.asInstanceOf[Nuotti].korkeus)
+//          println(aanet(0).asInstanceOf[Nuotti].nuppi)
+//          println(aani.asInstanceOf[Nuotti].nimiMapissa)
+//       }   
+        
       var viivasto = piirraTyhjaViivasto(kuvanLeveys)
+      for (aani <- aanet){
+         val nimiMapissa = aani.asInstanceOf[Nuotti].nimiMapissa 
+         val etumerkki = aani.asInstanceOf[Nuotti].etumerkki
+         val nuppi = aani.asInstanceOf[Nuotti].nuppi
+         if(etumerkki.size == 0)  // ei etumerkkiä
+            viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 3) + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
+         else
+            viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 2) + etumerkki + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
+         }
+      
+      /*
       var viivastoArray = Array[Char]()
       println("viivasto.size" + viivasto.size)
        for(a <- 0 until aanet.size){             // äänet
@@ -53,27 +72,24 @@ import scala.collection.mutable.Map
               }  
            }     
          } 
-       }
+       }  */
      viivasto         //  aanet(0).kuva      
      }
-     def soiva =  true
-     def pituus = aanet(0).pituus   // kaikkien soinnun sävelten tulee olla samanpituisia 
-     def kuvanLeveys =  aanet(0).kuvanLeveys
+    
   }
  
- 
-//trait SoivaSymboli extends ViivastolleLaitettava{    
-//}
 
 abstract class Nuotti extends ViivastolleLaitettava {
      def nuppi = "()"   
      def soiva = true
      def korkeus: String
+     def nimiMapissa: String
+     def etumerkki: String
      
      
      def piirraApuviiva = {            // TODO
-      // if(nuotinNimi.contains("c1")){                 
-        //  viivasto.piirraApuviiva
+      // if(nimiMapissa == "c1"){                 
+       
      //  }
   }
   }
@@ -89,10 +105,11 @@ abstract class Nuotti extends ViivastolleLaitettava {
     def pituus = 4.0
     def kuvanLeveys = 20
     def nimiMapissa = nuotinNimi.filter(_ !='#').filter(_ != 'b').filter(_ != '§')  // esim. gb1 --> g1
-    def etumerkki: String = if (nuotinNimi.filter(_ !='-').size == 3) return nuotinNimi(1).toString else ""
+    def etumerkki: String = if (nuotinNimi.filter(_ !='-').size == 3) nuotinNimi(1).toString else ""
   
+    viivasto = piirraTyhjaViivasto(kuvanLeveys)  
     def kuva = {
-      var viivasto = piirraTyhjaViivasto(kuvanLeveys)
+      
       if(etumerkki.size == 0)  // ei etumerkkiä
          viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 3) + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
       else
