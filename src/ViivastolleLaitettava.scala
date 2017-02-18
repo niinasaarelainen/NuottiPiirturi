@@ -38,7 +38,7 @@ import scala.collection.mutable.Map
      
      var korkeudet = Buffer[Int]()
      
-     def kuva = {                // Viivasto.liita kutsuu tätä sikamonta kertaa 
+    def kuva = {                // Viivasto.liita kutsuu tätä sikamonta kertaa 
         
       viivasto = piirraTyhjaViivasto(kuvanLeveys)
       for (aani <- aanet){
@@ -53,20 +53,20 @@ import scala.collection.mutable.Map
       }  // end for
       
       var ylospain = true
-      if (korkeudet.min - 0 < 15 - korkeudet.max )   // 0 on ylin piirtoindeksi, 15 alin
+      if (korkeudet.min - 0 < 15 - korkeudet.max )   // 0 on ylin piirtoindeksi, 15 alin, lasketaan missä on enemmän tilaa
           ylospain = false
       piirraVarsi(korkeudet.min, korkeudet.max, ylospain)
         
-     viivasto          
-     }
+      viivasto          
+    }
      
-     def piirraVarsi(mista: Int, mihin:Int, ylospain:Boolean) = {                                        ///////// @ Sointu
+     def piirraVarsi(mista: Int, mihin:Int, ylospain:Boolean) = {                                     ///////// @ Sointu
             if(ylospain){
                for (i <- 0 to mihin-mista+3)   // nuottien väli + kolmen mittainen ylimenevä osuus
-                 viivasto(mista-i) = viivasto(mista-i).substring(0, 4) + "|" + viivasto(mista-i).substring(5, kuvanLeveys)  
+                 viivasto(mihin-i) = viivasto(mihin-i).substring(0, 5) + "|" + viivasto(mihin-i).substring(6, kuvanLeveys)  
             } else {
-              for (i <- 1 to 3)
-                   viivasto(mista+i) = viivasto(mista+i).substring(0, 3) + "|" + viivasto(mista+i).substring(4, kuvanLeveys)  
+              for (i <-  0 to mihin-mista +3)
+                   viivasto(mista+i) = viivasto(mista+i).substring(0, 2) + "|" + viivasto(mista+i).substring(3, kuvanLeveys)  
             }        
      }
      
