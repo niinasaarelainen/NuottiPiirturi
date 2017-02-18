@@ -36,47 +36,41 @@ import scala.collection.mutable.Map
      def pituus = aanet(0).pituus   // kaikkien soinnun sävelten tulee olla samanpituisia 
      def kuvanLeveys =  aanet(0).kuvanLeveys
      
-   
-     println("aanet.size" + aanet.size)
-     println("aanet(0).kuva.size" + aanet(0).kuva.size)
-     println("aanet(0).kuva(0).size" + aanet(0).kuva(0).size)
+     var korkeudet = Buffer[Int]()
      
-     
-     def kuva = {                // Viivasto.liita kutsuu tätä sikamonta kertaa
-//       for (aani <- aanet){
-//          println(aani.asInstanceOf[Nuotti].korkeus)
-//          println(aanet(0).asInstanceOf[Nuotti].nuppi)
-//          println(aani.asInstanceOf[Nuotti].nimiMapissa)
-//       }   
+     def kuva = {                // Viivasto.liita kutsuu tätä sikamonta kertaa 
         
-      var viivasto = piirraTyhjaViivasto(kuvanLeveys)
+      viivasto = piirraTyhjaViivasto(kuvanLeveys)
       for (aani <- aanet){
          val nimiMapissa = aani.asInstanceOf[Nuotti].nimiMapissa 
          val etumerkki = aani.asInstanceOf[Nuotti].etumerkki
          val nuppi = aani.asInstanceOf[Nuotti].nuppi
+         korkeudet += y(nimiMapissa)
          if(etumerkki.size == 0)  // ei etumerkkiä
             viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 3) + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
          else
             viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 2) + etumerkki + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
-         }
+      }  // end for
       
-      /*
-      var viivastoArray = Array[Char]()
-      println("viivasto.size" + viivasto.size)
-       for(a <- 0 until aanet.size){             // äänet
-         for(r <- 0 until 17){   // rivit              // (aanet(a).kuva.size-2)
-           for(i <- 0 until aanet(a).kuva(r).size){  // rivin merkit
-              if (aanet(a).kuva(r).toCharArray().charAt(i) != '-' && aanet(a).kuva(r).toCharArray().charAt(i) != ' '){
-                viivastoArray = viivasto(r).toCharArray()             // ("a: " + a + "r: " + r + "i " + i)
-                viivastoArray(i) =  aanet(a).kuva(r).toCharArray().charAt(i)  
-              }  
-           }     
-         } 
-       }  */
-     viivasto         //  aanet(0).kuva      
+      var ylospain = true
+      if (korkeudet.min - 0 < 15 - korkeudet.max )   // 0 on ylin piirtoindeksi, 15 alin
+          ylospain = false
+      piirraVarsi(korkeudet.min, korkeudet.max, ylospain)
+        
+     viivasto          
      }
-    
-  }
+     
+     def piirraVarsi(mista: Int, mihin:Int, ylospain:Boolean) = {                                        ///////// @ Sointu
+            if(ylospain){
+               for (i <- 0 to mihin-mista+3)   // nuottien väli + kolmen mittainen ylimenevä osuus
+                 viivasto(mista-i) = viivasto(mista-i).substring(0, 4) + "|" + viivasto(mista-i).substring(5, kuvanLeveys)  
+            } else {
+              for (i <- 1 to 3)
+                   viivasto(mista+i) = viivasto(mista+i).substring(0, 3) + "|" + viivasto(mista+i).substring(4, kuvanLeveys)  
+            }        
+     }
+     
+ }
  
 
 abstract class Nuotti extends ViivastolleLaitettava {
@@ -107,14 +101,18 @@ abstract class Nuotti extends ViivastolleLaitettava {
     def nimiMapissa = nuotinNimi.filter(_ !='#').filter(_ != 'b').filter(_ != '§')  // esim. gb1 --> g1
     def etumerkki: String = if (nuotinNimi.filter(_ !='-').size == 3) nuotinNimi(1).toString else ""
   
-    viivasto = piirraTyhjaViivasto(kuvanLeveys)  
-    def kuva = {
-      
+    def piirraNuppi = { 
       if(etumerkki.size == 0)  // ei etumerkkiä
          viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 3) + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
       else
          viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 2) + etumerkki + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
-      viivasto
+      
+    }
+     
+    def kuva = {
+         viivasto = piirraTyhjaViivasto(kuvanLeveys) 
+         piirraNuppi
+         viivasto
     }
  }   
  
