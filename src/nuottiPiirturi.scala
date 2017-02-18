@@ -68,37 +68,26 @@ class nuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
           for(aani <- sointu) 
              sointuBuffer += aani
           nuottiData += new Sointu(kasitteleNuottiTieto(sointuBuffer, viivastolleLaitettavaBuffer) ) 
-          
-    //      nuottiData += new Sointu(Buffer(new PuoliNuotti("d1"), new PuoliNuotti ("f1")))
        }      
        else {
          nuotinNimi = solu.filter(_ != '-')           //tutkiEtumerkit(solu, x)   
-       }
-        
+       }        
        if (nuotinNimi == "z"){
-   //      kasitteleTauot       // TODO
-       }   
-       
-       else if(pituus == 1){       
-          palautetaan += new NeljasosaNuotti(nuotinNimi) 
-       
-       } else if (pituus == 2){
+         kasitteleTauot       // TODO
+       } else if(pituus == 1 && solu.head != '<'){       
+          palautetaan += new NeljasosaNuotti(nuotinNimi)        
+       } else if (pituus == 2 && solu.head != '<'){
          palautetaan += new PuoliNuotti (nuotinNimi)  
-       }  
-       else if (pituus == 3){
+       } else if (pituus == 3 && solu.head != '<'){
           palautetaan += new PisteellinenPuoliNuotti(nuotinNimi) 
-         } 
-          
-       else if (pituus == 4){
-          palautetaan += new KokoNuotti(nuotinNimi)  
-         
-       } else if (pituus == 0 ){         // kahdeksasosa
+       } else if (pituus == 4 && solu.head != '<'){
+          palautetaan += new KokoNuotti(nuotinNimi)           
+       } else if (pituus == 0 && solu.head != '<'){         // kahdeksasosa
     //      if( i < inputArray.length -1 && inputArray(i+1).count(_ == '-') == 0 ){
           //   piirraKahdeksasosaPari(nuotinNimi, inputArray(i+1))
       //    }   
         //  else {   
-         palautetaan +=  new KahdeksasosaNuotti (nuotinNimi)   
-            
+         palautetaan +=  new KahdeksasosaNuotti (nuotinNimi)     // TODO  ei voi luoda ennen seuraavan solun tutkimista !!            
         //  }  
        }
        else if (pituus == 0){
@@ -108,6 +97,10 @@ class nuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
     }  // for */
   palautetaan   // tätä tarvitaan sointuja muodostetaaessa
 } 
+  
+  def kasitteleTauot = {
+    
+  }
   
   println("after kasitteleNuottiTieto: " )
      for(rivi <- nuottiData)     

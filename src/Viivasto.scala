@@ -13,7 +13,6 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava]) {
   var kappale = new Kappale
   
   
-  
   def piirraNuotit(nuottiOliot: Buffer[ViivastolleLaitettava]) = {
     
      for (laitettava <- nuottiOliot) {
@@ -85,7 +84,7 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava]) {
 }
  
   
-    /*   TODO
+    /*         // TODO
     def piirraLyriikkaTavu(tavu: String) = {
   
     for(c<-tavu){
