@@ -14,6 +14,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Int)]) {   // Tuple (korkeu
 		val channel = channels(0)
   
 		synth.open()
+		Thread.sleep(300)
   
     for(nuottiTaiSointu <- nuotit){
       
@@ -42,24 +43,21 @@ object testi extends App{
    
    noteNumbereiksi(nuottinimet)
    
-   def noteNumbereiksi (nuotteja : Buffer[Buffer[String]])= {
+   def noteNumbereiksi (nuotteja : Buffer[Buffer[String]])= { 
      for (buffer <- nuottinimet){
         for (nuotti <- buffer){
           apubuffer += MIDINoteNumber(nuotti)
         }  
         nuottiNumberit += apubuffer
         apubuffer = Buffer[Int]()
-     }
-     
+     }     
    }
    
-   println(nuottiNumberit(2))
      
 //  var nuotit =  nuottinimet.map(MIDINoteNumber(_))    // toimii jos ei sointuja
   var pituudet = Buffer(0, 0, 1, 1, 2, 4)
   pituudet = pituudet.map { x => if(x== 0) x + 1 else x*2 }   // helpompi kertoa millisekunneilla kun kahdeksasosa on 1, ja muut sen moninkertoja
-  println(pituudet)
-   val nuotitJaPituudet = nuottiNumberit.zip(pituudet)
+  val nuotitJaPituudet = nuottiNumberit.zip(pituudet)
   val player = new simpleMIDIPlayer(nuotitJaPituudet)
 
 }
