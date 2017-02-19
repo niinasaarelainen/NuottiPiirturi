@@ -55,20 +55,22 @@ import scala.collection.mutable.Map
       var ylospain = true
       if (korkeudet.min - 0 < 15 - korkeudet.max )   // 0 on ylin piirtoindeksi, 15 alin, lasketaan missä on enemmän tilaa
           ylospain = false
-      piirraVarsi(korkeudet.min, korkeudet.max, ylospain)
-        
+      if (pituus < 4)    
+          piirraVarsiJaMahdollisestiVaka(korkeudet.min, korkeudet.max, ylospain)
       viivasto          
     }
      
-     def piirraVarsi(mista: Int, mihin:Int ,ylospain:Boolean) = {                                     ///////// @ Sointu
+     def piirraVarsiJaMahdollisestiVaka(mista: Int, mihin:Int ,ylospain:Boolean) = {                                  ///////// @ Sointu
             if(ylospain){
                for (i <- 1 to mihin-mista+3)   // nuottien väli + kolmen mittainen ylimenevä osuus
                  if(!korkeudet.contains(mihin-i))  // nuppien kohdalle ei vartta
                    viivasto(mihin-i) = viivasto(mihin-i).substring(0, 4) + "|" + viivasto(mihin-i).substring(5, kuvanLeveys)  
+            if (pituus == 0.5) viivasto(mista-3) =  viivasto(mista-3).substring(0, 5) + "\\" + viivasto(mista-3).substring(6, kuvanLeveys)       
             } else {
               for (i <-  1 to mihin-mista +3)
                   if(!korkeudet.contains(mista+i))
                      viivasto(mista+i) = viivasto(mista+i).substring(0, 3) + "|" + viivasto(mista+i).substring(4, kuvanLeveys)  
+              if (pituus == 0.5) viivasto(mihin + 3) =  viivasto(mihin + 3).substring(0, 4) + "/" + viivasto(mihin + 3).substring(5, kuvanLeveys)                
             }        
      }
      
