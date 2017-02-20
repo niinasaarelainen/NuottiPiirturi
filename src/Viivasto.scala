@@ -24,7 +24,7 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava]) {
           tahtiaMennyt = 0.0
           lisaaTahtiviiva
        }
-       if (riviaMennytMontakoTahtia == 2 ){          
+       if (riviaMennytMontakoTahtia == 4 ){      // printtaukseen 2, voisi kysyä käyttäjältä  //TODO      
            vaihdaRivi
        }
     } // for

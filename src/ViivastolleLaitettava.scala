@@ -178,11 +178,11 @@ abstract class Nuotti extends ViivastolleLaitettava {
     
   override def kuva = {
       super.kuva
-      piirraVarsi
+      piirraVarsiJaVaka
       viivasto
     }
     
-    override def piirraVarsi = {
+     def piirraVarsiJaVaka = {
      if(y(nimiMapissa) >= y("h1")){  // varsi ylös  
         for (i <- 1 to 3)
            viivasto(y(nimiMapissa)-i) = viivasto(y(nimiMapissa)-i).substring(0, 4) + "|" + viivasto(y(nimiMapissa)-i).substring(5, kuvanLeveys)  

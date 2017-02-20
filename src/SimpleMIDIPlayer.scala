@@ -14,18 +14,19 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Int)]) {   // Tuple (korkeu
 		val channel = channels(0)
   
 		synth.open()
-		Thread.sleep(300)
+		Thread.sleep(300)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
   
     for(nuottiTaiSointu <- nuotit){
       
         for (soinnunNuotti <- nuottiTaiSointu._1)
-           channel.noteOn(soinnunNuotti, 110)         // 110 = velocity (128 = max)
-        println(nuottiTaiSointu._2)  
+           channel.noteOn(soinnunNuotti, 115)         // 115 = velocity (127 = max)
+           
         Thread.sleep(nuottiTaiSointu._2 * 300)  // ms   
         
         for (soinnunNuotti <- nuottiTaiSointu._1)              
            channel.noteOff(soinnunNuotti)
     }
+    Thread.sleep(300)   // parempi soundi vikaan ääneen
     synth.close()
 }
 
@@ -36,8 +37,9 @@ object testi extends App{
        "a#1" -> 70, "hb1" -> 70, "b1" -> 70, "h1" -> 71,  "c2" -> 72, "c#2" -> 73, "db2" -> 73, "d2" -> 74, 
        "d#2" -> 75, "eb2" -> 75, "e2" -> 76, "f2" -> 77, "f#2" -> 78, "gb2" -> 78, "g2" -> 79)
 
-  var nuottinimet = Buffer(Buffer("c1"), Buffer("eb1"), Buffer("g1"), Buffer("c2"), Buffer("eb2"), Buffer("g2"))  
+//  var nuottinimet = Buffer(Buffer("c1"), Buffer("eb1"), Buffer("g1"), Buffer("c2"), Buffer("eb2"), Buffer("g2"))  
 //   var nuottinimet = Buffer(Buffer("c1"), Buffer("eb1"), Buffer("g2", "f2"), Buffer("c2", "eb2", "g2"), Buffer("b1", "d2", "f2") )  
+    var nuottinimet = Buffer(Buffer("c1","eb1","g1"), Buffer("c2", "eb2", "g2"), Buffer("c1","e1","g1"), Buffer("c2", "e2", "g2") ) 
    var nuottiNumberit = Buffer[Buffer[Int]]() 
    var apubuffer = Buffer[Int]()
    
@@ -55,7 +57,8 @@ object testi extends App{
    
      
 //  var nuotit =  nuottinimet.map(MIDINoteNumber(_))    // toimii jos ei sointuja
-  var pituudet = Buffer(0, 0, 1, 1, 2, 4)
+//  var pituudet = Buffer(0, 0, 1, 1, 2, 4)
+   var pituudet = Buffer( 1, 1, 1, 1)
   pituudet = pituudet.map { x => if(x== 0) x + 1 else x*2 }   // helpompi kertoa millisekunneilla kun kahdeksasosa on 1, ja muut sen moninkertoja
   val nuotitJaPituudet = nuottiNumberit.zip(pituudet)
   val player = new simpleMIDIPlayer(nuotitJaPituudet)
