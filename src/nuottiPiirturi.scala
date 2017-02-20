@@ -79,7 +79,13 @@ class nuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
          nuotinNimi = solu.filter(_ != '-')       //Huom! Nyt soinnun sävelet tulevat ensin sointuna, sitten yksitellen !
        }        
        if (nuotinNimi == "z"){
-         kasitteleTauot               // TODO
+          pituus match{
+            case 0 => palautetaan += new KahdeksasosaTauko
+            case 1 => palautetaan += new NeljasosaTauko
+            case 2 => palautetaan += new NeljasosaTauko; palautetaan += new NeljasosaTauko
+            case 3 => palautetaan += new NeljasosaTauko; palautetaan += new NeljasosaTauko; palautetaan += new NeljasosaTauko
+       }
+//          palautetaan = kasitteleTauot(palautetaan,  pituus)             // TODO
        } else if(pituus == 1 && solu.head != '<'){       
           palautetaan += new NeljasosaNuotti(nuotinNimi)        
        } else if (pituus == 2 && solu.head != '<'){
@@ -104,8 +110,9 @@ class nuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
   palautetaan   // tätä tarvitaan sointuja muodostetaaessa
 } 
   
-  def kasitteleTauot = {
-    
+  def kasitteleTauot(palautetaan: Buffer[ViivastolleLaitettava], pituus: Int) = {
+     
+    palautetaan
   }
   
   println("after kasitteleNuottiTieto: " )

@@ -83,8 +83,7 @@ abstract class Nuotti extends ViivastolleLaitettava {
      def korkeus: String
      def nimiMapissa: String
      def etumerkki: String
-     
-     
+      
      def piirraApuviiva = {            // TODO
       // if(nimiMapissa == "c1"){                 
        
@@ -222,26 +221,35 @@ abstract class Nuotti extends ViivastolleLaitettava {
        piirraPalkki(nuotitYAkselilla(nuotinNimi) < nuotitYAkselilla("h1"), nuotitYAkselilla(nuotinNimi))    // palkki 1. nuotin korkeudelle
     }   
    }
-  
-  
+  */
   
   
   class NeljasosaTauko extends Tauko { 
-      ='\\'
-     = '/'
-     ='\\'
-      = '/'    
-       
-  }
+  
+    def pituus = 1.0
+    def kuvanLeveys = 8
+    
+    
+    def kuva = {
+      viivasto = piirraTyhjaViivasto(kuvanLeveys) 
+      viivasto(y("c2")) = viivasto(y("c2")).substring(0, 4) + "\\" + viivasto(y("c2")).substring(5, kuvanLeveys)
+      viivasto(y("h1")) = viivasto(y("h1")).substring(0, 4) + "/" + viivasto(y("h1")).substring(5, kuvanLeveys)
+      viivasto(y("a1")) = viivasto(y("a1")).substring(0, 4) + "\\" + viivasto(y("a1")).substring(5, kuvanLeveys)
+      viivasto(y("g1")) = viivasto(y("g1")).substring(0, 4) + "/" + viivasto(y("g1")).substring(5, kuvanLeveys)
+      viivasto 
+    }
+  }   
   
    class KahdeksasosaTauko extends NeljasosaTauko{
       
-          = '/'             // väkä        
-          = '\\'
-       
-  }
+      override def pituus = 0.5
+      override def kuvanLeveys = 6
+    
+      override def kuva = {
+           viivasto = piirraTyhjaViivasto(kuvanLeveys) 
+           viivasto(y("c2")) = viivasto(y("c2")).substring(0, 3) + "/" + viivasto(y("c2")).substring(4, kuvanLeveys)
+      viivasto   
+      }
   
- 
+   }
   
-  
- */
