@@ -75,8 +75,8 @@ class nuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
         
          var apuBuffer = Buffer[String]()
          apuBuffer += solu
-         soitettavatKorkeudet += apuBuffer     // pituustieto mukana
-         nuotinNimi = solu.filter(_ != '-')           //tutkiEtumerkit(solu, x)   
+         soitettavatKorkeudet += apuBuffer       // pituustieto mukana  
+         nuotinNimi = solu.filter(_ != '-')       //Huom! Nyt soinnun sävelet tulevat ensin sointuna, sitten yksitellen !
        }        
        if (nuotinNimi == "z"){
          kasitteleTauot               // TODO
@@ -109,15 +109,19 @@ class nuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
   }
   
   println("after kasitteleNuottiTieto: " )
-     for(rivi <- nuottiData)     
-         println(rivi) 
+     for(viivastolleLaitettava <- nuottiData)     
+         println(viivastolleLaitettava.isInstanceOf[Sointu]) 
   
-  val player = new simpleMIDIPlayerAdapter(soitettavatKorkeudet )
          
   biisiLoppu = true
   var viivasto = new Viivasto(nuottiData)
   viivasto.piirraNuotit(nuottiData)
+ 
+  val player = new simpleMIDIPlayerAdapter(nuottiData )
+  //val player = new simpleMIDIPlayerAdapter(soitettavatKorkeudet )
   val out = new TiedostonTallennus(viivasto.kappale)
+  
+ 
     
     
 }
