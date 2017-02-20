@@ -9,11 +9,17 @@ import scala.collection.mutable.Buffer
 class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)]) {   // Tuple (korkeus/korkeudet, pituus)
   
   val synth = MidiSystem.getSynthesizer()
+ // synth.loadInstrument(arg0)
   
     val channels  =  synth.getChannels()
-		val channel = channels(0)
+		var channel = channels(0)
+		println(channel.getController(0) * 128  + channel.getController(32))
+		println(channel.getProgram)
+		channel.programChange(44)   // bank, program
+		println(channel.getProgram)
+		
   
-		synth.open()
+		synth.open() 
 		Thread.sleep(300)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
   
     for(nuottiTaiSointu <- nuotit){

@@ -247,7 +247,8 @@ abstract class Nuotti extends ViivastolleLaitettava {
     
       override def kuva = {
            viivasto = piirraTyhjaViivasto(kuvanLeveys) 
-           viivasto(y("c2")) = viivasto(y("c2")).substring(0, 3) + "/" + viivasto(y("c2")).substring(4, kuvanLeveys)
+           viivasto(y(korkeus)) = viivasto(y(korkeus)).substring(0, 2) + "/|" + viivasto(y(korkeus)).substring(4, kuvanLeveys)
+           viivasto(y(korkeus)+1) = viivasto(y(korkeus)+1).substring(0, 3) + "|" + viivasto(y(korkeus)+1).substring(4, kuvanLeveys)
       viivasto   
       }
   
