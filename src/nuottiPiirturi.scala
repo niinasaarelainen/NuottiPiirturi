@@ -13,6 +13,7 @@ class nuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
   var biisiLoppu = false
   var tunnisteet = Buffer[String]()
   var nuottiData= Buffer[ViivastolleLaitettava]() 
+  val soitettavatKorkeudet =  Buffer[Buffer[String]]() 
  
   val inputBuffer = Buffer[String]()
   var inputArray = Array[String]()  // saadaan splittaamalla, ei tule Buffer
@@ -53,27 +54,32 @@ class nuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
   }
   
   
-  def kasitteleNuottiTieto(inputBuffer: Buffer[String], palautetaan : Buffer[ViivastolleLaitettava] ): Buffer[ViivastolleLaitettava] = {        
+  def kasitteleNuottiTieto(inputBuffer: Buffer[String], palautetaan: Buffer[ViivastolleLaitettava] ): Buffer[ViivastolleLaitettava] = {        
  
   for ( i<- 0 until inputBuffer.length){
         
      
-       var solu = inputBuffer(i)    // esim. "g#1--"
-       var pituus = solu.count(_ == '-')  
+       var solu = inputBuffer(i)    // esim. "g#1--"        
+       var pituus = solu.count(_ == '-')                  // huom tulee väärä luku <g1--,a-->   4 !!!!
    //    println("solu: " + solu + ", pit:" + pituus)
        if (solu.head == '<'){
-          sointu =  solu.tail.substring(0, solu.size -2).split(",")    // kesken
+          sointu =  solu.tail.substring(0, solu.size -2).split(",")    
           var sointuBuffer = Buffer[String]()
           var viivastolleLaitettavaBuffer = Buffer[ViivastolleLaitettava]()
           for(aani <- sointu) 
              sointuBuffer += aani
+          soitettavatKorkeudet += sointuBuffer  
           nuottiData += new Sointu(kasitteleNuottiTieto(sointuBuffer, viivastolleLaitettavaBuffer) ) 
        }      
        else {
+        
+         var apuBuffer = Buffer[String]()
+         apuBuffer += solu
+         soitettavatKorkeudet += apuBuffer     // pituustieto mukana
          nuotinNimi = solu.filter(_ != '-')           //tutkiEtumerkit(solu, x)   
        }        
        if (nuotinNimi == "z"){
-         kasitteleTauot       // TODO
+         kasitteleTauot               // TODO
        } else if(pituus == 1 && solu.head != '<'){       
           palautetaan += new NeljasosaNuotti(nuotinNimi)        
        } else if (pituus == 2 && solu.head != '<'){
@@ -106,6 +112,7 @@ class nuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
      for(rivi <- nuottiData)     
          println(rivi) 
   
+  val player = new simpleMIDIPlayerAdapter(soitettavatKorkeudet )
          
   biisiLoppu = true
   var viivasto = new Viivasto(nuottiData)

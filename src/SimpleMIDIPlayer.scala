@@ -30,37 +30,61 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Int)]) {   // Tuple (korkeu
     synth.close()
 }
 
-object testi extends App{
+class simpleMIDIPlayerAdapter (soitettavatKorkeudet: Buffer[Buffer[String]]) {   //  used to be: extends App
   
    val MIDINoteNumber = Map("c1" -> 60, "c#1" ->61, "db1" -> 61, "d1" -> 62, "d#1" -> 63, "eb1" -> 63,  "e1" -> 64,  
        "f1"-> 65,  "f#1"->66,  "gb1" -> 66, "g1" -> 67,  "g#1" -> 68, "ab1" -> 68, "a1" -> 69,  
        "a#1" -> 70, "hb1" -> 70, "b1" -> 70, "h1" -> 71,  "c2" -> 72, "c#2" -> 73, "db2" -> 73, "d2" -> 74, 
-       "d#2" -> 75, "eb2" -> 75, "e2" -> 76, "f2" -> 77, "f#2" -> 78, "gb2" -> 78, "g2" -> 79)
+       "d#2" -> 75, "eb2" -> 75, "e2" -> 76, "f2" -> 77, "f#2" -> 78, "gb2" -> 78, "g2" -> 79, "z" -> 0)
 
 //  var nuottinimet = Buffer(Buffer("c1"), Buffer("eb1"), Buffer("g1"), Buffer("c2"), Buffer("eb2"), Buffer("g2"))  
 //   var nuottinimet = Buffer(Buffer("c1"), Buffer("eb1"), Buffer("g2", "f2"), Buffer("c2", "eb2", "g2"), Buffer("b1", "d2", "f2") )  
-    var nuottinimet = Buffer(Buffer("c1","eb1","g1"), Buffer("c2", "eb2", "g2"), Buffer("c1","e1","g1"), Buffer("c2", "e2", "g2") ) 
+ //   var nuottinimet = Buffer(Buffer("c1","eb1","g1"), Buffer("c2", "eb2", "g2"), Buffer("c1","e1","g1"), Buffer("c2", "e2", "g2") ) 
+   
+   var nuottinimet = Buffer[Buffer[String]]() 
    var nuottiNumberit = Buffer[Buffer[Int]]() 
    var apubuffer = Buffer[Int]()
+   var pituudet = Buffer[Int]()
+   var apuBufferStr = Buffer[String]()
    
-   noteNumbereiksi(nuottinimet)
+   println(soitettavatKorkeudet)
+//   for (alkio<- soitettavatKorkeudet){
+//     var apuBufferStr = Buffer[String]()
+//       
+//          
+//          for (soinnunSavel <- sointu)
+//             apuBufferStr += soinnunSavel.filter(_ != '-')
+//          nuottinimet += apuBufferStr
+//        }
+//        else {
+//          apuBufferStr += alkio.filter(_ != '-')
+//          nuottinimet += apuBufferStr
+//        }
+           
    
-   def noteNumbereiksi (nuotteja : Buffer[Buffer[String]])= { 
-     for (buffer <- nuottinimet){
-        for (nuotti <- buffer){
-          apubuffer += MIDINoteNumber(nuotti)
-        }  
-        nuottiNumberit += apubuffer
-        apubuffer = Buffer[Int]()
-     }     
-   }
+  // println(nuottinimet)
+   
+   //  noteNumbereiksi(nuottinimet)
+   
+     def noteNumbereiksi (nuotteja : Buffer[Buffer[String]])= { 
+       for (buffer <- nuottinimet){
+         pituudet += buffer(0).count(_ == '-')       // kaikilla soinnun sävelillä on sama pituus
+          for (nuotti <- buffer){                    // ei siis haluta kaikkien nuottien pituuksia muistiin
+            apubuffer += MIDINoteNumber(nuotti)
+          }  
+          nuottiNumberit += apubuffer
+          apubuffer = Buffer[Int]()
+       }     
+     }
    
      
 //  var nuotit =  nuottinimet.map(MIDINoteNumber(_))    // toimii jos ei sointuja
 //  var pituudet = Buffer(0, 0, 1, 1, 2, 4)
-   var pituudet = Buffer( 1, 1, 1, 1)
-  pituudet = pituudet.map { x => if(x== 0) x + 1 else x*2 }   // helpompi kertoa millisekunneilla kun kahdeksasosa on 1, ja muut sen moninkertoja
-  val nuotitJaPituudet = nuottiNumberit.zip(pituudet)
-  val player = new simpleMIDIPlayer(nuotitJaPituudet)
-
+ //   var pituudet = Buffer( 1, 1, 1, 1)
+    pituudet = pituudet.map { x => if(x== 0) x + 1 else x*2 }   // helpompi kertoa millisekunneilla kun kahdeksasosa on 1, ja muut sen moninkertoja
+    val nuotitJaPituudet = nuottiNumberit.zip(pituudet)
+    
+//    val nuotitJaPituudet2 = nuottiNumberit.zip(soitettavatPituudet)  // parametrina
+    val player = new simpleMIDIPlayer(nuotitJaPituudet) 
+  
 }
