@@ -9,30 +9,30 @@ import scala.collection.mutable.Buffer
 class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)]) {   // Tuple (korkeus/korkeudet, pituus)
   
   val synth = MidiSystem.getSynthesizer()
- // synth.loadInstrument(arg0)
-  
+  synth.open()  
+
     val channels  =  synth.getChannels()
-		var channel = channels(0)
-		println(channel.getController(0) * 128  + channel.getController(32))
-		println(channel.getProgram)
-		channel.programChange(44)   // bank, program
-		println(channel.getProgram)
+		var ch1 = channels(0)
+	//	val ch10 = synth.getChannels()(9)       rummut
 		
+	//	val instruments = synth.getAvailableInstruments
+		ch1.programChange(11)   //program #11 = Vibraphone
+
   
-		synth.open() 
+		
 		Thread.sleep(300)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
   
     for(nuottiTaiSointu <- nuotit){
       
         if (nuottiTaiSointu._1(0) != 0)  //taukojen "korkeus"
           for (soinnunNuotti <- nuottiTaiSointu._1)
-             channel.noteOn(soinnunNuotti, 115)         // 115 = velocity (127 = max)
+             ch1.noteOn(soinnunNuotti, 115)         // 115 = velocity (127 = max)
            
         Thread.sleep((nuottiTaiSointu._2 * 500).toInt)  // ms   
         
         if (nuottiTaiSointu._1(0) != 0)
           for (soinnunNuotti <- nuottiTaiSointu._1)              
-             channel.noteOff(soinnunNuotti)
+             ch1.noteOff(soinnunNuotti)
     }
     Thread.sleep(300)   // parempi soundi vikaan ääneen
     synth.close()
