@@ -2,7 +2,7 @@
 import scala.collection.mutable.Buffer
 import scala.collection.mutable.Map
 
-class Viivasto(nuottiData: Buffer[ViivastolleLaitettava]) {
+class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[String]) {
   
   var viivasto = piirraGavain   //Buffer[String]()
   
@@ -15,7 +15,17 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava]) {
   
   def piirraNuotit(nuottiOliot: Buffer[ViivastolleLaitettava]) = {
     
+    for(tavu <-lyricsBuffer)
+      println(tavu)
+    
+    
+     var lyricsInd = 0
      for (laitettava <- nuottiOliot) {
+       
+       if(!laitettava.isInstanceOf[Tauko] && lyricsBuffer.size != 0){
+           laitettava.kuva(16) = laitettava.kuva(16).substring(0, 2) + lyricsBuffer(lyricsInd)  + laitettava.kuva(16).substring(2+ lyricsBuffer(lyricsInd).size, laitettava.kuvanLeveys)
+           lyricsInd += 1
+       }    
        liita(laitettava)
        tahtiaMennyt += laitettava.pituus
        if (tahtiaMennyt == 4.0){

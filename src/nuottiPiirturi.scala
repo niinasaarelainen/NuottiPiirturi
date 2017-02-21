@@ -10,6 +10,8 @@ class NuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
   
   var pituus = 0
   var kappale =  new Kappale    //Buffer[Viivasto]
+  var lyricsBuffer = Buffer[String]()
+  var sanatPotkona = ""
   var lyricsArray = lyrics.split(" ")     // muista: val lyricsNew = lyrics.replaceAll("-", "- ")
   var tunnisteet = Buffer[String]()
   var nuottiData= Buffer[ViivastolleLaitettava]() 
@@ -26,6 +28,18 @@ class NuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
  
    inputBuffer = inputTiedostosta.inputArray.toBuffer
    
+   for (rivi <-  inputTiedostosta.lyriikkadata){
+      sanatPotkona += rivi.replaceAll("-", "- ")
+      sanatPotkona += " "
+   }   
+   
+ 
+   lyricsBuffer =  sanatPotkona.replaceAll("  ", " ").split(" ").toBuffer  
+   
+   for (tavu <- lyricsBuffer)
+     println(tavu)
+   
+     
              
 //    tahtilaji = inputBuffer(1).head - 31
 //     println("tahtilaji :" + tahtilaji)
@@ -40,14 +54,12 @@ class NuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
   
   def kasitteleNuottiTieto(inputBuffer: Buffer[String], palautetaan: Buffer[ViivastolleLaitettava] ): Buffer[ViivastolleLaitettava] = {        
  
-  for ( i<- 0 until inputBuffer.length){
-        
+  for ( i<- 0 until inputBuffer.length){        
      
        var solu = inputBuffer(i)    // esim. "g#1--"   
        if(solu.head != '<')
-          pituus = solu.count(_ == '-')                  // huom tulee väärä luku <g1--,a-->   4 !!!!
-   //    println("solu: " + solu + ", pit:" + pituus)
-      
+          pituus = solu.count(_ == '-')                  
+          
        if (solu.head == '<'){
           sointu =  solu.tail.substring(0, solu.size -2).split(",")    
           var sointuBuffer = Buffer[String]()
@@ -58,8 +70,7 @@ class NuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
        }      
        
        else {        
-         nuotinNimi = solu.filter(_ != '-').filter(_ != '.')        //Huom! Nyt soinnun sävelet tulevat ensin sointuna, sitten yksitellen !
-          
+         nuotinNimi = solu.filter(_ != '-').filter(_ != '.')        
          if (nuotinNimi == "z"){
             pituus match{
               case 0 => palautetaan += new KahdeksasosaTauko
@@ -93,7 +104,7 @@ class NuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
   palautetaan   // tätä tarvitaan sointuja muodostetaaessa
 } 
  
-  var viivasto = new Viivasto(nuottiData)
+  var viivasto = new Viivasto(nuottiData, lyricsBuffer)
   viivasto.piirraNuotit(nuottiData)
  
   val player = new simpleMIDIPlayerAdapter(nuottiData)

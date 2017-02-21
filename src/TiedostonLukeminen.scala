@@ -64,12 +64,18 @@ class TiedostonLukeminen  {
   }
   
   def  kasitteleTunnisteet(inputFromFile: Buffer[String]) = {
+    
+    var seuraavatrivitLyriikkaan = false
     for (i <- 0 until inputFromFile.size ){  
          if (inputFromFile(i).head == '#'){     // parillisiin rivinumero Stringinä, parittomiin tunnisteen nimi
-                      
-           tunnisteet +=  i.toString()  
-           tunnisteet += inputFromFile(i).tail.toLowerCase().trim
-       } 
+           if(inputFromFile(i).tail.toLowerCase().trim == "sanat")   
+              seuraavatrivitLyriikkaan = true
+           else if(seuraavatrivitLyriikkaan == false){   
+             tunnisteet +=  i.toString()  
+             tunnisteet += inputFromFile(i).tail.toLowerCase().trim
+           }  
+       } else if (seuraavatrivitLyriikkaan)
+          lyriikkadata += (inputFromFile(i))
          else nuottidata += inputFromFile(i)
     }  
     tunnisteet += inputFromFile.size.toString()    // vika rivinumero
