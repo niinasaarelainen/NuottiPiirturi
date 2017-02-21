@@ -80,14 +80,8 @@ class TiedostonLukeminen  {
     }  
     tunnisteet += inputFromFile.size.toString()    // vika rivinumero
     
-    for(i <- 0 until tunnisteet.size ){
-       if(tunnisteet(i) == "sanat"){
-          for (j<- i-1 to i+1)
-             lyriikkadata += tunnisteet(j)
-       }
-    }
     if(lyriikkadata.size != 0)
-         println(lyriikkadata(0))
+         println("lyriikkadata(0): " + lyriikkadata(0))
   }
   
   def helppiTeksti = {

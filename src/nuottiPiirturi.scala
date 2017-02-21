@@ -28,17 +28,16 @@ class NuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
  
    inputBuffer = inputTiedostosta.inputArray.toBuffer
    
-   for (rivi <-  inputTiedostosta.lyriikkadata){
-      sanatPotkona += rivi.replaceAll("-", "- ")
-      sanatPotkona += " "
-   }   
-   
- 
-   lyricsBuffer =  sanatPotkona.replaceAll("  ", " ").split(" ").toBuffer  
-   
-   for (tavu <- lyricsBuffer)
-     println(tavu)
-   
+   if(inputTiedostosta.lyriikkadata.size != 0){
+        
+      for (rivi <-  inputTiedostosta.lyriikkadata){
+        sanatPotkona += rivi.replaceAll("-", "- ")
+        sanatPotkona += " "
+      }   
+      lyricsBuffer =  sanatPotkona.replaceAll("  ", " ").split(" ").toBuffer  
+      for (tavu <- lyricsBuffer)
+        println(tavu)
+   }
      
              
 //    tahtilaji = inputBuffer(1).head - 31

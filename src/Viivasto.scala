@@ -15,15 +15,17 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
   
   def piirraNuotit(nuottiOliot: Buffer[ViivastolleLaitettava]) = {
     
+    println("----@Viivasto-----")
     for(tavu <-lyricsBuffer)
       println(tavu)
     
+      println("lyricsBuffer.size: " + lyricsBuffer.size)
     
      var lyricsInd = 0
      for (laitettava <- nuottiOliot) {
        
        if(!laitettava.isInstanceOf[Tauko] && lyricsBuffer.size != 0){
-           laitettava.kuva(16) = laitettava.kuva(16).substring(0, 2) + lyricsBuffer(lyricsInd)  + laitettava.kuva(16).substring(2+ lyricsBuffer(lyricsInd).size, laitettava.kuvanLeveys)
+           laitettava.kuva(16) = laitettava.kuva(16).substring(0, 1) + lyricsBuffer(lyricsInd)  + laitettava.kuva(16).substring(1+ lyricsBuffer(lyricsInd).size, laitettava.kuvanLeveys)
            lyricsInd += 1
        }    
        liita(laitettava)
