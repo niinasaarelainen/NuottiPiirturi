@@ -6,10 +6,14 @@
   
 class TiedostonLukeminen  {
   
+  var inputFromFile = Buffer[String]()     // kaikki input, paitsi tyhjät rivit
+  val tunnisteet = Buffer[String]()       // edellisestä tunnisteet
+  val nuottidata = Buffer[String]()       // loput, eli nuottidata
   var inputArray= Array[String]() 
+ 
     
-  val nykyinenHakemisto = new File("./input")
-  val listaus = nykyinenHakemisto.listFiles()
+  val inputhakemisto = new File("./input")
+  val listaus = inputhakemisto.listFiles()
   
   helppiTeksti
 
@@ -19,23 +23,22 @@ class TiedostonLukeminen  {
     }
   }  
   val nimi = readLine("\nMinkä nimisen tiedoston haluat nuoteiksi? Valitse ylläolevista. ")
-//  val tiedosto = Source.fromFile("input/puolinuotteja.txt")   
   val tiedosto = Source.fromFile("input/" + nimi )
-  var inputFromFile = Buffer[String]()
    
   def lueJaTarkistaVirheet() = {
     try {   
       for (rivi <- tiedosto.getLines) {
-         if(rivi.trim.size != 0 )
-         inputFromFile += rivi.trim
+         if(rivi.trim.size != 0 ){
+             inputFromFile += rivi.trim
+         }
       }
     } finally {
       tiedosto.close()
     }
+    
+    kasitteleTunnisteet(inputFromFile)   // tämä pitää tehdä ennen splittaamista !!!! esim tunniste  #Let's get together
   
     // splittaus & virheiden tarkistus:  
-   
-    
    for (i <- 0 until inputFromFile.size) { 
       var  splitattuRivi = inputFromFile(i).split(" ")     // mieti tunnisteiden ja sointujen caset myöhemmin
       for (alkio <-   splitattuRivi){
@@ -58,6 +61,15 @@ class TiedostonLukeminen  {
         println (inputArray(i))
  
         
+  }
+  
+  def  kasitteleTunnisteet(inputFromFile: Buffer[String]) = {
+    for (i <- 0 until inputFromFile.size ){  
+         if (inputFromFile(i).head == '#'){     // parillisiin rivinumero Stringinä, parittomiin tunnisteen nimi
+           tunnisteet +=  i.toString()  
+           tunnisteet += inputFromFile(i).tail.toLowerCase().trim
+       } else nuottidata += inputFromFile(i)
+    }  
   }
   
   def helppiTeksti = {

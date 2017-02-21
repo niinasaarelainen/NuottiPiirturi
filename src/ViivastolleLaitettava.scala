@@ -34,11 +34,10 @@ import scala.collection.mutable.Map
      def nuotit = aanet   // korkeuden joutuu laskemaan jokaiselle nuotille erikseen
      def soiva =  true
      def pituus = aanet(0).pituus   // kaikkien soinnun sävelten tulee olla samanpituisia 
-     def kuvanLeveys =  aanet(0).kuvanLeveys
-     
+     def kuvanLeveys =  aanet(0).kuvanLeveys     
      var korkeudet = Buffer[Int]()
      
-    def kuva = {                // Viivasto.liita kutsuu tätä sikamonta kertaa 
+    def kuva = {              
         
       viivasto = piirraTyhjaViivasto(kuvanLeveys)
       for (aani <- aanet){
@@ -50,6 +49,9 @@ import scala.collection.mutable.Map
             viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 3) + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
          else
             viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 2) + etumerkki + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
+         if(aani.pituus== 1.5 || aani.pituus == 3)
+            viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 5) + "." + viivasto(y(nimiMapissa)).substring(6, kuvanLeveys)  
+
       }  // end for
      
       var ylospain = true
