@@ -14,8 +14,8 @@ class NuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
   var tunnisteet = Buffer[String]()
   var nuottiData= Buffer[ViivastolleLaitettava]() 
  
-  val inputBuffer = Buffer[String]()
-  var inputArray = Array[String]()  // saadaan splittaamalla, ei tule Buffer
+  var inputBuffer = Buffer[String]()
+ //  var inputArray = Array[String]()  // saadaan splittaamalla, ei tule Buffer. JEEEEE! Tätähän ei tarvita kun tekee .toBuffer !
   
   var nuotinNimi = ""
   var sointu = Array[String]()   // saadaan splittaamalla, ei tule Buffer
@@ -24,22 +24,8 @@ class NuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
    val inputTiedostosta = new TiedostonLukeminen
    inputTiedostosta.lueJaTarkistaVirheet()
  
-   kasitteleTunnisteetJaLuoNuottiPuskuri(inputTiedostosta.inputArray)
- 
-     
- def kasitteleTunnisteetJaLuoNuottiPuskuri(data: Array[String]) = {
-     for (i <- 0 until data.size ){  
-        if (data(i).head == '#'){     // parillisiin rivinumero Stringinä, parittomiin tunnisteen nimi
-           tunnisteet +=  i.toString()  
-           tunnisteet += data(i).tail.toLowerCase().trim
-        }   
-        else inputBuffer += data(i)   // mieti vielä case   #4  ... nuotteja...  samalla rivillä
-      }  
-      tunnisteet += data.size.toString()    // vika rivinumero
-      
-      for (rivi <- tunnisteet)
-          println("tunniste: " + rivi)
-          
+   inputBuffer = inputTiedostosta.inputArray.toBuffer
+   
              
 //    tahtilaji = inputBuffer(1).head - 31
 //     println("tahtilaji :" + tahtilaji)
@@ -50,7 +36,6 @@ class NuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
 //       }           
              
       nuottiData = kasitteleNuottiTieto(inputBuffer, nuottiData)      
-  }
   
   
   def kasitteleNuottiTieto(inputBuffer: Buffer[String], palautetaan: Buffer[ViivastolleLaitettava] ): Buffer[ViivastolleLaitettava] = {        
