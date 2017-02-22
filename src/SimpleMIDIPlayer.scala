@@ -50,7 +50,7 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava]) {   //
    var pituudet = Buffer[Double]()   // [0.5 ... 4.0]
    
    
-   println(nuottiData)
+  // println(nuottiData)
    
        for (alkio<- nuottiData) {
          var apubufferInt = Buffer[Int]()   // luodaan aina tyhjä buffer
@@ -74,7 +74,7 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava]) {   //
        }
    
    
-   println(nuottiNumberit)
+  // println(nuottiNumberit)
    
     val nuotitJaPituudet = nuottiNumberit.zip(pituudet)
     val player = new simpleMIDIPlayer(nuotitJaPituudet) 

@@ -43,10 +43,7 @@ class NuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
 //    tahtilaji = inputBuffer(1).head - 31
 //     println("tahtilaji :" + tahtilaji)
 //       
-      
-//       if(lyricsArray.isDefinedAt(i)){
-//           tavu = lyricsArray(i)
-//       }           
+       
              
       nuottiData = kasitteleNuottiTieto(inputBuffer, nuottiData)      
   

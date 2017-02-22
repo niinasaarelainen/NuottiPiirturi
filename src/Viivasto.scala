@@ -23,10 +23,10 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
     
      var lyricsInd = 0
      for (laitettava <- nuottiOliot) {
-       
-       if(!laitettava.isInstanceOf[Tauko] && lyricsBuffer.size != 0){
+                                                           // jos sanoja oli vähemmän kuin nuotteja, ei haluta kaataa ohjelmaa
+       if(!laitettava.isInstanceOf[Tauko] && lyricsBuffer.size != 0 && lyricsBuffer.size - lyricsInd >= 1 ){
            laitettava.kuva(16) = laitettava.kuva(16).substring(0, 1) + lyricsBuffer(lyricsInd)  + laitettava.kuva(16).substring(1+ lyricsBuffer(lyricsInd).size, laitettava.kuvanLeveys)
-           lyricsInd += 1
+              lyricsInd += 1
        }    
        liita(laitettava)
        tahtiaMennyt += laitettava.pituus
@@ -39,7 +39,7 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
        if (riviaMennytMontakoTahtia == 4 ){      // printtaukseen 2, voisi kysyä käyttäjältä  //TODO      
            vaihdaRivi
        }
-    } // for
+    } // end for, kaikki nuottiOliot käsitelty
     
     if(tahtiaMennyt != 0.0 || riviaMennytMontakoTahtia > 0 ){  // pelkkää G-avainta ei haluta mukaan kappaleeseen
         vaihdaRivi   
