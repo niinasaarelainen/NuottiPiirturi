@@ -6,7 +6,7 @@ import scala.collection.mutable.Map
 import scala.collection.mutable.Buffer
 
 
-class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)]) {   // Tuple (korkeus/korkeudet, pituus)
+class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int) {   // Tuple (korkeus/korkeudet, pituus)
   
   val synth = MidiSystem.getSynthesizer()
   synth.open()  
@@ -15,18 +15,25 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)]) {   // Tuple (kor
 		var ch1 = channels(0)
 	//	val ch10 = synth.getChannels()(9)       rummut
 		
-	//	val instruments = synth.getAvailableInstruments
-		ch1.programChange(11)   //program #11 = Vibraphone
-
-  
+	//	for(patch <- synth.getAvailableInstruments)
+	//	  println(patch)
+		
+		 MIDIPatch match {
+        case 1 => ch1.programChange(0)    //program #0 = Piano
+        case 2 => ch1.programChange(11)   //program #11 = Vibraphone
+        case 3 => ch1.programChange(18)   //program #19 = Rock Organ
+        case 4 => ch1.programChange(1024, 50)   //program #19 = Syn.Strings3 ,  eri bank:sta
+    }
 		
 		Thread.sleep(300)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
   
     for(nuottiTaiSointu <- nuotit){
       
         if (nuottiTaiSointu._1(0) != 0)  //taukojen "korkeus"
-          for (soinnunNuotti <- nuottiTaiSointu._1)
-             ch1.noteOn(soinnunNuotti, 115)         // 115 = velocity (127 = max)
+          for (i <- 0 until nuottiTaiSointu._1.size)
+            if(i <  nuottiTaiSointu._1.size-1)
+              ch1.noteOn(nuottiTaiSointu._1(i), 60)         // 60 = velocity (127 = max), säestysäänet, jos niitä on
+            else  ch1.noteOn(nuottiTaiSointu._1(i), 120)  // oltiin sortattu, eli melodia on vikana (ylin ääni = isoin numero)
            
         Thread.sleep((nuottiTaiSointu._2 * 500).toInt)  // ms   
         
@@ -38,7 +45,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)]) {   // Tuple (kor
     synth.close()
 }
 
-class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava]) {   //  used to be: extends App
+class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPatch:Int) {   //  used to be: extends App
   
    val MIDINoteNumber = Map("c1" -> 60, "c#1" ->61, "db1" -> 61, "d1" -> 62, "d#1" -> 63, "eb1" -> 63,  "e1" -> 64,  
        "f1"-> 65,  "f#1"->66,  "gb1" -> 66, "g1" -> 67,  "g#1" -> 68, "ab1" -> 68, "a1" -> 69,  
@@ -55,12 +62,12 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava]) {   //
        for (alkio<- nuottiData) {
          var apubufferInt = Buffer[Int]()   // luodaan aina tyhjä buffer
          
-          alkio.isInstanceOf[Sointu] match {
+           alkio.isInstanceOf[Sointu] match {
            case true  => pituudet += alkio.asInstanceOf[Sointu].pituus            // yhteinen pituus talteen vain kerran
                          for(nuotti <- alkio.asInstanceOf[Sointu].nuotit){
                               apubufferInt += MIDINoteNumber(nuotti.asInstanceOf[Nuotti].korkeus)  // Map("nuotinnimi" --> Int)     
                          }   
-                         nuottiNumberit += apubufferInt
+                         nuottiNumberit += apubufferInt.sorted  // melodia menee vikaksi
            case false => if (alkio.isInstanceOf[Nuotti]){
                  apubufferInt += MIDINoteNumber(alkio.asInstanceOf[Nuotti].korkeus)
                  nuottiNumberit += apubufferInt
@@ -77,6 +84,6 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava]) {   //
   // println(nuottiNumberit)
    
     val nuotitJaPituudet = nuottiNumberit.zip(pituudet)
-    val player = new simpleMIDIPlayer(nuotitJaPituudet) 
+    val player = new simpleMIDIPlayer(nuotitJaPituudet, MIDIPatch) 
   
 }

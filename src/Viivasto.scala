@@ -2,7 +2,7 @@
 import scala.collection.mutable.Buffer
 import scala.collection.mutable.Map
 
-class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[String]) {
+class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[String], tahtilaji:String) {
   
   var viivasto = piirraGavain   //Buffer[String]()
   
@@ -42,7 +42,7 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
        }    
        liita(laitettava)
        tahtiaMennyt += laitettava.pituus
-       if (tahtiaMennyt == 4.0){
+       if (tahtiaMennyt == tahtilaji.toDouble){
      //     println("laitettava: " + laitettava + ", pit:" + laitettava.pituus + "riviaMennytMontakoTahtia " +riviaMennytMontakoTahtia)
           riviaMennytMontakoTahtia += 1
           tahtiaMennyt = 0.0

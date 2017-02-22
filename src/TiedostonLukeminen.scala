@@ -12,7 +12,8 @@ class TiedostonLukeminen  {
   val lyriikkadata = Buffer[String]()      // biisin sanat
   var inputArray= Array[String]()         // splitattuna yllä oleva tiedosto
  
-    
+  var MIDIPatch = ""
+  var tahtilaji = "4"
   val inputhakemisto = new File("./input")
   val listaus = inputhakemisto.listFiles()
   
@@ -25,6 +26,11 @@ class TiedostonLukeminen  {
   }  
   val nimi = readLine("\nMinkä nimisen tiedoston haluat nuoteiksi? Valitse ylläolevista. ")
   val tiedosto = Source.fromFile("input/" + nimi )
+  
+   do {
+   MIDIPatch = readLine("\nMillä soundilla haluat kuulla kappaleen?\n" +
+                              "0= en millään, 1= piano, 2= vibrafoni, 3= rock-urut, 4=syna")
+   } while (!"01234".contains(MIDIPatch))                           
    
   def lueJaTarkistaVirheet() = {
     try {   
@@ -73,6 +79,8 @@ class TiedostonLukeminen  {
            else if(seuraavatrivitLyriikkaan == false){   
              tunnisteet +=  i.toString()  
              tunnisteet += inputFromFile(i).tail.toLowerCase().trim
+             if("2345678".contains(inputFromFile(i).tail))
+                 tahtilaji = inputFromFile(i).tail
            }  
        } else if (seuraavatrivitLyriikkaan)
           lyriikkadata += (inputFromFile(i))
