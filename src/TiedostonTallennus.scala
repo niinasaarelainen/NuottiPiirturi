@@ -6,7 +6,7 @@
 
 class TiedostonTallennus(biisi: Kappale) {
   
-   val nimi = readLine("millä nimellä talletetaan? ")
+   val nimi = readLine("\nMillä nimellä talletetaan? ")
    val kohdetiedosto = new PrintWriter("output/" + nimi+".txt")
    println("muista painaa F5, jotta tiedosto päivittyy Package Explorerissa.")
    

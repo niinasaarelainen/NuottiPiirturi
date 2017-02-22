@@ -23,10 +23,22 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
     
      var lyricsInd = 0
      for (laitettava <- nuottiOliot) {
-                                                           // jos sanoja oli vähemmän kuin nuotteja, ei haluta kaataa ohjelmaa
+             
+       
+             // jos sanoja oli vähemmän kuin nuotteja, ei haluta kaataa ohjelmaa
        if(!laitettava.isInstanceOf[Tauko] && lyricsBuffer.size != 0 && lyricsBuffer.size - lyricsInd >= 1 ){
-           laitettava.kuva(16) = laitettava.kuva(16).substring(0, 1) + lyricsBuffer(lyricsInd)  + laitettava.kuva(16).substring(1+ lyricsBuffer(lyricsInd).size, laitettava.kuvanLeveys)
-              lyricsInd += 1
+           var tavu = ""
+           // leikataan liian pitkien lyriikkatavujen loput:
+           if ( lyricsBuffer(lyricsInd).size > laitettava.kuvanLeveys){
+             tavu = lyricsBuffer(lyricsInd).substring(0, laitettava.kuvanLeveys)
+           } else tavu = lyricsBuffer(lyricsInd)
+           // keskitetään lyriikkatavuja lähemmäs nuottia:
+           if (laitettava.kuvanLeveys - tavu.size < 2)
+             laitettava.kuva(16) =  tavu  + laitettava.kuva(16).substring(tavu.size, laitettava.kuvanLeveys)
+           else if (laitettava.kuvanLeveys - tavu.size < 4) 
+              laitettava.kuva(16) = "  " + tavu  + laitettava.kuva(16).substring(tavu.size+2, laitettava.kuvanLeveys)
+           else  laitettava.kuva(16) = "   " + tavu  + laitettava.kuva(16).substring(tavu.size+3, laitettava.kuvanLeveys)
+           lyricsInd += 1
        }    
        liita(laitettava)
        tahtiaMennyt += laitettava.pituus
@@ -36,7 +48,7 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
           tahtiaMennyt = 0.0
           lisaaTahtiviiva
        }
-       if (riviaMennytMontakoTahtia == 4 ){      // printtaukseen 2, voisi kysyä käyttäjältä  //TODO      
+       if (riviaMennytMontakoTahtia == 2 ){      // printtaukseen 2, voisi kysyä käyttäjältä  //TODO      
            vaihdaRivi
        }
     } // end for, kaikki nuottiOliot käsitelty
