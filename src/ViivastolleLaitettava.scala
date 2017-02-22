@@ -45,6 +45,8 @@ import scala.collection.mutable.Map
          val etumerkki = aani.asInstanceOf[Nuotti].etumerkki
          val nuppi = aani.asInstanceOf[Nuotti].nuppi
          korkeudet += y(nimiMapissa)
+         if(nimiMapissa == "c1")  viivasto(y("c1")) = viivasto(y("c1")).substring(0, 1) + "--" +  viivasto(y("c1")).substring(4, 6) + "--" + viivasto(y("c1")).substring(7, kuvanLeveys)         
+         
          if(etumerkki.size == 0)  // ei etumerkkiä
             viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 3) + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
          else
@@ -86,11 +88,9 @@ abstract class Nuotti extends ViivastolleLaitettava {
      def nimiMapissa: String
      def etumerkki: String
       
-     def piirraApuviiva = {            // TODO
-      // if(nimiMapissa == "c1"){                 
-       
-     //  }
-  }
+     def piirraApuviiva = {                       
+           viivasto(y("c1")) = viivasto(y("c1")).substring(0, 1) + "--" +  viivasto(y("c1")).substring(4, 6) + "--" + viivasto(y("c1")).substring(7, kuvanLeveys)         
+     }
   }
  
  abstract class Tauko extends ViivastolleLaitettava{
@@ -107,6 +107,7 @@ abstract class Nuotti extends ViivastolleLaitettava {
     def etumerkki = if (nuotinNimi.filter(_ !='-').size == 3) nuotinNimi(1).toString else ""
   
     def piirraNuppi = { 
+      if(nuotinNimi=="c1") piirraApuviiva
       if(etumerkki.size == 0)  // ei etumerkkiä
          viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 3) + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
       else
