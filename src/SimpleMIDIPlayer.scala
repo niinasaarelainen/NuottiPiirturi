@@ -37,7 +37,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int) { 
                  ch1.noteOn(nuottiTaiSointu._1(i), 68)         // 68 = velocity (127 = max), säestysäänet, jos niitä on
               else  ch1.noteOn(nuottiTaiSointu._1(i), 114)  // oltiin sortattu, eli melodia on vikana (ylin ääni = isoin numero)     
            
-        Thread.sleep((nuottiTaiSointu._2 * 180).toInt)  // ms   
+        Thread.sleep((nuottiTaiSointu._2 * 160).toInt)  // ms   
         
         if (nuottiTaiSointu._1(0) != 0)
           for (soinnunNuotti <- nuottiTaiSointu._1)              

@@ -44,14 +44,15 @@ class Sointu(aanet: Buffer[ViivastolleLaitettava]) extends ViivastolleLaitettava
       for (aani <- aanet){
          val nimiMapissa = aani.asInstanceOf[Nuotti].nimiMapissa 
          val etumerkki = aani.asInstanceOf[Nuotti].etumerkki
+         val extraetumerkki = aani.asInstanceOf[Nuotti].extraetumerkkiDef
          val nuppi = aani.asInstanceOf[Nuotti].nuppi
          korkeudet += y(nimiMapissa)
          if(nimiMapissa == "c1")  viivasto(y("c1")) = viivasto(y("c1")).substring(0, 1) + "--" +  viivasto(y("c1")).substring(4, 6) + "--" + viivasto(y("c1")).substring(7, kuvanLeveys)         
          
-         if(etumerkki.size == 0)  // ei etumerkkiä
+         if(etumerkki.size == 0 && extraetumerkki.size == 0)  // ei etumerkkiä
             viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 3) + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
          else
-            viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 2) + etumerkki + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
+            viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 2) + extraetumerkki + etumerkki + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
          if(aani.pituus== 1.5 || aani.pituus == 3)
             viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 5) + "." + viivasto(y(nimiMapissa)).substring(6, kuvanLeveys)  
 
@@ -87,6 +88,7 @@ abstract class Nuotti extends ViivastolleLaitettava {
      def korkeus: String
      def nimiMapissa: String
      def etumerkki: String
+     def extraetumerkkiDef: String
       
      def piirraApuviiva = {                       
            viivasto(y("c1")) = viivasto(y("c1")).substring(0, 1) + "--" +  viivasto(y("c1")).substring(4, 6) + "--" + viivasto(y("c1")).substring(7, kuvanLeveys)         
@@ -94,32 +96,33 @@ abstract class Nuotti extends ViivastolleLaitettava {
   }
  
 abstract class Tauko extends ViivastolleLaitettava{
-    def korkeus = "c2"    
-    def soiva = false
+     def korkeus = "c2"    
+     def soiva = false
 }
 
  
 class KokoNuotti(nuotinNimi: String, extraetumerkki: String = "") extends Nuotti{    
-    def korkeus = nuotinNimi
-    def pituus = 4.0
-    def kuvanLeveys = 20
-    def nimiMapissa = nuotinNimi.filter(_ !='#').filter(_ != 'b').filter(_ != '§')  // esim. gb1 --> g1
-    def etumerkki = if (nuotinNimi.filter(_ !='-').size == 3) nuotinNimi(1).toString else ""
+     def korkeus = nuotinNimi
+     def pituus = 4.0
+     def kuvanLeveys = 20
+     def nimiMapissa = nuotinNimi.filter(_ !='#').filter(_ != 'b').filter(_ != '§')  // esim. gb1 --> g1
+     def etumerkki = if (nuotinNimi.filter(_ !='-').size == 3) nuotinNimi(1).toString else ""
+     def extraetumerkkiDef = extraetumerkki
   
-    def piirraNuppi = { 
-      if(nuotinNimi=="c1") piirraApuviiva
-      if(etumerkki.size == 0 && extraetumerkki.size == 0)  // ei etumerkkiä
-         viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 3) + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
-      else
+     def piirraNuppi = { 
+        if(nuotinNimi=="c1") piirraApuviiva
+        if(etumerkki.size == 0 && extraetumerkki.size == 0)  // ei etumerkkiä
+           viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 3) + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
+        else
          viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 2) + etumerkki + extraetumerkki + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
                                                                             // ikinä ei ole molempia, toinen "" 
-    }
+      }
      
-    def kuva = {
+      def kuva = {
          viivasto = piirraTyhjaViivasto(kuvanLeveys) 
          piirraNuppi
          viivasto
-    }
+      }
 }   
  
 
