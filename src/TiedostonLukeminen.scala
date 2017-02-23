@@ -6,74 +6,73 @@
   
 class TiedostonLukeminen  {
   
-  var inputFromFile = Buffer[String]()     // kaikki input, paitsi tyhjät rivit
-  val tunnisteet = Buffer[String]()       // edellisestä tunnisteet
-  val nuottidata = Buffer[String]()       // loput, eli nuottidata
-  val lyriikkadata = Buffer[String]()      // biisin sanat
-  var inputArray= Array[String]()         // splitattuna yllä oleva tiedosto
+   var inputFromFile = Buffer[String]()     // kaikki input, paitsi tyhjät rivit
+   val tunnisteet = Buffer[String]()       // edellisestä tunnisteet
+   val nuottidata = Buffer[String]()       // loput, eli nuottidata
+   val lyriikkadata = Buffer[String]()      // biisin sanat
+   var nuottiAlkiot= Array[String]()         // splitattuna yllä oleva tiedosto
  
-  var MIDIPatch = ""
-  var tahtilaji = "4"
-  var kappaleenNimi = ""
-  val inputhakemisto = new File("./input")
-  val listaus = inputhakemisto.listFiles()
+   var MIDIPatch = ""
+   var tahtilaji = "4"
+   var kappaleenNimi = "" 
+  
   
   helppiTeksti
 
-  for ( tiedosto <- listaus ) {
-    if ( tiedosto.isFile ) {
-      println(tiedosto.getName)
-    }
+  val inputhakemisto = new File("./input")
+  for ( tiedosto <- inputhakemisto.listFiles() ) {
+     if ( tiedosto.isFile ) {
+       println(tiedosto.getName)
+     }
   }  
   val nimi = readLine("\nMinkä nimisen tiedoston haluat nuoteiksi? Valitse ylläolevista. ")
   val tiedosto = Source.fromFile("input/" + nimi )
   
-   do {
-   MIDIPatch = readLine("\nMillä soundilla haluat kuulla kappaleen?\n" +
+  do {
+    MIDIPatch = readLine("\nMillä soundilla haluat kuulla kappaleen?\n" +
                               "0= en millään,  1= piano,  2= vibrafoni,  3= rock-urut,  4=syna ")
-   } while (!"01234".contains(MIDIPatch))                           
-   
+  } while (!"01234".contains(MIDIPatch))                           
+ 
+     
   def lueJaTarkistaVirheet() = {
-    try {   
-      for (rivi <- tiedosto.getLines) {
-         if(rivi.trim.size != 0 ){
+     try {   
+       for (rivi <- tiedosto.getLines) {
+          if(rivi.trim.size != 0 ){
              inputFromFile += rivi.trim
-         }
-      }
-    } finally {
-      tiedosto.close()
-    }
+          }
+       }
+     } finally {
+        tiedosto.close()
+     }
     
-    kasitteleTunnisteet(inputFromFile)   // tämä pitää tehdä ennen splittaamista !!!! esim tunniste  #Let's get together
-    println("nuottidata :" + nuottidata)
-    println("tunnisteet :" + tunnisteet)
+   kasitteleTunnisteet(inputFromFile)   // tämä pitää tehdä ennen splittaamista !!!! esim tunniste  #Let's get together
+   println("nuottidata :" + nuottidata)
+   println("tunnisteet :" + tunnisteet)
     
     // splittaus & virheiden tarkistus:  
    for (i <- 0 until nuottidata.size) { 
       var  splitattuRivi = nuottidata(i).split(" ")     // mieti tunnisteiden ja sointujen caset myöhemmin
       for (alkio <-   splitattuRivi){
      //    println("rivillä " + i + alkio)
-         if(alkio == "" ) {}                            // ylimääräisiä välilyöntejä ei inputArray:hin
+         if(alkio == "" ) {}                            // ylimääräisiä välilyöntejä ei nuottiAlkiot:hin
          else if(oikeellisuusTesti(alkio)){
-           inputArray = inputArray :+ alkio
+           nuottiAlkiot = nuottiAlkiot :+ alkio
          } else {
            val nimi = readLine("\nvirhe xxx. Korjaa tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")
          }         
+      }
+    } // end koko syöte
    
-     }
-      
-     
-   } // end koko syöte
-   
-     println (inputArray.size)
-//     for (i <- 0 until inputArray.size)
-//        println (inputArray(i))     
+     println (nuottiAlkiot.size)
+//     for (i <- 0 until nuottiAlkiot.size)
+//        println (nuottiAlkiot(i))     
   }
   
+   
   def  kasitteleTunnisteet(inputFromFile: Buffer[String]) = {
     
-    var seuraavatrivitLyriikkaan = false
-    for (i <- 0 until inputFromFile.size ){  
+     var seuraavatrivitLyriikkaan = false
+     for (i <- 0 until inputFromFile.size ){  
          if (inputFromFile(i).head == '#'){     
            if(inputFromFile(i).tail.toLowerCase().trim == "sanat")   //  T U N N I S T E E T
               seuraavatrivitLyriikkaan = true
@@ -96,27 +95,26 @@ class TiedostonLukeminen  {
           
          else nuottidata += inputFromFile(i)      // L O P U T   ELI   N U O T I T
     }  
-    tunnisteet += inputFromFile.size.toString()    // vika rivinumero
-    
-        
+    tunnisteet += inputFromFile.size.toString()    // vika rivinumero     
   }
+  
   
   def helppiTeksti = {
      val helpFile = Source.fromFile("help.txt")
    
-    try {   
-      for (rivi <- helpFile.getLines) {
+     try {   
+       for (rivi <- helpFile.getLines) {
          println(rivi)
-      }
-    } finally {
-      helpFile.close()
-    }
-  }
+       }
+     } finally {
+        helpFile.close()
+     }
+   }
   
-  def oikeellisuusTesti(nuottiJaPituus: String) : Boolean = {
+  
+   def oikeellisuusTesti(nuottiJaPituus: String) : Boolean = {
     
-    true
-  }  // end oikeellisuusTesti
+     true
+   }  // end oikeellisuusTesti
 
- 
-  }
+}

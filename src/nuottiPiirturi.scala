@@ -1,48 +1,32 @@
 import scala.collection.mutable.Buffer
 
 
-class NuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
+class NuottiPiirturi(input: String, var tahtilaji: Int = 4, lyrics: String = ""){
    
-   def this(input: String, tahtilaji: Int) = this (input, tahtilaji, "")
-   def this(input: String) = this (input, 4, "")
-  
    var pituus = 0
-   val kappale =  new Kappale    //Buffer[Viivasto]
    var lyricsBuffer = Buffer[String]()  
-   var nuottiData= Buffer[ViivastolleLaitettava]() 
-   var nuotinNimi = ""
-   var sanatPotkona = ""
-  
+   var nuottiData= Buffer[ViivastolleLaitettava]()    
   
    val inputTiedostosta = new TiedostonLukeminen
    inputTiedostosta.lueJaTarkistaVirheet()
  
-   val inputBuffer = inputTiedostosta.inputArray.toBuffer
+   kasitteleLyriikat
    
-   if(inputTiedostosta.lyriikkadata.size != 0){
-        
-      for (rivi <-  inputTiedostosta.lyriikkadata){
-        sanatPotkona += rivi.replaceAll("-", "- ")
-        sanatPotkona += " "
-      }   
-      lyricsBuffer =  sanatPotkona.replaceAll("  ", " ").split(" ").toBuffer  
-      for (tavu <- lyricsBuffer)
-        println(tavu)
-   }
-     
-  nuottiData = kasitteleNuottiTieto(inputBuffer, nuottiData)      
+   val inputBuffer = inputTiedostosta.nuottiAlkiot.toBuffer  
+   nuottiData = kasitteleNuottiTieto(inputBuffer, nuottiData)      
   
   
   def kasitteleNuottiTieto(inputBuffer: Buffer[String], palautetaan: Buffer[ViivastolleLaitettava] ): Buffer[ViivastolleLaitettava] = {        
- 
+     
+     val moneenkoLasketaan =  inputTiedostosta.tahtilaji     // TODO
      for ( i<- 0 until inputBuffer.length){        
      
-        var solu = inputBuffer(i)    // esim. "g#1--"   
-        if(solu.head != '<')
-           pituus = solu.count(_ == '-')                  
+        var alkio = inputBuffer(i)    // esim. "g#1--"   
+        if(alkio.head != '<')
+           pituus = alkio.count(_ == '-')                  
           
-        if (solu.head == '<'){
-          val sointu =  solu.tail.substring(0, solu.size -2).split(",")    
+        if (alkio.head == '<'){
+          val sointu =  alkio.tail.substring(0, alkio.size -2).split(",")    
           var sointuBuffer = Buffer[String]()
           var viivastolleLaitettavaBuffer = Buffer[ViivastolleLaitettava]()
           for(aani <- sointu) 
@@ -51,21 +35,21 @@ class NuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
         }      
        
         else {        
-           nuotinNimi = solu.filter(_ != '-').filter(_ != '.')        
+           val nuotinNimi = alkio.filter(_ != '-').filter(_ != '.')        
            if (nuotinNimi == "z"){
               pituus match{
                  case 0 => palautetaan += new KahdeksasosaTauko
-                 case 1 => if(solu.contains(".")) palautetaan += new PisteellinenNeljasosaTauko  else palautetaan += new NeljasosaTauko
+                 case 1 => if(alkio.contains(".")) palautetaan += new PisteellinenNeljasosaTauko  else palautetaan += new NeljasosaTauko
                  case 2 => for (i<- 1 to 2) palautetaan += new NeljasosaTauko
                  case 3 =>  for (i<- 1 to 3) palautetaan += new NeljasosaTauko
                  case 4 =>  for (i<- 1 to 4) palautetaan += new NeljasosaTauko
               }
             } else if(pituus == 1 ){   
-               if(solu.contains("."))
+               if(alkio.contains("."))
                   palautetaan += new PisteellinenNeljasosaNuotti(nuotinNimi) 
                else palautetaan += new NeljasosaNuotti(nuotinNimi)        
             } else if (pituus == 2 ){
-               if(solu.contains("."))
+               if(alkio.contains("."))
                   palautetaan += new PisteellinenPuoliNuotti(nuotinNimi)  
                else palautetaan += new PuoliNuotti (nuotinNimi)  
             } else if (pituus == 3 ){
@@ -78,7 +62,7 @@ class NuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
        //    }   
         //  else {   
             if (nuotinNimi.size == 2)  {       // testing !!!!!!!
-                palautetaan +=  new KahdeksasosaNuotti (nuotinNimi, "§")     // TODO  ei voi luoda ennen seuraavan solun tutkimista !!)
+                palautetaan +=  new KahdeksasosaNuotti (nuotinNimi, "§")     // TODO  ei voi luoda ennen seuraavan alkion tutkimista !!)
             } else  palautetaan +=  new KahdeksasosaNuotti (nuotinNimi)  // if ylennys ollut jo tässä tahdissa,  "N" = neutral, 
                                            //  ei palautusmerkkiä  vai pitäisikö tehdä g1, mutta silloin soittoData menee reisille
         //  }  
@@ -87,14 +71,31 @@ class NuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
     }  // for 
    palautetaan   // tätä tarvitaan sointuja muodostettaessa
    } 
+  
+   
+   def kasitteleLyriikat = {
+      if(inputTiedostosta.lyriikkadata.size != 0){
+       
+      var sanatPotkona = ""  
+      for (rivi <-  inputTiedostosta.lyriikkadata){
+        sanatPotkona += rivi.replaceAll("-", "- ")
+        sanatPotkona += " "
+      }   
+      lyricsBuffer =  sanatPotkona.replaceAll("  ", " ").split(" ").toBuffer  
+      for (tavu <- lyricsBuffer)
+        println(tavu)
+      }
+   }
  
  
+  
    var viivasto = new Viivasto(nuottiData, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)
    viivasto.piirraNuotit(nuottiData)
  
    if(inputTiedostosta.MIDIPatch.toInt != 0)  // käyttäjä valitsi että ei kuunnella
       new simpleMIDIPlayerAdapter(nuottiData, inputTiedostosta.MIDIPatch.toInt)
    
+   val kappale =  new Kappale    //Buffer[Buffer[String]]()
    new TiedostonTallennus(viivasto.kappale)    
     
 }
