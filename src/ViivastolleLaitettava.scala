@@ -76,8 +76,7 @@ import scala.collection.mutable.Map
                      viivasto(mista+i) = viivasto(mista+i).substring(0, 3) + "|" + viivasto(mista+i).substring(4, kuvanLeveys)  
               if (pituus == 0.5) viivasto(mihin + 3) =  viivasto(mihin + 3).substring(0, 4) + "/" + viivasto(mihin + 3).substring(5, kuvanLeveys)                
             }        
-     }
-     
+     }     
  }
  
 
@@ -99,7 +98,7 @@ abstract class Nuotti extends ViivastolleLaitettava {
   }
 
  
- class KokoNuotti(nuotinNimi: String) extends Nuotti{    
+ class KokoNuotti(nuotinNimi: String, extraetumerkki: String = "") extends Nuotti{    
     def korkeus = nuotinNimi
     def pituus = 4.0
     def kuvanLeveys = 20
@@ -108,10 +107,10 @@ abstract class Nuotti extends ViivastolleLaitettava {
   
     def piirraNuppi = { 
       if(nuotinNimi=="c1") piirraApuviiva
-      if(etumerkki.size == 0)  // ei etumerkkiä
+      if(etumerkki.size == 0 && extraetumerkki.size == 0)  // ei etumerkkiä
          viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 3) + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
       else
-         viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 2) + etumerkki + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
+         viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 2) + etumerkki + extraetumerkki + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
       
     }
      
@@ -123,7 +122,7 @@ abstract class Nuotti extends ViivastolleLaitettava {
  }   
  
 
-  class PuoliNuotti(nuotinNimi: String) extends KokoNuotti(nuotinNimi: String){
+  class PuoliNuotti(nuotinNimi: String, extraetumerkki: String = "") extends KokoNuotti(nuotinNimi: String, extraetumerkki: String){
     override def korkeus = nuotinNimi
     override def pituus = 2.0
     override def kuvanLeveys = 12
@@ -161,7 +160,7 @@ abstract class Nuotti extends ViivastolleLaitettava {
    }
    
     
-  class NeljasosaNuotti(nuotinNimi: String) extends PuoliNuotti(nuotinNimi: String){
+  class NeljasosaNuotti(nuotinNimi: String, extraetumerkki: String = "") extends PuoliNuotti(nuotinNimi: String, extraetumerkki: String){
     override def korkeus = nuotinNimi
     override def pituus = 1.0
     override def kuvanLeveys = 8
@@ -186,7 +185,7 @@ abstract class Nuotti extends ViivastolleLaitettava {
   }   
   
     
-   class KahdeksasosaNuotti(nuotinNimi: String) extends NeljasosaNuotti(nuotinNimi: String){
+   class KahdeksasosaNuotti(nuotinNimi: String, extraetumerkki: String = "") extends NeljasosaNuotti(nuotinNimi: String, extraetumerkki: String){
     override def korkeus = nuotinNimi
     override def pituus = 0.5
     override def kuvanLeveys = 7

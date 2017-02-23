@@ -92,10 +92,14 @@ class NuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
           //   piirraKahdeksasosaPari(nuotinNimi, inputArray(i+1))
       //    }   
         //  else {   
-            palautetaan +=  new KahdeksasosaNuotti (nuotinNimi)     // TODO  ei voi luoda ennen seuraavan solun tutkimista !!            
+            if (nuotinNimi.size == 2)  {       // testing !!!!!!!
+               palautetaan +=  new KahdeksasosaNuotti (nuotinNimi, "§")     // TODO  ei voi luoda ennen seuraavan solun tutkimista !!
+               println("§")
+            }   
+            else  palautetaan +=  new KahdeksasosaNuotti (nuotinNimi)
         //  }  
           }
-      }   // iso else: ei-sointu
+      }   // iso else: ei-sointu.
     }  // for */
   palautetaan   // tätä tarvitaan sointuja muodostetaaessa
 } 
