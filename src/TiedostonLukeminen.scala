@@ -82,6 +82,8 @@ class TiedostonLukeminen  {
               tunnisteet += inputFromFile(i).tail.toLowerCase().trim
               if("2345678".contains(inputFromFile(i).tail))
                  tahtilaji = inputFromFile(i).tail
+        //         if(inputFromFile(i).tail.trim.substring(1,inputFromFile(i).tail.size) != 0)  // samalla rivillä tahtilaji ja nuotteja
+          //           nuottidata += inputFromFile(i).tail.trim.substring(1,inputFromFile(i).tail.size)
               if(inputFromFile(i).tail.toLowerCase().contains("nimi")){
                 println(inputFromFile(i).size)
                  kappaleenNimi = inputFromFile(i).tail.substring(5, inputFromFile(i).tail.size)  

@@ -22,16 +22,13 @@ class simpleChordPlayer (sointumerkit: Buffer[(Buffer[Int], Int)]) {   // Tuple 
 	//	  println(patch)
 	
 		
-		Thread.sleep(495)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
+		Thread.sleep(500)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
   
        for(sointumerkki <- sointumerkit){
          
-          if(sointumerkki._1(0) -24 < 36)
-             ch1.noteOn(sointumerkki._1(0) -12,  60)   // bassoääni ekana    -24 = 2 okt. alaspäin
-          else ch1.noteOn(sointumerkki._1(0) -24,  60)  
-          
+          ch1.noteOn(sointumerkki._1(0)-12, 60)  // oltiin sortattu, basso alimpana   
           for (i <- 0 until sointumerkki._1.size)
-               ch2.noteOn(sointumerkki._1(i), 60)      // synasointu
+               ch2.noteOn(sointumerkki._1(i), 60)      // 60 = velocity (127 = max), säestysäänet, jos niitä on
                    
           
           Thread.sleep(sointumerkki._2 * 500)  // ms   
@@ -129,14 +126,47 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPa
    
   // println(nuottiNumberit)
    
-   val nuotitJaPituudet = nuottiNumberit.zip(pituudet)
+    val nuotitJaPituudet = nuottiNumberit.zip(pituudet)
    
+    
+    
+    val nuottiNumberit2 = Buffer[Buffer[Int]]() 
+    apubufferInt = Buffer[Int]() 
+    apubufferInt += (60,64,67)
+    nuottiNumberit2 += apubufferInt
+    
+    apubufferInt = Buffer[Int]() 
+    apubufferInt += (59,62,67)
+    nuottiNumberit2 += apubufferInt
+    
+    apubufferInt = Buffer[Int]() 
+    apubufferInt += (60,65,69)
+    nuottiNumberit2 += apubufferInt
+    
+    apubufferInt = Buffer[Int]() 
+    apubufferInt += (60,64,67)
+    nuottiNumberit2 += apubufferInt
+    
+    apubufferInt = Buffer[Int]() 
+    apubufferInt += (59,62,67)
+    nuottiNumberit2 += apubufferInt
+    
+    apubufferInt = Buffer[Int]() 
+    apubufferInt += (60,64,67)
+    nuottiNumberit2 += apubufferInt
+    
+    var soinnunPituudet = Buffer(8,8,4,4,4,4)
+    
+    
+    val nuotitJaPituudet2 = nuottiNumberit2.zip(soinnunPituudet)
+   
+    
    for (i <- 1 to 2) {
     val thread = new Thread {
         override def run {  
           i match{        
             case 1 => new simpleMIDIPlayer(nuotitJaPituudet, MIDIPatch) 
-            case 2 => new simpleChordPlayerAdapter(Buffer("C", "G", "F", "C", "G", "C")) 
+            case 2 => new simpleChordPlayer(nuotitJaPituudet2) 
           }
         }
     }
@@ -144,40 +174,4 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPa
    } 
     
 }
-
-
-
-class simpleChordPlayerAdapter (sointumerkit: Buffer[String]){
-  
-  val MIDINoteNumber = Map("c" -> 60, "c#1" ->61, "db" -> 61, "d" -> 62, "d#" -> 63, "eb" -> 63,  
-       "e" -> 64, "f"-> 65,  "f#"->66,  "gb" -> 66, "g" -> 67,  "g#" -> 68, "ab" -> 68, 
-       "a" -> 69, "a#" -> 70, "hb" -> 70, "b" -> 70, "bb" -> 70, "h" -> 71)
-
-  
-  val soinnut = Buffer[Buffer[Int]]() 
-  
-  for(sointumerkki <- sointumerkit)
-    if(sointumerkki.toLowerCase().contains("m"))      
-       soinnut += molli(MIDINoteNumber(sointumerkki.toLowerCase().head.toString))
-    else  soinnut += duuri(MIDINoteNumber(sointumerkki.toLowerCase()))  
-  
-    
-  def duuri(perussavel: Int) = {
-    var apubufferInt = Buffer[Int]() 
-    apubufferInt += (perussavel, perussavel+4, perussavel+7)
-    apubufferInt
-  }
-  
-  def molli(perussavel: Int) = {
-     var apubufferInt = Buffer[Int]() 
-     apubufferInt += (perussavel, perussavel+3, perussavel+7)
-     apubufferInt
-  }
    
-     
-    var soinnunPituudet = Buffer(8,8,4,4,4,4)   // 8 iskua = 2 tahtia
-       
-    val soinnutJaPituudet = soinnut.zip(soinnunPituudet)
-    new simpleChordPlayer(soinnutJaPituudet)
-  
-}
