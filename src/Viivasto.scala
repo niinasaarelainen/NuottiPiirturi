@@ -2,7 +2,7 @@
 import scala.collection.mutable.Buffer
 import scala.collection.mutable.Map
 
-class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[String], tahtilaji:String) {
+class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[String], tahtilaji:String, kappaleenNimi:String) {
   
   var viivasto = piirraGavain   //Buffer[String]()
   
@@ -11,8 +11,9 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
   var tahtiaMennyt = 0.0        // laskee iskuja
   var riviaMennytMontakoTahtia = 0             // halutaan max 4 tahtia riville
   var kappale = new Kappale
+  this.kappale.lisaaKappaleenNimi(kappaleenNimi)
   
-  
+    
   def piirraNuotit(nuottiOliot: Buffer[ViivastolleLaitettava]) = {
     
     println("----@Viivasto-----")

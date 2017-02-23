@@ -14,6 +14,7 @@ class TiedostonLukeminen  {
  
   var MIDIPatch = ""
   var tahtilaji = "4"
+  var kappaleenNimi = ""
   val inputhakemisto = new File("./input")
   val listaus = inputhakemisto.listFiles()
   
@@ -29,7 +30,7 @@ class TiedostonLukeminen  {
   
    do {
    MIDIPatch = readLine("\nMillä soundilla haluat kuulla kappaleen?\n" +
-                              "0= en millään, 1= piano, 2= vibrafoni, 3= rock-urut, 4=syna")
+                              "0= en millään,  1= piano,  2= vibrafoni,  3= rock-urut,  4=syna ")
    } while (!"01234".contains(MIDIPatch))                           
    
   def lueJaTarkistaVirheet() = {
@@ -65,31 +66,37 @@ class TiedostonLukeminen  {
    } // end koko syöte
    
      println (inputArray.size)
-     for (i <- 0 until inputArray.size)
-        println (inputArray(i))     
+//     for (i <- 0 until inputArray.size)
+//        println (inputArray(i))     
   }
   
   def  kasitteleTunnisteet(inputFromFile: Buffer[String]) = {
     
     var seuraavatrivitLyriikkaan = false
     for (i <- 0 until inputFromFile.size ){  
-         if (inputFromFile(i).head == '#'){     // parillisiin rivinumero Stringinä, parittomiin tunnisteen nimi
-           if(inputFromFile(i).tail.toLowerCase().trim == "sanat")   
+         if (inputFromFile(i).head == '#'){     
+           if(inputFromFile(i).tail.toLowerCase().trim == "sanat")   //  T U N N I S T E E T
               seuraavatrivitLyriikkaan = true
            else if(seuraavatrivitLyriikkaan == false){   
-             tunnisteet +=  i.toString()  
-             tunnisteet += inputFromFile(i).tail.toLowerCase().trim
-             if("2345678".contains(inputFromFile(i).tail))
+              tunnisteet +=  i.toString()                              // parillisiin rivinumero Stringinä, parittomiin tunnisteen nimi
+              tunnisteet += inputFromFile(i).tail.toLowerCase().trim
+              if("2345678".contains(inputFromFile(i).tail))
                  tahtilaji = inputFromFile(i).tail
+              if(inputFromFile(i).tail.toLowerCase().contains("nimi")){
+                println(inputFromFile(i).size)
+                 kappaleenNimi = inputFromFile(i).tail.substring(5, inputFromFile(i).tail.size)  
+                 println("kappaleenNimi: " + kappaleenNimi)
+              }       
            }  
+           
        } else if (seuraavatrivitLyriikkaan)
-          lyriikkadata += (inputFromFile(i))
-         else nuottidata += inputFromFile(i)
+          lyriikkadata += (inputFromFile(i))      // L Y R I I K A 
+          
+         else nuottidata += inputFromFile(i)      // L O P U T   ELI   N U O T I T
     }  
     tunnisteet += inputFromFile.size.toString()    // vika rivinumero
     
-    if(lyriikkadata.size != 0)
-         println("lyriikkadata(0): " + lyriikkadata(0))
+        
   }
   
   def helppiTeksti = {

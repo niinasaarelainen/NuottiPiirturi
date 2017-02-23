@@ -101,14 +101,14 @@ class NuottiPiirturi(input: String, var tahtilaji: Int, lyrics: String){
 } 
  
  
-  var viivasto = new Viivasto(nuottiData, lyricsBuffer, inputTiedostosta.tahtilaji)
+  var viivasto = new Viivasto(nuottiData, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)
   viivasto.piirraNuotit(nuottiData)
  
   if(inputTiedostosta.MIDIPatch.toInt != 0)  // käyttäjä valitsi että ei kuunnella
       new simpleMIDIPlayerAdapter(nuottiData, inputTiedostosta.MIDIPatch.toInt)
   //val player = new simpleMIDIPlayerAdapter(soitettavatKorkeudet )  // tällä lailla tiedonkeruussa tuli soinnut myös yksitellen
   
-  new TiedostonTallennus(viivasto.kappale)  // biisin nimi !!!
+  new TiedostonTallennus(viivasto.kappale) 
   
  
     
