@@ -34,8 +34,8 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int) { 
         if (nuottiTaiSointu._1(0) != 0)   //taukojen "korkeus"
            for (i <- 0 until nuottiTaiSointu._1.size)
               if(i <  nuottiTaiSointu._1.size-1)
-                 ch1.noteOn(nuottiTaiSointu._1(i), 65)         // 60 = velocity (127 = max), säestysäänet, jos niitä on
-              else  ch1.noteOn(nuottiTaiSointu._1(i), 115)  // oltiin sortattu, eli melodia on vikana (ylin ääni = isoin numero)     
+                 ch1.noteOn(nuottiTaiSointu._1(i), 68)         // 68 = velocity (127 = max), säestysäänet, jos niitä on
+              else  ch1.noteOn(nuottiTaiSointu._1(i), 114)  // oltiin sortattu, eli melodia on vikana (ylin ääni = isoin numero)     
            
         Thread.sleep((nuottiTaiSointu._2 * 180).toInt)  // ms   
         
