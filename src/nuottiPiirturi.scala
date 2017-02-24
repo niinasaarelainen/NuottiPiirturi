@@ -109,7 +109,7 @@ class NuottiPiirturi(input: String, var tahtilaji: String = "4", lyrics: String 
               else this.tahdinAikaisetEtumerkit += nuotinNimi    
       } else if ( this.tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last).size == 1  ){
               val tulos = tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last)
-              tahdinAikaisetEtumerkit = tahdinAikaisetEtumerkit.filter(_ != tulos(0))    // otetaan esim g#1 pois puskurista
+              tahdinAikaisetEtumerkit -= tulos(0)              // otetaan esim g#1 pois puskurista, koska se on nyt §-tilassa
               return "§"   // esim f#1 ja f1 peräkkäin, tarvitaan palautusmerkki                  
       }      
       return ""        
