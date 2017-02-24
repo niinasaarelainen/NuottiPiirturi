@@ -131,6 +131,12 @@ class NuottiPiirturi(input: String, var tahtilaji: String = "4", lyrics: String 
       }
    }
  
+   /*
+   for(viivastolleLaitettava <- nuottiData){							// kesken      asetaExtraetumerkki
+     viivastolleLaitettava.pituus
+     if(viivastolleLaitettava.isInstanceOf[Nuotti])
+        viivastolleLaitettava.asInstanceOf[Nuotti].asetaExtraetumerkki("§")
+   }   */
  
   
    var viivasto = new Viivasto(nuottiData, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)
