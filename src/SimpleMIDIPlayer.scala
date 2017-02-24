@@ -113,7 +113,7 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPa
                          nuottiNumberit += apubufferInt.sorted  // melodia menee vikaksi
                          
            case false => if (alkio.isInstanceOf[Nuotti]){
-                 apubufferInt += MIDINoteNumber(alkio.asInstanceOf[Nuotti].korkeus)
+                 apubufferInt += MIDINoteNumber(alkio.asInstanceOf[Nuotti].korkeus.filter(_ != 'n').filter(_ != '§'))
                  nuottiNumberit += apubufferInt
                  pituudet += alkio.asInstanceOf[Nuotti].pituus
                  

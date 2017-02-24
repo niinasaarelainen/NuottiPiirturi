@@ -105,7 +105,7 @@ class KokoNuotti(nuotinNimi: String, extraetumerkki: String = "") extends Nuotti
      def korkeus = nuotinNimi
      def pituus = 4.0
      def kuvanLeveys = 20
-     def nimiMapissa = nuotinNimi.filter(_ !='#').filter(_ != 'b').filter(_ != '§')  // esim. gb1 --> g1
+     def nimiMapissa = nuotinNimi.filter(_ !='#').filter(_ != 'b').filter(_ != '§').filter(_ != 'n')  // esim. gb1 --> g1
      def etumerkki = if (nuotinNimi.filter(_ !='-').size == 3) nuotinNimi(1).toString else ""
      def extraetumerkkiDef = extraetumerkki
   

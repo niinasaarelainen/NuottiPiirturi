@@ -11,10 +11,11 @@ class TiedostonTallennus(biisi: Kappale) {
    println("muista painaa F5, jotta tiedosto päivittyy Package Explorerissa.")
    
    try {
-      for (viivasto <- biisi.kappale ){
-          for (i <- 0 until viivasto.size)     
-        kohdetiedosto.println(viivasto(i))
-      } 
+      for {
+          viivasto <- biisi.kappale 
+          i <- 0 until viivasto.size
+      } kohdetiedosto.println(viivasto(i))
+   
             
    } finally {
      kohdetiedosto.close()
