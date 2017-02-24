@@ -1,7 +1,7 @@
 import scala.collection.mutable.Buffer
 
 
-class NuottiPiirturi(input: String, var tahtilaji: Int = 4, lyrics: String = ""){
+class NuottiPiirturi(input: String, var tahtilaji: String = "4", lyrics: String = ""){
    
    var pituus = 0
    var lyricsBuffer = Buffer[String]()  
@@ -14,14 +14,17 @@ class NuottiPiirturi(input: String, var tahtilaji: Int = 4, lyrics: String = "")
    kasitteleLyriikat
    
    val inputBuffer = inputTiedostosta.nuottiAlkiot.toBuffer  
-   nuottiData = kasitteleNuottiTieto(inputBuffer, nuottiData)      
+   nuottiData = kasitteleNuottiTieto(inputBuffer, nuottiData, 0.0)      
   
   
+   tahtilaji = inputTiedostosta.tahtilaji  
+   var iskujaMennyt =  0.0
    
-  def kasitteleNuottiTieto(inputBuffer: Buffer[String], palautetaan: Buffer[ViivastolleLaitettava] ): Buffer[ViivastolleLaitettava] = {        
+   var ok= 0   // nollana/pos. ok kasvattaa iskujaMennyt. Sointu asettaa arvon soinnunsävelten määrä +1 (pituus halutaan kerran) negatiiviselle
+   
+  def kasitteleNuottiTieto(inputBuffer: Buffer[String], palautetaan: Buffer[ViivastolleLaitettava], iskujaMennytMuuttuja:Double ): Buffer[ViivastolleLaitettava] = {        
      
-     val tahtilaji = inputTiedostosta.tahtilaji.toDouble    
-     var iskujaMennyt =  0.0
+    var iskujaMennyt = iskujaMennytMuuttuja
     
      for ( i<- 0 until inputBuffer.length){        
         var extraetumerkki = ""
@@ -35,7 +38,8 @@ class NuottiPiirturi(input: String, var tahtilaji: Int = 4, lyrics: String = "")
           var viivastolleLaitettavaBuffer = Buffer[ViivastolleLaitettava]()
           for(aani <- sointu) 
              sointuBuffer += aani
-          nuottiData += new Sointu(kasitteleNuottiTieto(sointuBuffer, viivastolleLaitettavaBuffer) ) 
+          ok = 0- sointuBuffer.size +1    
+          nuottiData += new Sointu(kasitteleNuottiTieto(sointuBuffer, viivastolleLaitettavaBuffer, iskujaMennyt) ) 
         }      
        
         else {                                                            // N U O T I T  J A   T A U O T
@@ -82,15 +86,16 @@ class NuottiPiirturi(input: String, var tahtilaji: Int = 4, lyrics: String = "")
         //  else {   
             
                 palautetaan +=  new KahdeksasosaNuotti (nuotinNimi, extraetumerkki)     // TODO  ei voi luoda ennen seuraavan alkion tutkimista !!)
-                iskujaMennyt += 0.5
+                if(ok >= 0) iskujaMennyt += 0.5
             } 
            println(nuotinNimi + " " + iskujaMennyt)
       }   // iso else: ei-sointu.
-      if (iskujaMennyt == tahtilaji) {
-        
+      if (iskujaMennyt == tahtilaji.toInt) {
+        println("--------------------------")
         iskujaMennyt = 0.0  
         tahdinAikaisetEtumerkit = Buffer[String]()
       }
+      ok += 1
     }  // for 
    palautetaan   // tätä tarvitaan sointuja muodostettaessa
    } 
@@ -103,7 +108,9 @@ class NuottiPiirturi(input: String, var tahtilaji: Int = 4, lyrics: String = "")
                   return "n"   // n = nuottikuva neutral, nuotti on ylennetty/alennettu mutta merkkiä ei piirretä
               else this.tahdinAikaisetEtumerkit += nuotinNimi    
       } else if ( this.tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last).size == 1  ){
-                  return "§"   // esim f#1 ja f1 peräkkäin, tarvitaan palautusmerkki
+              val tulos = tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last)
+              tahdinAikaisetEtumerkit = tahdinAikaisetEtumerkit.filter(_ != tulos(0))    // otetaan esim g#1 pois puskurista
+              return "§"   // esim f#1 ja f1 peräkkäin, tarvitaan palautusmerkki                  
       }      
       return ""        
    }

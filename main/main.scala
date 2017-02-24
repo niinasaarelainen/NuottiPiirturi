@@ -21,7 +21,7 @@ object test extends App{
       
   
 //  val piirturi = new nuottiPiirturi(inputFromFile, tahtilaji)
-  val piirturi = new NuottiPiirturi(kokonuotteja, tahtilaji)
+  val piirturi = new NuottiPiirturi(kokonuotteja, "4")
  //  val piirturi = new nuottiPiirturi(taukoja, tahtilaji)
 //  val piirturi2 = new nuottiPiirturi(kahdeksasosia)
 //  val valssi = new nuottiPiirturi(kahdeksasosia, 3)     // tahtiviivat huonosti
