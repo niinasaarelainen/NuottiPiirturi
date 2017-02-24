@@ -106,15 +106,15 @@ class KokoNuotti(nuotinNimi: String, extraetumerkki: String = "") extends Nuotti
      def pituus = 4.0
      def kuvanLeveys = 20
      def nimiMapissa = nuotinNimi.filter(_ !='#').filter(_ != 'b').filter(_ != '§').filter(_ != 'n')  // esim. gb1 --> g1
-     def etumerkki = if (nuotinNimi.filter(_ !='-').size == 3) nuotinNimi(1).toString else ""
-     def extraetumerkkiDef = extraetumerkki
+     def etumerkki = if(extraetumerkki == "n") "" else if (nuotinNimi.filter(_ !='-').size == 3) nuotinNimi(1).toString else ""
+     def extraetumerkkiDef = if(extraetumerkki == "n") "" else extraetumerkki
   
      def piirraNuppi = { 
         if(nuotinNimi=="c1") piirraApuviiva
-        if(etumerkki.size == 0 && extraetumerkki.size == 0)  // ei etumerkkiä
+        if(etumerkki.size == 0 && extraetumerkkiDef.size == 0)  // ei etumerkkiä
            viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 3) + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
         else
-         viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 2) + etumerkki + extraetumerkki + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
+         viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 2) + etumerkki + extraetumerkkiDef + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
                                                                             // ikinä ei ole molempia, toinen "" 
       }
      
