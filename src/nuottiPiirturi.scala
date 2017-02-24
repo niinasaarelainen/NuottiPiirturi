@@ -29,7 +29,7 @@ class NuottiPiirturi(input: String, var tahtilaji: Int = 4, lyrics: String = "")
         if(alkio.head != '<')
            pituus = alkio.count(_ == '-')                  
           
-        if (alkio.head == '<'){
+        if (alkio.head == '<'){                                                // S O I N N U T
           val sointu =  alkio.tail.substring(0, alkio.size -2).split(",")    
           var sointuBuffer = Buffer[String]()
           var viivastolleLaitettavaBuffer = Buffer[ViivastolleLaitettava]()
@@ -38,12 +38,11 @@ class NuottiPiirturi(input: String, var tahtilaji: Int = 4, lyrics: String = "")
           nuottiData += new Sointu(kasitteleNuottiTieto(sointuBuffer, viivastolleLaitettavaBuffer) ) 
         }      
        
-        else {        
+        else {                                                            // N U O T I T  J A   T A U O T
            var nuotinNimi = alkio.filter(_ != '-').filter(_ != '.')  
            extraetumerkki = tutkiEtumerkit(nuotinNimi)  
-           println("extraetumerkki-jälkeen:" + extraetumerkki +"!")
            
-           if (nuotinNimi == "z"){
+           if (nuotinNimi == "z"){                                         //   T A U O T
               pituus match{
                  case 0 => palautetaan += new KahdeksasosaTauko
                  case 1 => if(alkio.contains(".")) palautetaan += new PisteellinenNeljasosaTauko  else palautetaan += new NeljasosaTauko
@@ -52,7 +51,7 @@ class NuottiPiirturi(input: String, var tahtilaji: Int = 4, lyrics: String = "")
                  case 4 =>  for (i<- 1 to 4) palautetaan += new NeljasosaTauko
               }
            
-           } else if(pituus == 1 ){   
+           } else if(pituus == 1 ){                                           // N U O T I T
                if(alkio.contains(".")){
                   palautetaan += new PisteellinenNeljasosaNuotti(nuotinNimi, extraetumerkki) 
                   iskujaMennyt += 1.5
@@ -81,15 +80,14 @@ class NuottiPiirturi(input: String, var tahtilaji: Int = 4, lyrics: String = "")
            //   piirraKahdeksasosaPari(nuotinNimi, inputArray(i+1))
        //    }   
         //  else {   
-            if (nuotinNimi.size == 2)  {       // testing !!!!!!!
+            
                 palautetaan +=  new KahdeksasosaNuotti (nuotinNimi, extraetumerkki)     // TODO  ei voi luoda ennen seuraavan alkion tutkimista !!)
                 iskujaMennyt += 0.5
-            } else  palautetaan +=  new KahdeksasosaNuotti (nuotinNimi, extraetumerkki)  // if ylennys ollut jo tässä tahdissa,  "N" = neutral, 
-                                           //  ei palautusmerkkiä  vai pitäisikö tehdä g1, mutta silloin soittoData menee reisille
-        //  }  
-          }
+            } 
+           println(nuotinNimi + " " + iskujaMennyt)
       }   // iso else: ei-sointu.
       if (iskujaMennyt == tahtilaji) {
+        
         iskujaMennyt = 0.0  
         tahdinAikaisetEtumerkit = Buffer[String]()
       }
@@ -102,7 +100,7 @@ class NuottiPiirturi(input: String, var tahtilaji: Int = 4, lyrics: String = "")
      
       if(nuotinNimi.contains("#") || nuotinNimi.contains("b")){
               if(this.tahdinAikaisetEtumerkit.contains(nuotinNimi))
-                  return "n"   // n = neutral, nuotti on ylennetty/alennettu mutta merkkiä ei piirretä
+                  return "n"   // n = nuottikuva neutral, nuotti on ylennetty/alennettu mutta merkkiä ei piirretä
               else this.tahdinAikaisetEtumerkit += nuotinNimi    
       } else if ( this.tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last).size == 1  ){
                   return "§"   // esim f#1 ja f1 peräkkäin, tarvitaan palautusmerkki
@@ -126,8 +124,6 @@ class NuottiPiirturi(input: String, var tahtilaji: Int = 4, lyrics: String = "")
       }
    }
  
-   for(nuottialkio <- nuottiData)
-     println(nuottialkio.asInstanceOf[Nuotti].korkeus)
  
   
    var viivasto = new Viivasto(nuottiData, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)

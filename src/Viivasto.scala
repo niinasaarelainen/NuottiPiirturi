@@ -13,6 +13,9 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
   var kappale = new Kappale
   this.kappale.lisaaKappaleenNimi(kappaleenNimi)
   
+ //  val thread = new Thread     ei varmaankaan toimi että Thread on täällä. Pitäisi vuorotellen käskyttää soittoa ja printtausta
+ //    thread.start
+  
     
   def piirraNuotit(nuottiOliot: Buffer[ViivastolleLaitettava]) = {
     
@@ -50,12 +53,12 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
           lisaaTahtiviiva
        }
        if (riviaMennytMontakoTahtia == 2 ){      // printtaukseen 2, voisi kysyä käyttäjältä  //TODO      
-           vaihdaRivi
+           vaihdaRiviJaPrinttaa
        }
     } // end for, kaikki nuottiOliot käsitelty
     
     if(tahtiaMennyt != 0.0 || riviaMennytMontakoTahtia > 0 ){  // pelkkää G-avainta ei haluta mukaan kappaleeseen
-        vaihdaRivi   
+        vaihdaRiviJaPrinttaa   
         lisaaTahtiviiva
     }    
   }
@@ -76,9 +79,13 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
     }
    
    
-   def vaihdaRivi = {     
-     for (rivi <- this.viivasto)
+   def vaihdaRiviJaPrinttaa = {     
+    
+     
+     for (rivi <- this.viivasto){
          println(rivi)
+  //       thread.wait(1000)          ei näin!  TODO  miten saada nuotit printtautumaan musan tahdissa ?!?
+     }    
      kappale.lisaaViivasto(this.viivasto)    
      viivasto = piirraGavain 
      this.riviaMennytMontakoTahtia = 0
