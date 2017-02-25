@@ -23,12 +23,18 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
         case 2 => ch1.programChange(11)   //program #11 = Vibraphone
         case 3 => ch1.programChange(18)   //program #19 = Rock Organ
         case 4 => ch1.programChange(1024, 50)   //program #19 = Syn.Strings3 ,  eri bank:sta
-    }
+        case 5 => ch1.programChange(24)    // nylon guitar
+     }
 		
 		Thread.sleep(500)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
   
 		var olisiAikaVaihtaaRivi = 0
+		var riviInd = 0
 		
+		
+		vaihdaRivi(riviInd)
+		riviInd += 1
+		 
     for(nuottiTaiSointu <- nuotit){
       
         if (nuottiTaiSointu._1(0) != 0)   //taukojen "korkeus"
@@ -37,7 +43,15 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
                  ch1.noteOn(nuottiTaiSointu._1(i), 68)         // 68 = velocity (127 = max), säestysäänet, jos niitä on
               else  ch1.noteOn(nuottiTaiSointu._1(i), 114)  // oltiin sortattu, eli melodia on vikana (ylin ääni = isoin numero)     
            
-        Thread.sleep((nuottiTaiSointu._2 * 160).toInt)  // ms   
+        Thread.sleep((nuottiTaiSointu._2 * 160).toInt)  // ms 
+        olisiAikaVaihtaaRivi += 160
+        if(olisiAikaVaihtaaRivi > 1800){
+           if ( riviInd < kappale.kappale.size){
+              vaihdaRivi(riviInd)
+              riviInd += 1
+              olisiAikaVaihtaaRivi = 0
+           }
+        }   
         
         if (nuottiTaiSointu._1(0) != 0)
           for (soinnunNuotti <- nuottiTaiSointu._1)              
@@ -45,6 +59,14 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
     }
     Thread.sleep(500)   // parempi soundi vikaan ääneen
     synth.close()
+    
+    
+    def vaihdaRivi(riviInd: Int)= {
+         for (i <- 0 until kappale.kappale(riviInd).size)
+           println(kappale.kappale(riviInd)(i))
+    }
+    
+    
 }
 
 

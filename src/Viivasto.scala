@@ -19,10 +19,8 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
     
   def piirraNuotit(nuottiOliot: Buffer[ViivastolleLaitettava]) = {
     
- //   println("----@Viivasto-----")
+ 
     for(tavu <-lyricsBuffer)
-  //    println(tavu)
-    
       println("lyricsBuffer.size: " + lyricsBuffer.size)
     
      var lyricsInd = 0

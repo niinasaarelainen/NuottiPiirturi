@@ -88,7 +88,7 @@ class NuottiPiirturi(input: String, var tahtilaji: String = "4", lyrics: String 
                 palautetaan +=  new KahdeksasosaNuotti (nuotinNimi, extraetumerkki)     // TODO  ei voi luoda ennen seuraavan alkion tutkimista !!)
                 if(ok >= 0) iskujaMennyt += 0.5
             } 
-           println(nuotinNimi + " " + iskujaMennyt)
+        //   println(nuotinNimi + " " + iskujaMennyt)
       }   // iso else: ei-sointu.
       if (iskujaMennyt == tahtilaji.toInt) {
         println("--------------------------")
@@ -145,7 +145,7 @@ class NuottiPiirturi(input: String, var tahtilaji: String = "4", lyrics: String 
    val kappale =  new Kappale    //Buffer[Buffer[String]]()
    if(!inputTiedostosta.MIDIPatch.equals(""))    // pelkkää Enteriä ei voi muuntaa Intiksi, ja se tulkitaan niin että käyttäjä ei halua kuunnella musaa
       if(inputTiedostosta.MIDIPatch.toInt != 0 )        // käyttäjä valitsi että ei kuunnella
-        new simpleMIDIPlayerAdapter(nuottiData, inputTiedostosta.MIDIPatch.toInt, kappale)
+        new simpleMIDIPlayerAdapter(nuottiData, inputTiedostosta.MIDIPatch.toInt, viivasto.kappale)
    
    new TiedostonTallennus(viivasto.kappale)    
     
