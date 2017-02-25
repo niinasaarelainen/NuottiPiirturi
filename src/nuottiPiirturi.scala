@@ -141,11 +141,12 @@ class NuottiPiirturi(input: String, var tahtilaji: String = "4", lyrics: String 
   
    var viivasto = new Viivasto(nuottiData, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)
    viivasto.piirraNuotit(nuottiData)
- 
-   if(inputTiedostosta.MIDIPatch.toInt != 0)  // käyttäjä valitsi että ei kuunnella
-      new simpleMIDIPlayerAdapter(nuottiData, inputTiedostosta.MIDIPatch.toInt)
    
    val kappale =  new Kappale    //Buffer[Buffer[String]]()
+   if(!inputTiedostosta.MIDIPatch.equals(""))    // pelkkää Enteriä ei voi muuntaa Intiksi, ja se tulkitaan niin että käyttäjä ei halua kuunnella musaa
+      if(inputTiedostosta.MIDIPatch.toInt != 0 )        // käyttäjä valitsi että ei kuunnella
+        new simpleMIDIPlayerAdapter(nuottiData, inputTiedostosta.MIDIPatch.toInt, kappale)
+   
    new TiedostonTallennus(viivasto.kappale)    
     
 }

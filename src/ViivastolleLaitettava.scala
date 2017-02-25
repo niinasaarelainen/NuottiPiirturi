@@ -89,8 +89,7 @@ abstract class Nuotti extends ViivastolleLaitettava {
      def nimiMapissa: String
      def etumerkki: String
      def extraetumerkkiDef: String
-     def asetaExtraetumerkki(merkki: String): Unit
-      
+       
      def piirraApuviiva = {                       
            viivasto(y("c1")) = viivasto(y("c1")).substring(0, 1) + "--" +  viivasto(y("c1")).substring(4, 6) + "--" + viivasto(y("c1")).substring(7, kuvanLeveys)         
      }
@@ -109,7 +108,7 @@ class KokoNuotti(nuotinNimi: String, extraetumerkki: String = "") extends Nuotti
      def nimiMapissa = nuotinNimi.filter(_ !='#').filter(_ != 'b').filter(_ != '§').filter(_ != 'n')  // esim. gb1 --> g1
      def etumerkki = if(extraetumerkki == "n") "" else if (nuotinNimi.filter(_ !='-').size == 3) nuotinNimi(1).toString else ""
      def extraetumerkkiDef = if(extraetumerkki == "n") "" else extraetumerkki
-     def asetaExtraetumerkki(merkki: String) = {}  // extraetumerkki = merkki
+    
   
      def piirraNuppi = { 
         if(nuotinNimi=="c1") piirraApuviiva

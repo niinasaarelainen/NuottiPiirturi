@@ -80,10 +80,8 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
    
    
    def vaihdaRiviJaPrinttaa = {     
-    
-     
      for (rivi <- this.viivasto){
-         println(rivi)
+    //     println(rivi)
   //       thread.wait(1000)          ei näin!  TODO  miten saada nuotit printtautumaan musan tahdissa ?!?
      }    
      kappale.lisaaViivasto(this.viivasto)    
@@ -95,35 +93,25 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
   def piirraGavain= {
     var g = Buffer[String]()                  
 
-  g +="          "
-  g +="          "
-  g +="          "
-  g +="    |\\    " 
-  g +="----|/----" 
-  g +="    /     " 
-  g +="---/|-----" 
-  g +="  / |     " 
-  g +="-|--|__---" 
-  g +=" | /|  \\  " 
-  g +="-\\-\\|---|-" 
-  g +="  \\_|__/  " 
-  g +="----|-----" 
-  g +="  \\_/     " 
-  g += "          "
-  g += "          "
-  g += "          "
- g
-}
+    g +="          "
+    g +="          "
+    g +="          "
+    g +="    |\\    " 
+    g +="----|/----" 
+    g +="    /     " 
+    g +="---/|-----" 
+    g +="  / |     " 
+    g +="-|--|__---" 
+    g +=" | /|  \\  " 
+    g +="-\\-\\|---|-" 
+    g +="  \\_|__/  " 
+    g +="----|-----" 
+    g +="  \\_/     " 
+    g += "          "
+    g += "          "
+    g += "          "
+   g
+  }
  
-  
-    /*         // TODO
-    def piirraLyriikkaTavu(tavu: String) = {
-  
-    for(c<-tavu){
-       viivasto(apuX) = tavu   // ihan sekaisin
-       apuX += 1
-    }   
-  }  */
-  
  
 }

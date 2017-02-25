@@ -30,8 +30,8 @@ class TiedostonLukeminen  {
   
   do {
     MIDIPatch = readLine("\nMillä soundilla haluat kuulla kappaleen?\n" +
-                              "0= en millään,  1= piano,  2= vibrafoni,  3= rock-urut,  4=syna ")
-  } while (!"01234".contains(MIDIPatch))                           
+                              "0= en millään,  1= piano,  2= vibrafoni,  3= rock-urut,  4=syna,  5=kitara  ")
+  } while (!"012345".contains(MIDIPatch))                           
  
      
   def lueJaTarkistaVirheet() = {
