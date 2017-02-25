@@ -24,7 +24,7 @@ class NuottiPiirturi(input: String, var tahtilaji: String = "4", lyrics: String 
    
   def kasitteleNuottiTieto(inputBuffer: Buffer[String], palautetaan: Buffer[ViivastolleLaitettava], iskujaMennytMuuttuja:Double ): Buffer[ViivastolleLaitettava] = {        
      
-    var iskujaMennyt = iskujaMennytMuuttuja
+     iskujaMennyt = iskujaMennytMuuttuja
     
      for ( i<- 0 until inputBuffer.length){        
         var extraetumerkki = ""
@@ -58,27 +58,27 @@ class NuottiPiirturi(input: String, var tahtilaji: String = "4", lyrics: String 
            } else if(pituus == 1 ){                                           // N U O T I T
                if(alkio.contains(".")){
                   palautetaan += new PisteellinenNeljasosaNuotti(nuotinNimi, extraetumerkki) 
-                  iskujaMennyt += 1.5
+                  if(ok >= 0) iskujaMennyt += 1.5
                }   
                else {
                  palautetaan += new NeljasosaNuotti(nuotinNimi, extraetumerkki)    
-                 iskujaMennyt += 1.0
+                 if(ok >= 0) iskujaMennyt += 1.0
                }
             } else if (pituus == 2 ){
                if(alkio.contains(".")){
                   palautetaan += new PisteellinenPuoliNuotti(nuotinNimi,extraetumerkki)  
-                  iskujaMennyt += 3.0
+                  if(ok >= 0) iskujaMennyt += 3.0
                }   
                else {
                  palautetaan += new PuoliNuotti (nuotinNimi, extraetumerkki)  
-                 iskujaMennyt += 2.0
+                 if(ok >= 0) iskujaMennyt += 2.0
                }
             } else if (pituus == 3 ){
                 palautetaan += new PisteellinenPuoliNuotti(nuotinNimi,extraetumerkki) 
-                iskujaMennyt += 3.0
+                if(ok >= 0) iskujaMennyt += 3.0
             } else if (pituus == 4 ){
                palautetaan += new KokoNuotti(nuotinNimi,extraetumerkki)     
-               iskujaMennyt += 4.0
+               if(ok >= 0) iskujaMennyt += 4.0
             } else if (pituus == 0 ){         // kahdeksasosa
       //      if( i < inputArray.length -1 && inputArray(i+1).count(_ == '-') == 0 ){
            //   piirraKahdeksasosaPari(nuotinNimi, inputArray(i+1))
