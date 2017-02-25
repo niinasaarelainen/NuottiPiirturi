@@ -49,10 +49,11 @@ class NuottiPiirturi(input: String, var tahtilaji: String = "4", lyrics: String 
            if (nuotinNimi == "z"){                                         //   T A U O T
               pituus match{
                  case 0 => palautetaan += new KahdeksasosaTauko
-                 case 1 => if(alkio.contains(".")) palautetaan += new PisteellinenNeljasosaTauko  else palautetaan += new NeljasosaTauko
-                 case 2 => for (i<- 1 to 2) palautetaan += new NeljasosaTauko
-                 case 3 =>  for (i<- 1 to 3) palautetaan += new NeljasosaTauko
-                 case 4 =>  for (i<- 1 to 4) palautetaan += new NeljasosaTauko
+                 case 1 => if(alkio.contains(".")) palautetaan += new PisteellinenNeljasosaTauko  
+                           else {palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 1.0}
+                 case 2 => for (i<- 1 to 2) palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 2.0; if(alkio.contains(".")) palautetaan += new NeljasosaTauko
+                 case 3 =>  for (i<- 1 to 3) palautetaan += new NeljasosaTauko ; if(ok >= 0) iskujaMennyt += 3.0
+                 case 4 =>  for (i<- 1 to 4) palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 4.0
               }
            
            } else if(pituus == 1 ){                                           // N U O T I T
@@ -91,7 +92,6 @@ class NuottiPiirturi(input: String, var tahtilaji: String = "4", lyrics: String 
         //   println(nuotinNimi + " " + iskujaMennyt)
       }   // iso else: ei-sointu.
       if (iskujaMennyt == tahtilaji.toInt) {
-        println("--------------------------")
         iskujaMennyt = 0.0  
         tahdinAikaisetEtumerkit = Buffer[String]()
       }
