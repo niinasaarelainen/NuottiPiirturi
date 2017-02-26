@@ -15,9 +15,10 @@ class TiedostonLukeminen  {
    var MIDIPatch = ""
    var tahtilaji = "4"
    var kappaleenNimi = "" 
+   var tiedostonNimi = ""
   
   
-  helppiTeksti
+  helppiTeksti()
 
   val inputhakemisto = new File("./input")
   for ( tiedosto <- inputhakemisto.listFiles() ) {
@@ -25,15 +26,29 @@ class TiedostonLukeminen  {
        println(tiedosto.getName)
      }
   }  
-  val nimi = readLine("\nMinkä nimisen tiedoston haluat nuoteiksi? Valitse ylläolevista. ")
-  val tiedosto = Source.fromFile("input/" + nimi )
+   
+  do { 
+  tiedostonNimi = readLine("\nMinkä nimisen tiedoston haluat nuoteiksi? Valitse ylläolevista. ")
+  } while (!onkoListalla(tiedostonNimi))
+    
+  val tiedosto = Source.fromFile("input/" + tiedostonNimi )
   
+    
   do {
     MIDIPatch = readLine("\nMillä soundilla haluat kuulla kappaleen?\n" +
                               "0= en millään,  1= piano,  2= vibrafoni,  3= rock-urut,  4=syna,  5=kitara  ")
   } while (!"012345".contains(MIDIPatch))                           
  
      
+    
+  def onkoListalla(nimi: String): Boolean = {   
+    for ( tiedosto <- inputhakemisto.listFiles() )     
+       if ( tiedosto.isFile && tiedosto.getName == nimi)     
+          return true   
+    false   
+  }
+ 
+  
   def lueJaTarkistaVirheet() = {
      try {   
        for (rivi <- tiedosto.getLines) {
@@ -99,7 +114,7 @@ class TiedostonLukeminen  {
   }
   
   
-  def helppiTeksti = {
+  def helppiTeksti() = {
      val helpFile = Source.fromFile("help.txt")
    
      try {   

@@ -8,7 +8,7 @@ import scala.collection.mutable.Buffer
 
 class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, kappale: Kappale, tahtilaji: Int) {   // Tuple (korkeus/korkeudet, pituus)
   
-    val ms = 150     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
+    val ms = 170     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
   
     val synth = MidiSystem.getSynthesizer()
     synth.open()  
@@ -29,11 +29,11 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
 		
     var olisiAikaSkrollata = 0
 		var riviInd = 0
-    Skrollaaa(riviInd)     // laitetaan näytölle valmiiksi biisin nimi...
+    skrollaaa(riviInd)     // laitetaan näytölle valmiiksi biisin nimi...
 		riviInd += 1
-		Skrollaaa(riviInd)    // ... ja eka rivi
+		skrollaaa(riviInd)    // ... ja eka rivi
 		riviInd += 1
-		olisiAikaSkrollata += ms     // ja alkuarvo, jotta skrollaus tapahtuu hieman ennen kuin rivi oikeasti vaihtuu
+		olisiAikaSkrollata += 500     // ja alkuarvo, jotta skrollaus tapahtuu hieman ennen kuin rivi oikeasti vaihtuu
 		
 		Thread.sleep(900)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
   
@@ -42,14 +42,14 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
         if (nuottiTaiSointu._1(0) != 0)   //taukojen "korkeus", eli tauoille tehdään vain sleep ja skrollausrutiinit
            for (i <- 0 until nuottiTaiSointu._1.size)
               if(i <  nuottiTaiSointu._1.size-1)
-                 ch1.noteOn(nuottiTaiSointu._1(i), 68)         // 68 = velocity (127 = max), säestysäänet, jos niitä on
+                 ch1.noteOn(nuottiTaiSointu._1(i), 75)         // 68 = velocity (127 = max), säestysäänet, jos niitä on
               else  ch1.noteOn(nuottiTaiSointu._1(i), 114)  // oltiin sortattu, eli melodia on vikana (ylin ääni = isoin numero)     
            
         Thread.sleep((nuottiTaiSointu._2 * ms).toInt)  // ms 
         olisiAikaSkrollata += (nuottiTaiSointu._2 * ms).toInt
         if(olisiAikaSkrollata >= ms*tahtilaji*2 ){            // rivillä on 2 tahtia 
            if ( riviInd < kappale.kappale.size){
-              Skrollaaa(riviInd)
+              skrollaaa(riviInd)
               riviInd += 1
               olisiAikaSkrollata = 0
            }
@@ -60,11 +60,11 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
              ch1.noteOff(soinnunNuotti)
     }
     
-    Thread.sleep(500)   // parempi soundi vikaan ääneen
+    Thread.sleep(900)   // parempi soundi vikaan ääneen
     synth.close()
     
     
-    def Skrollaaa(riviInd: Int)= {
+    def skrollaaa(riviInd: Int)= {
          for (i <- 0 until kappale.kappale(riviInd).size)
            println(kappale.kappale(riviInd)(i))
     }
@@ -114,11 +114,13 @@ class simpleChordPlayer (sointumerkit: Buffer[(Buffer[Int], Int)]) {   // Tuple 
             ch2.noteOff(sointumerkki._1(i))   
        }        
 
-    Thread.sleep(500)   // parempi soundi vikaan ääneen
+    Thread.sleep(900)   // parempi soundi vikaan ääneen
     synth.close()
 }
 
-class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPatch:Int, kappale: Kappale, tahtilaji:Int) {   // Buffer[Buffer[String]]
+
+
+class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPatch:Int, kappale: Kappale, tahtilaji:Int) {   
   
    val MIDINoteNumber = Map("cb1" -> 59, "h#1" -> 60, "c1" -> 60, "c#1" ->61, "db1" -> 61, "d1" -> 62, "d#1" -> 63, "eb1" -> 63,  
        "e1" -> 64, "e#1" -> 65, "fb1"-> 64, "f1"-> 65,  "f#1"->66,  "gb1" -> 66, "g1" -> 67,  "g#1" -> 68, "ab1" -> 68, 
@@ -126,8 +128,7 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPa
        "c#2" -> 73, "db2" -> 73, "d2" -> 74,        "d#2" -> 75, "eb2" -> 75, "e2" -> 76, "fb2" -> 76, "e#2" -> 77, 
        "f2" -> 77, "f#2" -> 78, "gb2" -> 78, "g2" -> 79, "g#2" -> 80)
 
-   var nuottiNumberit = Buffer[Buffer[Int]]() 
-   var apubufferInt = Buffer[Int]()   // tänne nuottien korkeudet
+   var nuottiNumberit = Buffer[Buffer[Int]]()    // tänne nuottien korkeudet
    var pituudet = Buffer[Double]()   // [0.5 ... 4.0]
    
    
@@ -179,7 +180,7 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPa
 
 class simpleChordPlayerAdapter (sointumerkit: Buffer[String]){
   
-  val MIDINoteNumber = Map("c" -> 60, "c#1" ->61, "db" -> 61, "d" -> 62, "d#" -> 63, "eb" -> 63,  
+  val MIDINoteNumber = Map("c" -> 60, "c#" ->61, "db" -> 61, "d" -> 62, "d#" -> 63, "eb" -> 63,  
        "e" -> 64, "f"-> 65,  "f#"->66,  "gb" -> 66, "g" -> 67,  "g#" -> 68, "ab" -> 68, 
        "a" -> 69, "a#" -> 70, "hb" -> 70, "b" -> 70, "bb" -> 70, "h" -> 71)
 
