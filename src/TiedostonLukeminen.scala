@@ -36,8 +36,8 @@ class TiedostonLukeminen  {
     
   do {
     MIDIPatch = readLine("\nMillä soundilla haluat kuulla kappaleen?\n" +
-                              "0= en millään,  1= piano,  2= vibrafoni,  3= rock-urut,  4=syna,  5=kitara  ")
-  } while (!"012345".contains(MIDIPatch))                           
+                              "ENTER= en millään,  1= piano,  2= vibrafoni,  3= rock-urut,  4=syna,  5=kitara  ")
+  } while (!"12345".contains(MIDIPatch))                           
  
      
     
@@ -73,7 +73,7 @@ class TiedostonLukeminen  {
          else if(oikeellisuusTesti(alkio)){
            nuottiAlkiot = nuottiAlkiot :+ alkio
          } else {
-           val nimi = readLine("\nvirhe xxx. Korjaa tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")
+           val korjattuVersio = readLine("\nvirhe xxx. Korjaa tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")
          }         
       }
     } // end koko syöte

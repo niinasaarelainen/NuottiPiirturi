@@ -214,9 +214,20 @@ class KahdeksasosaNuotti(nuotinNimi: String, extraetumerkki: String = "") extend
      } 
 }   
   
-   /*
-  def piirraKahdeksasosaPari(nuotinNimi: String, toisenNuotinNimi: String) = {
-    val toisenNuotinNimiTutk = tutkiEtumerkit(toisenNuotinNimi, x+5) 
+  
+class kahdeksasosaPari(nuotinNimi: String, toisenNuotinNimi: String, extraetumerkki1: String, extraetumerkki2: String) extends NeljasosaNuotti(nuotinNimi: String, extraetumerkki1: String){
+
+     override def korkeus = nuotinNimi
+     def korkeus2 = toisenNuotinNimi
+     override def pituus = 1.0
+     override def kuvanLeveys = 11
+    
+     override def kuva = {
+       viivasto = piirraTyhjaViivasto(kuvanLeveys)
+       super.kuva
+     }
+  
+    /*
     viivasto(nuotitYAkselilla(nuotinNimi))(x)='@'          // 1/8-nuottipari, varret ylös
     viivasto(nuotitYAkselilla(toisenNuotinNimiTutk))(x+5)='@'     
     if(nuotinNimi == "c1"){
@@ -239,10 +250,9 @@ class KahdeksasosaNuotti(nuotinNimi: String, extraetumerkki: String = "") extend
        piirraVarsi(nuotinNimi, x, 0)
        piirraVarsi(toisenNuotinNimiTutk, x+5, Math.abs(korkeusero))
        piirraPalkki(nuotitYAkselilla(nuotinNimi) < nuotitYAkselilla("h1"), nuotitYAkselilla(nuotinNimi))    // palkki 1. nuotin korkeudelle
-    }   
-   }
-  */
-  
+    } */  
+ }
+ 
   
 class NeljasosaTauko extends Tauko {   
     def pituus = 1.0

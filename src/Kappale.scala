@@ -16,4 +16,11 @@ class Kappale {
   def lisaaViivasto(viivasto: Buffer[String]){
     this.kappale += viivasto
   }
+  
+  def printtaaRuudulleIlmanAjastusta() = {
+    for {
+          viivasto <- kappale 
+          rivi <- viivasto
+      } println(rivi)
+  }
 }

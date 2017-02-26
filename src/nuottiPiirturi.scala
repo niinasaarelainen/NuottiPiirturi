@@ -81,12 +81,12 @@ class NuottiPiirturi(){
             } else if (pituus == 4 ){
                palautetaan += new KokoNuotti(nuotinNimi,extraetumerkki)     
                if(ok >= 0) iskujaMennyt += 4.0
-            } else if (pituus == 0 ){         // kahdeksasosa
-      //      if( i < inputArray.length -1 && inputArray(i+1).count(_ == '-') == 0 ){
-           //   piirraKahdeksasosaPari(nuotinNimi, inputArray(i+1))
-       //    }   
+            } else if (pituus == 0 ){        
+               if( i < inputBuffer.length -1 && inputBuffer(i+1).count(_ == '-') == 0 ){     
+               new kahdeksasosaPari(nuotinNimi, inputBuffer(i+1).filter(_ != '-').filter(_ != '.') , extraetumerkki, "")   // miten saadaan extraetumerkki2 emnnenkuin nuotti on luotu !?!?
+            }   
         //  else {               
-                palautetaan +=  new KahdeksasosaNuotti (nuotinNimi, extraetumerkki)     // TODO  ei voi luoda ennen seuraavan alkion tutkimista !!)
+                palautetaan +=  new KahdeksasosaNuotti (nuotinNimi, extraetumerkki)     
                 if(ok >= 0) iskujaMennyt += 0.5
             } 
            println(nuotinNimi + " " + iskujaMennyt)
@@ -138,9 +138,10 @@ class NuottiPiirturi(){
    var viivasto = new Viivasto(nuottiData, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)
    viivasto.piirraNuotit(nuottiData)
    
-   if(!inputTiedostosta.MIDIPatch.equals(""))    // pelkkää Enteriä ei voi muuntaa Intiksi, ja se tulkitaan niin että käyttäjä ei halua kuunnella musaa
+   if(!inputTiedostosta.MIDIPatch.equals("")){    // pelkkää Enteriä ei voi muuntaa Intiksi, ja se tulkitaan niin että käyttäjä ei halua kuunnella musaa
       if(inputTiedostosta.MIDIPatch.toInt != 0 )        // käyttäjä valitsi että ei kuunnella
         new simpleMIDIPlayerAdapter(nuottiData, inputTiedostosta.MIDIPatch.toInt, viivasto.kappale, inputTiedostosta.tahtilaji.toInt)
+   } else viivasto.kappale.printtaaRuudulleIlmanAjastusta()
    
    new TiedostonTallennus(viivasto.kappale)    
     
