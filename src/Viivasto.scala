@@ -17,16 +17,10 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
     
   def piirraNuotit(nuottiOliot: Buffer[ViivastolleLaitettava]) = {
     
- 
-    for(tavu <-lyricsBuffer)
-      println("lyricsBuffer.size: " + lyricsBuffer.size)
-    
      var lyricsInd = 0
-     for (laitettava <- nuottiOliot) {
-             
-       
-             // jos sanoja oli vähemmän kuin nuotteja, ei haluta kaataa ohjelmaa
-       if(!laitettava.isInstanceOf[Tauko] && lyricsBuffer.size != 0 && lyricsBuffer.size - lyricsInd >= 1 ){
+     for (laitettava <- nuottiOliot) {      
+                      // jos sanoja oli vähemmän kuin nuotteja, ei haluta kaataa ohjelmaa
+       if(laitettava.soiva && lyricsBuffer.size != 0 && lyricsBuffer.size - lyricsInd >= 1 ){     // nuotti ja sointu => soiva= true, tauko=> soiva=false
            var tavu = ""
            // leikataan liian pitkien lyriikkatavujen loput:
            if ( lyricsBuffer(lyricsInd).size > laitettava.kuvanLeveys){
@@ -49,18 +43,19 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
           lisaaTahtiviiva
        }
        if (riviaMennytMontakoTahtia == 2 ){      // printtaukseen 2, voisi kysyä käyttäjältä  //TODO      
-           vaihdaRiviJaPrinttaa
+           vaihdaRivi
        }
     } // end for, kaikki nuottiOliot käsitelty
     
-    lisaaTahtiviiva   // biisin lopetusviiva, ei tule    TODO
-    
+    lisaaTahtiviiva   // biisin lopetusviiva, tulee vain vajaissa riveissä    TODO  : myös täyteen riviin    
     
     if(tahtiaMennyt != 0.0 || riviaMennytMontakoTahtia > 0 ){  // pelkkää G-avainta ei haluta mukaan kappaleeseen
-        vaihdaRiviJaPrinttaa   
+        vaihdaRivi   
         lisaaTahtiviiva       
     }    
   }
+  
+  
   
    def liita(liitosOlio: ViivastolleLaitettava) = {
      for (i <- 0 until this.viivasto.size)
@@ -68,17 +63,19 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
    }
   
   
+   
    def lisaaTahtiviiva = {
        for(i<-nuotitYAkselilla("ylatila3") to nuotitYAkselilla("g2"))   
-         viivasto(i) += " "   // tänne tyhjää, jotta mahdollisesti tänne tuleva nuotti/varsi asemoituu oikein    
+         viivasto(i) += " "                                       // tänne tyhjää, jotta mahdollisesti tänne tuleva nuotti/varsi asemoituu oikein    
        for(i<-nuotitYAkselilla("f2") to nuotitYAkselilla("e1"))   // tahtiviiva menee ylimmästä viivasta alimpaan
          viivasto(i) += "|"  
        for(i<-nuotitYAkselilla("d1") to nuotitYAkselilla("lyr"))  
-         viivasto(i) += " "   // tänne tyhjää, jotta mahdollisesti tänne tuleva nuotti/lyriikka asemoituu oikein      
+         viivasto(i) += " "                                       // tänne tyhjää, jotta mahdollisesti tänne tuleva nuotti/lyriikka asemoituu oikein      
     }
    
    
-   def vaihdaRiviJaPrinttaa = {     
+   
+   def vaihdaRivi = {     
      for (rivi <- this.viivasto){
      }    
      kappale.lisaaViivasto(this.viivasto)    
@@ -87,6 +84,7 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
    }
     
  
+   
   def piirraGavain= {
     var g = Buffer[String]()                  
 
