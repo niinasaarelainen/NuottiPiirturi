@@ -111,7 +111,7 @@ class NuottiPiirturi(){
               if(this.tahdinAikaisetEtumerkit.contains(nuotinNimi))
                   return "n"   // n = nuottikuva neutral, nuotti on ylennetty/alennettu mutta merkkiä ei piirretä
               else this.tahdinAikaisetEtumerkit += nuotinNimi    
-      } else if ( this.tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last).size == 1  ){
+      } else if ( this.tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last).size > 0  ){
               val tulos = tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last)
               tahdinAikaisetEtumerkit -= tulos(0)              // otetaan esim g#1 pois puskurista, koska se on nyt §-tilassa
               return "§"   // esim f#1 ja f1 peräkkäin, tarvitaan palautusmerkki                  
