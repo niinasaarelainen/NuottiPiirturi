@@ -35,18 +35,18 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
 		riviInd += 1
 		olisiAikaSkrollata += ms     // ja alkuarvo, jotta skrollaus tapahtuu hieman ennen kuin rivi oikeasti vaihtuu
 		
-		Thread.sleep(1100)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
+		Thread.sleep(900)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
   
-	    for(nuottiTaiSointu <- nuotit){
-      
-        if (nuottiTaiSointu._1(0) != 0)   //taukojen "korkeus"
+		
+	  for(nuottiTaiSointu <- nuotit){      
+        if (nuottiTaiSointu._1(0) != 0)   //taukojen "korkeus", eli tauoille tehdään vain sleep ja skrollausrutiinit
            for (i <- 0 until nuottiTaiSointu._1.size)
               if(i <  nuottiTaiSointu._1.size-1)
                  ch1.noteOn(nuottiTaiSointu._1(i), 68)         // 68 = velocity (127 = max), säestysäänet, jos niitä on
               else  ch1.noteOn(nuottiTaiSointu._1(i), 114)  // oltiin sortattu, eli melodia on vikana (ylin ääni = isoin numero)     
            
         Thread.sleep((nuottiTaiSointu._2 * ms).toInt)  // ms 
-        olisiAikaSkrollata += ms
+        olisiAikaSkrollata += (nuottiTaiSointu._2 * ms).toInt
         if(olisiAikaSkrollata >= ms*8 ){            // rivillä on 2 tahtia =  8 iskua * ms
            if ( riviInd < kappale.kappale.size){
               Skrollaaa(riviInd)
@@ -59,12 +59,12 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
           for (soinnunNuotti <- nuottiTaiSointu._1)              
              ch1.noteOff(soinnunNuotti)
     }
+    
     Thread.sleep(500)   // parempi soundi vikaan ääneen
     synth.close()
     
     
     def Skrollaaa(riviInd: Int)= {
-      println(kappale.kappale(riviInd).size)
          for (i <- 0 until kappale.kappale(riviInd).size)
            println(kappale.kappale(riviInd)(i))
     }
@@ -90,7 +90,7 @@ class simpleChordPlayer (sointumerkit: Buffer[(Buffer[Int], Int)]) {   // Tuple 
 	//	  println(patch)
 	
 		
-		Thread.sleep(495)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
+		Thread.sleep(895)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
   
        for(sointumerkki <- sointumerkit){
          
