@@ -61,7 +61,7 @@ class Sointu(aanet: Buffer[ViivastolleLaitettava]) extends ViivastolleLaitettava
       var ylospain = true
       if (korkeudet.min - 0 < 15 - korkeudet.max )   // 0 on ylin piirtoindeksi, 15 alin, lasketaan missä on enemmän tilaa
           ylospain = false
-      if (pituus < 4)    
+      if (pituus < 4)   // kokonuottiin ei vartta 
           piirraVarsiJaMahdollisestiVaka(korkeudet.min, korkeudet.max, ylospain)
       viivasto          
     }
@@ -215,18 +215,34 @@ class KahdeksasosaNuotti(nuotinNimi: String, extraetumerkki: String = "") extend
 }   
   
   
-class kahdeksasosaPari(nuotinNimi: String, toisenNuotinNimi: String, extraetumerkki1: String, extraetumerkki2: String) extends NeljasosaNuotti(nuotinNimi: String, extraetumerkki1: String){
+class KahdeksasosaPari(nuotinNimi: String, toisenNuotinNimi: String, extraetumerkki1: String, extraetumerkki2: String) extends NeljasosaNuotti(nuotinNimi: String, extraetumerkki1: String){
 
      override def korkeus = nuotinNimi
      def korkeus2 = toisenNuotinNimi
      override def pituus = 1.0
-     override def kuvanLeveys = 11
+     override def kuvanLeveys = 12
      
-     val tokaNuotti = new KahdeksasosaNuotti(toisenNuotinNimi, extraetumerkki1)
+     val tokaNuotti = new KahdeksasosaNuotti(toisenNuotinNimi, extraetumerkki2)
+     
+     /* muokkaa tätä soinnun logiikkaa:
+      var ylospain = true
+      if (korkeudet.min - 0 < 15 - korkeudet.max )   // 0 on ylin piirtoindeksi, 15 alin, lasketaan missä on enemmän tilaa
+          ylospain = false
+    */
     
      override def kuva = {
        viivasto = piirraTyhjaViivasto(kuvanLeveys)
        super.kuva
+        if(tokaNuotti.etumerkki.size == 0 && tokaNuotti.extraetumerkkiDef.size == 0)  // ei etumerkkiä
+            viivasto(y(tokaNuotti.nimiMapissa)) = viivasto(y(tokaNuotti.nimiMapissa)).substring(0, 8) + tokaNuotti.nuppi + viivasto(y(tokaNuotti.nimiMapissa)).substring(10, kuvanLeveys)  
+         else
+            viivasto(y(tokaNuotti.nimiMapissa)) = viivasto(y(tokaNuotti.nimiMapissa)).substring(0, 7) + tokaNuotti.extraetumerkkiDef + tokaNuotti.etumerkki + tokaNuotti.nuppi + viivasto(y(tokaNuotti.nimiMapissa)).substring(10, kuvanLeveys)  
+       
+        for(i<- 1 to 3) viivasto(y(tokaNuotti.nimiMapissa)-i) = viivasto(y(tokaNuotti.nimiMapissa)-i).substring(0, 9) + "|"  + viivasto(y(tokaNuotti.nimiMapissa)-i).substring(10, kuvanLeveys)    
+     //    viivasto(y(tokaNuotti.nimiMapissa)-4) = viivasto(y(tokaNuotti.nimiMapissa)-4).substring(0, 3+1) + "="  + viivasto(y(tokaNuotti.nimiMapissa)-4).substring(5, kuvanLeveys)  
+            viivasto(y(tokaNuotti.nimiMapissa)-4) = viivasto(y(tokaNuotti.nimiMapissa)-4).substring(0, 4) + "______"  + viivasto(y(tokaNuotti.nimiMapissa)-4).substring(10, kuvanLeveys)    
+                       
+        viivasto  
      }
   
     /*

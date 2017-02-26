@@ -8,7 +8,7 @@ import scala.collection.mutable.Buffer
 
 class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, kappale: Kappale, tahtilaji: Int) {   // Tuple (korkeus/korkeudet, pituus)
   
-    val ms = 170     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
+    val ms = 500     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
   
     val synth = MidiSystem.getSynthesizer()
     synth.open()  
@@ -135,8 +135,17 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPa
        for (alkio<- nuottiData) {
          var apubufferInt = Buffer[Int]()   // luodaan aina tyhjä buffer
          
-         //  alkio.isInstanceOf[KokoNuotti]
-           alkio.isInstanceOf[Sointu] match {
+           if (alkio.isInstanceOf[KahdeksasosaPari]){
+                 apubufferInt += MIDINoteNumber(alkio.asInstanceOf[KahdeksasosaPari].korkeus)   // parin eka nuotti
+                 nuottiNumberit += apubufferInt
+                 pituudet += 0.5
+                 apubufferInt = Buffer[Int]()
+                 apubufferInt += MIDINoteNumber(alkio.asInstanceOf[KahdeksasosaPari].korkeus2)   // parin toka nuotti
+                 nuottiNumberit += apubufferInt
+                 pituudet += 0.5
+           }
+         
+           else alkio.isInstanceOf[Sointu] match {
            case true  => pituudet += alkio.asInstanceOf[Sointu].pituus            // yhteinen pituus talteen vain kerran
                          for(nuotti <- alkio.asInstanceOf[Sointu].nuotit){
                               apubufferInt += MIDINoteNumber(nuotti.asInstanceOf[Nuotti].korkeus)  // Map("nuotinnimi" --> Int)     

@@ -85,8 +85,9 @@ class NuottiPiirturi(){
                palautetaan += new KokoNuotti(nuotinNimi,extraetumerkki)     
                if(ok >= 0) iskujaMennyt += 4.0
              } else if (pituus == 0 ){        
-               if( i < inputBuffer.length -1 && inputBuffer(i+1).count(_ == '-') == 0 ){     
-                  palautetaan += new kahdeksasosaPari(nuotinNimi, inputBuffer(i+1).filter(_ != '-').filter(_ != '.') , extraetumerkki, "")   // miten saadaan extraetumerkki2 emnnenkuin nuotti on luotu !?!?
+               if( i < inputBuffer.length -1 && inputBuffer(i+1).count(_ == '-') == 0 ){      // tahdinosa 0.0, 1.0, 2.0 tai 3.0
+                  val toisenNuotinNimi = inputBuffer(i+1).filter(_ != '-').filter(_ != '.')
+                  palautetaan += new KahdeksasosaPari(nuotinNimi, toisenNuotinNimi, extraetumerkki, tutkiEtumerkit(toisenNuotinNimi) )   
                   if(ok >= 0) iskujaMennyt += 1.0
                   minutOnJoPiirretty = true
                }   
