@@ -51,7 +51,8 @@ class NuottiPiirturi(input: String, var tahtilaji: String = "4", lyrics: String 
                  case 0 => palautetaan += new KahdeksasosaTauko
                  case 1 => if(alkio.contains(".")) palautetaan += new PisteellinenNeljasosaTauko  
                            else {palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 1.0}
-                 case 2 => for (i<- 1 to 2) palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 2.0; if(alkio.contains(".")) palautetaan += new NeljasosaTauko
+                 case 2 => for (i<- 1 to 2) palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 2.0; 
+                           if(alkio.contains(".")) {palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 2.0;} 
                  case 3 =>  for (i<- 1 to 3) palautetaan += new NeljasosaTauko ; if(ok >= 0) iskujaMennyt += 3.0
                  case 4 =>  for (i<- 1 to 4) palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 4.0
               }
@@ -125,24 +126,17 @@ class NuottiPiirturi(input: String, var tahtilaji: String = "4", lyrics: String 
         sanatPotkona += rivi.replaceAll("-", "- ")
         sanatPotkona += " "
       }   
-      lyricsBuffer =  sanatPotkona.replaceAll("  ", " ").split(" ").toBuffer  
+      lyricsBuffer =  sanatPotkona.replaceAll("  ", " ").split(" ").toBuffer    // entä jos 3 välilyöntiä ?  TODO  trim? milloin?
       for (tavu <- lyricsBuffer)
         println(tavu)
       }
    }
  
-   /*
-   for(viivastolleLaitettava <- nuottiData){							// kesken      asetaExtraetumerkki
-     viivastolleLaitettava.pituus
-     if(viivastolleLaitettava.isInstanceOf[Nuotti])
-        viivastolleLaitettava.asInstanceOf[Nuotti].asetaExtraetumerkki("§")
-   }   */
- 
+  
   
    var viivasto = new Viivasto(nuottiData, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)
    viivasto.piirraNuotit(nuottiData)
    
-   val kappale =  new Kappale    //Buffer[Buffer[String]]()
    if(!inputTiedostosta.MIDIPatch.equals(""))    // pelkkää Enteriä ei voi muuntaa Intiksi, ja se tulkitaan niin että käyttäjä ei halua kuunnella musaa
       if(inputTiedostosta.MIDIPatch.toInt != 0 )        // käyttäjä valitsi että ei kuunnella
         new simpleMIDIPlayerAdapter(nuottiData, inputTiedostosta.MIDIPatch.toInt, viivasto.kappale)

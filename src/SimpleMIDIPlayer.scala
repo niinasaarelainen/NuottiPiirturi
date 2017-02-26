@@ -8,12 +8,13 @@ import scala.collection.mutable.Buffer
 
 class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, kappale: Kappale) {   // Tuple (korkeus/korkeudet, pituus)
   
+    val ms = 500     // biisin nopeus:  200= nopea, 500 = normaali  900= hidas
+  
     val synth = MidiSystem.getSynthesizer()
     synth.open()  
 
     val channels  =  synth.getChannels()
 		val ch1 = channels(0)
-	//	val ch10 = synth.getChannels()(9)       rummut
 		
 	//	for(patch <- synth.getAvailableInstruments)
 	//	  println(patch)
@@ -26,11 +27,13 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
         case 5 => ch1.programChange(24)    // nylon guitar
      }
 		
-    var olisiAikaVaihtaaRivi = 0
+    var olisiAikaSkrollata = 0
 		var riviInd = 0
-    vaihdaRivi(riviInd)
+    Skrollaaa(riviInd)     // laitetaan näytölle valmiiksi biisin nimi...
 		riviInd += 1
-		
+		Skrollaaa(riviInd)    // ... ja eka rivi
+		riviInd += 1
+		olisiAikaSkrollata += ms     // ja alkuarvo, jotta skrollaus tapahtuu hieman ennen kuin rivi oikeasti vaihtuu
 		
 		Thread.sleep(1100)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
   
@@ -42,13 +45,13 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
                  ch1.noteOn(nuottiTaiSointu._1(i), 68)         // 68 = velocity (127 = max), säestysäänet, jos niitä on
               else  ch1.noteOn(nuottiTaiSointu._1(i), 114)  // oltiin sortattu, eli melodia on vikana (ylin ääni = isoin numero)     
            
-        Thread.sleep((nuottiTaiSointu._2 * 190).toInt)  // ms 
-        olisiAikaVaihtaaRivi += 190
-        if(olisiAikaVaihtaaRivi > 190*8){  // rivillä on 2 riviä =  8 iskua * 180 ms
+        Thread.sleep((nuottiTaiSointu._2 * ms).toInt)  // ms 
+        olisiAikaSkrollata += ms
+        if(olisiAikaSkrollata >= ms*8 ){            // rivillä on 2 tahtia =  8 iskua * ms
            if ( riviInd < kappale.kappale.size){
-              vaihdaRivi(riviInd)
+              Skrollaaa(riviInd)
               riviInd += 1
-              olisiAikaVaihtaaRivi = 0
+              olisiAikaSkrollata = 0
            }
         }   
         
@@ -60,7 +63,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
     synth.close()
     
     
-    def vaihdaRivi(riviInd: Int)= {
+    def Skrollaaa(riviInd: Int)= {
       println(kappale.kappale(riviInd).size)
          for (i <- 0 until kappale.kappale(riviInd).size)
            println(kappale.kappale(riviInd)(i))
