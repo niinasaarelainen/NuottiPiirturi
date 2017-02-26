@@ -135,6 +135,7 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPa
        for (alkio<- nuottiData) {
          var apubufferInt = Buffer[Int]()   // luodaan aina tyhjä buffer
          
+         //  alkio.isInstanceOf[KokoNuotti]
            alkio.isInstanceOf[Sointu] match {
            case true  => pituudet += alkio.asInstanceOf[Sointu].pituus            // yhteinen pituus talteen vain kerran
                          for(nuotti <- alkio.asInstanceOf[Sointu].nuotit){

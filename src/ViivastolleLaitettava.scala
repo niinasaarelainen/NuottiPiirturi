@@ -221,6 +221,8 @@ class kahdeksasosaPari(nuotinNimi: String, toisenNuotinNimi: String, extraetumer
      def korkeus2 = toisenNuotinNimi
      override def pituus = 1.0
      override def kuvanLeveys = 11
+     
+     val tokaNuotti = new KahdeksasosaNuotti(toisenNuotinNimi, extraetumerkki1)
     
      override def kuva = {
        viivasto = piirraTyhjaViivasto(kuvanLeveys)

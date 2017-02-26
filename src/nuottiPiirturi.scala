@@ -26,79 +26,86 @@ class NuottiPiirturi(){
    
   def kasitteleNuottiTieto(inputBuffer: Buffer[String], palautetaan: Buffer[ViivastolleLaitettava] ): Buffer[ViivastolleLaitettava] = {        
      
-     for ( i<- 0 until inputBuffer.length){        
-        var extraetumerkki = ""
-        var alkio = inputBuffer(i)    // esim. "g#1--"   
-        if(alkio.head != '<')
-           pituus = alkio.count(_ == '-')                  
+    var minutOnJoPiirretty =  false
+    for ( i<- 0 until inputBuffer.length ){   
+       if(!minutOnJoPiirretty){  
+          minutOnJoPiirretty =  false
+          var extraetumerkki = ""
+          var alkio = inputBuffer(i)    // esim. "g#1--"   
+          if(alkio.head != '<')
+             pituus = alkio.count(_ == '-')                  
           
-        if (alkio.head == '<'){                                                // S O I N N U T
-          val sointu =  alkio.tail.substring(0, alkio.size -2).split(",")    
-          var sointuBuffer = Buffer[String]()
-          var viivastolleLaitettavaBuffer = Buffer[ViivastolleLaitettava]()
-          for(aani <- sointu) 
-             sointuBuffer += aani
-          ok = 0- sointuBuffer.size +1    
-          nuottiData += new Sointu(kasitteleNuottiTieto(sointuBuffer, viivastolleLaitettavaBuffer) ) 
-        }      
+          if (alkio.head == '<'){                                                // S O I N N U T
+            val sointu =  alkio.tail.substring(0, alkio.size -2).split(",")    
+            var sointuBuffer = Buffer[String]()
+            var viivastolleLaitettavaBuffer = Buffer[ViivastolleLaitettava]()
+            for(aani <- sointu) 
+               sointuBuffer += aani
+            ok = 0- sointuBuffer.size +1    
+            nuottiData += new Sointu(kasitteleNuottiTieto(sointuBuffer, viivastolleLaitettavaBuffer) ) 
+          }      
        
-        else {                                                            // N U O T I T  J A   T A U O T
-           var nuotinNimi = alkio.filter(_ != '-').filter(_ != '.')  
-           extraetumerkki = tutkiEtumerkit(nuotinNimi)  
+          else {                                                            // N U O T I T  J A   T A U O T
+             var nuotinNimi = alkio.filter(_ != '-').filter(_ != '.')  
+             extraetumerkki = tutkiEtumerkit(nuotinNimi)  
            
-           if (nuotinNimi == "z"){                                         //   T A U O T
-              pituus match{
-                 case 0 => palautetaan += new KahdeksasosaTauko; if(ok >= 0) iskujaMennyt += 0.5
-                 case 1 => if(alkio.contains(".")) {palautetaan += new PisteellinenNeljasosaTauko; if(ok >= 0) iskujaMennyt += 1.5 }  
-                           else {palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 1.0}
-                 case 2 =>  if(alkio.contains(".")) {for (i<- 1 to 3) palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 3.0; } 
+             if (nuotinNimi == "z"){                                         //   T A U O T
+               pituus match{
+                  case 0 => palautetaan += new KahdeksasosaTauko; if(ok >= 0) iskujaMennyt += 0.5
+                  case 1 => if(alkio.contains(".")) {palautetaan += new PisteellinenNeljasosaTauko; if(ok >= 0) iskujaMennyt += 1.5 }  
+                            else {palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 1.0}
+                  case 2 =>  if(alkio.contains(".")) {for (i<- 1 to 3) palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 3.0; } 
                             else {for (i<- 1 to 2) palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 2.0; }                          
-                 case 3 =>  for (i<- 1 to 3) palautetaan += new NeljasosaTauko ; if(ok >= 0) iskujaMennyt += 3.0
-                 case 4 =>  for (i<- 1 to 4) palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 4.0
-              }
+                  case 3 =>  for (i<- 1 to 3) palautetaan += new NeljasosaTauko ; if(ok >= 0) iskujaMennyt += 3.0
+                  case 4 =>  for (i<- 1 to 4) palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 4.0
+               }
            
-           } else if(pituus == 1 ){                                           // N U O T I T
-               if(alkio.contains(".")){
-                  palautetaan += new PisteellinenNeljasosaNuotti(nuotinNimi, extraetumerkki) 
-                  if(ok >= 0) iskujaMennyt += 1.5
-               }   
-               else {
-                 palautetaan += new NeljasosaNuotti(nuotinNimi, extraetumerkki)    
-                 if(ok >= 0) iskujaMennyt += 1.0
-               }
-            } else if (pituus == 2 ){
-               if(alkio.contains(".")){
-                  palautetaan += new PisteellinenPuoliNuotti(nuotinNimi,extraetumerkki)  
-                  if(ok >= 0) iskujaMennyt += 3.0
-               }   
-               else {
-                 palautetaan += new PuoliNuotti (nuotinNimi, extraetumerkki)  
-                 if(ok >= 0) iskujaMennyt += 2.0
-               }
-            } else if (pituus == 3 ){
-                palautetaan += new PisteellinenPuoliNuotti(nuotinNimi,extraetumerkki) 
-                if(ok >= 0) iskujaMennyt += 3.0
-            } else if (pituus == 4 ){
+             } else if(pituus == 1 ){                                           // N U O T I T
+                 if(alkio.contains(".")){
+                    palautetaan += new PisteellinenNeljasosaNuotti(nuotinNimi, extraetumerkki) 
+                    if(ok >= 0) iskujaMennyt += 1.5
+                 }   
+                 else {
+                   palautetaan += new NeljasosaNuotti(nuotinNimi, extraetumerkki)    
+                   if(ok >= 0) iskujaMennyt += 1.0
+                 }
+             } else if (pituus == 2 ){
+                if(alkio.contains(".")){
+                   palautetaan += new PisteellinenPuoliNuotti(nuotinNimi,extraetumerkki)  
+                   if(ok >= 0) iskujaMennyt += 3.0
+                }   
+                else {
+                   palautetaan += new PuoliNuotti (nuotinNimi, extraetumerkki)  
+                   if(ok >= 0) iskujaMennyt += 2.0
+                }
+             } else if (pituus == 3 ){
+                 palautetaan += new PisteellinenPuoliNuotti(nuotinNimi,extraetumerkki) 
+                 if(ok >= 0) iskujaMennyt += 3.0
+             } else if (pituus == 4 ){
                palautetaan += new KokoNuotti(nuotinNimi,extraetumerkki)     
                if(ok >= 0) iskujaMennyt += 4.0
-            } else if (pituus == 0 ){        
+             } else if (pituus == 0 ){        
                if( i < inputBuffer.length -1 && inputBuffer(i+1).count(_ == '-') == 0 ){     
-               new kahdeksasosaPari(nuotinNimi, inputBuffer(i+1).filter(_ != '-').filter(_ != '.') , extraetumerkki, "")   // miten saadaan extraetumerkki2 emnnenkuin nuotti on luotu !?!?
-            }   
-        //  else {               
-                palautetaan +=  new KahdeksasosaNuotti (nuotinNimi, extraetumerkki)     
-                if(ok >= 0) iskujaMennyt += 0.5
-            } 
-           println(nuotinNimi + " " + iskujaMennyt)
-      }   // iso else: ei-sointu.
+                  palautetaan += new kahdeksasosaPari(nuotinNimi, inputBuffer(i+1).filter(_ != '-').filter(_ != '.') , extraetumerkki, "")   // miten saadaan extraetumerkki2 emnnenkuin nuotti on luotu !?!?
+                  if(ok >= 0) iskujaMennyt += 1.0
+                  minutOnJoPiirretty = true
+               }   
+               else {               
+                  palautetaan +=  new KahdeksasosaNuotti (nuotinNimi, extraetumerkki)     
+                  if(ok >= 0) iskujaMennyt += 0.5
+               } 
+             }    
+             println(nuotinNimi + " " + iskujaMennyt)
+        }   // iso else: ei-sointu.
         
-      if (iskujaMennyt == tahtilaji) {
-        println("-----------------")
-        iskujaMennyt = 0.0  
-        tahdinAikaisetEtumerkit = Buffer[String]()
-      }
-      ok += 1
-    }  // for 
+        if (iskujaMennyt == tahtilaji) {
+           println("-----------------")
+           iskujaMennyt = 0.0  
+           tahdinAikaisetEtumerkit = Buffer[String]()
+        }
+        ok += 1
+     }  else minutOnJoPiirretty=  !minutOnJoPiirretty
+   }  // for 
    palautetaan   // tätä tarvitaan sointuja muodostettaessa
    } 
   
