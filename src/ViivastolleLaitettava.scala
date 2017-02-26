@@ -105,13 +105,13 @@ class KokoNuotti(nuotinNimi: String, extraetumerkki: String = "") extends Nuotti
      def korkeus = nuotinNimi
      def pituus = 4.0
      def kuvanLeveys = 20
-     def nimiMapissa = nuotinNimi.filter(_ !='#').filter(_ != 'b').filter(_ != '§').filter(_ != 'n')  // esim. gb1 --> g1
+     def nimiMapissa = nuotinNimi.filter(_ !='#').filter(_ != 'b') // esim. gb1 --> g1
      def etumerkki = if(extraetumerkki == "n") "" else if (nuotinNimi.filter(_ !='-').size == 3) nuotinNimi(1).toString else ""
      def extraetumerkkiDef = if(extraetumerkki == "n") "" else extraetumerkki
     
   
      def piirraNuppi = { 
-        if(nuotinNimi=="c1") piirraApuviiva
+        if(nimiMapissa=="c1") piirraApuviiva
         if(etumerkki.size == 0 && extraetumerkkiDef.size == 0)  // ei etumerkkiä
            viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 3) + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
         else
@@ -199,9 +199,9 @@ class KahdeksasosaNuotti(nuotinNimi: String, extraetumerkki: String = "") extend
         super.kuva
         piirraVarsiJaVaka
         viivasto
-      }
+     }
     
-      def piirraVarsiJaVaka = {
+     def piirraVarsiJaVaka = {
          if(y(nimiMapissa) >= y("h1")){  // varsi ylös  
             for (i <- 1 to 3)
                viivasto(y(nimiMapissa)-i) = viivasto(y(nimiMapissa)-i).substring(0, 4) + "|" + viivasto(y(nimiMapissa)-i).substring(5, kuvanLeveys)  
@@ -211,8 +211,7 @@ class KahdeksasosaNuotti(nuotinNimi: String, extraetumerkki: String = "") extend
                 viivasto(y(nimiMapissa)+i) = viivasto(y(nimiMapissa)+i).substring(0, 3) + "|" + viivasto(y(nimiMapissa)+i).substring(4, kuvanLeveys)  
             viivasto(y(nimiMapissa)+3) = viivasto(y(nimiMapissa)+3).substring(0, 4) + "/" + viivasto(y(nimiMapissa)+3).substring(5, kuvanLeveys)  
          }
-      }
-      
+     } 
 }   
   
    /*

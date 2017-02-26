@@ -94,20 +94,24 @@ class simpleChordPlayer (sointumerkit: Buffer[(Buffer[Int], Int)]) {   // Tuple 
   
        for(sointumerkki <- sointumerkit){
          
+        // säestysäänet päälle: 
+           if(sointumerkki._1(0) -24 < 36)
+              ch1.noteOn(sointumerkki._1(0) -12,  60)   // bassoääni ekana    -24 = 2 okt. alaspäin
+           else ch1.noteOn(sointumerkki._1(0) -24,  60)  
+          
+           for (i <- 0 until sointumerkki._1.size)
+              ch2.noteOn(sointumerkki._1(i), 60)      // synasointu
+                   
+        // soi:   
+          Thread.sleep(sointumerkki._2 * 500)  // ms       // tässä pitää olla sama ms kuin MIDIPalyerissä !!
+        
+        // säestysäänet pois päältä:   
           if(sointumerkki._1(0) -24 < 36)
-             ch1.noteOn(sointumerkki._1(0) -12,  60)   // bassoääni ekana    -24 = 2 okt. alaspäin
+             ch1.noteOn(sointumerkki._1(0) -12,  60)  
           else ch1.noteOn(sointumerkki._1(0) -24,  60)  
           
           for (i <- 0 until sointumerkki._1.size)
-               ch2.noteOn(sointumerkki._1(i), 60)      // synasointu
-                   
-          
-          Thread.sleep(sointumerkki._2 * 500)  // ms   
-        
-         
-             ch1.noteOff(sointumerkki._1(0)-12)  // oltiin sortattu, basso alimpana   
-             for (i <- 0 until sointumerkki._1.size)
-                ch2.noteOff(sointumerkki._1(i))   
+            ch2.noteOff(sointumerkki._1(i))   
        }        
 
     Thread.sleep(500)   // parempi soundi vikaan ääneen

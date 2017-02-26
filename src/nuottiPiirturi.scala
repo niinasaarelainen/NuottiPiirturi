@@ -17,17 +17,15 @@ class NuottiPiirturi(){
    kasitteleLyriikat
    
    val inputBuffer = inputTiedostosta.nuottiAlkiot.toBuffer  
-   nuottiData = kasitteleNuottiTieto(inputBuffer, nuottiData, 0.0)        
+   nuottiData = kasitteleNuottiTieto(inputBuffer, nuottiData)        
   
    
    var ok= 0   // nollana/pos. ok kasvattaa iskujaMennyt. Sointu asettaa arvon soinnunsävelten määrä +1 (pituus halutaan kerran) negatiiviselle
   
    
    
-  def kasitteleNuottiTieto(inputBuffer: Buffer[String], palautetaan: Buffer[ViivastolleLaitettava], iskujaMennytMuuttuja:Double ): Buffer[ViivastolleLaitettava] = {        
+  def kasitteleNuottiTieto(inputBuffer: Buffer[String], palautetaan: Buffer[ViivastolleLaitettava] ): Buffer[ViivastolleLaitettava] = {        
      
-     iskujaMennyt = iskujaMennytMuuttuja
-    
      for ( i<- 0 until inputBuffer.length){        
         var extraetumerkki = ""
         var alkio = inputBuffer(i)    // esim. "g#1--"   
@@ -41,7 +39,7 @@ class NuottiPiirturi(){
           for(aani <- sointu) 
              sointuBuffer += aani
           ok = 0- sointuBuffer.size +1    
-          nuottiData += new Sointu(kasitteleNuottiTieto(sointuBuffer, viivastolleLaitettavaBuffer, iskujaMennyt) ) 
+          nuottiData += new Sointu(kasitteleNuottiTieto(sointuBuffer, viivastolleLaitettavaBuffer) ) 
         }      
        
         else {                                                            // N U O T I T  J A   T A U O T
@@ -51,10 +49,10 @@ class NuottiPiirturi(){
            if (nuotinNimi == "z"){                                         //   T A U O T
               pituus match{
                  case 0 => palautetaan += new KahdeksasosaTauko; if(ok >= 0) iskujaMennyt += 0.5
-                 case 1 => if(alkio.contains(".")) {palautetaan += new PisteellinenNeljasosaTauko; if(ok >= 0) iskujaMennyt += 1.5}  
+                 case 1 => if(alkio.contains(".")) {palautetaan += new PisteellinenNeljasosaTauko; if(ok >= 0) iskujaMennyt += 1.5 }  
                            else {palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 1.0}
-                 case 2 => for (i<- 1 to 2) palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 2.0; 
-                           if(alkio.contains(".")) {palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 2.0;} 
+                 case 2 =>  if(alkio.contains(".")) {for (i<- 1 to 3) palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 3.0; } 
+                            else {for (i<- 1 to 2) palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 2.0; }                          
                  case 3 =>  for (i<- 1 to 3) palautetaan += new NeljasosaTauko ; if(ok >= 0) iskujaMennyt += 3.0
                  case 4 =>  for (i<- 1 to 4) palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 4.0
               }
