@@ -1,26 +1,28 @@
 import scala.collection.mutable.Buffer
 
 
-class NuottiPiirturi(input: String, var tahtilaji: String = "4", lyrics: String = ""){
+class NuottiPiirturi(){
    
    var pituus = 0
    var lyricsBuffer = Buffer[String]()  
    var nuottiData= Buffer[ViivastolleLaitettava]()    
    var tahdinAikaisetEtumerkit = Buffer[String]()
+   
   
    val inputTiedostosta = new TiedostonLukeminen
    inputTiedostosta.lueJaTarkistaVirheet()
+   val tahtilaji = inputTiedostosta.tahtilaji.toDouble 
+   var iskujaMennyt =  0.0
  
    kasitteleLyriikat
    
    val inputBuffer = inputTiedostosta.nuottiAlkiot.toBuffer  
-   nuottiData = kasitteleNuottiTieto(inputBuffer, nuottiData, 0.0)      
+   nuottiData = kasitteleNuottiTieto(inputBuffer, nuottiData, 0.0)        
   
-  
-   tahtilaji = inputTiedostosta.tahtilaji  
-   var iskujaMennyt =  0.0
    
    var ok= 0   // nollana/pos. ok kasvattaa iskujaMennyt. Sointu asettaa arvon soinnunsävelten määrä +1 (pituus halutaan kerran) negatiiviselle
+  
+   
    
   def kasitteleNuottiTieto(inputBuffer: Buffer[String], palautetaan: Buffer[ViivastolleLaitettava], iskujaMennytMuuttuja:Double ): Buffer[ViivastolleLaitettava] = {        
      
@@ -48,8 +50,8 @@ class NuottiPiirturi(input: String, var tahtilaji: String = "4", lyrics: String 
            
            if (nuotinNimi == "z"){                                         //   T A U O T
               pituus match{
-                 case 0 => palautetaan += new KahdeksasosaTauko
-                 case 1 => if(alkio.contains(".")) palautetaan += new PisteellinenNeljasosaTauko  
+                 case 0 => palautetaan += new KahdeksasosaTauko; if(ok >= 0) iskujaMennyt += 0.5
+                 case 1 => if(alkio.contains(".")) {palautetaan += new PisteellinenNeljasosaTauko; if(ok >= 0) iskujaMennyt += 1.5}  
                            else {palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 1.0}
                  case 2 => for (i<- 1 to 2) palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 2.0; 
                            if(alkio.contains(".")) {palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 2.0;} 
@@ -85,14 +87,15 @@ class NuottiPiirturi(input: String, var tahtilaji: String = "4", lyrics: String 
       //      if( i < inputArray.length -1 && inputArray(i+1).count(_ == '-') == 0 ){
            //   piirraKahdeksasosaPari(nuotinNimi, inputArray(i+1))
        //    }   
-        //  else {   
-            
+        //  else {               
                 palautetaan +=  new KahdeksasosaNuotti (nuotinNimi, extraetumerkki)     // TODO  ei voi luoda ennen seuraavan alkion tutkimista !!)
                 if(ok >= 0) iskujaMennyt += 0.5
             } 
-        //   println(nuotinNimi + " " + iskujaMennyt)
+           println(nuotinNimi + " " + iskujaMennyt)
       }   // iso else: ei-sointu.
-      if (iskujaMennyt == tahtilaji.toInt) {
+        
+      if (iskujaMennyt == tahtilaji) {
+        println("-----------------")
         iskujaMennyt = 0.0  
         tahdinAikaisetEtumerkit = Buffer[String]()
       }
@@ -139,7 +142,7 @@ class NuottiPiirturi(input: String, var tahtilaji: String = "4", lyrics: String 
    
    if(!inputTiedostosta.MIDIPatch.equals(""))    // pelkkää Enteriä ei voi muuntaa Intiksi, ja se tulkitaan niin että käyttäjä ei halua kuunnella musaa
       if(inputTiedostosta.MIDIPatch.toInt != 0 )        // käyttäjä valitsi että ei kuunnella
-        new simpleMIDIPlayerAdapter(nuottiData, inputTiedostosta.MIDIPatch.toInt, viivasto.kappale)
+        new simpleMIDIPlayerAdapter(nuottiData, inputTiedostosta.MIDIPatch.toInt, viivasto.kappale, inputTiedostosta.tahtilaji.toInt)
    
    new TiedostonTallennus(viivasto.kappale)    
     

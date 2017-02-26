@@ -7,7 +7,6 @@ class Kappale {
   
   def lisaaKappaleenNimi(kappaleenNimi: String){
     var apuPuskuri = Buffer[String]()
-    println("\n                                    " + kappaleenNimi +"\n")
     apuPuskuri += "\n                                    " + kappaleenNimi +"\n"
     this.kappale += apuPuskuri
     

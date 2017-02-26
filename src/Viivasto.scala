@@ -53,9 +53,12 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
        }
     } // end for, kaikki nuottiOliot käsitelty
     
+    lisaaTahtiviiva   // biisin lopetusviiva, ei tule    TODO
+    
+    
     if(tahtiaMennyt != 0.0 || riviaMennytMontakoTahtia > 0 ){  // pelkkää G-avainta ei haluta mukaan kappaleeseen
         vaihdaRiviJaPrinttaa   
-        lisaaTahtiviiva
+        lisaaTahtiviiva       
     }    
   }
   
