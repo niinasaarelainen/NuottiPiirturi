@@ -26,10 +26,9 @@ class NuottiPiirturi(){
    
   def kasitteleNuottiTieto(inputBuffer: Buffer[String], palautetaan: Buffer[ViivastolleLaitettava] ): Buffer[ViivastolleLaitettava] = {        
      
-    var minutOnJoPiirretty =  false
+   
     for ( i<- 0 until inputBuffer.length ){   
-       if(!minutOnJoPiirretty){  
-          minutOnJoPiirretty =  false
+        
           var extraetumerkki = ""
           var alkio = inputBuffer(i)    // esim. "g#1--"   
           if(alkio.head != '<')
@@ -84,17 +83,9 @@ class NuottiPiirturi(){
              } else if (pituus == 4 ){
                palautetaan += new KokoNuotti(nuotinNimi,extraetumerkki)     
                if(ok >= 0) iskujaMennyt += 4.0
-             } else if (pituus == 0 ){        
-               if( i < inputBuffer.length -1 && inputBuffer(i+1).count(_ == '-') == 0 ){      // tahdinosa 0.0, 1.0, 2.0 tai 3.0
-                  val toisenNuotinNimi = inputBuffer(i+1).filter(_ != '-').filter(_ != '.')
-                  palautetaan += new KahdeksasosaPari(nuotinNimi, toisenNuotinNimi, extraetumerkki, tutkiEtumerkit(toisenNuotinNimi) )   
-                  if(ok >= 0) iskujaMennyt += 1.0
-                  minutOnJoPiirretty = true
-               }   
-               else {               
+             } else if (pituus == 0 ){           
                   palautetaan +=  new KahdeksasosaNuotti (nuotinNimi, extraetumerkki)     
                   if(ok >= 0) iskujaMennyt += 0.5
-               } 
              }    
              println(nuotinNimi + " " + iskujaMennyt)
         }   // iso else: ei-sointu.
@@ -105,7 +96,6 @@ class NuottiPiirturi(){
            tahdinAikaisetEtumerkit = Buffer[String]()
         }
         ok += 1
-     }  else minutOnJoPiirretty=  !minutOnJoPiirretty
    }  // for 
    palautetaan   // tätä tarvitaan sointuja muodostettaessa
    } 
@@ -141,9 +131,27 @@ class NuottiPiirturi(){
       }
    }
  
+   
+   def tehdaanKahdeksasosaParit = {
+     
+     /* if( i < inputBuffer.length -1 && inputBuffer(i+1).count(_ == '-') == 0 ){      // tahdinosa 0.0, 1.0, 2.0 tai 3.0
+                  val toisenNuotinNimi = inputBuffer(i+1).filter(_ != '-').filter(_ != '.')  // kaatuu jos onkin tulossa: key not found: <a1,f1,d1>
+                  palautetaan += new KahdeksasosaPari(nuotinNimi, toisenNuotinNimi, extraetumerkki, tutkiEtumerkit(toisenNuotinNimi) )   
+                  if(ok >= 0) iskujaMennyt += 1.0
+                  minutOnJoPiirretty = true    // jos 1/8-sointu, tätä ei saisi laittaa päälle  !!!!!
+               }   */
+     
+     iskujaMennyt =  0.0
+     
+     for (i <- 0 to nuottiData.size){
+        if(nuottiData(i).isInstanceOf[KahdeksasosaNuotti] && (iskujaMennyt== 0.0 || iskujaMennyt== 1.0 || iskujaMennyt== 2.0 || iskujaMennyt== 3.0 ))
+        {}
+     }
+       
+   }
   
   
-   var viivasto = new Viivasto(nuottiData, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)
+   val viivasto = new Viivasto(nuottiData, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)
    viivasto.piirraNuotit(nuottiData)
    
    if(!inputTiedostosta.MIDIPatch.equals("")){    // pelkkää Enteriä ei voi muuntaa Intiksi, ja se tulkitaan niin että käyttäjä ei halua kuunnella musaa
