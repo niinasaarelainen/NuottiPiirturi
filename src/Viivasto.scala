@@ -20,7 +20,7 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
      for (laitettava <- nuottiData) {      
                       // jos sanoja oli vähemmän kuin nuotteja, ei haluta kaataa ohjelmaa
         if(laitettava.soiva && lyricsBuffer.size != 0 && lyricsBuffer.size - lyricsInd >= 1 ){     // nuotti ja sointu => soiva= true, tauko=> soiva=false
-         kasitteleLyriikat(laitettava) 
+           kasitteleLyriikat(laitettava) 
         }    
         liita(laitettava)
         tahtiaMennyt += laitettava.pituus
@@ -49,7 +49,7 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
       var tavu, tavu2 = ""
       if(!laitettava.isInstanceOf[KahdeksasosaPari]){
            kasitteleYksiTavu()
-      } else kasitteleKaksiTavua()   
+      } else if(lyricsBuffer.size - lyricsInd >= 2 ) kasitteleKaksiTavua()   
       
       def kasitteleYksiTavu() = {
          // leikataan liian pitkien lyriikkatavujen loput:
@@ -69,19 +69,21 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
            // leikataan liian pitkien lyriikkatavujen loput:
          if ( lyricsBuffer(lyricsInd).size > laitettava.kuvanLeveys/2){      // 12/2
              tavu = lyricsBuffer(lyricsInd).substring(0, laitettava.kuvanLeveys/2)
-             lyricsInd += 1
-             tavu2 = lyricsBuffer(lyricsInd).substring(0, laitettava.kuvanLeveys/2)
          } else {
-           tavu = lyricsBuffer(lyricsInd)
-           lyricsInd += 1
+           tavu = lyricsBuffer(lyricsInd)           
+         }
+         lyricsInd += 1
+         if ( lyricsBuffer(lyricsInd).size > laitettava.kuvanLeveys/2){ 
+              tavu2 = lyricsBuffer(lyricsInd).substring(0, laitettava.kuvanLeveys/2 -1)
+         } else {
            tavu2 = lyricsBuffer(lyricsInd)
          }
          // keskitetään lyriikkatavuja lähemmäs nuottia:
          if (laitettava.kuvanLeveys/2 - tavu.size < 2)
-             laitettava.kuva(16) =  tavu  + "  " + tavu2 + laitettava.kuva(16).substring(tavu.size + tavu2.size +3, laitettava.kuvanLeveys)
-         else if (laitettava.kuvanLeveys - tavu.size < 4) 
-              laitettava.kuva(16) = "  " + tavu  + "  " + tavu2 + laitettava.kuva(16).substring(tavu.size + tavu2.size + 6, laitettava.kuvanLeveys)
-         else  laitettava.kuva(16) = "   " + tavu  + "  " + tavu2 + laitettava.kuva(16).substring(tavu.size + tavu2.size +6, laitettava.kuvanLeveys)
+             laitettava.kuva(16) =  tavu  + " " + tavu2 + laitettava.kuva(16).substring(tavu.size + tavu2.size, laitettava.kuvanLeveys)
+         else if (laitettava.kuvanLeveys/2 - tavu.size < 3) 
+              laitettava.kuva(16) = " " + tavu  + "  " + tavu2 + laitettava.kuva(16).substring(tavu.size + tavu2.size + 3, laitettava.kuvanLeveys)
+         else  laitettava.kuva(16) = "  " + tavu  + "  " + tavu2 + laitettava.kuva(16).substring(tavu.size + tavu2.size +4, laitettava.kuvanLeveys)
            lyricsInd += 1
              
       }

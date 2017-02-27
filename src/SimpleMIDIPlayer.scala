@@ -8,7 +8,7 @@ import scala.collection.mutable.Buffer
 
 class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, kappale: Kappale, tahtilaji: Int) {   // Tuple (korkeus/korkeudet, pituus)
   
-    val ms = 190     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
+    val ms = 500     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
   
     val synth = MidiSystem.getSynthesizer()
     synth.open()  
@@ -96,8 +96,8 @@ class simpleChordPlayer (sointumerkit: Buffer[(Buffer[Int], Int)]) {   // Tuple 
          
         // säestysäänet päälle: 
            if(sointumerkki._1(0) -24 < 36)
-              ch1.noteOn(sointumerkki._1(0) -12,  60)   // bassoääni ekana    -24 = 2 okt. alaspäin
-           else ch1.noteOn(sointumerkki._1(0) -24,  60)  
+              ch1.noteOn(sointumerkki._1(0) -12,  50)   // bassoääni ekana    -24 = 2 okt. alaspäin
+           else ch1.noteOn(sointumerkki._1(0) -24,  50)  
           
            for (i <- 0 until sointumerkki._1.size)
               ch2.noteOn(sointumerkki._1(i), 60)      // synasointu
@@ -107,8 +107,8 @@ class simpleChordPlayer (sointumerkit: Buffer[(Buffer[Int], Int)]) {   // Tuple 
         
         // säestysäänet pois päältä:   
           if(sointumerkki._1(0) -24 < 36)
-             ch1.noteOn(sointumerkki._1(0) -12,  60)  
-          else ch1.noteOn(sointumerkki._1(0) -24,  60)  
+             ch1.noteOff(sointumerkki._1(0) -12,  60)  
+          else ch1.noteOff(sointumerkki._1(0) -24,  60)  
           
           for (i <- 0 until sointumerkki._1.size)
             ch2.noteOff(sointumerkki._1(i))   
@@ -135,16 +135,6 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPa
        for (alkio<- nuottiData) {
          var apubufferInt = Buffer[Int]()   // luodaan aina tyhjä buffer
          
-         /*
-           if (alkio.isInstanceOf[KahdeksasosaPari]){
-                 apubufferInt += MIDINoteNumber(alkio.asInstanceOf[KahdeksasosaPari].korkeus)   // parin eka nuotti
-                 nuottiNumberit += apubufferInt
-                 pituudet += 0.5
-                 apubufferInt = Buffer[Int]()
-                 apubufferInt += MIDINoteNumber(alkio.asInstanceOf[KahdeksasosaPari].korkeus2)   // parin toka nuotti
-                 nuottiNumberit += apubufferInt
-                 pituudet += 0.5
-           }  */
          
            alkio.isInstanceOf[Sointu] match {
            case true  => pituudet += alkio.asInstanceOf[Sointu].pituus            // yhteinen pituus talteen vain kerran
@@ -170,20 +160,20 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPa
   // println(nuottiNumberit)
    
    val nuotitJaPituudet = nuottiNumberit.zip(pituudet)
-   new simpleMIDIPlayer(nuotitJaPituudet, MIDIPatch, kappale, tahtilaji) 
+  // new simpleMIDIPlayer(nuotitJaPituudet, MIDIPatch, kappale, tahtilaji) 
    
- /*
+ 
    for (i <- 1 to 2) {
     val thread = new Thread {
         override def run {  
           i match{        
-            case 1 => new simpleMIDIPlayer(nuotitJaPituudet, MIDIPatch) 
-            case 2 => new simpleChordPlayerAdapter(Buffer("C", "G", "F", "C", "G", "C")) 
+            case 1 => new simpleMIDIPlayer(nuotitJaPituudet, MIDIPatch, kappale, tahtilaji) 
+            case 2 => new simpleChordPlayerAdapter(Buffer("C", "G", "F", "C", "G", "C",    "C", "G", "F", "C", "G", "C")) 
           }
         }
     }
     thread.start
-   }  */
+   }  
     
 }
 
@@ -217,7 +207,7 @@ class simpleChordPlayerAdapter (sointumerkit: Buffer[String]){
   }
    
      
-    var soinnunPituudet = Buffer(8,8,4,4,4,4)   // 8 iskua = 2 tahtia
+    var soinnunPituudet = Buffer(8,8,4,4,4,4, 8,8,4,4,4,4)   // 8 iskua = 2 tahtia
        
     val soinnutJaPituudet = soinnut.zip(soinnunPituudet)
     new simpleChordPlayer(soinnutJaPituudet)
