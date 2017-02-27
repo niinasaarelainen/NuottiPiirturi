@@ -215,10 +215,12 @@ class KahdeksasosaNuotti(nuotinNimi: String, extraetumerkki: String = "") extend
 }   
   
   
-class KahdeksasosaPari(ekaNuotti: KahdeksasosaNuotti, tokaNuotti: KahdeksasosaNuotti) extends Nuotti{
+class KahdeksasosaPari (ekaNuotti: KahdeksasosaNuotti, tokaNuotti: KahdeksasosaNuotti)  extends NeljasosaNuotti(ekaNuotti.korkeus: String, ekaNuotti.extraetumerkkiDef: String){
 
-     def korkeus = ekaNuotti.korkeus  
-     def korkeus2 = tokaNuotti.korkeus  
+// (ekaNuotti: ViivastolleLaitettava, tokaNuotti: ViivastolleLaitettava)  extends Nuotti{
+  
+
+     override def korkeus = ""
      override def pituus = 1.0
      override def kuvanLeveys = 12
      
@@ -228,7 +230,7 @@ class KahdeksasosaPari(ekaNuotti: KahdeksasosaNuotti, tokaNuotti: KahdeksasosaNu
       var ylospain = true
       if (korkeudet.min - 0 < 15 - korkeudet.max )   // 0 on ylin piirtoindeksi, 15 alin, lasketaan missä on enemmän tilaa
           ylospain = false
-    */
+   
     
      override def kuva = {
        viivasto = piirraTyhjaViivasto(kuvanLeveys)
@@ -242,20 +244,13 @@ class KahdeksasosaPari(ekaNuotti: KahdeksasosaNuotti, tokaNuotti: KahdeksasosaNu
      //    viivasto(y(tokaNuotti.nimiMapissa)-4) = viivasto(y(tokaNuotti.nimiMapissa)-4).substring(0, 3+1) + "="  + viivasto(y(tokaNuotti.nimiMapissa)-4).substring(5, kuvanLeveys)  
             viivasto(y(tokaNuotti.nimiMapissa)-4) = viivasto(y(tokaNuotti.nimiMapissa)-4).substring(0, 4) + "______"  + viivasto(y(tokaNuotti.nimiMapissa)-4).substring(10, kuvanLeveys)    
                        
-        viivasto  
-     }
+        viivasto   */
+    
   
     /*
     viivasto(nuotitYAkselilla(nuotinNimi))(x)='@'          // 1/8-nuottipari, varret ylös
     viivasto(nuotitYAkselilla(toisenNuotinNimiTutk))(x+5)='@'     
-    if(nuotinNimi == "c1"){
-       viivasto(nuotitYAkselilla(nuotinNimi))(x-1) = '-'    // keski-c:lle apuviiva
-       viivasto(nuotitYAkselilla(nuotinNimi))(x+1) = '-'
-    }
-    if(toisenNuotinNimi == "c1"){
-       viivasto(nuotitYAkselilla(toisenNuotinNimi))(x+4) = '-'    // keski-c:lle apuviiva
-       viivasto(nuotitYAkselilla(toisenNuotinNimi))(x+6) = '-'
-    }
+    
     val korkeusero = nuotitYAkselilla(nuotinNimi) - nuotitYAkselilla(toisenNuotinNimiTutk)
     println(korkeusero)
     if(korkeusero >= 0 && nuotitYAkselilla(nuotinNimi) > nuotitYAkselilla("h1") || korkeusero < 0 && nuotitYAkselilla(nuotinNimi) < nuotitYAkselilla("h1")){   // parin eka nuotti on alempana, toinen korkeammalla

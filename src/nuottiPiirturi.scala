@@ -6,6 +6,7 @@ class NuottiPiirturi(){
    var pituus = 0
    var lyricsBuffer = Buffer[String]()  
    var nuottiData= Buffer[ViivastolleLaitettava]()    
+   var nuottiDataParitettu= Buffer[ViivastolleLaitettava]()    
    var tahdinAikaisetEtumerkit = Buffer[String]()
    
   
@@ -142,20 +143,25 @@ class NuottiPiirturi(){
                }   */
      
      iskujaMennyt =  0.0
+     var i= 0
      
-     for (i <- 0 until nuottiData.size -1 ){  // vikalle alkiolle ei kannata kysyä seuraajaa
+     while (i < nuottiData.size-1 ){      // vikalle alkiolle ei kannata kysyä seuraajaa
         iskujaMennyt += nuottiData(i).pituus
         if(nuottiData(i).isInstanceOf[KahdeksasosaNuotti] && (iskujaMennyt== 0.5 || iskujaMennyt== 1.5 || iskujaMennyt== 2.5 || iskujaMennyt== 3.5 )){
             if(nuottiData(i+1).isInstanceOf[KahdeksasosaNuotti]){
-               nuottiData.insert(i, new KahdeksasosaPari(nuottiData(i).asInstanceOf[KahdeksasosaNuotti], nuottiData(i+1).asInstanceOf[KahdeksasosaNuotti]))
-               nuottiData.remove(i)
-               nuottiData.remove(i+1)
+               nuottiDataParitettu += new KahdeksasosaPari(nuottiData(i).asInstanceOf[KahdeksasosaNuotti], nuottiData(i+1).asInstanceOf[KahdeksasosaNuotti])
             }
         }
+        else {
+           nuottiDataParitettu += nuottiData(i)     // ei muuteta dataa
+           nuottiDataParitettu += nuottiData(i+1)
+        }
+        
         if (iskujaMennyt == tahtilaji) {
            println("-----------------")
            iskujaMennyt = 0.0  
-        }     
+        }  
+     i += 1   
      }
    }  
   
