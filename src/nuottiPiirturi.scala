@@ -143,32 +143,43 @@ class NuottiPiirturi(){
                }   */
      
      iskujaMennyt =  0.0
-     var i= 0
+     var minutOnJoKasitelty = false
      
-     while (i < nuottiData.size-1 ){      // vikalle alkiolle ei kannata kysyä seuraajaa
-        iskujaMennyt += nuottiData(i).pituus
-        if(nuottiData(i).isInstanceOf[KahdeksasosaNuotti] && (iskujaMennyt== 0.5 || iskujaMennyt== 1.5 || iskujaMennyt== 2.5 || iskujaMennyt== 3.5 )){
-            if(nuottiData(i+1).isInstanceOf[KahdeksasosaNuotti]){
-               nuottiDataParitettu += new KahdeksasosaPari(nuottiData(i).asInstanceOf[KahdeksasosaNuotti], nuottiData(i+1).asInstanceOf[KahdeksasosaNuotti])
-            }
-        }
-        else {
-           nuottiDataParitettu += nuottiData(i)     // ei muuteta dataa
-           nuottiDataParitettu += nuottiData(i+1)
-        }
+     for (i <- 0 until nuottiData.size-1 ){      // vikalle alkiolle ei kannata kysyä seuraajaa
+        if(!minutOnJoKasitelty){
+     //     minutOnJoKasitelty = false
+          iskujaMennyt += nuottiData(i).pituus
+          if(nuottiData(i).isInstanceOf[KahdeksasosaNuotti] && (iskujaMennyt== 0.5 || iskujaMennyt== 1.5 || iskujaMennyt== 2.5 || iskujaMennyt== 3.5 )){
+              if(nuottiData(i+1).isInstanceOf[KahdeksasosaNuotti]){
+                 nuottiDataParitettu += new KahdeksasosaPari(nuottiData(i).asInstanceOf[KahdeksasosaNuotti], nuottiData(i+1).asInstanceOf[KahdeksasosaNuotti])
+                 minutOnJoKasitelty = true
+                 iskujaMennyt += nuottiData(i+1).pituus
+              }
+          }
+          else {
+             nuottiDataParitettu += nuottiData(i)     // ei muuteta dataa
+          }
         
-        if (iskujaMennyt == tahtilaji) {
-           println("-----------------")
-           iskujaMennyt = 0.0  
-        }  
-     i += 1   
-     }
+   //       println("iskujaMennyt: " +iskujaMennyt + nuottiData(i).asInstanceOf[KahdeksasosaNuotti].korkeus )
+          if (iskujaMennyt == tahtilaji) {
+             println("-----------------")
+             iskujaMennyt = 0.0  
+          }  
+      
+        }  else  minutOnJoKasitelty=  false
+       }
+        
+        
    }  
   
   
    tehdaanKahdeksasosaParit()
-   val viivasto = new Viivasto(nuottiData, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)
-   viivasto.piirraNuotit(nuottiData)
+   
+   for(nuottiOlio <- nuottiDataParitettu)
+     println(nuottiOlio)
+   
+   val viivasto = new Viivasto(nuottiDataParitettu, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)
+   viivasto.piirraNuotit()
    
    if(!inputTiedostosta.MIDIPatch.equals("")){    // pelkkää Enteriä ei voi muuntaa Intiksi, ja se tulkitaan niin että käyttäjä ei halua kuunnella musaa
       if(inputTiedostosta.MIDIPatch.toInt != 0 )        // käyttäjä valitsi että ei kuunnella

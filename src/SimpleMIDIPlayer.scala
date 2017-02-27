@@ -135,6 +135,7 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPa
        for (alkio<- nuottiData) {
          var apubufferInt = Buffer[Int]()   // luodaan aina tyhjä buffer
          
+         /*
            if (alkio.isInstanceOf[KahdeksasosaPari]){
                  apubufferInt += MIDINoteNumber(alkio.asInstanceOf[KahdeksasosaPari].korkeus)   // parin eka nuotti
                  nuottiNumberit += apubufferInt
@@ -143,9 +144,9 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPa
                  apubufferInt += MIDINoteNumber(alkio.asInstanceOf[KahdeksasosaPari].korkeus2)   // parin toka nuotti
                  nuottiNumberit += apubufferInt
                  pituudet += 0.5
-           }
+           }  */
          
-           else alkio.isInstanceOf[Sointu] match {
+           alkio.isInstanceOf[Sointu] match {
            case true  => pituudet += alkio.asInstanceOf[Sointu].pituus            // yhteinen pituus talteen vain kerran
                          for(nuotti <- alkio.asInstanceOf[Sointu].nuotit){
                               apubufferInt += MIDINoteNumber(nuotti.asInstanceOf[Nuotti].korkeus)  // Map("nuotinnimi" --> Int)     

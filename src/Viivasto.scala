@@ -15,10 +15,10 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
   
  
     
-  def piirraNuotit(nuottiOliot: Buffer[ViivastolleLaitettava]) = {
+  def piirraNuotit() = {
     
      var lyricsInd = 0
-     for (laitettava <- nuottiOliot) {      
+     for (laitettava <- nuottiData) {      
                       // jos sanoja oli vähemmän kuin nuotteja, ei haluta kaataa ohjelmaa
        if(laitettava.soiva && lyricsBuffer.size != 0 && lyricsBuffer.size - lyricsInd >= 1 ){     // nuotti ja sointu => soiva= true, tauko=> soiva=false
            var tavu = ""
@@ -45,7 +45,7 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
        if (riviaMennytMontakoTahtia == 2 ){      // printtaukseen 2, voisi kysyä käyttäjältä  //TODO      
            vaihdaRivi
        }
-    } // end for, kaikki nuottiOliot käsitelty
+    } // end for, kaikki nuottiData käsitelty
     
     lisaaTahtiviiva   // biisin lopetusviiva, tulee vain vajaissa riveissä    TODO  : myös täyteen riviin    
     
