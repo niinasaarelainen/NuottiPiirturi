@@ -133,15 +133,9 @@ class NuottiPiirturi(){
    }
  
    
-   def tehdaanKahdeksasosaParit() = {
+   def tehdaanKahdeksasosaParit() = {      // TODO  1/8-sointu !?!?!?!?
      
-     /* if( i < inputBuffer.length -1 && inputBuffer(i+1).count(_ == '-') == 0 ){      // tahdinosa 0.0, 1.0, 2.0 tai 3.0
-                  val toisenNuotinNimi = inputBuffer(i+1).filter(_ != '-').filter(_ != '.')  // kaatuu jos onkin tulossa: key not found: <a1,f1,d1>
-                  palautetaan += new KahdeksasosaPari(nuotinNimi, toisenNuotinNimi, extraetumerkki, tutkiEtumerkit(toisenNuotinNimi) )   
-                  if(ok >= 0) iskujaMennyt += 1.0
-                  minutOnJoPiirretty = true    // jos 1/8-sointu, tätä ei saisi laittaa päälle  !!!!!
-               }   */
-     
+    
      iskujaMennyt =  0.0
      var minutOnJoKasitelty = false
      
@@ -149,7 +143,7 @@ class NuottiPiirturi(){
         if(!minutOnJoKasitelty){
      //     minutOnJoKasitelty = false
           iskujaMennyt += nuottiData(i).pituus
-          if(nuottiData(i).isInstanceOf[KahdeksasosaNuotti] && (iskujaMennyt== 0.5 || iskujaMennyt== 1.5 || iskujaMennyt== 2.5 || iskujaMennyt== 3.5 )){
+          if(nuottiData(i).isInstanceOf[KahdeksasosaNuotti] && (Array(0.5, 1.5, 2.5, 3.5).contains(iskujaMennyt))){
               if(nuottiData(i+1).isInstanceOf[KahdeksasosaNuotti]){
                  nuottiDataParitettu += new KahdeksasosaPari(nuottiData(i).asInstanceOf[KahdeksasosaNuotti], nuottiData(i+1).asInstanceOf[KahdeksasosaNuotti])
                  minutOnJoKasitelty = true
@@ -168,8 +162,10 @@ class NuottiPiirturi(){
       
         }  else  minutOnJoKasitelty=  false
       }
-      nuottiDataParitettu += nuottiData(nuottiData.size-1)     // viimeinenkin nuottiolio messiin
-        
+     if(nuottiDataParitettu.size <  nuottiData.size)     // TODO, ei toimi tällä logiikalla, pariolioita on tietty vähemmän kuin yksittäisolioita
+          nuottiDataParitettu += nuottiData(nuottiData.size-1)     // viimeinenkin nuottiolio messiin, jos se ei ollut 1/8-parin puolisko
+
+                                                                    // pitääkö katsoa tahdinosa & 1/8-instanssi?
    }  
   
   
