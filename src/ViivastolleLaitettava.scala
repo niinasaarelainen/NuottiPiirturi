@@ -90,7 +90,7 @@ abstract class Nuotti extends ViivastolleLaitettava {
      def etumerkki: String
      def extraetumerkkiDef: String
        
-     def piirraApuviiva = {                       
+     def piirraApuviiva() = {                       
            viivasto(y("c1")) = viivasto(y("c1")).substring(0, 1) + "--" +  viivasto(y("c1")).substring(4, 6) + "--" + viivasto(y("c1")).substring(7, kuvanLeveys)         
      }
   }
@@ -110,8 +110,8 @@ class KokoNuotti(nuotinNimi: String, extraetumerkki: String = "") extends Nuotti
      def extraetumerkkiDef = if(extraetumerkki == "n") "" else extraetumerkki
     
   
-     def piirraNuppi = { 
-        if(nimiMapissa=="c1") piirraApuviiva
+     def piirraNuppi() = { 
+        if(nimiMapissa=="c1") piirraApuviiva()
         if(etumerkki.size == 0 && extraetumerkkiDef.size == 0)  // ei etumerkkiä
            viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 3) + nuppi + viivasto(y(nimiMapissa)).substring(5, kuvanLeveys)  
         else
@@ -121,7 +121,7 @@ class KokoNuotti(nuotinNimi: String, extraetumerkki: String = "") extends Nuotti
      
       def kuva = {
          viivasto = piirraTyhjaViivasto(kuvanLeveys) 
-         piirraNuppi
+         piirraNuppi()
          viivasto
       }
 }   
@@ -134,11 +134,11 @@ class PuoliNuotti(nuotinNimi: String, extraetumerkki: String = "") extends KokoN
     
     override def kuva = {
       super.kuva
-      piirraVarsi
+      piirraVarsi()
       viivasto
     }
     
-    def piirraVarsi = {
+    def piirraVarsi() = {
       if(y(nimiMapissa) >= y("h1")){  // varsi ylös  
         for (i <- 1 to 3)
            viivasto(y(nimiMapissa)-i) = viivasto(y(nimiMapissa)-i).substring(0, 4) + "|" + viivasto(y(nimiMapissa)-i).substring(5, kuvanLeveys)  
@@ -245,6 +245,9 @@ class KahdeksasosaPari (ekaNuotti: KahdeksasosaNuotti, tokaNuotti: KahdeksasosaN
        viivasto = piirraTyhjaViivasto(kuvanLeveys)
        super.kuva     // piirtää ekan nuotin nupin 
        // tokan nuppi
+       if(tokaNuotti.nimiMapissa == "c1")        
+           viivasto(y("c1")) = viivasto(y("c1")).substring(0, 6) + "--" +  viivasto(y("c1")).substring(8, 10) + "--" + viivasto(y("c1")).substring(11, kuvanLeveys)         
+  
        if(tokaNuotti.etumerkki.size == 0 && tokaNuotti.extraetumerkkiDef.size == 0)  // ei etumerkkiä
             viivasto(y(tokaNuotti.nimiMapissa)) = viivasto(y(tokaNuotti.nimiMapissa)).substring(0, 8) + tokaNuotti.nuppi + viivasto(y(tokaNuotti.nimiMapissa)).substring(10, kuvanLeveys)  
        else

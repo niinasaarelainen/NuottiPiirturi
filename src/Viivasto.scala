@@ -40,18 +40,18 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
      //     println("laitettava: " + laitettava + ", pit:" + laitettava.pituus + "riviaMennytMontakoTahtia " +riviaMennytMontakoTahtia)
           riviaMennytMontakoTahtia += 1
           tahtiaMennyt = 0.0
-          lisaaTahtiviiva
+          lisaaTahtiviiva()
        }
        if (riviaMennytMontakoTahtia == 2 ){      // printtaukseen 2, voisi kysyä käyttäjältä  //TODO      
-           vaihdaRivi
+           vaihdaRivi()
        }
     } // end for, kaikki nuottiData käsitelty
     
-    lisaaTahtiviiva   // biisin lopetusviiva, tulee vain vajaissa riveissä    TODO  : myös täyteen riviin    
+    lisaaTahtiviiva()   // biisin lopetusviiva, tulee vain vajaissa riveissä    TODO  : myös täyteen riviin    
     
     if(tahtiaMennyt != 0.0 || riviaMennytMontakoTahtia > 0 ){  // pelkkää G-avainta ei haluta mukaan kappaleeseen
-        vaihdaRivi   
-        lisaaTahtiviiva       
+        vaihdaRivi()   
+        lisaaTahtiviiva()       
     }    
   }
   
@@ -64,7 +64,7 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
   
   
    
-   def lisaaTahtiviiva = {
+   def lisaaTahtiviiva() = {
        for(i<-nuotitYAkselilla("ylatila3") to nuotitYAkselilla("g2"))   
          viivasto(i) += " "                                       // tänne tyhjää, jotta mahdollisesti tänne tuleva nuotti/varsi asemoituu oikein    
        for(i<-nuotitYAkselilla("f2") to nuotitYAkselilla("e1"))   // tahtiviiva menee ylimmästä viivasta alimpaan
@@ -75,7 +75,7 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
    
    
    
-   def vaihdaRivi = {     
+   def vaihdaRivi() = {     
      for (rivi <- this.viivasto){
      }    
      kappale.lisaaViivasto(this.viivasto)    

@@ -138,6 +138,7 @@ class NuottiPiirturi(){
     
      iskujaMennyt =  0.0
      var minutOnJoKasitelty = false
+     var paastiinTiedostonloppuun = false
      
      for (i <- 0 until nuottiData.size-1 ){      // vikalle alkiolle ei kannata kysyä seuraajaa
         if(!minutOnJoKasitelty){
@@ -148,6 +149,7 @@ class NuottiPiirturi(){
                  nuottiDataParitettu += new KahdeksasosaPari(nuottiData(i).asInstanceOf[KahdeksasosaNuotti], nuottiData(i+1).asInstanceOf[KahdeksasosaNuotti])
                  minutOnJoKasitelty = true
                  iskujaMennyt += nuottiData(i+1).pituus
+                 if(i+1 == nuottiData.size-1) paastiinTiedostonloppuun = true
               }
           }
           else {
@@ -162,7 +164,7 @@ class NuottiPiirturi(){
       
         }  else  minutOnJoKasitelty=  false
       }
-     if(nuottiDataParitettu.size <  nuottiData.size)     // TODO, ei toimi tällä logiikalla, pariolioita on tietty vähemmän kuin yksittäisolioita
+     if(!paastiinTiedostonloppuun)     // TODO, ei toimi tällä logiikalla, pariolioita on tietty vähemmän kuin yksittäisolioita
           nuottiDataParitettu += nuottiData(nuottiData.size-1)     // viimeinenkin nuottiolio messiin, jos se ei ollut 1/8-parin puolisko
 
                                                                     // pitääkö katsoa tahdinosa & 1/8-instanssi?
