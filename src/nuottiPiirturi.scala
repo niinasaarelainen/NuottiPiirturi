@@ -14,7 +14,7 @@ class NuottiPiirturi(){
    val tahtilaji = inputTiedostosta.tahtilaji.toDouble 
    var iskujaMennyt =  0.0
  
-   kasitteleLyriikat
+   kasitteleLyriikat()
    
    val inputBuffer = inputTiedostosta.nuottiAlkiot.toBuffer  
    nuottiData = kasitteleNuottiTieto(inputBuffer, nuottiData)        
@@ -87,11 +87,11 @@ class NuottiPiirturi(){
                   palautetaan +=  new KahdeksasosaNuotti (nuotinNimi, extraetumerkki)     
                   if(ok >= 0) iskujaMennyt += 0.5
              }    
-             println(nuotinNimi + " " + iskujaMennyt)
+       //      println(nuotinNimi + " " + iskujaMennyt)
         }   // iso else: ei-sointu.
         
         if (iskujaMennyt == tahtilaji) {
-           println("-----------------")
+  //         println("-----------------")
            iskujaMennyt = 0.0  
            tahdinAikaisetEtumerkit = Buffer[String]()
         }
@@ -117,7 +117,7 @@ class NuottiPiirturi(){
    
    
    
-   def kasitteleLyriikat = {
+   def kasitteleLyriikat() = {
       if(inputTiedostosta.lyriikkadata.size != 0){
        
       var sanatPotkona = ""  
@@ -132,7 +132,7 @@ class NuottiPiirturi(){
    }
  
    
-   def tehdaanKahdeksasosaParit = {
+   def tehdaanKahdeksasosaParit() = {
      
      /* if( i < inputBuffer.length -1 && inputBuffer(i+1).count(_ == '-') == 0 ){      // tahdinosa 0.0, 1.0, 2.0 tai 3.0
                   val toisenNuotinNimi = inputBuffer(i+1).filter(_ != '-').filter(_ != '.')  // kaatuu jos onkin tulossa: key not found: <a1,f1,d1>
@@ -143,14 +143,24 @@ class NuottiPiirturi(){
      
      iskujaMennyt =  0.0
      
-     for (i <- 0 to nuottiData.size){
-        if(nuottiData(i).isInstanceOf[KahdeksasosaNuotti] && (iskujaMennyt== 0.0 || iskujaMennyt== 1.0 || iskujaMennyt== 2.0 || iskujaMennyt== 3.0 ))
-        {}
+     for (i <- 0 until nuottiData.size -1 ){  // vikalle alkiolle ei kannata kysyä seuraajaa
+        iskujaMennyt += nuottiData(i).pituus
+        if(nuottiData(i).isInstanceOf[KahdeksasosaNuotti] && (iskujaMennyt== 0.5 || iskujaMennyt== 1.5 || iskujaMennyt== 2.5 || iskujaMennyt== 3.5 )){
+            if(nuottiData(i+1).isInstanceOf[KahdeksasosaNuotti]){
+               nuottiData.insert(i, new KahdeksasosaPari(nuottiData(i).asInstanceOf[KahdeksasosaNuotti], nuottiData(i+1).asInstanceOf[KahdeksasosaNuotti]))
+               nuottiData.remove(i)
+               nuottiData.remove(i+1)
+            }
+        }
+        if (iskujaMennyt == tahtilaji) {
+           println("-----------------")
+           iskujaMennyt = 0.0  
+        }     
      }
-       
-   }
+   }  
   
   
+   tehdaanKahdeksasosaParit()
    val viivasto = new Viivasto(nuottiData, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)
    viivasto.piirraNuotit(nuottiData)
    

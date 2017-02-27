@@ -215,14 +215,14 @@ class KahdeksasosaNuotti(nuotinNimi: String, extraetumerkki: String = "") extend
 }   
   
   
-class KahdeksasosaPari(nuotinNimi: String, toisenNuotinNimi: String, extraetumerkki1: String, extraetumerkki2: String) extends NeljasosaNuotti(nuotinNimi: String, extraetumerkki1: String){
+class KahdeksasosaPari(ekaNuotti: KahdeksasosaNuotti, tokaNuotti: KahdeksasosaNuotti) extends Nuotti{
 
-     override def korkeus = nuotinNimi
-     def korkeus2 = toisenNuotinNimi
+     def korkeus = ekaNuotti.korkeus  
+     def korkeus2 = tokaNuotti.korkeus  
      override def pituus = 1.0
      override def kuvanLeveys = 12
      
-     val tokaNuotti = new KahdeksasosaNuotti(toisenNuotinNimi, extraetumerkki2)
+    
      
      /* muokkaa tätä soinnun logiikkaa:
       var ylospain = true
