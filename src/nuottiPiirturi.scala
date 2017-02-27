@@ -167,8 +167,8 @@ class NuottiPiirturi(){
           }  
       
         }  else  minutOnJoKasitelty=  false
-       }
-        
+      }
+      nuottiDataParitettu += nuottiData(nuottiData.size-1)     // viimeinenkin nuottiolio messiin
         
    }  
   

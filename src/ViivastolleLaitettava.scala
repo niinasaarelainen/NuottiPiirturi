@@ -221,29 +221,49 @@ class KahdeksasosaPari (ekaNuotti: KahdeksasosaNuotti, tokaNuotti: KahdeksasosaN
      override def pituus = 1.0
      override def kuvanLeveys = 12
      override def nuppi = "@@"
-     
+     var ekanVarrenPit, tokanVarrenPit = 0
+     var ylospain = true
      
      val korkeudet = Array( y(ekaNuotti.nimiMapissa),  y(tokaNuotti.nimiMapissa))
     
-     
-     var ylospain = true
-     if (korkeudet.min - 0 < 15 - korkeudet.max )   // 0 on ylin piirtoindeksi, 15 alin, lasketaan missä on enemmän tilaa
+    
+     if (korkeudet.min - 0 < 15 - korkeudet.max ) {  // 0 on ylin piirtoindeksi, 15 alin, lasketaan missä on enemmän tilaa
          ylospain = false  
-   
+          ekanVarrenPit = Math.abs(korkeudet.max - y(ekaNuotti.nimiMapissa)) + 2
+         tokanVarrenPit = Math.abs(korkeudet.max - y(tokaNuotti.nimiMapissa))  + 2  
+        
+     } else {
+        
+          ekanVarrenPit = Math.abs(korkeudet.min - y(ekaNuotti.nimiMapissa)) + 2
+         tokanVarrenPit = Math.abs(korkeudet.min - y(tokaNuotti.nimiMapissa))  + 2  
+     }
+     
+     println("ekanVarrenPit: " + ekanVarrenPit + "tokanVarrenPit: " + tokanVarrenPit)
+    
     
      override def kuva = {
        viivasto = piirraTyhjaViivasto(kuvanLeveys)
        super.kuva     // piirtää ekan nuotin nupin 
+       // tokan nuppi
        if(tokaNuotti.etumerkki.size == 0 && tokaNuotti.extraetumerkkiDef.size == 0)  // ei etumerkkiä
             viivasto(y(tokaNuotti.nimiMapissa)) = viivasto(y(tokaNuotti.nimiMapissa)).substring(0, 8) + tokaNuotti.nuppi + viivasto(y(tokaNuotti.nimiMapissa)).substring(10, kuvanLeveys)  
        else
            viivasto(y(tokaNuotti.nimiMapissa)) = viivasto(y(tokaNuotti.nimiMapissa)).substring(0, 7) + tokaNuotti.extraetumerkkiDef + tokaNuotti.etumerkki + tokaNuotti.nuppi + viivasto(y(tokaNuotti.nimiMapissa)).substring(10, kuvanLeveys)  
      
-       if(ylospain)  {  
-          for(i<- 1 to 3) viivasto(y(tokaNuotti.nimiMapissa)-i) = viivasto(y(tokaNuotti.nimiMapissa)-i).substring(0, 9) + "|"  + viivasto(y(tokaNuotti.nimiMapissa)-i).substring(10, kuvanLeveys)    
-              viivasto(y(tokaNuotti.nimiMapissa)-4) = viivasto(y(tokaNuotti.nimiMapissa)-4).substring(0, 4) + "======"  + viivasto(y(tokaNuotti.nimiMapissa)-4).substring(10, kuvanLeveys)    
-       } else { for(i<- 1 to 3) viivasto(y(tokaNuotti.nimiMapissa)+i) = viivasto(y(tokaNuotti.nimiMapissa)+i).substring(0, 8) + "|"  + viivasto(y(tokaNuotti.nimiMapissa)+i).substring(9, kuvanLeveys)    
-              viivasto(y(tokaNuotti.nimiMapissa)+4) = viivasto(y(tokaNuotti.nimiMapissa)+4).substring(0, 3) + "======"  + viivasto(y(tokaNuotti.nimiMapissa)+4).substring(9, kuvanLeveys)    
+       // varret ja palkki:    
+       if(ylospain)  {           
+          for (i <- 1 to ekanVarrenPit)   // nuottien väli + kolmen mittainen ylimenevä osuus
+                   viivasto( y(ekaNuotti.nimiMapissa)-i) = viivasto( y(ekaNuotti.nimiMapissa)-i).substring(0, 4) + "|" + viivasto( y(ekaNuotti.nimiMapissa)-i).substring(5, kuvanLeveys)  
+        
+          for(i<- 1 to tokanVarrenPit) viivasto(y(tokaNuotti.nimiMapissa)-i) = viivasto(y(tokaNuotti.nimiMapissa)-i).substring(0, 9) + "|"  + viivasto(y(tokaNuotti.nimiMapissa)-i).substring(10, kuvanLeveys)    
+          viivasto(korkeudet.min -3) = viivasto(korkeudet.min -3).substring(0, 4) + "======"  + viivasto(korkeudet.min -3).substring(10, kuvanLeveys)    
+       } else { 
+         // varret alaspäin
+          for (i <- 1 to ekanVarrenPit)   // nuottien väli + kolmen mittainen ylimenevä osuus
+                   viivasto( y(ekaNuotti.nimiMapissa)+i) = viivasto( y(ekaNuotti.nimiMapissa)+i).substring(0, 3) + "|" + viivasto( y(ekaNuotti.nimiMapissa)+i).substring(4, kuvanLeveys)  
+        
+          for(i<- 1 to tokanVarrenPit) viivasto(y(tokaNuotti.nimiMapissa)+i) = viivasto(y(tokaNuotti.nimiMapissa)+i).substring(0, 8) + "|"  + viivasto(y(tokaNuotti.nimiMapissa)+i).substring(9, kuvanLeveys)    
+          viivasto(korkeudet.max +3) = viivasto(korkeudet.max +3).substring(0, 3) + "======"  + viivasto(korkeudet.max +3).substring(9, kuvanLeveys)    
        }  
        viivasto   
      }
