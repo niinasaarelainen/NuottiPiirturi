@@ -211,7 +211,7 @@ class KahdeksasosaNuotti(nuotinNimi: String, extraetumerkki: String = "") extend
 }   
   
   
-class KahdeksasosaPari (ekaNuotti: KahdeksasosaNuotti, tokaNuotti: KahdeksasosaNuotti)  extends NeljasosaNuotti(ekaNuotti.korkeus: String, ekaNuotti.extraetumerkkiDef: String){
+class KahdeksasosaPari (ekaNuotti: KahdeksasosaNuotti, tokaNuotti: KahdeksasosaNuotti)  extends KokoNuotti(ekaNuotti.korkeus: String, ekaNuotti.extraetumerkkiDef: String){
 
 // (ekaNuotti: ViivastolleLaitettava, tokaNuotti: ViivastolleLaitettava)  extends Nuotti{
   
@@ -220,26 +220,31 @@ class KahdeksasosaPari (ekaNuotti: KahdeksasosaNuotti, tokaNuotti: KahdeksasosaN
      def korkeus2 = tokaNuotti.korkeus
      override def pituus = 1.0
      override def kuvanLeveys = 12
+     override def nuppi = "@@"
      
+     
+     val korkeudet = Array( y(ekaNuotti.nimiMapissa),  y(tokaNuotti.nimiMapissa))
     
      
-     /* muokkaa tätä soinnun logiikkaa:
-      var ylospain = true
-      if (korkeudet.min - 0 < 15 - korkeudet.max )   // 0 on ylin piirtoindeksi, 15 alin, lasketaan missä on enemmän tilaa
-          ylospain = false   */
+     var ylospain = true
+     if (korkeudet.min - 0 < 15 - korkeudet.max )   // 0 on ylin piirtoindeksi, 15 alin, lasketaan missä on enemmän tilaa
+         ylospain = false  
    
     
      override def kuva = {
        viivasto = piirraTyhjaViivasto(kuvanLeveys)
-       super.kuva
+       super.kuva     // piirtää ekan nuotin nupin 
        if(tokaNuotti.etumerkki.size == 0 && tokaNuotti.extraetumerkkiDef.size == 0)  // ei etumerkkiä
             viivasto(y(tokaNuotti.nimiMapissa)) = viivasto(y(tokaNuotti.nimiMapissa)).substring(0, 8) + tokaNuotti.nuppi + viivasto(y(tokaNuotti.nimiMapissa)).substring(10, kuvanLeveys)  
        else
            viivasto(y(tokaNuotti.nimiMapissa)) = viivasto(y(tokaNuotti.nimiMapissa)).substring(0, 7) + tokaNuotti.extraetumerkkiDef + tokaNuotti.etumerkki + tokaNuotti.nuppi + viivasto(y(tokaNuotti.nimiMapissa)).substring(10, kuvanLeveys)  
-       
-       for(i<- 1 to 2) viivasto(y(tokaNuotti.nimiMapissa)-i) = viivasto(y(tokaNuotti.nimiMapissa)-i).substring(0, 9) + "|"  + viivasto(y(tokaNuotti.nimiMapissa)-i).substring(10, kuvanLeveys)    
-             viivasto(y(tokaNuotti.nimiMapissa)-3) = viivasto(y(tokaNuotti.nimiMapissa)-3).substring(0, 4) + "======"  + viivasto(y(tokaNuotti.nimiMapissa)-3).substring(10, kuvanLeveys)    
-                       
+     
+       if(ylospain)  {  
+          for(i<- 1 to 3) viivasto(y(tokaNuotti.nimiMapissa)-i) = viivasto(y(tokaNuotti.nimiMapissa)-i).substring(0, 9) + "|"  + viivasto(y(tokaNuotti.nimiMapissa)-i).substring(10, kuvanLeveys)    
+              viivasto(y(tokaNuotti.nimiMapissa)-4) = viivasto(y(tokaNuotti.nimiMapissa)-4).substring(0, 4) + "======"  + viivasto(y(tokaNuotti.nimiMapissa)-4).substring(10, kuvanLeveys)    
+       } else { for(i<- 1 to 3) viivasto(y(tokaNuotti.nimiMapissa)+i) = viivasto(y(tokaNuotti.nimiMapissa)+i).substring(0, 8) + "|"  + viivasto(y(tokaNuotti.nimiMapissa)+i).substring(9, kuvanLeveys)    
+              viivasto(y(tokaNuotti.nimiMapissa)+4) = viivasto(y(tokaNuotti.nimiMapissa)+4).substring(0, 3) + "======"  + viivasto(y(tokaNuotti.nimiMapissa)+4).substring(9, kuvanLeveys)    
+       }  
        viivasto   
      }
   
