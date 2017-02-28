@@ -89,7 +89,7 @@ class TiedostonLukeminen  {
      var seuraavatrivitLyriikkaan = false
      for (i <- 0 until inputFromFile.size ){  
          if (inputFromFile(i).head == '#'){     
-           if(inputFromFile(i).tail.toLowerCase().trim == "sanat")   //  T U N N I S T E E T
+           if(inputFromFile(i).tail.toLowerCase().trim.contains("sanat"))   //  T U N N I S T E E T
               seuraavatrivitLyriikkaan = true
            else if(seuraavatrivitLyriikkaan == false){   
               tunnisteet +=  i.toString()                              // parillisiin rivinumero Stringinä, parittomiin tunnisteen nimi

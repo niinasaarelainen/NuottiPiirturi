@@ -17,8 +17,8 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
 		val ch1 = channels(0)
 		val ch2 = channels(1)
 		
-		for(patch <- synth.getAvailableInstruments)
-	 	  println(patch)
+//		for(patch <- synth.getAvailableInstruments)
+//	 	  println(patch)
 		
 		MIDIPatch match {
         case 1 => ch1.programChange(0)    //program #0 = Piano
@@ -78,7 +78,6 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
            println(kappale.kappale(riviInd)(i))
     }
     
-    
 }
 
 
@@ -88,7 +87,7 @@ class simpleDrumPlayer (rumpudata: Buffer[(Buffer[Int], Buffer[Double] )] ) {
    rumpukone.open()  
    val ch10 = rumpukone.getChannels()(9)     //  rummut
   	
-   Thread.sleep(904)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
+   Thread.sleep(880)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
 
      var basarinIndeksi = 0
      for(kertaa <- 1 to 8){           // soitetaan 8 kertaa sama yhden tahdin luuppi

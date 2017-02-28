@@ -142,7 +142,6 @@ class NuottiPiirturi(){
      
      for (i <- 0 until nuottiData.size-1 ){      // vikalle alkiolle ei kannata kysyä seuraajaa
         if(!minutOnJoKasitelty){
-     //     minutOnJoKasitelty = false
           iskujaMennyt += nuottiData(i).pituus
           if(nuottiData(i).isInstanceOf[KahdeksasosaNuotti] && (iskujaMennyt % 1== 0.5)){
               if(nuottiData(i+1).isInstanceOf[KahdeksasosaNuotti]){
@@ -150,6 +149,8 @@ class NuottiPiirturi(){
                  minutOnJoKasitelty = true
                  iskujaMennyt += nuottiData(i+1).pituus
                  if(i+1 == nuottiData.size-1) paastiinTiedostonloppuun = true
+              } else {
+                 nuottiDataParitettu += nuottiData(i)     // ei muuteta dataa
               }
           }
           else {

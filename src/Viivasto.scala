@@ -59,6 +59,8 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
          // keskitetään lyriikkatavuja lähemmäs nuottia:
          if (laitettava.kuvanLeveys - tavu.size < 2)
              laitettava.kuva(16) =  tavu  + laitettava.kuva(16).substring(tavu.size, laitettava.kuvanLeveys)
+              else if (laitettava.kuvanLeveys - tavu.size == 2) 
+              laitettava.kuva(16) = " " + tavu  + laitettava.kuva(16).substring(tavu.size+1, laitettava.kuvanLeveys)
          else if (laitettava.kuvanLeveys - tavu.size < 4) 
               laitettava.kuva(16) = "  " + tavu  + laitettava.kuva(16).substring(tavu.size+2, laitettava.kuvanLeveys)
          else  laitettava.kuva(16) = "   " + tavu  + laitettava.kuva(16).substring(tavu.size+3, laitettava.kuvanLeveys)
@@ -81,9 +83,9 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
          // keskitetään lyriikkatavuja lähemmäs nuottia:
          if (laitettava.kuvanLeveys/2 - tavu.size < 2)
              laitettava.kuva(16) =  tavu  + " " + tavu2 + laitettava.kuva(16).substring(tavu.size + tavu2.size, laitettava.kuvanLeveys)
-         else if (laitettava.kuvanLeveys/2 - tavu.size < 3) 
+         else // (laitettava.kuvanLeveys/2 - tavu.size < 3) 
               laitettava.kuva(16) = " " + tavu  + "  " + tavu2 + laitettava.kuva(16).substring(tavu.size + tavu2.size + 3, laitettava.kuvanLeveys)
-         else  laitettava.kuva(16) = "  " + tavu  + "  " + tavu2 + laitettava.kuva(16).substring(tavu.size + tavu2.size +4, laitettava.kuvanLeveys)
+    //     else  laitettava.kuva(16) = "  " + tavu  + "  " + tavu2 + laitettava.kuva(16).substring(tavu.size + tavu2.size +4, laitettava.kuvanLeveys)
            lyricsInd += 1
              
       }
