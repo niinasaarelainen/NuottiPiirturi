@@ -88,11 +88,11 @@ class NuottiPiirturi(){
                   palautetaan +=  new KahdeksasosaNuotti (nuotinNimi, extraetumerkki)     
                   if(ok >= 0) iskujaMennyt += 0.5
              }    
-       //      println(nuotinNimi + " " + iskujaMennyt)
+             println(nuotinNimi + " " + iskujaMennyt + " tahdinAikaisetEtumerkit: " + tahdinAikaisetEtumerkit + "extraetumerkki: " + extraetumerkki)
         }   // iso else: ei-sointu.
         
         if (iskujaMennyt == tahtilaji) {
-  //         println("-----------------")
+           println("-----------------")
            iskujaMennyt = 0.0  
            tahdinAikaisetEtumerkit = Buffer[String]()
         }
@@ -134,7 +134,6 @@ class NuottiPiirturi(){
  
    
    def tehdaanKahdeksasosaParit() = {      // TODO  1/8-sointu !?!?!?!?
-     
     
      iskujaMennyt =  0.0
      var minutOnJoKasitelty = false
@@ -150,16 +149,15 @@ class NuottiPiirturi(){
                  iskujaMennyt += nuottiData(i+1).pituus
                  if(i+1 == nuottiData.size-1) paastiinTiedostonloppuun = true
               } else {
-                 nuottiDataParitettu += nuottiData(i)     // ei muuteta dataa
+                 nuottiDataParitettu += nuottiData(i)     // 1/8 talteen, jos se ei löytänyt paria
               }
           }
           else {
-             nuottiDataParitettu += nuottiData(i)     // ei muuteta dataa
+             nuottiDataParitettu += nuottiData(i)     // ei-1/8:kin talteen
           }
         
    //       println("iskujaMennyt: " +iskujaMennyt + nuottiData(i).asInstanceOf[KahdeksasosaNuotti].korkeus )
           if (iskujaMennyt == tahtilaji) {
-             println("-----------------")
              iskujaMennyt = 0.0  
           }  
       
@@ -167,15 +165,13 @@ class NuottiPiirturi(){
       }
      if(!paastiinTiedostonloppuun)    
           nuottiDataParitettu += nuottiData(nuottiData.size-1)   // viimeinenkin nuottiolio messiin, jos se ei ollut 1/8-parin puolisko
-
-                                                                   
    }  
   
   
    tehdaanKahdeksasosaParit()
    
-   for(nuottiOlio <- nuottiDataParitettu)
-     println(nuottiOlio)
+  // for(nuottiOlio <- nuottiDataParitettu)
+  //   println(nuottiOlio)
    
    val viivasto = new Viivasto(nuottiDataParitettu, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)
    viivasto.piirraNuotit()

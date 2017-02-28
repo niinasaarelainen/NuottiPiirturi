@@ -109,6 +109,7 @@ class KokoNuotti(nuotinNimi: String, extraetumerkki: String = "") extends Nuotti
      def etumerkki = if(extraetumerkki == "n") "" else if (nuotinNimi.filter(_ !='-').size == 3) nuotinNimi(1).toString else ""
      def extraetumerkkiDef = if(extraetumerkki == "n") "" else extraetumerkki
     
+     def getExtraetumerkki = extraetumerkki
   
      def piirraNuppi() = { 
         if(nimiMapissa=="c1") piirraApuviiva()
@@ -211,7 +212,7 @@ class KahdeksasosaNuotti(nuotinNimi: String, extraetumerkki: String = "") extend
 }   
   
   
-class KahdeksasosaPari (ekaNuotti: KahdeksasosaNuotti, tokaNuotti: KahdeksasosaNuotti)  extends KokoNuotti(ekaNuotti.korkeus: String, ekaNuotti.extraetumerkkiDef: String){
+class KahdeksasosaPari (ekaNuotti: KahdeksasosaNuotti, tokaNuotti: KahdeksasosaNuotti)  extends KokoNuotti(ekaNuotti.korkeus: String, ekaNuotti.getExtraetumerkki: String){
 
 // (ekaNuotti: ViivastolleLaitettava, tokaNuotti: ViivastolleLaitettava)  extends Nuotti{
   
@@ -226,25 +227,20 @@ class KahdeksasosaPari (ekaNuotti: KahdeksasosaNuotti, tokaNuotti: KahdeksasosaN
      
      val korkeudet = Array( y(ekaNuotti.nimiMapissa),  y(tokaNuotti.nimiMapissa))
     
-    
      if (korkeudet.min - 0 < 15 - korkeudet.max ) {  // 0 on ylin piirtoindeksi, 15 alin, lasketaan missä on enemmän tilaa
          ylospain = false  
-          ekanVarrenPit = Math.abs(korkeudet.max - y(ekaNuotti.nimiMapissa)) + 2
+         ekanVarrenPit = Math.abs(korkeudet.max - y(ekaNuotti.nimiMapissa)) + 2
          tokanVarrenPit = Math.abs(korkeudet.max - y(tokaNuotti.nimiMapissa))  + 2  
         
      } else {
-        
-          ekanVarrenPit = Math.abs(korkeudet.min - y(ekaNuotti.nimiMapissa)) + 2
+         ekanVarrenPit = Math.abs(korkeudet.min - y(ekaNuotti.nimiMapissa)) + 2
          tokanVarrenPit = Math.abs(korkeudet.min - y(tokaNuotti.nimiMapissa))  + 2  
      }
-     
-     println("ekanVarrenPit: " + ekanVarrenPit + "tokanVarrenPit: " + tokanVarrenPit)
-    
-    
+       
      override def kuva = {
        viivasto = piirraTyhjaViivasto(kuvanLeveys)
        super.kuva     // piirtää ekan nuotin nupin 
-       // tokan nuppi
+       // tokan nuppi:
        if(tokaNuotti.nimiMapissa == "c1")        
            viivasto(y("c1")) = viivasto(y("c1")).substring(0, 6) + "--" +  viivasto(y("c1")).substring(8, 10) + "--" + viivasto(y("c1")).substring(11, kuvanLeveys)         
   
@@ -255,14 +251,14 @@ class KahdeksasosaPari (ekaNuotti: KahdeksasosaNuotti, tokaNuotti: KahdeksasosaN
      
        // varret ja palkki:    
        if(ylospain)  {           
-          for (i <- 1 to ekanVarrenPit)   // nuottien väli + kolmen mittainen ylimenevä osuus
+          for (i <- 1 to ekanVarrenPit)  
                    viivasto( y(ekaNuotti.nimiMapissa)-i) = viivasto( y(ekaNuotti.nimiMapissa)-i).substring(0, 4) + "|" + viivasto( y(ekaNuotti.nimiMapissa)-i).substring(5, kuvanLeveys)  
         
           for(i<- 1 to tokanVarrenPit) viivasto(y(tokaNuotti.nimiMapissa)-i) = viivasto(y(tokaNuotti.nimiMapissa)-i).substring(0, 9) + "|"  + viivasto(y(tokaNuotti.nimiMapissa)-i).substring(10, kuvanLeveys)    
           viivasto(korkeudet.min -3) = viivasto(korkeudet.min -3).substring(0, 4) + "======"  + viivasto(korkeudet.min -3).substring(10, kuvanLeveys)    
        } else { 
          // varret alaspäin
-          for (i <- 1 to ekanVarrenPit)   // nuottien väli + kolmen mittainen ylimenevä osuus
+          for (i <- 1 to ekanVarrenPit)   
                    viivasto( y(ekaNuotti.nimiMapissa)+i) = viivasto( y(ekaNuotti.nimiMapissa)+i).substring(0, 3) + "|" + viivasto( y(ekaNuotti.nimiMapissa)+i).substring(4, kuvanLeveys)  
         
           for(i<- 1 to tokanVarrenPit) viivasto(y(tokaNuotti.nimiMapissa)+i) = viivasto(y(tokaNuotti.nimiMapissa)+i).substring(0, 8) + "|"  + viivasto(y(tokaNuotti.nimiMapissa)+i).substring(9, kuvanLeveys)    
@@ -270,24 +266,7 @@ class KahdeksasosaPari (ekaNuotti: KahdeksasosaNuotti, tokaNuotti: KahdeksasosaN
        }  
        viivasto   
      }
-  
-    /*
-    viivasto(nuotitYAkselilla(nuotinNimi))(x)='@'          // 1/8-nuottipari, varret ylös
-    viivasto(nuotitYAkselilla(toisenNuotinNimiTutk))(x+5)='@'     
     
-    val korkeusero = nuotitYAkselilla(nuotinNimi) - nuotitYAkselilla(toisenNuotinNimiTutk)
-    println(korkeusero)
-    if(korkeusero >= 0 && nuotitYAkselilla(nuotinNimi) > nuotitYAkselilla("h1") || korkeusero < 0 && nuotitYAkselilla(nuotinNimi) < nuotitYAkselilla("h1")){   // parin eka nuotti on alempana, toinen korkeammalla
-        piirraVarsi(nuotinNimi, x, korkeusero)
-        piirraVarsi(toisenNuotinNimiTutk, x+5, 0)       
-        piirraPalkki(nuotitYAkselilla(nuotinNimi) < nuotitYAkselilla("h1"), nuotitYAkselilla(toisenNuotinNimiTutk))  // palkki 2. nuotin korkeudelle
-     
-    }     
-    else  {          // parin eka nuotti on korkeampi, toinen matalampi
-       piirraVarsi(nuotinNimi, x, 0)
-       piirraVarsi(toisenNuotinNimiTutk, x+5, Math.abs(korkeusero))
-       piirraPalkki(nuotitYAkselilla(nuotinNimi) < nuotitYAkselilla("h1"), nuotitYAkselilla(nuotinNimi))    // palkki 1. nuotin korkeudelle
-    } */  
 }
  
   
@@ -304,7 +283,8 @@ class NeljasosaTauko extends Tauko {
       viivasto 
     }
 }   
-  
+
+
 class PisteellinenNeljasosaTauko extends NeljasosaTauko{      
       override def pituus = 1.5
       override def kuvanLeveys = 9
@@ -315,7 +295,8 @@ class PisteellinenNeljasosaTauko extends NeljasosaTauko{
         viivasto   
       } 
 }
-  
+
+
 class KahdeksasosaTauko extends NeljasosaTauko{      
       override def pituus = 0.5
       override def kuvanLeveys = 6
@@ -325,7 +306,6 @@ class KahdeksasosaTauko extends NeljasosaTauko{
          viivasto(y(korkeus)) = viivasto(y(korkeus)).substring(0, 2) + "/|" + viivasto(y(korkeus)).substring(4, kuvanLeveys)
          viivasto(y(korkeus)+1) = viivasto(y(korkeus)+1).substring(0, 3) + "|" + viivasto(y(korkeus)+1).substring(4, kuvanLeveys)
        viivasto   
-      }
-  
+      }  
 }
   

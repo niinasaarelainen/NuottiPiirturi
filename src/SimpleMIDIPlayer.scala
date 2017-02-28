@@ -45,11 +45,11 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
            for (i <- 0 until nuottiTaiSointu._1.size)
               if(i <  nuottiTaiSointu._1.size-1){
                  ch1.noteOn(nuottiTaiSointu._1(i), 75)         // 68 = velocity (127 = max), säestysäänet, jos niitä on
-                 ch2.noteOn(nuottiTaiSointu._1(i)-24, 65)  
+          //       ch2.noteOn(nuottiTaiSointu._1(i)-24, 65)  
               }   
               else { 
                 ch1.noteOn(nuottiTaiSointu._1(i), 114)  // oltiin sortattu, eli melodia on vikana (ylin ääni = isoin numero)  
-                ch2.noteOn(nuottiTaiSointu._1(i)-24, 94) 
+            //    ch2.noteOn(nuottiTaiSointu._1(i)-24, 94) 
               }
            
         Thread.sleep((nuottiTaiSointu._2 * ms).toInt)  // ms 
@@ -65,7 +65,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
         if (nuottiTaiSointu._1(0) != 0)
           for (i <- 0 until nuottiTaiSointu._1.size)  {            
              ch1.noteOff(nuottiTaiSointu._1(i))
-             ch2.noteOff(nuottiTaiSointu._1(i)-24)
+   //          ch2.noteOff(nuottiTaiSointu._1(i)-24)
           }   
     }
     
@@ -197,13 +197,13 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPa
   // new simpleMIDIPlayer(nuotitJaPituudet, MIDIPatch, kappale, tahtilaji) 
    
  
-   for (i <- 1 to 3) {
+   for (i <- 1 to 1) {                        // used to be 3
     val thread = new Thread {
         override def run {  
           i match{        
             case 1 => new simpleMIDIPlayer(nuotitJaPituudet, MIDIPatch, kappale, tahtilaji) 
       //      case 2 => new simpleChordPlayerAdapter(Buffer("C", "G", "F", "C", "G", "C",    "C", "G", "F", "C", "G", "C")) 
-            case 3 => new simpleDrumAdapter()
+       //     case 3 => new simpleDrumAdapter()
           }
         }
     }
