@@ -144,7 +144,7 @@ class NuottiPiirturi(){
         if(!minutOnJoKasitelty){
      //     minutOnJoKasitelty = false
           iskujaMennyt += nuottiData(i).pituus
-          if(nuottiData(i).isInstanceOf[KahdeksasosaNuotti] && (Array(0.5, 1.5, 2.5, 3.5).contains(iskujaMennyt))){
+          if(nuottiData(i).isInstanceOf[KahdeksasosaNuotti] && (iskujaMennyt % 1== 0.5)){
               if(nuottiData(i+1).isInstanceOf[KahdeksasosaNuotti]){
                  nuottiDataParitettu += new KahdeksasosaPari(nuottiData(i).asInstanceOf[KahdeksasosaNuotti], nuottiData(i+1).asInstanceOf[KahdeksasosaNuotti])
                  minutOnJoKasitelty = true
@@ -164,10 +164,10 @@ class NuottiPiirturi(){
       
         }  else  minutOnJoKasitelty=  false
       }
-     if(!paastiinTiedostonloppuun)     // TODO, ei toimi tällä logiikalla, pariolioita on tietty vähemmän kuin yksittäisolioita
-          nuottiDataParitettu += nuottiData(nuottiData.size-1)     // viimeinenkin nuottiolio messiin, jos se ei ollut 1/8-parin puolisko
+     if(!paastiinTiedostonloppuun)    
+          nuottiDataParitettu += nuottiData(nuottiData.size-1)   // viimeinenkin nuottiolio messiin, jos se ei ollut 1/8-parin puolisko
 
-                                                                    // pitääkö katsoa tahdinosa & 1/8-instanssi?
+                                                                   
    }  
   
   
@@ -179,10 +179,9 @@ class NuottiPiirturi(){
    val viivasto = new Viivasto(nuottiDataParitettu, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)
    viivasto.piirraNuotit()
    
-   if(!inputTiedostosta.MIDIPatch.equals("")){    // pelkkää Enteriä ei voi muuntaa Intiksi, ja se tulkitaan niin että käyttäjä ei halua kuunnella musaa
-      if(inputTiedostosta.MIDIPatch.toInt != 0 )        // käyttäjä valitsi että ei kuunnella
+   if(!inputTiedostosta.MIDIPatch.equals(""))     // käyttäjä valitsi että ei kuunnella
         new simpleMIDIPlayerAdapter(nuottiData, inputTiedostosta.MIDIPatch.toInt, viivasto.kappale, inputTiedostosta.tahtilaji.toInt)
-   } else viivasto.kappale.printtaaRuudulleIlmanAjastusta()
+   else viivasto.kappale.printtaaRuudulleIlmanAjastusta()
    
    new TiedostonTallennus(viivasto.kappale)    
     
