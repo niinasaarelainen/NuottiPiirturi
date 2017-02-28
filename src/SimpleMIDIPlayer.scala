@@ -45,11 +45,11 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
            for (i <- 0 until nuottiTaiSointu._1.size)
               if(i <  nuottiTaiSointu._1.size-1){
                  ch1.noteOn(nuottiTaiSointu._1(i), 75)         // 68 = velocity (127 = max), säestysäänet, jos niitä on
-        //         ch2.noteOn(nuottiTaiSointu._1(i)-12, 75)  
+                 ch2.noteOn(nuottiTaiSointu._1(i)-24, 65)  
               }   
               else { 
                 ch1.noteOn(nuottiTaiSointu._1(i), 114)  // oltiin sortattu, eli melodia on vikana (ylin ääni = isoin numero)  
-        //        ch2.noteOn(nuottiTaiSointu._1(i)-12, 114) 
+                ch2.noteOn(nuottiTaiSointu._1(i)-24, 94) 
               }
            
         Thread.sleep((nuottiTaiSointu._2 * ms).toInt)  // ms 
@@ -65,7 +65,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
         if (nuottiTaiSointu._1(0) != 0)
           for (i <- 0 until nuottiTaiSointu._1.size)  {            
              ch1.noteOff(nuottiTaiSointu._1(i))
-         //    ch2.noteOff(nuottiTaiSointu._1(i)-12)
+             ch2.noteOff(nuottiTaiSointu._1(i)-24)
           }   
     }
     
@@ -88,9 +88,9 @@ class simpleDrumPlayer (rumpudata: Buffer[(Buffer[Int], Buffer[Double] )] ) {
    rumpukone.open()  
    val ch10 = rumpukone.getChannels()(9)     //  rummut
   	
-   Thread.sleep(895)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
+   Thread.sleep(904)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
 
-        var basarinIndeksi = 0
+     var basarinIndeksi = 0
      for(kertaa <- 1 to 8){           // soitetaan 8 kertaa sama yhden tahdin luuppi
         for (i <- 0 until rumpudata(0)._1.size){
             basarinIndeksi = i
