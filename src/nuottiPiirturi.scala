@@ -122,7 +122,14 @@ class NuottiPiirturi(){
       if(nuotinNimi.contains("#") || nuotinNimi.contains("b")){
               if(this.tahdinAikaisetEtumerkit.contains(nuotinNimi))
                   return "n"   // n = nuottikuva neutral, nuotti on ylennetty/alennettu mutta merkkiä ei piirretä
-              else this.tahdinAikaisetEtumerkit += nuotinNimi    
+              // case: puskurissa oli sama nuotti eri etumerkillä varustettuna, se pois    
+              else if ( this.tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last).size > 0 ){
+                  tahdinAikaisetEtumerkit -= tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last)(0)
+                  this.tahdinAikaisetEtumerkit += nuotinNimi 
+              }  // tai vain lisätään puskuriin
+              else  this.tahdinAikaisetEtumerkit += nuotinNimi   
+                
+             
       } else if ( this.tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last).size > 0  ){
               val tulokset = tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last)
               for(tulos <- tulokset)  tahdinAikaisetEtumerkit -= tulos              // otetaan esim g#1 pois puskurista, koska se on nyt §-tilassa
