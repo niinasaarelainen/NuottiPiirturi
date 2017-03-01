@@ -33,9 +33,11 @@ class NuottiPiirturi(){
    
      
  
-///// F U N K T I O T  ja niihin liittyvät muuttujat (ei voi määritellä funktion sisällä rekursion takia): /////////////////////////   
+///// F U N K T I O T  ja niihin liittyvät muuttujat (ei voi määritellä funktion sisällä rekursion takia): /////////////////////////  
+   
    var iskujaMennyt =  0.0
-   var ok= 0   // nollana/pos. ok kasvattaa iskujaMennyt. Sointu asettaa arvon soinnunsävelten määrä +1 (pituus halutaan kerran) negatiiviselle
+   var ok= 0   // nollana/positiivisena ok kasvattaa iskujaMennyt. 
+                //   Sointu asettaa negatiivisen arvon (soinnunsävelten määrä +1) - pituus halutaan kerran - 
   
   def kasitteleNuottiTieto(inputBuffer: Buffer[String], palautetaan: Buffer[ViivastolleLaitettava] ): Buffer[ViivastolleLaitettava] = {        
      
@@ -87,15 +89,15 @@ class NuottiPiirturi(){
                    if(ok >= 0) iskujaMennyt += 3.0
                 }   
                 else {
-                   palautetaan += new PuoliNuotti (nuotinNimi, extraetumerkki)  
-                   if(ok >= 0) iskujaMennyt += 2.0
+                  palautetaan += new PuoliNuotti (nuotinNimi, extraetumerkki)  
+                  if(ok >= 0) iskujaMennyt += 2.0
                 }
              } else if (pituus == 3 ){
-                 palautetaan += new PisteellinenPuoliNuotti(nuotinNimi,extraetumerkki) 
-                 if(ok >= 0) iskujaMennyt += 3.0
+                  palautetaan += new PisteellinenPuoliNuotti(nuotinNimi,extraetumerkki) 
+                  if(ok >= 0) iskujaMennyt += 3.0
              } else if (pituus == 4 ){
-               palautetaan += new KokoNuotti(nuotinNimi,extraetumerkki)     
-               if(ok >= 0) iskujaMennyt += 4.0
+                  palautetaan += new KokoNuotti(nuotinNimi,extraetumerkki)     
+                  if(ok >= 0) iskujaMennyt += 4.0
              } else if (pituus == 0 ){           
                   palautetaan +=  new KahdeksasosaNuotti (nuotinNimi, extraetumerkki)     
                   if(ok >= 0) iskujaMennyt += 0.5
@@ -132,15 +134,12 @@ class NuottiPiirturi(){
    
    def kasitteleLyriikat() = {
       if(inputTiedostosta.lyriikkadata.size != 0){
-       
-      var sanatPotkona = ""  
-      for (rivi <-  inputTiedostosta.lyriikkadata){
-        sanatPotkona += rivi.replaceAll("-", "- ")
-        sanatPotkona += " "
-      }   
-      lyricsBuffer =  sanatPotkona.replaceAll("  ", " ").split(" ").toBuffer    // entä jos 3 välilyöntiä ?  TODO  trim? milloin?
-      for (tavu <- lyricsBuffer)
-        println(tavu)
+         var sanatPotkona = ""  
+         for (rivi <-  inputTiedostosta.lyriikkadata){
+           sanatPotkona += rivi.replaceAll("-", "- ")
+           sanatPotkona += " "
+         }   
+         lyricsBuffer =  sanatPotkona.replaceAll("  ", " ").split(" ").toBuffer    // entä jos 3 välilyöntiä ?  TODO  trim? milloin?
       }
    }
  

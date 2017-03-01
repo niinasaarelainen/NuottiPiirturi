@@ -8,7 +8,7 @@ import scala.collection.mutable.Buffer
 
 class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, kappale: Kappale, tahtilaji: Int) {   // Tuple (korkeus/korkeudet, pituus)
   
-    val ms = 500     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
+    val ms = 600     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
   
     val synth = MidiSystem.getSynthesizer()
     synth.open()  
@@ -35,7 +35,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
 		riviInd += 1
 		skrollaaa(riviInd)    // ... ja eka rivi
 		riviInd += 1
-		olisiAikaSkrollata += 300     // ja alkuarvo, jotta skrollaus tapahtuu hieman ennen kuin rivi oikeasti vaihtuu
+		olisiAikaSkrollata += ms     // ja alkuarvo, jotta skrollaus tapahtuu hieman ennen kuin rivi oikeasti vaihtuu
 		
 		Thread.sleep(900)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
   
