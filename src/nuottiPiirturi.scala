@@ -3,31 +3,43 @@ import scala.collection.mutable.Buffer
 
 class NuottiPiirturi(){
    
-   var pituus = 0
-   var lyricsBuffer = Buffer[String]()  
+  
+   
    var nuottiData= Buffer[ViivastolleLaitettava]()    
    var nuottiDataParitettu= Buffer[ViivastolleLaitettava]()    
    var tahdinAikaisetEtumerkit = Buffer[String]()
-   
-  
+   var lyricsBuffer = Buffer[String]()  
    val inputTiedostosta = new TiedostonLukeminen
-   inputTiedostosta.lueJaTarkistaVirheet()
    val tahtilaji = inputTiedostosta.tahtilaji.toDouble 
-   var iskujaMennyt =  0.0
- 
-   kasitteleLyriikat()
-   
+  
+    
+   inputTiedostosta.lueJaTarkistaVirheet()
    val inputBuffer = inputTiedostosta.nuottiAlkiot.toBuffer  
    nuottiData = kasitteleNuottiTieto(inputBuffer, nuottiData)        
+   kasitteleLyriikat() 
+   tehdaanKahdeksasosaParit()
+ 
+   val viivasto = new Viivasto(nuottiDataParitettu, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)
+   viivasto.piirraNuotit()
+   
+    // jos kuunnellaan, tallennuskäsky pitää antaa kuuntelun jälkeen, muuten se tulee ruudulle ennen nuotteja
+   if(!inputTiedostosta.MIDIPatch.equals(""))  // kuunnellaan  
+        new simpleMIDIPlayerAdapter(nuottiData, inputTiedostosta.MIDIPatch.toInt, viivasto.kappale, inputTiedostosta.tahtilaji.toInt)
+   else {        // käyttäjä valitsi että ei kuunnella
+       viivasto.kappale.printtaaRuudulleIlmanAjastusta()
+       new TiedostonTallennus(viivasto.kappale)    
+   }                                               
   
    
+     
+ 
+///// F U N K T I O T  ja niihin liittyvät muuttujat (ei voi määritellä funktion sisällä rekursion takia): /////////////////////////   
+   var iskujaMennyt =  0.0
    var ok= 0   // nollana/pos. ok kasvattaa iskujaMennyt. Sointu asettaa arvon soinnunsävelten määrä +1 (pituus halutaan kerran) negatiiviselle
   
-   
-   
   def kasitteleNuottiTieto(inputBuffer: Buffer[String], palautetaan: Buffer[ViivastolleLaitettava] ): Buffer[ViivastolleLaitettava] = {        
      
-   
+    var pituus = 0
     for ( i<- 0 until inputBuffer.length ){   
         
           var extraetumerkki = ""
@@ -145,7 +157,7 @@ class NuottiPiirturi(){
           if(nuottiData(i).isInstanceOf[KahdeksasosaNuotti] && (iskujaMennyt % 1== 0.5)){
               if(nuottiData(i+1).isInstanceOf[KahdeksasosaNuotti]){
                  nuottiDataParitettu += new KahdeksasosaPari(nuottiData(i).asInstanceOf[KahdeksasosaNuotti], nuottiData(i+1).asInstanceOf[KahdeksasosaNuotti])
-                 minutOnJoKasitelty = true
+                 minutOnJoKasitelty = true  
                  iskujaMennyt += nuottiData(i+1).pituus
                  if(i+1 == nuottiData.size-1) paastiinTiedostonloppuun = true
               } else {
@@ -167,19 +179,6 @@ class NuottiPiirturi(){
           nuottiDataParitettu += nuottiData(nuottiData.size-1)   // viimeinenkin nuottiolio messiin, jos se ei ollut 1/8-parin puolisko
    }  
   
-  
-   tehdaanKahdeksasosaParit()
-   
-  // for(nuottiOlio <- nuottiDataParitettu)
-  //   println(nuottiOlio)
-   
-   val viivasto = new Viivasto(nuottiDataParitettu, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)
-   viivasto.piirraNuotit()
-   
-   if(!inputTiedostosta.MIDIPatch.equals(""))     // käyttäjä valitsi että ei kuunnella
-        new simpleMIDIPlayerAdapter(nuottiData, inputTiedostosta.MIDIPatch.toInt, viivasto.kappale, inputTiedostosta.tahtilaji.toInt)
-   else viivasto.kappale.printtaaRuudulleIlmanAjastusta()
-   
-   new TiedostonTallennus(viivasto.kappale)    
+ 
     
 }

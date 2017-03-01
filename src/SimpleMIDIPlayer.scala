@@ -71,6 +71,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
     
     Thread.sleep(900)   // parempi soundi vikaan ääneen
     synth.close()
+    new TiedostonTallennus(kappale)  
     
     
     def skrollaaa(riviInd: Int)= {

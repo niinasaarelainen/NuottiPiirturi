@@ -47,9 +47,11 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
   def kasitteleLyriikat(laitettava: ViivastolleLaitettava) = {
      
       var tavu, tavu2 = ""
-      if(!laitettava.isInstanceOf[KahdeksasosaPari]){
+      if(!laitettava.isInstanceOf[KahdeksasosaPari])
            kasitteleYksiTavu(laitettava.kuvanLeveys)
-      } else if(lyricsBuffer.size - lyricsInd >= 2 ) kasitteleKaksiTavua()   
+      else if(lyricsBuffer.size - lyricsInd >= 2 ) 
+           kasitteleKaksiTavua()   
+      else kasitteleYksiTavu(laitettava.kuvanLeveys)   
       
       
       def kasitteleYksiTavu(leveys: Int) = {
@@ -59,18 +61,19 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
          } else tavu = lyricsBuffer(lyricsInd)
          // keskitetään lyriikkatavuja lähemmäs nuottia:
          if (leveys - tavu.size < 2)
-             laitettava.kuva(16) =  tavu  + laitettava.kuva(16).substring(tavu.size, leveys)
+             laitettava.kuva(16) =  tavu  + laitettava.kuva(16).substring(tavu.size)
               else if (leveys - tavu.size == 2) 
-              laitettava.kuva(16) = " " + tavu  + laitettava.kuva(16).substring(tavu.size+1, leveys)
+              laitettava.kuva(16) = " " + tavu  + laitettava.kuva(16).substring(tavu.size+1)
          else if (leveys - tavu.size < 4) 
-              laitettava.kuva(16) = "  " + tavu  + laitettava.kuva(16).substring(tavu.size+2, leveys)
-         else  laitettava.kuva(16) = "   " + tavu  + laitettava.kuva(16).substring(tavu.size+3, leveys)
+              laitettava.kuva(16) = "  " + tavu  + laitettava.kuva(16).substring(tavu.size+2)
+         else  laitettava.kuva(16) = "   " + tavu  + laitettava.kuva(16).substring(tavu.size+3)
            lyricsInd += 1
       }     
+      
+      
      
       def kasitteleKaksiTavua() = {
-        
-         kasitteleYksiTavu(laitettava.kuvanLeveys)    // ekan tavun tila on puolet parin tilasta
+         kasitteleYksiTavu(laitettava.kuvanLeveys/2)    // ekan tavun tila on puolet parin tilasta   TODO miksi  laitettava.kuvanLeveys/2 kaataa??
          
          if ( lyricsBuffer(lyricsInd).size > laitettava.kuvanLeveys/2){ 
               tavu2 = lyricsBuffer(lyricsInd).substring(0, laitettava.kuvanLeveys/2 -1)
@@ -79,11 +82,11 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
          }
          // keskitetään lyriikkatavuja lähemmäs nuottia:
          if (laitettava.kuvanLeveys/2 - tavu2.size < 2)              
-             laitettava.kuva(16) = laitettava.kuva(16).substring(0,7) + tavu2 + laitettava.kuva(16).substring(7 + tavu2.size, laitettava.kuvanLeveys)
+             laitettava.kuva(16) = laitettava.kuva(16).substring(0,6) + tavu2 + laitettava.kuva(16).substring(6 + tavu2.size)
          else if (laitettava.kuvanLeveys/2 - tavu2.size < 3) 
-              laitettava.kuva(16) =  laitettava.kuva(16).substring(0,7) + " " +  tavu2 + laitettava.kuva(16).substring(7 + tavu2.size + 1, laitettava.kuvanLeveys)
-         else  laitettava.kuva(16) =  laitettava.kuva(16).substring(0,7) + "  " + tavu2 + laitettava.kuva(16).substring(7 + tavu2.size +2, laitettava.kuvanLeveys)
-           lyricsInd += 1
+              laitettava.kuva(16) =  laitettava.kuva(16).substring(0,6) + " " +  tavu2 + laitettava.kuva(16).substring(6 + tavu2.size + 1)
+         else  laitettava.kuva(16) =  laitettava.kuva(16).substring(0,6) + "  " + tavu2 + laitettava.kuva(16).substring(6 + tavu2.size +2)
+         lyricsInd += 1
              
       }
         
