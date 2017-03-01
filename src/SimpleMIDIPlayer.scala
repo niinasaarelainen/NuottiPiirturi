@@ -197,13 +197,13 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPa
   // new simpleMIDIPlayer(nuotitJaPituudet, MIDIPatch, kappale, tahtilaji) 
    
  
-   for (i <- 1 to 1) {                        // used to be 3
+   for (i <- 1 to 3) {                        
     val thread = new Thread {
         override def run {  
           i match{        
             case 1 => new simpleMIDIPlayer(nuotitJaPituudet, MIDIPatch, kappale, tahtilaji) 
-      //      case 2 => new simpleChordPlayerAdapter(Buffer("C", "G", "F", "C", "G", "C",    "C", "G", "F", "C", "G", "C")) 
-       //     case 3 => new simpleDrumAdapter()
+            case 2 => // new simpleChordPlayerAdapter(Buffer("C", "G", "F", "C", "G", "C",    "C", "G", "F", "C", "G", "C")) 
+            case 3 =>  // new simpleDrumAdapter()
           }
         }
     }

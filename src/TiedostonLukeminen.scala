@@ -96,7 +96,7 @@ class TiedostonLukeminen  {
               tunnisteet += inputFromFile(i).tail.toLowerCase().trim
               if("2345678".contains(inputFromFile(i).tail))
                  tahtilaji = inputFromFile(i).tail
-        //         if(inputFromFile(i).tail.trim.substring(1,inputFromFile(i).tail.size) != 0)  // samalla rivillä tahtilaji ja nuotteja
+        //         if(inputFromFile(i).tail.trim.substring(1,inputFromFile(i).tail.size) != 0)  //  TODO samalla rivillä tahtilaji ja nuotteja
           //           nuottidata += inputFromFile(i).tail.trim.substring(1,inputFromFile(i).tail.size)
               if(inputFromFile(i).tail.toLowerCase().contains("nimi")){
                 println(inputFromFile(i).size)
@@ -108,7 +108,7 @@ class TiedostonLukeminen  {
        } else if (seuraavatrivitLyriikkaan)
           lyriikkadata += (inputFromFile(i))      // L Y R I I K A 
           
-         else nuottidata += inputFromFile(i)      // L O P U T   ELI   N U O T I T
+         else nuottidata += inputFromFile(i).toLowerCase()      // L O P U T   ELI   N U O T I T
     }  
     tunnisteet += inputFromFile.size.toString()    // vika rivinumero     
   }

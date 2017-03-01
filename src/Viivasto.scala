@@ -48,44 +48,41 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
      
       var tavu, tavu2 = ""
       if(!laitettava.isInstanceOf[KahdeksasosaPari]){
-           kasitteleYksiTavu()
+           kasitteleYksiTavu(laitettava.kuvanLeveys)
       } else if(lyricsBuffer.size - lyricsInd >= 2 ) kasitteleKaksiTavua()   
       
-      def kasitteleYksiTavu() = {
+      
+      def kasitteleYksiTavu(leveys: Int) = {
          // leikataan liian pitkien lyriikkatavujen loput:
-         if ( lyricsBuffer(lyricsInd).size > laitettava.kuvanLeveys){
-             tavu = lyricsBuffer(lyricsInd).substring(0, laitettava.kuvanLeveys)
+         if ( lyricsBuffer(lyricsInd).size > leveys){
+             tavu = lyricsBuffer(lyricsInd).substring(0, leveys)
          } else tavu = lyricsBuffer(lyricsInd)
          // keskitetään lyriikkatavuja lähemmäs nuottia:
-         if (laitettava.kuvanLeveys - tavu.size < 2)
-             laitettava.kuva(16) =  tavu  + laitettava.kuva(16).substring(tavu.size, laitettava.kuvanLeveys)
-              else if (laitettava.kuvanLeveys - tavu.size == 2) 
-              laitettava.kuva(16) = " " + tavu  + laitettava.kuva(16).substring(tavu.size+1, laitettava.kuvanLeveys)
-         else if (laitettava.kuvanLeveys - tavu.size < 4) 
-              laitettava.kuva(16) = "  " + tavu  + laitettava.kuva(16).substring(tavu.size+2, laitettava.kuvanLeveys)
-         else  laitettava.kuva(16) = "   " + tavu  + laitettava.kuva(16).substring(tavu.size+3, laitettava.kuvanLeveys)
+         if (leveys - tavu.size < 2)
+             laitettava.kuva(16) =  tavu  + laitettava.kuva(16).substring(tavu.size, leveys)
+              else if (leveys - tavu.size == 2) 
+              laitettava.kuva(16) = " " + tavu  + laitettava.kuva(16).substring(tavu.size+1, leveys)
+         else if (leveys - tavu.size < 4) 
+              laitettava.kuva(16) = "  " + tavu  + laitettava.kuva(16).substring(tavu.size+2, leveys)
+         else  laitettava.kuva(16) = "   " + tavu  + laitettava.kuva(16).substring(tavu.size+3, leveys)
            lyricsInd += 1
       }     
      
       def kasitteleKaksiTavua() = {
-           // leikataan liian pitkien lyriikkatavujen loput:
-         if ( lyricsBuffer(lyricsInd).size > laitettava.kuvanLeveys/2){      // 12/2
-             tavu = lyricsBuffer(lyricsInd).substring(0, laitettava.kuvanLeveys/2)
-         } else {
-           tavu = lyricsBuffer(lyricsInd)           
-         }
-         lyricsInd += 1
+        
+         kasitteleYksiTavu(laitettava.kuvanLeveys)    // ekan tavun tila on puolet parin tilasta
+         
          if ( lyricsBuffer(lyricsInd).size > laitettava.kuvanLeveys/2){ 
               tavu2 = lyricsBuffer(lyricsInd).substring(0, laitettava.kuvanLeveys/2 -1)
          } else {
-           tavu2 = lyricsBuffer(lyricsInd)
+              tavu2 = lyricsBuffer(lyricsInd)
          }
          // keskitetään lyriikkatavuja lähemmäs nuottia:
-         if (laitettava.kuvanLeveys/2 - tavu.size < 2)
-             laitettava.kuva(16) =  tavu  + " " + tavu2 + laitettava.kuva(16).substring(tavu.size + tavu2.size, laitettava.kuvanLeveys)
-         else // (laitettava.kuvanLeveys/2 - tavu.size < 3) 
-              laitettava.kuva(16) = " " + tavu  + "  " + tavu2 + laitettava.kuva(16).substring(tavu.size + tavu2.size + 3, laitettava.kuvanLeveys)
-    //     else  laitettava.kuva(16) = "  " + tavu  + "  " + tavu2 + laitettava.kuva(16).substring(tavu.size + tavu2.size +4, laitettava.kuvanLeveys)
+         if (laitettava.kuvanLeveys/2 - tavu2.size < 2)              
+             laitettava.kuva(16) = laitettava.kuva(16).substring(0,7) + tavu2 + laitettava.kuva(16).substring(7 + tavu2.size, laitettava.kuvanLeveys)
+         else if (laitettava.kuvanLeveys/2 - tavu2.size < 3) 
+              laitettava.kuva(16) =  laitettava.kuva(16).substring(0,7) + " " +  tavu2 + laitettava.kuva(16).substring(7 + tavu2.size + 1, laitettava.kuvanLeveys)
+         else  laitettava.kuva(16) =  laitettava.kuva(16).substring(0,7) + "  " + tavu2 + laitettava.kuva(16).substring(7 + tavu2.size +2, laitettava.kuvanLeveys)
            lyricsInd += 1
              
       }
