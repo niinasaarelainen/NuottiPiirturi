@@ -10,10 +10,11 @@ class NuottiPiirturi(){
    var tahdinAikaisetEtumerkit = Buffer[String]()
    var lyricsBuffer = Buffer[String]()  
    val inputTiedostosta = new TiedostonLukeminen
+   inputTiedostosta.lueJaTarkistaVirheet()
    val tahtilaji = inputTiedostosta.tahtilaji.toDouble 
   
     
-   inputTiedostosta.lueJaTarkistaVirheet()
+  
    val inputBuffer = inputTiedostosta.nuottiAlkiot.toBuffer  
    nuottiData = kasitteleNuottiTieto(inputBuffer, nuottiData)        
    kasitteleLyriikat() 
@@ -102,7 +103,7 @@ class NuottiPiirturi(){
                   palautetaan +=  new KahdeksasosaNuotti (nuotinNimi, extraetumerkki)     
                   if(ok >= 0) iskujaMennyt += 0.5
              }    
-             println(nuotinNimi + " " + iskujaMennyt + " tahdinAikaisetEtumerkit: " + tahdinAikaisetEtumerkit + "extraetumerkki: " + extraetumerkki)
+             println(nuotinNimi + " " + iskujaMennyt + " tahdinAikaisetEtumerkit: " + tahdinAikaisetEtumerkit + "tahtilaji: " + tahtilaji + "extraetumerkki: " + extraetumerkki)
         }   // iso else: ei-sointu.
         
         if (iskujaMennyt == tahtilaji) {

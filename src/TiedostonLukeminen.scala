@@ -101,7 +101,7 @@ class TiedostonLukeminen  {
               if(inputFromFile(i).tail.toLowerCase().contains("nimi")){
                 println(inputFromFile(i).size)
                  kappaleenNimi = inputFromFile(i).tail.substring(5, inputFromFile(i).tail.size)  
-                 println("kappaleenNimi: " + kappaleenNimi)
+                 println("kappaleenNimi: " + kappaleenNimi + "tahtilaji" + tahtilaji)
               }       
            }  
            
