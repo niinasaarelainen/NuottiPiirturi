@@ -8,7 +8,7 @@ import scala.collection.mutable.Buffer
 
 class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, kappale: Kappale, tahtilaji: Int) {   // Tuple (korkeus/korkeudet, pituus)
   
-    val ms = 200     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
+    val ms = 180     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
   
     val synth = MidiSystem.getSynthesizer()
     synth.open()  
@@ -140,7 +140,7 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPa
        "e1" -> 64, "e#1" -> 65, "fb1"-> 64, "f1"-> 65,  "f#1"->66,  "gb1" -> 66, "g1" -> 67,  "g#1" -> 68, "ab1" -> 68, 
        "a1" -> 69, "a#1" -> 70, "hb1" -> 70, "b1" -> 70, "bb1" -> 70, "h1" -> 71, "cb2" -> 71, "h#" -> 72, "c2" -> 72, 
        "c#2" -> 73, "db2" -> 73, "d2" -> 74,  "d#2" -> 75, "eb2" -> 75, "e2" -> 76, "fb2" -> 76, "e#2" -> 77, 
-       "f2" -> 77, "f#2" -> 78, "gb2" -> 78, "g2" -> 79, "g#2" -> 80)
+       "f2" -> 77, "f#2" -> 78, "gb2" -> 78, "g2" -> 79, "g#2" -> 80, "ab2" -> 80, "a2" -> 81, "a#2" -> 82)
 
    var nuottiNumberit = Buffer[Buffer[Int]]()    // tänne nuottien korkeudet
    var pituudet = Buffer[Double]()   // [0.5 ... 4.0]

@@ -5,8 +5,10 @@ import scala.collection.mutable.Map
 trait ViivastolleLaitettava {  
   
    var viivasto = Buffer[String]()   
-   val y = Map("lyr" -> 16, "alatila" ->15, "c1" -> 14, "d1" -> 13,  "e1" -> 12,  "f1" -> 11,  "g1"-> 10,  "a1"->9,  "h1" -> 8, "c2" -> 7, "d2" -> 6,  "e2" -> 5,  "f2" -> 4,  "g2"-> 3,  "ylatila1"-> 2, "ylatila2" -> 1, "ylatila3" -> 0)
+ //  val y = Map("lyr" -> 16, "alatila" ->15, "c1" -> 14, "d1" -> 13,  "e1" -> 12,  "f1" -> 11,  "g1"-> 10,  "a1"->9,  "h1" -> 8, "c2" -> 7, "d2" -> 6,  "e2" -> 5,  "f2" -> 4,  "g2"-> 3,  "ylatila1"-> 2, "ylatila2" -> 1, "ylatila3" -> 0)
+ val y = Map("lyr" -> 17, "alatila" ->16, "c1" -> 15, "d1" -> 14,  "e1" -> 13,  "f1" -> 12,  "g1"-> 11,  "a1"->10,  "h1" -> 9, "c2" -> 8, "d2" -> 7,  "e2" -> 6,  "f2" -> 5,  "g2"-> 4,  "a2"-> 3, "ylatila1" -> 2, "ylatila2" -> 1, "ylatila3" -> 0)
 
+   
    def kuva: Buffer[String]   
    def kuvanLeveys: Int   
    def pituus : Double
@@ -20,9 +22,9 @@ trait ViivastolleLaitettava {
       var vali = ""
       for ( i <- 1 to pituus) vali += " "   // muodostetaan oikean mittainen väli
     
-      for ( i <- 1 to 3) viivasto += vali      // ylös tyhjää varsia varten   
+      for ( i <- 1 to 4) viivasto += vali      // ylös tyhjää varsia varten   
       for(i <- 1 to 5){
-        viivasto += vali      // ylin paikka on g2 = Map index 3
+        viivasto += vali      // ylin paikka on g2
         viivasto += viiva      // 5 viivaa
       } 
       for ( i <- 1 to 4) viivasto += vali       // d1, c1, alavali & sanoille tila
@@ -48,7 +50,8 @@ class Sointu(aanet: Buffer[ViivastolleLaitettava]) extends ViivastolleLaitettava
          val nuppi = aani.asInstanceOf[Nuotti].nuppi
          korkeudet += y(nimiMapissa)
          if(nimiMapissa == "c1")  viivasto(y("c1")) = viivasto(y("c1")).substring(0, 1) + "--" +  viivasto(y("c1")).substring(4, 6) + "--" + viivasto(y("c1")).substring(7)         
-         
+         if(nimiMapissa == "a2")  viivasto(y("a2")) = viivasto(y("a2")).substring(0, 1) + "--" +  viivasto(y("a2")).substring(4, 6) + "--" + viivasto(y("a2")).substring(7)         
+     
          if(etumerkki.size == 0 && extraetumerkki.size == 0)  // ei etumerkkiä
             viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 3) + nuppi + viivasto(y(nimiMapissa)).substring(5)  
          else
@@ -90,8 +93,12 @@ abstract class Nuotti extends ViivastolleLaitettava {
      def etumerkki: String
      def extraetumerkkiDef: String
        
-     def piirraApuviiva() = {                       
+     def piirraAlaApuviiva() = {                       
            viivasto(y("c1")) = viivasto(y("c1")).substring(0, 1) + "--" +  viivasto(y("c1")).substring(4, 6) + "--" + viivasto(y("c1")).substring(7)         
+     }
+     
+      def piirraYlaApuviiva() = {                       
+           viivasto(y("a2")) = viivasto(y("a2")).substring(0, 1) + "--" +  viivasto(y("a2")).substring(4, 6) + "--" + viivasto(y("a2")).substring(7)         
      }
   }
  
@@ -112,7 +119,8 @@ class KokoNuotti(nuotinNimi: String, extraetumerkki: String = "") extends Nuotti
      def getExtraetumerkki = extraetumerkki
   
      def piirraNuppi() = { 
-        if(nimiMapissa=="c1") piirraApuviiva()
+        if(nimiMapissa=="c1") piirraAlaApuviiva()
+        if(nimiMapissa=="a2") piirraYlaApuviiva()
         if(etumerkki.size == 0 && extraetumerkkiDef.size == 0)  // ei etumerkkiä
            viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 3) + nuppi + viivasto(y(nimiMapissa)).substring(5)  
         else

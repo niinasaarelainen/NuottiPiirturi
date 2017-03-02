@@ -29,10 +29,10 @@
 <eb1,g1,c1> f#1 f1 e1 <f1,d1,cb1> e1 eb1 d1    <eb1,c1> e1 f1 f#1 <f1,d1> f#1 g1 g#1
 <a1,g1,c#1> g#1 g1 f#1 g1 f#1 f1 e1   f2 e2 eb2 d2 c#2 c2 h1 hb1
 
-a1 hb1 a1 hb1 a1 hb1 <a1,f2> hb1     <a1,d2> hb1 <a1,hb1> hb1 <a1,d2> hb1 <a1,f2> hb1
-a1 hb1 a1 hb1 a1 hb1 <a1,f2> hb1     <a1,d2> hb1 <a1,hb1> hb1 <a1,d2> hb1 <a1,f2> hb1
+a1 hb1 a1 hb1 <a2,a1> hb1 <a1,f2> hb1     <a1,d2> hb1 hb1 hb1 <a1,d2> hb1 <a1,f2> hb1
+<a2,a1> hb1 a1 hb1 <a2,a1> hb1 <a1,f2> hb1     <a1,d2> hb1 <a1,hb1> hb1 <a1,d2> hb1 <a1,f2> hb1
 
-a1 hb1 h1 c2 c#2 d2 d#2 e2    f1 f#1 g1 g#1 a1 a#1 h1 c2
+<a2,a1> hb1 h1 c2 c#2 d2 d#2 e2    f1 f#1 g1 g#1 a1 a#1 h1 c2
 c#2 d2 d#2 e2 f2 f#2 g2 g#2   a1 a#1 a1 g#1 a1 a#1 a1 g#1
 
 # kuten alku   
@@ -84,4 +84,3 @@ Pistearvo: A10.
 Ohjelmoijan työvälineitä: ohjelmointikieli, ohjelmakoodi, sovelluskehitin, pakkaukset ja kooditiedostot.
 Mitä tehdään? Luetaan sekä kokeillaan ohjelmointityökaluja. Suuntaa antava vaativuusarvio: Varsinaiselta sisällöltään helppo. Tarvittavien ohjelmistojen asentamisessa voi joissakin ympäristöissä tulla mutkia matkaan.
 Suuntaa antava työläysarvio:? Puolitoista tuntia. Enemmänkin voi mennä, jos asennat samalla ohjelmointityökaluja omalle koneellesi.
-Pistearvo: A10.
