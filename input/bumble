@@ -22,9 +22,35 @@
 <g1,g2> ab1 g1 ab1 g1 ab1 g1 ab1          <g1,f#2,g#2> ab1 g1 ab1 g1 ab1 g1 ab1
 
 <g1,g2> ab1 g1 ab1     <g1,f#2,g#2> ab1 g1 ab1     <g1,g2> ab1    <g1,f#2,g#2> ab1 <g1,f2> ab1  <g1,e2> ab1  
-<d#2---,h1---,g1---> z-
+<d#2,h1,g1,g1> ab1 a1 a#1 h1 a#1 a1 ab1   g1 ab1 a1 a#1 h1 c2 c#2 d2
 
+#teema g:stä
+<eb2,g1> f#1 f1 e1 eb1 ab1 g1 f#1    <g1,eb1,c1> f#1 f1 e1 <eb1,c1> e1 f1 f#1
+<eb1,g1,c1> f#1 f1 e1 <f1,d1,cb1> e1 eb1 d1    <eb1,c1> e1 f1 f#1 <f1,d1> f#1 g1 g#1
+<a1,g1,c#1> g#1 g1 f#1 g1 f#1 f1 e1   f2 e2 eb2 d2 c#2 c2 h1 hb1
 
+a1 hb1 a1 hb1 a1 hb1 <a1,f2> hb1     <a1,d2> hb1 <a1,hb1> hb1 <a1,d2> hb1 <a1,f2> hb1
+a1 hb1 a1 hb1 a1 hb1 <a1,f2> hb1     <a1,d2> hb1 <a1,hb1> hb1 <a1,d2> hb1 <a1,f2> hb1
+
+a1 hb1 h1 c2 c#2 d2 d#2 e2    f1 f#1 g1 g#1 a1 a#1 h1 c2
+c#2 d2 d#2 e2 f2 f#2 g2 g#2   a1 a#1 a1 g#1 a1 a#1 a1 g#1
+
+# kuten alku   
+<a1,f1,d1> g#1 g1 f#1 f1 hb1 a1 g#1    <a1,f1,d1> g#1 g1 f#1 <f1,d1,cb1> f#1 g1 g#1
+<a1,f1,d1> g#1 g1 f#1 f1 hb1 a1 g#1    <a1,f1,d1> g#1 g1 f#1 <f1,d1,cb1> f#1 g1 g#1
+
+<a1,f1,d1> g#1 g1 f#1 <g1,d1> f#1 f1 e1    <f1,d1> f#1 g1 g#1 <a1,g1,c#1> hb1 a1 g#1 
+<a1,f1,d1> g#1 g1 f#1 <g1,d1> f#1 f1 e1    <f1,d1> f#1 g1 g#1 <a1,g1,c#1> h1 c2 c#2
+
+# nyt eri tavalla
+<d2,a1,f1> c#2 c2 h1 <c2,a1,f#1> h1 hb1 a1    <hb1,g1,d1> a1 g#1 g1 f#1 f1 e1 eb1
+<d2,a1,f1> c#2 c2 h1 <c2,a1,f#1> h1 hb1 a1    <hb1,g1,d1> a1 g#1 g1 f#1 f1 e1 eb1
+
+d1- z- a1 a#1 h1 c2       c#2 d2 d#2 e2 f2 f#2 g2 g#2 
+a1 a#1 h1 c2  c#2 d2 d#2 e2     f1 f#1 g1 g#1  a1 h1 c2 c#2
+d2 z z---   <f2,d2,d1> z z---   <d1,d1> z z---
+
+    
 
 #sanat (ei tavuviivoja. Paree jos olis, mutku ei oo)
 
@@ -33,22 +59,29 @@ Mitä käsitellään? Ohjelmoinnin perusajatus ja yleisiä piirteitä. Ohjelmoij
 Mitä tehdään? Luetaan sekä kokeillaan ohjelmointityökaluja. Suuntaa antava vaativuusarvio: Varsinaiselta sisällöltään helppo. Tarvittavien ohjelmistojen asentamisessa voi joissakin ympäristöissä tulla mutkia matkaan.
 Suuntaa antava työläysarvio:? Puolitoista tuntia. Enemmänkin voi mennä, jos asennat samalla ohjelmointityökaluja omalle koneellesi.
 Pistearvo: A10.
+Ohjelmoija määrittää, miten tietokoneen halutaan toimivan ohjelmaa ajettaessa. Esimerkiksi kurssi-ilmoittautumisohjelmaa laativa ohjelmoija voi määritellä tietokoneelle ohjeen: "Jos käyttäjä painaa tiettyä nappia, lisää kyseinen käyttäjä kurssille ilmoittautuneiden luetteloon."
+Sovellusohjelman käyttäjällä on käytössään kopio ohjelmasta tallennettuna tietokoneeseensa. Kun hän käynnistää ohjelman, ohjelma ajetaan eli suoritetaan (run, execute). Tällöin tietokone noudattaa sille ohjelmassa ennalta määrättyjä käskyjä.
+Esimerkki: Käyttäjä antaa kuvaketta klikkaamalla tietokoneen käyttöjärjestelmälle käskyn käynnistää tekstinkäsittelysovellus. Tällöin tietokone toimii niin kuin kyseinen sovellusohjelma määrää. Kunhan ohjelmoija on tehnyt työnsä hyvin, niin toiminta on käyttäjän kannalta mielekästä: tekstinkäsittelyä varten avautuu uusi ikkuna, joka reagoi käyttäjän toimiin halutulla tavalla.
 Oheisprojektit: GoodStuff, O1Yleiset.
 Pääkysymyksiä: Mitä ovat ohjelmat ja ohjelmointi? Mihin ohjelmoija kirjoittaa ohjelmakoodin? Miten laadittu ohjelma käynnistetään? Miten kurssilla palautetaan ohjelmia arvioitaviksi?
 Mitä käsitellään? Ohjelmoinnin perusajatus ja yleisiä piirteitä. Ohjelmoijan työvälineitä: ohjelmointikieli, ohjelmakoodi, sovelluskehitin, pakkaukset ja kooditiedostot.
 Mitä tehdään? Luetaan sekä kokeillaan ohjelmointityökaluja. Suuntaa antava vaativuusarvio: Varsinaiselta sisällöltään helppo. Tarvittavien ohjelmistojen asentamisessa voi joissakin ympäristöissä tulla mutkia matkaan.
 Suuntaa antava työläysarvio:? Puolitoista tuntia. Enemmänkin voi mennä, jos asennat samalla ohjelmointityökaluja omalle koneellesi.
 Pistearvo: A10.
+Kukin tietokoneen toimintaa ohjaava prosessori tekee vain tasan sen, mitä käsketään. Se suorittaa käskyjä yksitellen, järjestyksessä. Toisin kuin reseptiä lukeva ja asiansa osaava kokki, prosessori ei ymmärrä mitään käskyjen merkityksestä ohjelmakokonaisuudessa. Se ei osaa päätellä, arvioida eikä soveltaa. Tietokone on siis pohjimmiltaan "tyhmä". Se on kuitenkin nopea, tarkka ja hyvämuistinen.
+Ohjelmaa kirjoitettaessa täytyy luoda yksityiskohtainen, kirjaimellinen kuvaus siitä, mitä tietokoneen halutaan tekevän, kun ohjelma ajetaan. Jotta tämä onnistuisi, on käytettävien ilmaisujen oltava täsmällisiä ja yksiselitteisiä. Luonnollinen ihmisten kieli ei ole täsmällistä eikä yksiselitteistä, eikä sovellu ohjelmointiin: "suolaa maun mukaan", "kunnes on kauniin ruskea".
 Oheisprojektit: GoodStuff, O1Yleiset.
-Pääkysymyksiä: Mitä ovat ohjelmat ja ohjelmointi? Mihin ohjelmoija kirjoittaa ohjelmakoodin? Miten laadittu ohjelma käynnistetään? Miten kurssilla palautetaan ohjelmia arvioitaviksi?
-Mitä käsitellään? Ohjelmoinnin perusajatus ja yleisiä piirteitä. Ohjelmoijan työvälineitä: ohjelmointikieli, ohjelmakoodi, sovelluskehitin, pakkaukset ja kooditiedostot.
+Ohjelmoija määrittää, miten tietokoneen halutaan toimivan ohjelmaa ajettaessa. Esimerkiksi kurssi-ilmoittautumisohjelmaa laativa ohjelmoija voi määritellä tietokoneelle ohjeen: "Jos käyttäjä painaa tiettyä nappia, lisää kyseinen käyttäjä kurssille ilmoittautuneiden luetteloon."
+Sovellusohjelman käyttäjällä on käytössään kopio ohjelmasta tallennettuna tietokoneeseensa. Kun hän käynnistää ohjelman, ohjelma ajetaan eli suoritetaan (run, execute). Tällöin tietokone noudattaa sille ohjelmassa ennalta määrättyjä käskyjä.
+Ohjelmoijan työvälineitä: ohjelmointikieli, ohjelmakoodi, sovelluskehitin, pakkaukset ja kooditiedostot.
 Mitä tehdään? Luetaan sekä kokeillaan ohjelmointityökaluja. Suuntaa antava vaativuusarvio: Varsinaiselta sisällöltään helppo. Tarvittavien ohjelmistojen asentamisessa voi joissakin ympäristöissä tulla mutkia matkaan.
 Suuntaa antava työläysarvio:? Puolitoista tuntia. Enemmänkin voi mennä, jos asennat samalla ohjelmointityökaluja omalle koneellesi.
 Pistearvo: A10.
-Oheisprojektit: GoodStuff, O1Yleiset.
-Pääkysymyksiä: Mitä ovat ohjelmat ja ohjelmointi? Mihin ohjelmoija kirjoittaa ohjelmakoodin? Miten laadittu ohjelma käynnistetään? Miten kurssilla palautetaan ohjelmia arvioitaviksi?
-Mitä käsitellään? Ohjelmoinnin perusajatus ja yleisiä piirteitä. Ohjelmoijan työvälineitä: ohjelmointikieli, ohjelmakoodi, sovelluskehitin, pakkaukset ja kooditiedostot.
+Ohjelmoijan työvälineitä: ohjelmointikieli, ohjelmakoodi, sovelluskehitin, pakkaukset ja kooditiedostot.
 Mitä tehdään? Luetaan sekä kokeillaan ohjelmointityökaluja. Suuntaa antava vaativuusarvio: Varsinaiselta sisällöltään helppo. Tarvittavien ohjelmistojen asentamisessa voi joissakin ympäristöissä tulla mutkia matkaan.
 Suuntaa antava työläysarvio:? Puolitoista tuntia. Enemmänkin voi mennä, jos asennat samalla ohjelmointityökaluja omalle koneellesi.
 Pistearvo: A10.
-Oheisprojektit: GoodStuff, O1Yleiset.
+Ohjelmoijan työvälineitä: ohjelmointikieli, ohjelmakoodi, sovelluskehitin, pakkaukset ja kooditiedostot.
+Mitä tehdään? Luetaan sekä kokeillaan ohjelmointityökaluja. Suuntaa antava vaativuusarvio: Varsinaiselta sisällöltään helppo. Tarvittavien ohjelmistojen asentamisessa voi joissakin ympäristöissä tulla mutkia matkaan.
+Suuntaa antava työläysarvio:? Puolitoista tuntia. Enemmänkin voi mennä, jos asennat samalla ohjelmointityökaluja omalle koneellesi.
+Pistearvo: A10.

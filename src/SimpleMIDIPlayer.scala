@@ -8,7 +8,7 @@ import scala.collection.mutable.Buffer
 
 class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, kappale: Kappale, tahtilaji: Int) {   // Tuple (korkeus/korkeudet, pituus)
   
-    val ms = 700     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
+    val ms = 200     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
   
     val synth = MidiSystem.getSynthesizer()
     synth.open()  
@@ -81,34 +81,9 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
     }
     
 }
+ ////// end   simpleMIDIPlayer   ///////////////////////////////////////////////
 
 
-class simpleDrumPlayer (rumpudata: Buffer[(Buffer[Int], Buffer[Double] )] ) { 
-    
-   val rumpukone = MidiSystem.getSynthesizer()
-   rumpukone.open()  
-   val ch10 = rumpukone.getChannels()(9)     //  rummut
-  	
-   Thread.sleep(880)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
-
-     var basarinIndeksi = 0
-     for(kertaa <- 1 to 8){           // soitetaan 8 kertaa sama yhden tahdin luuppi
-        for (i <- 0 until rumpudata(0)._1.size){
-            basarinIndeksi = i
-             ch10.noteOn(rumpudata(0)._1(i), 70)    // hihat
-             if(i > rumpudata(1)._1.size-1)
-                basarinIndeksi = 0
-             ch10.noteOn(rumpudata(1)._1(basarinIndeksi), 70)    // basari, tulee nyt liian usein,
-                                                                // TODO rakenna FruityLoops-tyylinen 4iskua x 4 x1/16 -raami
-               
-             Thread.sleep((rumpudata(0)._2(i) * 500).toInt)   
-          
-             ch10.noteOff(rumpudata(0)._1(i))    // hihat
-             ch10.noteOff(rumpudata(1)._1(basarinIndeksi))     // basari
-        }     
-     }       
-}  
-   
    
 class simpleChordPlayer (sointumerkit: Buffer[(Buffer[Int], Int)]) {   // Tuple ("Cm", pituus)
   
@@ -155,6 +130,8 @@ class simpleChordPlayer (sointumerkit: Buffer[(Buffer[Int], Int)]) {   // Tuple 
     synth.close()
 }
 
+ /////// end  simpleChordPlayer   ////////////////////////////////////////////////////
+
 
 
 class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPatch:Int, kappale: Kappale, tahtilaji:Int) {   
@@ -174,7 +151,7 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPa
          
          
            alkio.isInstanceOf[Sointu] match {
-           case true  => pituudet += alkio.asInstanceOf[Sointu].pituus            // yhteinen pituus talteen vain kerran
+           case true  => pituudet += alkio.asInstanceOf[Sointu].pituus         // yhteinen pituus talteen vain kerran
                          for(nuotti <- alkio.asInstanceOf[Sointu].nuotit){
                               apubufferInt += MIDINoteNumber(nuotti.asInstanceOf[Nuotti].korkeus)  // Map("nuotinnimi" --> Int)     
                          }   
@@ -200,37 +177,20 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPa
   // new simpleMIDIPlayer(nuotitJaPituudet, MIDIPatch, kappale, tahtilaji) 
    
  
-   for (i <- 1 to 3) {                        
+   for (i <- 1 to 2) {                        
     val thread = new Thread {
         override def run {  
           i match{        
             case 1 => new simpleMIDIPlayer(nuotitJaPituudet, MIDIPatch, kappale, tahtilaji) 
-            case 2 => // new simpleChordPlayerAdapter(Buffer("C", "G", "F", "C", "G", "C",    "C", "G", "F", "C", "G", "C")) 
-            case 3 =>  // new simpleDrumAdapter()
+            case 2 => // new simpleChordPlayerAdapter(Buffer("C", "G", "F", "C", "G", "C",    "C", "G", "F", "C", "G", "C"))           
           }
         }
     }
     thread.start
    }  
     
-}
+}  ///////////////////// end   simpleMIDIPlayerAdapter  /////////////////////////////////////////////////////////
 
-class simpleDrumAdapter () {
-  
-   val hihatAndSnare = Buffer(42, 42, 42, 42, 38, 42, 42, 42,   42, 42, 42, 42, 38, 42, 42, 42)   // 4 iskua 1/16-nuotteja
-   val hihatAndSnarePituudet = Buffer( 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25,   0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25) 
-   val basari = Buffer(36, 36)
-   val basariPituudet = Buffer(2.0,2.0)
-   
-   var rummut = Buffer[Buffer[Int]]() 
-   rummut += (hihatAndSnare, basari)
-   
-   var rumpujenPituudet =  Buffer[Buffer[Double]]() 
-   rumpujenPituudet += (hihatAndSnarePituudet, basariPituudet)
-   
-   val rumpudata = rummut.zip(rumpujenPituudet)
-   new simpleDrumPlayer(rumpudata)
-}
 
 
 class simpleChordPlayerAdapter (sointumerkit: Buffer[String]){
@@ -245,12 +205,10 @@ class simpleChordPlayerAdapter (sointumerkit: Buffer[String]){
   
   for(sointumerkki <- sointumerkit)
     
-    if(sointumerkki.toLowerCase().contains("m"))      
-       soinnut += molli(MIDINoteNumber(sointumerkki.toLowerCase().head.toString))
-    else  soinnut += duuri(MIDINoteNumber(sointumerkki.toLowerCase()))  
+     if(sointumerkki.toLowerCase().contains("m"))      
+        soinnut += molli(MIDINoteNumber(sointumerkki.toLowerCase().head.toString))
+     else  soinnut += duuri(MIDINoteNumber(sointumerkki.toLowerCase()))  
   
-    
- 
     
   def duuri(perussavel: Int) = {
     Buffer(perussavel, perussavel+4, perussavel+7)
@@ -261,11 +219,8 @@ class simpleChordPlayerAdapter (sointumerkit: Buffer[String]){
   }
    
      
-    var soinnunPituudet = Buffer(8,8,4,4,4,4, 8,8,4,4,4,4)   // 8 iskua = 2 tahtia
-  
-    val soinnutJaPituudet = soinnut.zip(soinnunPituudet)
-   
+    var soinnunPituudet = Buffer(8,8,4,4,4,4, 8,8,4,4,4,4)   // 8 iskua = 2 tahtia  
+    val soinnutJaPituudet = soinnut.zip(soinnunPituudet)   
     new simpleChordPlayer(soinnutJaPituudet)
    
-  
 }
