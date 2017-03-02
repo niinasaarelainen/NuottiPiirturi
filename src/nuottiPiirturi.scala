@@ -151,7 +151,8 @@ class NuottiPiirturi(){
    }
  
    
-   def tehdaanKahdeksasosaParit() = {      // TODO  1/8-sointu !?!?!?!?
+   def tehdaanKahdeksasosaParit() = {      // TODO??  1/8-sointu:   nuottiData(i).pituus == 0.5, mutta liian iso remontti 
+                                           // KahdeksasosaPari -luokkaan joka nyt toimisi. Ei kannata  säätää ?!?
     
      iskujaMennyt =  0.0
      var minutOnJoKasitelty = false

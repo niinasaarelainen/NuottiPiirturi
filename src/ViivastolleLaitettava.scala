@@ -214,7 +214,7 @@ class KahdeksasosaNuotti(nuotinNimi: String, extraetumerkki: String = "") extend
   
 class KahdeksasosaPari (ekaNuotti: KahdeksasosaNuotti, tokaNuotti: KahdeksasosaNuotti)  extends KokoNuotti(ekaNuotti.korkeus: String, ekaNuotti.getExtraetumerkki: String){
 
-// (ekaNuotti: ViivastolleLaitettava, tokaNuotti: ViivastolleLaitettava)  extends Nuotti{
+  //class KahdeksasosaPari(ekaNuotti: ViivastolleLaitettava, tokaNuotti: ViivastolleLaitettava)  extends Nuotti{
   
 
      override def korkeus = ekaNuotti.korkeus
