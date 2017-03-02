@@ -27,6 +27,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
         case 4 => ch1.programChange(1024, 50)   //program #19 = Syn.Strings3 ,  eri bank:sta
         case 5 => ch1.programChange(24)    // nylon guitar
         case 6 => ch1.programChange(29) ; ch2.programChange(1024, 81)    // myös 30
+        case 7 => ch1.programChange(10)   // music box
      }
 		
     var olisiAikaSkrollata = 0
@@ -97,7 +98,8 @@ class simpleDrumPlayer (rumpudata: Buffer[(Buffer[Int], Buffer[Double] )] ) {
              ch10.noteOn(rumpudata(0)._1(i), 70)    // hihat
              if(i > rumpudata(1)._1.size-1)
                 basarinIndeksi = 0
-             ch10.noteOn(rumpudata(1)._1(basarinIndeksi), 70)    // basari
+             ch10.noteOn(rumpudata(1)._1(basarinIndeksi), 70)    // basari, tulee nyt liian usein,
+                                                                // TODO rakenna FruityLoops-tyylinen 4iskua x 4 x1/16 -raami
                
              Thread.sleep((rumpudata(0)._2(i) * 500).toInt)   
           

@@ -36,8 +36,8 @@ class TiedostonLukeminen  {
     
   do {
     MIDIPatch = readLine("\nMillä soundilla haluat kuulla kappaleen?\n" +
-                              "ENTER= en millään,  1= piano,  2= vibrafoni,  3= rock-urut,  4= syna,  5= akustinen kitara,  6= rokkibändi  ")
-  } while (!"123456".contains(MIDIPatch))                           
+                              "ENTER= en millään,  1= piano,  2= vibrafoni,  3= rock-urut,  4= syna,  5= akustinen kitara,  6= rokkibändi,  7=music box  ")
+  } while (!"1234567".contains(MIDIPatch))                           
  
      
     
