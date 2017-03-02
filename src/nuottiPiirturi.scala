@@ -128,7 +128,6 @@ class NuottiPiirturi(){
                   this.tahdinAikaisetEtumerkit += nuotinNimi 
               }  // tai vain lisätään puskuriin
               else  this.tahdinAikaisetEtumerkit += nuotinNimi   
-                
              
       } else if ( this.tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last).size > 0  ){
               val tulokset = tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last)
