@@ -4,7 +4,7 @@ import scala.collection.mutable.Map
 
 class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[String], tahtilaji:String, kappaleenNimi:String) {
   
-  var viivasto = piirraGavain   //Buffer[String]()
+  var viivasto = piirraGavain()   //Buffer[String]()
   
   val nuotitYAkselilla = Map("lyr" -> 17, "alatila" ->16, "c1" -> 15, "d1" -> 14,  "e1" -> 13,  "f1" -> 12,  "g1"-> 11,  "a1"->10,  "h1" -> 9, "c2" -> 8, "d2" -> 7,  "e2" -> 6,  "f2" -> 5,  "g2"-> 4,  "a2"-> 3, "ylatila1" -> 2, "ylatila2" -> 1, "ylatila3" -> 0)
 
@@ -70,7 +70,6 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
            lyricsInd += 1
       }     
       
-      
      
       def kasitteleKaksiTavua() = {
          kasitteleYksiTavu(laitettava.kuvanLeveys/2)    // ekan tavun tila on puolet parin tilasta   TODO miksi  laitettava.kuvanLeveys/2 kaataa??
@@ -87,7 +86,6 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
               laitettava.kuva(17) =  laitettava.kuva(17).substring(0,6) + " " +  tavu2 + laitettava.kuva(17).substring(6 + tavu2.size + 1)
          else  laitettava.kuva(17) =  laitettava.kuva(17).substring(0,6) + "  " + tavu2 + laitettava.kuva(17).substring(6 + tavu2.size +2)
          lyricsInd += 1
-             
       }
         
   }
@@ -122,7 +120,7 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
     
  
    
-  def piirraGavain= {
+  def piirraGavain() = {
      var g = Buffer[String]()                  
 
      g +="          "

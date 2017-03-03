@@ -16,8 +16,9 @@ class NuottiPiirturi(){
     
   
    val inputBuffer = inputTiedostosta.nuottiAlkiot.toBuffer  
-   nuottiData = kasitteleNuottiTieto(inputBuffer, nuottiData)        
-   kasitteleLyriikat() 
+   nuottiData = kasitteleNuottiTieto(inputBuffer, nuottiData)    
+   if(inputTiedostosta.lyriikkadata.size != 0)
+       kasitteleLyriikat() 
    tehdaanKahdeksasosaParit()
  
    val viivasto = new Viivasto(nuottiDataParitettu, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)
@@ -40,17 +41,12 @@ class NuottiPiirturi(){
    var ok= 0   // nollana/positiivisena ok kasvattaa iskujaMennyt. 
                 //   Sointu asettaa negatiivisen arvon (soinnunsävelten määrä +1) - pituus halutaan kerran - 
   
-  def kasitteleNuottiTieto(inputBuffer: Buffer[String], palautetaan: Buffer[ViivastolleLaitettava] ): Buffer[ViivastolleLaitettava] = {        
-     
-    var pituus = 0
-    for ( i<- 0 until inputBuffer.length ){   
-        
-          var extraetumerkki = ""
-          var alkio = inputBuffer(i)    // esim. "g#1--"   
-          if(alkio.head != '<')
-             pituus = alkio.count(_ == '-')                  
-          
-          if (alkio.head == '<'){                                                // S O I N N U T
+  def kasitteleNuottiTieto(inputBuffer: Buffer[String], palautetaan: Buffer[ViivastolleLaitettava] ): Buffer[ViivastolleLaitettava] = {   
+  
+    for ( alkio <- inputBuffer ){      // alkio esim. "g#1--"   tai   "<f1,d1>"
+   
+      // S O I N N U T
+        if (alkio.head == '<'){                                                
             val sointu =  alkio.tail.substring(0, alkio.size -2).split(",")    
             var sointuBuffer = Buffer[String]()
             var viivastolleLaitettavaBuffer = Buffer[ViivastolleLaitettava]()
@@ -58,24 +54,26 @@ class NuottiPiirturi(){
                sointuBuffer += aani
             ok = 0- sointuBuffer.size +1    
             nuottiData += new Sointu(kasitteleNuottiTieto(sointuBuffer, viivastolleLaitettavaBuffer) ) 
-          }      
+        }      
        
-          else {                                                            // N U O T I T  J A   T A U O T
-             var nuotinNimi = alkio.filter(_ != '-').filter(_ != '.')  
-             extraetumerkki = tutkiEtumerkit(nuotinNimi)  
+      // N U O T I T  J A   T A U O T 
+        else {                                                            
+            var nuotinNimi = alkio.filter(_ != '-').filter(_ != '.')  
+            var pituus = alkio.count(_ == '-')     
+            var extraetumerkki = tutkiEtumerkit(nuotinNimi)  
            
-             if (nuotinNimi == "z"){                                         //   T A U O T
+            if (nuotinNimi == "z"){                                 //   T A U O T
                pituus match{
-                  case 0 => palautetaan += new KahdeksasosaTauko; if(ok >= 0) iskujaMennyt += 0.5
-                  case 1 => if(alkio.contains(".")) {palautetaan += new PisteellinenNeljasosaTauko; if(ok >= 0) iskujaMennyt += 1.5 }  
-                            else {palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 1.0}
+                  case 0 =>  palautetaan += new KahdeksasosaTauko; if(ok >= 0) iskujaMennyt += 0.5
+                  case 1 =>  if(alkio.contains(".")) {palautetaan += new PisteellinenNeljasosaTauko; if(ok >= 0) iskujaMennyt += 1.5 }  
+                             else {palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 1.0}
                   case 2 =>  if(alkio.contains(".")) {for (i<- 1 to 3) palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 3.0; } 
-                            else {for (i<- 1 to 2) palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 2.0; }                          
+                             else {for (i<- 1 to 2) palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 2.0; }                          
                   case 3 =>  for (i<- 1 to 3) palautetaan += new NeljasosaTauko ; if(ok >= 0) iskujaMennyt += 3.0
                   case 4 =>  for (i<- 1 to 4) palautetaan += new NeljasosaTauko; if(ok >= 0) iskujaMennyt += 4.0
-               }
+            }
            
-             } else if(pituus == 1 ){                                           // N U O T I T
+            } else if(pituus == 1 ){                                  // N U O T I T
                  if(alkio.contains(".")){
                     palautetaan += new PisteellinenNeljasosaNuotti(nuotinNimi, extraetumerkki) 
                     if(ok >= 0) iskujaMennyt += 1.5
@@ -84,7 +82,7 @@ class NuottiPiirturi(){
                    palautetaan += new NeljasosaNuotti(nuotinNimi, extraetumerkki)    
                    if(ok >= 0) iskujaMennyt += 1.0
                  }
-             } else if (pituus == 2 ){
+            } else if (pituus == 2 ){
                 if(alkio.contains(".")){
                    palautetaan += new PisteellinenPuoliNuotti(nuotinNimi,extraetumerkki)  
                    if(ok >= 0) iskujaMennyt += 3.0
@@ -93,16 +91,16 @@ class NuottiPiirturi(){
                   palautetaan += new PuoliNuotti (nuotinNimi, extraetumerkki)  
                   if(ok >= 0) iskujaMennyt += 2.0
                 }
-             } else if (pituus == 3 ){
+            } else if (pituus == 3 ){
                   palautetaan += new PisteellinenPuoliNuotti(nuotinNimi,extraetumerkki) 
                   if(ok >= 0) iskujaMennyt += 3.0
-             } else if (pituus == 4 ){
+            } else if (pituus == 4 ){
                   palautetaan += new KokoNuotti(nuotinNimi,extraetumerkki)     
                   if(ok >= 0) iskujaMennyt += 4.0
-             } else if (pituus == 0 ){           
+            } else if (pituus == 0 ){           
                   palautetaan +=  new KahdeksasosaNuotti (nuotinNimi, extraetumerkki)     
                   if(ok >= 0) iskujaMennyt += 0.5
-             }    
+            }    
              println(nuotinNimi + " " + iskujaMennyt + " tahdinAikaisetEtumerkit: " + tahdinAikaisetEtumerkit + "tahtilaji: " + tahtilaji + "extraetumerkki: " + extraetumerkki)
         }   // iso else: ei-sointu.
         
@@ -112,7 +110,7 @@ class NuottiPiirturi(){
            tahdinAikaisetEtumerkit = Buffer[String]()
         }
         ok += 1
-   }  // for 
+     }  // for 
    palautetaan   // tätä tarvitaan sointuja muodostettaessa
    } 
   
@@ -140,14 +138,14 @@ class NuottiPiirturi(){
    
    
    def kasitteleLyriikat() = {
-      if(inputTiedostosta.lyriikkadata.size != 0){
-         var sanatPotkona = ""  
+     
          for (rivi <-  inputTiedostosta.lyriikkadata){
-           sanatPotkona += rivi.replaceAll("-", "- ")
-           sanatPotkona += " "
-         }   
-         lyricsBuffer =  sanatPotkona.replaceAll("  ", " ").split(" ").toBuffer    // entä jos 3 välilyöntiä ?  TODO  trim? milloin?
-      }
+            var splitattuRivi = rivi.replaceAll("-", "- ").split(" ")
+            for (alkio <- splitattuRivi) {
+                if (alkio == "") {}             // jos oli enemmän kuin 1 välilyönti, tulee turha alkio, ei mukaan lyricsBuffer:iin
+                else lyricsBuffer += alkio
+            }   
+         }  
    }
  
    
@@ -157,6 +155,7 @@ class NuottiPiirturi(){
      var minutOnJoKasitelty = false
      var paastiinTiedostonloppuun = false
      
+     
      for (i <- 0 until nuottiData.size-1 ){      // vikalle alkiolle ei kannata kysyä seuraajaa
         if(!minutOnJoKasitelty){
           iskujaMennyt += nuottiData(i).pituus
@@ -165,7 +164,8 @@ class NuottiPiirturi(){
                  nuottiDataParitettu += new KahdeksasosaPari(nuottiData(i).asInstanceOf[KahdeksasosaNuotti], nuottiData(i+1).asInstanceOf[KahdeksasosaNuotti])
                  minutOnJoKasitelty = true  
                  iskujaMennyt += nuottiData(i+1).pituus
-                 if(i+1 == nuottiData.size-1) paastiinTiedostonloppuun = true
+                 if(nuottiData.last.eq(nuottiData(i+1))) paastiinTiedostonloppuun = true
+             //    if(i+1 == nuottiData.size-1) paastiinTiedostonloppuun = true
               } else {
                  nuottiDataParitettu += nuottiData(i)     // 1/8 talteen, jos se ei löytänyt paria
               }
@@ -174,11 +174,9 @@ class NuottiPiirturi(){
              nuottiDataParitettu += nuottiData(i)     // ei-1/8:kin talteen
           }
         
-   //       println("iskujaMennyt: " +iskujaMennyt + nuottiData(i).asInstanceOf[KahdeksasosaNuotti].korkeus )
           if (iskujaMennyt == tahtilaji) {
              iskujaMennyt = 0.0  
           }  
-      
         }  else  minutOnJoKasitelty=  false
       }
      if(!paastiinTiedostonloppuun)    

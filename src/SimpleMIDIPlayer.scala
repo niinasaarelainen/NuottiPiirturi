@@ -26,7 +26,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
         case 3 => ch1.programChange(18)   //program #19 = Rock Organ
         case 4 => ch1.programChange(1024, 50)   //program #19 = Syn.Strings3 ,  eri bank:sta
         case 5 => ch1.programChange(24)    // nylon guitar
-        case 6 => ch1.programChange(29) ; ch2.programChange(1024, 81)    // myös 30
+        case 6 => ch1.programChange(29) ; ch2.programChange(1024, 81)    // myös 30   ERI DEF ?????   TODO
         case 7 => ch1.programChange(10)   // music box
      }
 		
@@ -43,15 +43,13 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
 		
 	  for(nuottiTaiSointu <- nuotit){      
         if (nuottiTaiSointu._1(0) != 0)   //taukojen "korkeus", eli tauoille tehdään vain sleep ja skrollausrutiinit
-           for (i <- 0 until nuottiTaiSointu._1.size)
-              if(i <  nuottiTaiSointu._1.size-1){
-                 ch1.noteOn(nuottiTaiSointu._1(i), 75)         // 68 = velocity (127 = max), säestysäänet, jos niitä on
-          //       ch2.noteOn(nuottiTaiSointu._1(i)-24, 65)  
-              }   
+              for (nuotti <-  nuottiTaiSointu._1)
+              if(nuotti !=  nuottiTaiSointu._1.last){
+                 ch1.noteOn(nuotti, 75)         // 68 = velocity (127 = max), säestysäänet, jos niitä on
+               }   
               else { 
-                ch1.noteOn(nuottiTaiSointu._1(i), 114)  // oltiin sortattu, eli melodia on vikana (ylin ääni = isoin numero)  
-            //    ch2.noteOn(nuottiTaiSointu._1(i)-24, 94) 
-              }
+                ch1.noteOn(nuotti, 114)  // oltiin sortattu, eli melodia on vikana (ylin ääni = isoin numero)  
+               }
            
         Thread.sleep((nuottiTaiSointu._2 * ms).toInt)  // ms 
         olisiAikaSkrollata += (nuottiTaiSointu._2 * ms).toInt
@@ -64,9 +62,8 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
         }   
         
         if (nuottiTaiSointu._1(0) != 0)
-          for (i <- 0 until nuottiTaiSointu._1.size)  {            
-             ch1.noteOff(nuottiTaiSointu._1(i))
-   //          ch2.noteOff(nuottiTaiSointu._1(i)-24)
+          for (nuotti <- nuottiTaiSointu._1)  {            
+             ch1.noteOff(nuotti)
           }   
     }
     
@@ -107,12 +104,12 @@ class simpleChordPlayer (sointumerkit: Buffer[(Buffer[Int], Int)]) {   // Tuple 
        for(sointumerkki <- sointumerkit){
          
         // säestysäänet päälle: 
-           if(sointumerkki._1(0) -24 < 36)
-              ch1.noteOn(sointumerkki._1(0) -12,  50)   // bassoääni ekana    -24 = 2 okt. alaspäin
+           if(sointumerkki._1(0) -24 < 36)                // bassoääni ekana    -24 = 2 okt. alaspäin
+              ch1.noteOn(sointumerkki._1(0) -12,  50)   
            else ch1.noteOn(sointumerkki._1(0) -24,  50)  
           
-           for (i <- 0 until sointumerkki._1.size)
-              ch2.noteOn(sointumerkki._1(i), 60)      // synasointu
+           for (soinnunaani <- sointumerkki._1)
+              ch2.noteOn(soinnunaani, 60)      // synasointu
                    
         // soi:   
           Thread.sleep(sointumerkki._2 * 500)  // ms       // tässä pitää olla sama ms kuin MIDIPlayerissä !!
@@ -122,15 +119,14 @@ class simpleChordPlayer (sointumerkit: Buffer[(Buffer[Int], Int)]) {   // Tuple 
              ch1.noteOff(sointumerkki._1(0) -12,  60)  
           else ch1.noteOff(sointumerkki._1(0) -24,  60)  
           
-          for (i <- 0 until sointumerkki._1.size)
-            ch2.noteOff(sointumerkki._1(i))   
+          for (soinnunaani <- sointumerkki._1)
+              ch2.noteOff(soinnunaani)
        }        
 
     Thread.sleep(900)   // parempi soundi vikaan ääneen
     synth.close()
 }
-
- /////// end  simpleChordPlayer   ////////////////////////////////////////////////////
+ /////////    end  simpleChordPlayer   /////////////////////////////////////////////////////////////////
 
 
 
@@ -161,20 +157,19 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPa
                  apubufferInt += MIDINoteNumber(alkio.asInstanceOf[Nuotti].korkeus)
                  nuottiNumberit += apubufferInt
                  pituudet += alkio.asInstanceOf[Nuotti].pituus
-                 
-           }     else if (alkio.isInstanceOf[Tauko]){
+                 } 
+                 else if (alkio.isInstanceOf[Tauko]){
                       pituudet += alkio.asInstanceOf[Tauko].pituus   
                       apubufferInt += 0  // tauon "korkeus" on 0
                       nuottiNumberit += apubufferInt
-           }
-         } 
-       }
+                 }
+            } 
+       } // end for
    
    
   // println(nuottiNumberit)
    
    val nuotitJaPituudet = nuottiNumberit.zip(pituudet)
-  // new simpleMIDIPlayer(nuotitJaPituudet, MIDIPatch, kappale, tahtilaji) 
    
  
    for (i <- 1 to 2) {                        

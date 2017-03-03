@@ -5,8 +5,7 @@ import scala.collection.mutable.Map
 trait ViivastolleLaitettava {  
   
    var viivasto = Buffer[String]()   
- //  val y = Map("lyr" -> 16, "alatila" ->15, "c1" -> 14, "d1" -> 13,  "e1" -> 12,  "f1" -> 11,  "g1"-> 10,  "a1"->9,  "h1" -> 8, "c2" -> 7, "d2" -> 6,  "e2" -> 5,  "f2" -> 4,  "g2"-> 3,  "ylatila1"-> 2, "ylatila2" -> 1, "ylatila3" -> 0)
- val y = Map("lyr" -> 17, "alatila" ->16, "c1" -> 15, "d1" -> 14,  "e1" -> 13,  "f1" -> 12,  "g1"-> 11,  "a1"->10,  "h1" -> 9, "c2" -> 8, "d2" -> 7,  "e2" -> 6,  "f2" -> 5,  "g2"-> 4,  "a2"-> 3, "ylatila1" -> 2, "ylatila2" -> 1, "ylatila3" -> 0)
+   val y = Map("lyr" -> 17, "alatila" ->16, "c1" -> 15, "d1" -> 14,  "e1" -> 13,  "f1" -> 12,  "g1"-> 11,  "a1"->10,  "h1" -> 9, "c2" -> 8, "d2" -> 7,  "e2" -> 6,  "f2" -> 5,  "g2"-> 4,  "a2"-> 3, "ylatila1" -> 2, "ylatila2" -> 1, "ylatila3" -> 0)
 
    
    def kuva: Buffer[String]   
@@ -33,6 +32,7 @@ trait ViivastolleLaitettava {
   }
 }
   
+
 class Sointu(aanet: Buffer[ViivastolleLaitettava]) extends ViivastolleLaitettava{
      def nuotit = aanet   // korkeuden joutuu laskemaan jokaiselle nuotille erikseen
      def soiva =  true
@@ -113,9 +113,8 @@ class KokoNuotti(nuotinNimi: String, extraetumerkki: String = "") extends Nuotti
      def pituus = 4.0
      def kuvanLeveys = 20
      def nimiMapissa = nuotinNimi.filter(_ !='#').filter(_ != 'b') // esim. gb1 --> g1
-     def etumerkki = if(extraetumerkki == "n") "" else if (nuotinNimi.filter(_ !='-').size == 3) nuotinNimi(1).toString else ""
-     def extraetumerkkiDef = if(extraetumerkki == "n") "" else extraetumerkki
-    
+     def etumerkki = if(extraetumerkki == "n") "" else if (nuotinNimi.size == 3) nuotinNimi(1).toString else ""
+     def extraetumerkkiDef = if(extraetumerkki == "n") "" else extraetumerkki   
      def getExtraetumerkki = extraetumerkki
   
      def piirraNuppi() = { 
@@ -166,7 +165,7 @@ class PisteellinenPuoliNuotti(nuotinNimi: String, extraetumerkki: String = "") e
       override def kuvanLeveys = 16
       
       override def kuva = {
-        super.kuva
+   //     super.kuva
         viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 5) + "." + viivasto(y(nimiMapissa)).substring(6)  
         viivasto
       }
