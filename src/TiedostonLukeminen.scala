@@ -6,7 +6,6 @@ import java.io._
 class TiedostonLukeminen {
 
   var inputFromFile = Buffer[String]() // kaikki input, paitsi tyhjät rivit
-  val tunnisteet = Buffer[String]() // edellisestä tunnisteet
   val nuottidata = Buffer[String]() // loput, eli nuottidata
   val lyriikkadata = Buffer[String]() // biisin sanat
   var nuottiAlkiot = Array[String]() // splitattuna yllä oleva tiedosto
@@ -56,8 +55,7 @@ class TiedostonLukeminen {
 
     kasitteleTunnisteet(inputFromFile) // tämä pitää tehdä ennen splittaamista !!!! esim tunniste  #Let's get together
     println("nuottidata :" + nuottidata)
-    println("tunnisteet :" + tunnisteet)
-
+ 
     // splittaus & virheiden tarkistus:  
     for (i <- 0 until nuottidata.size) {
       var splitattuRivi = nuottidata(i).split(" ") // mieti tunnisteiden ja sointujen caset myöhemmin
@@ -85,9 +83,7 @@ class TiedostonLukeminen {
         if (inputFromFile(i).tail.toLowerCase().trim.contains("sanat")) //  T U N N I S T E E T
           seuraavatrivitLyriikkaan = true
         else if (seuraavatrivitLyriikkaan == false) {
-          tunnisteet += i.toString() // parillisiin rivinumero Stringinä, parittomiin tunnisteen nimi
-          tunnisteet += inputFromFile(i).tail.toLowerCase().trim
-          if ("2345678".contains(inputFromFile(i).tail))
+         if ("2345678".contains(inputFromFile(i).tail))
             tahtilaji = inputFromFile(i).tail
           //         if(inputFromFile(i).tail.trim.substring(1,inputFromFile(i).tail.size) != 0)  //  TODO samalla rivillä tahtilaji ja nuotteja
           //           nuottidata += inputFromFile(i).tail.trim.substring(1,inputFromFile(i).tail.size)
@@ -103,7 +99,6 @@ class TiedostonLukeminen {
 
       else nuottidata += inputFromFile(i).toLowerCase() // L O P U T   ELI   N U O T I T
     }
-    tunnisteet += inputFromFile.size.toString() // vika rivinumero     
   }
 
   def helppiTeksti() = {
