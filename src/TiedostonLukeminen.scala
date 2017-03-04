@@ -134,7 +134,7 @@ class TiedostonLukeminen {
                return "nuotin/tauon pitää alkaa kirjaimilla cdefgahz"   // väärä teksti jos "zz"
              else if(filtteredNote.size == 1 && !(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   
                return "tarkoititko "+ syote + "1 vai " + syote + "2?"   
-            else if(filtteredNote.tail.contains("#b") ||  filtteredNote.tail.contains("#b"))    
+            else if(filtteredNote.tail.contains("#b") ||  filtteredNote.tail.contains("b#"))    
                 return "nuotissa on ylennys- ja alennusmerkki"   
             else if( !(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   
                return "sallitut oktaavialat ovat 1 ja 2"   

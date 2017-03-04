@@ -15,8 +15,28 @@ Tässä kaikki käytettävissä olevat pituudet:
 Tauon symboli on z. Et tarvitse muita merkkejä. Perään muista laittaa pituus, esim.
 puolitauko merkitään z--
 
+Etumerkit: ylennä nuotti näin: g#1, alenna näin: gb1. Palautusmerkkejä ei tarvita, eli jos on
+yksiviivainen fis ja f peräkkäin, kirjoita f#1 f1. 
+
+Muista aina oktaaviala (1 tai 2), muutoin ohjelma ei tiedä, kumpaa nuottia tarkoitat.  
+
+
+_______ JO NÄILLÄ OHJEILLA KANNATTAA KOKEILLA OHJELMAN KÄYTTÖÄ _____________________
+_______ JOS OLET ENSIKERTALAINEN.___________________________________________________
+
+
+
+
+_______ ALLA LISÄOHJEITA EDISTYNEILLE:______________________________________________
+
+Soinnut: ..... blaah......
 
 Jos haluat kappaleeseen sanat, toimi seuraavasti: 
 1) tee nuotit (ja tauot) normaalisti, esim. c1 z d1 z e1 z 
 2) kun kaikki nuotit on laitetu, kirjoita seuraavalle riville tunniste #Sanat ja sen perään sanoja:
    Jaak-ko kul-ta Jaak-ko kul-ta
+   
+Jos haluat kappaleelle nimen, kirjoita esim #nimi Säkkijärven polkka
+
+Jos kappale ei mene 4/4-tahtilajissa, tulee merkitä (jonkin) rivin alkuun moneenko lasketaan seuraavasti: 
+#3 (kolmijakoinen) tai vaikkapa #5 (viisijakoinen)
