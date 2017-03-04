@@ -4,11 +4,12 @@ import javax.sound.midi.MidiChannel
 
 import scala.collection.mutable.Map
 import scala.collection.mutable.Buffer
+import scala.io.StdIn._
 
 
 class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, kappale: Kappale, tahtilaji: Int) {   // Tuple (korkeus/korkeudet, pituus)
   
-    val ms = 180     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
+    val ms = 480     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
   
     val synth = MidiSystem.getSynthesizer()
     synth.open()  
@@ -29,7 +30,9 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
         case 6 => ch1.programChange(29) ; ch2.programChange(1024, 81)    // myös 30   ERI DEF ?????   TODO
         case 7 => ch1.programChange(10)   // music box
      }
-		
+	
+    var uudestaan = "0"
+   do{	
     var olisiAikaSkrollata = 0
 		var riviInd = 0
     skrollaaa(riviInd)     // laitetaan näytölle valmiiksi biisin nimi... 
@@ -41,6 +44,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
 		Thread.sleep(900)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
   
 		
+	
 	  for(nuottiTaiSointu <- nuotit){      
         if (nuottiTaiSointu._1(0) != 0)   //taukojen "korkeus", eli tauoille tehdään vain sleep ja skrollausrutiinit
               for (nuotti <-  nuottiTaiSointu._1)
@@ -69,6 +73,10 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
     
     Thread.sleep(900)   // parempi soundi vikaan ääneen
     synth.close()
+    
+    uudestaan = readLine("\n\nSoitetaanko uudestaan? ENTER = Kyllä,  0 = Ei")
+	} while (uudestaan == "0")
+    
     new TiedostonTallennus(kappale)  
     
     
@@ -132,9 +140,9 @@ class simpleChordPlayer (sointumerkit: Buffer[(Buffer[Int], Int)]) {   // Tuple 
 
 class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPatch:Int, kappale: Kappale, tahtilaji:Int) {   
   
-   val MIDINoteNumber = Map("cb1" -> 59, "h#1" -> 60, "c1" -> 60, "c#1" ->61, "db1" -> 61, "d1" -> 62, "d#1" -> 63, "eb1" -> 63,  
+   val MIDINoteNumber = Map("cb1" -> 59,  "c1" -> 60, "c#1" ->61, "db1" -> 61, "d1" -> 62, "d#1" -> 63, "eb1" -> 63,  
        "e1" -> 64, "e#1" -> 65, "fb1"-> 64, "f1"-> 65,  "f#1"->66,  "gb1" -> 66, "g1" -> 67,  "g#1" -> 68, "ab1" -> 68, 
-       "a1" -> 69, "a#1" -> 70, "hb1" -> 70, "b1" -> 70, "bb1" -> 70, "h1" -> 71, "cb2" -> 71, "h#" -> 72, "c2" -> 72, 
+       "a1" -> 69, "a#1" -> 70, "hb1" -> 70, "b1" -> 70, "bb1" -> 70, "h1" -> 71, "cb2" -> 71, "h#1" -> 72, "c2" -> 72, 
        "c#2" -> 73, "db2" -> 73, "d2" -> 74,  "d#2" -> 75, "eb2" -> 75, "e2" -> 76, "fb2" -> 76, "e#2" -> 77, 
        "f2" -> 77, "f#2" -> 78, "gb2" -> 78, "g2" -> 79, "g#2" -> 80, "ab2" -> 80, "a2" -> 81, "a#2" -> 82)
 

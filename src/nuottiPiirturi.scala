@@ -19,11 +19,10 @@ class NuottiPiirturi(){
    nuottiData = kasitteleNuottiTieto(inputBuffer, nuottiData)    
    if(inputTiedostosta.lyriikkadata.size != 0)
        kasitteleLyriikat() 
-//   tehdaanKahdeksasosaParit()
+   tehdaanKahdeksasosaParit()
  
-   val viivasto = new Viivasto(nuottiData, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)
- 
- //  val viivasto = new Viivasto(nuottiDataParitettu, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)
+  // val viivasto = new Viivasto(nuottiData, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)
+   val viivasto = new Viivasto(nuottiDataParitettu, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)
    viivasto.piirraNuotit()
    
     // jos kuunnellaan, tallennuskäsky pitää antaa kuuntelun jälkeen, muuten se tulee ruudulle ennen nuotteja
@@ -133,7 +132,10 @@ class NuottiPiirturi(){
               val tulokset = tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last)
               for(tulos <- tulokset)  tahdinAikaisetEtumerkit -= tulos              // otetaan esim g#1 pois puskurista, koska se on nyt §-tilassa
               return "§"   // esim f#1 ja f1 peräkkäin, tarvitaan palautusmerkki                  
-      }      
+      } else if ( this.tahdinAikaisetEtumerkit.contains("b1") && nuotinNimi == "h1"){
+               tahdinAikaisetEtumerkit -= "b1"
+               return "§"
+      }         
       return ""        
    }
    
