@@ -62,7 +62,7 @@ class Sointu(aanet: Buffer[ViivastolleLaitettava]) extends ViivastolleLaitettava
       }  // end for
      
       var ylospain = true
-      if (korkeudet.min - 0 < 15 - korkeudet.max )   // 0 on ylin piirtoindeksi, 15 alin, lasketaan missä on enemmän tilaa
+      if (korkeudet.min - 0 < 17 - korkeudet.max )   // 0 on ylin piirtoindeksi, 17 alin, lasketaan missä on enemmän tilaa
           ylospain = false
       if (pituus < 4)   // kokonuottiin ei vartta 
           piirraVarsiJaMahdollisestiVaka(korkeudet.min, korkeudet.max, ylospain)
@@ -242,7 +242,7 @@ class KahdeksasosaPari (ekaNuotti: KahdeksasosaNuotti, tokaNuotti: KahdeksasosaN
      
      val korkeudet = Array( y(ekaNuotti.nimiMapissa),  y(tokaNuotti.nimiMapissa))
     
-     if (korkeudet.min - 0 < 15 - korkeudet.max ) {  // 0 on ylin piirtoindeksi, 15 alin, lasketaan missä on enemmän tilaa
+     if (korkeudet.min - 0 < 17 - korkeudet.max ) {  // 0 on ylin piirtoindeksi, 17 alin, lasketaan missä on enemmän tilaa
          ylospain = false  
          ekanVarrenPit = Math.abs(korkeudet.max - y(ekaNuotti.nimiMapissa)) + 2   // varren pituus on väh. 2
          tokanVarrenPit = Math.abs(korkeudet.max - y(tokaNuotti.nimiMapissa))  + 2  
