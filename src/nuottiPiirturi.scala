@@ -135,7 +135,11 @@ class NuottiPiirturi(){
       } else if ( this.tahdinAikaisetEtumerkit.contains("b1") && nuotinNimi == "h1"){
                tahdinAikaisetEtumerkit -= "b1"
                return "§"
-      }         
+      } else if ( this.tahdinAikaisetEtumerkit.contains("b2") && nuotinNimi == "h2"){
+               tahdinAikaisetEtumerkit -= "b2"
+               return "§"
+      }    
+      
       return ""        
    }
    

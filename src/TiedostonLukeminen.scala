@@ -161,10 +161,7 @@ class TiedostonLukeminen {
            
      //       else if(filtteredNote.size < 2)      turha ?
        //        return "oktaaviala puuttuu"
-           
-            else if(filtteredNote.contains("h") &&   filtteredNote.contains("2"))  // löytää h2, h#2, hb2 = piirtoalueen ulkopuolella    
-                return "noin korkeaa nuottia ei pysty piirtää, ylin mahdollinen nuotti on a#2"    
-                  
+                    
             else ""     
           
           } // iso else
