@@ -71,16 +71,16 @@ class TiedostonLukeminen {
           // S O I N T U   
              else if (alkio.head == '<'){ 
                  if(alkio.last != '>'){
-                      val korjattuVersio = readLine("\n syöte '" + alkio +"' on virheellinen:  puuttuu soinnun lopetussymboli '>'" + 
+                      val korjattuVersio = readLine("\n\n syöte '" + alkio +"' on virheellinen:  puuttuu soinnun lopetussymboli '>' tai olet vahingossa laittanut välilyönnin soinnun sisään" + 
                        "\n Virhe on rivillä " + (nuottiDatanRivinumerot(i)+1)  +
-                       "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")
+                       "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")  // TODO Enter ei tee mitä lupaa
                  }      
                  val sointu =  alkio.tail.substring(0, alkio.size -2).split(",")  
                  for(aani <- sointu) {
                     if (oikeellisuusTesti(aani) == "") {}
                     else {
                        virheitaNolla =  false  
-                       val korjattuVersio = readLine("\n syöte '" + aani +"' on virheellinen: " + oikeellisuusTesti(aani) + 
+                       val korjattuVersio = readLine("\n\n syöte '" + aani +"' on virheellinen: " + oikeellisuusTesti(aani) + 
                        "\n Virhe on rivillä " + (nuottiDatanRivinumerot(i)+1)  +
                        "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")
                     }
@@ -95,7 +95,7 @@ class TiedostonLukeminen {
                   nuottiAlkiot = nuottiAlkiot :+ alkio
              } else {
              virheitaNolla =  false  
-             val korjattuVersio = readLine("\n syöte '" + alkio +"' on virheellinen: " + oikeellisuusTesti(alkio) + 
+             val korjattuVersio = readLine("\n\n syöte '" + alkio +"' on virheellinen: " + oikeellisuusTesti(alkio) + 
                "\n Virhe on rivillä " + (nuottiDatanRivinumerot(i)+1)  +
                "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")
              }
@@ -135,9 +135,10 @@ class TiedostonLukeminen {
         }
       }// if   .size != 0 
     } 
-    println("kappaleenNimi: " + kappaleenNimi + "tahtilaji" + tahtilaji)
+//    println("kappaleenNimi: " + kappaleenNimi + "tahtilaji" + tahtilaji)
   }
 
+  
   def helppiTeksti() = {
     val helpFile = Source.fromFile("help.txt")   
 
@@ -151,6 +152,7 @@ class TiedostonLukeminen {
     }
   }
   
+  
   def soundiValinta() = {
      do {
      MIDIPatch = readLine("\nMillä soundilla haluat kuulla kappaleen?\n" +
@@ -158,6 +160,7 @@ class TiedostonLukeminen {
      } while (!"1234567".contains(MIDIPatch))
   }
 
+  
   def oikeellisuusTesti(syote: String): String = {    // esim. g#1---
   
     // N U O T T I E N   S Y N T A K SI ,  EI PITUUDET

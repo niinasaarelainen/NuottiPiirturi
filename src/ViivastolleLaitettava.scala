@@ -114,7 +114,7 @@ abstract class Nuotti extends ViivastolleLaitettava {
      def extraetumerkkiDef: String
        
      def piirraAlaApuviiva() = {                       
-           viivasto(y("c1")) = viivasto(y("c1")).substring(0, 1) + "--" +  viivasto(y("c1")).substring(4, 6) + "-" + viivasto(y("c1")).substring(6)         
+           viivasto(y("c1")) = viivasto(y("c1")).substring(0, 1) + "--" +  viivasto(y("c1")).substring(4, 6) + "--" + viivasto(y("c1")).substring(7)         
      }
      
       def piirraYlaApuviiva() = {                       
