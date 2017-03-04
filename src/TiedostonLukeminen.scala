@@ -21,14 +21,20 @@ class TiedostonLukeminen {
   helppiTeksti()
 
   val inputhakemisto = new File("./input_virheita")
-  for (tiedosto <- inputhakemisto.listFiles()) {
-    if (tiedosto.isFile) {
-      println(tiedosto.getName)
-    }
+  var montakoNimeaRiville = 0
+  for (tiedosto <- inputhakemisto.listFiles()) {     
+     if (tiedosto.isFile) {
+        print(tiedosto.getName + "         ")
+        montakoNimeaRiville += 1
+        if (montakoNimeaRiville == 7){
+          println()
+          montakoNimeaRiville = 0
+        }
+     }    
   }
 
   do {
-    tiedostonNimi = readLine("\nMinkä nimisen tiedoston haluat nuoteiksi? Valitse ylläolevista. ")
+    tiedostonNimi = readLine("\n\nMinkä nimisen tiedoston haluat nuoteiksi? Valitse ylläolevista. ")
   } while (!onkoListalla(tiedostonNimi))
 
   val tiedosto = Source.fromFile("input_virheita/" + tiedostonNimi)
@@ -61,7 +67,7 @@ class TiedostonLukeminen {
      for (i <- 0 until nuottiDataRiveina.size) {
            var splitattuRivi = nuottiDataRiveina(i).split(" ") // mieti tunnisteiden ja sointujen caset myöhemmin
            for (alkio <- splitattuRivi) {
-             println("rivillä " + i + ": " +  alkio)
+      //       println("rivillä " + i + ": " +  alkio)
              if (alkio == "") {} // ylimääräisiä välilyöntejä ei nuottiAlkiot:hin
              else if (oikeellisuusTesti(alkio) == "") {
        //           if(filtteredNote.size == 3 && (filtteredNote.tail.contains("#")  || filtteredNote.tail.contains("b")))   e2# --> e#2 TODO
@@ -117,6 +123,7 @@ class TiedostonLukeminen {
       for (rivi <- helpFile.getLines) {
         println(rivi)
       }
+      println()
     } finally {
       helpFile.close()
     }
@@ -132,8 +139,10 @@ class TiedostonLukeminen {
          else{
             if(!"cdefgah".contains(filtteredNote.toLowerCase().head.toString()))
                return "nuotin/tauon pitää alkaa kirjaimilla cdefgahz"   // väärä teksti jos "zz"
-             else if(filtteredNote.size == 1 && !(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   
+            else if(filtteredNote.size == 1 && !(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   
                return "tarkoititko "+ syote + "1 vai " + syote + "2?"   
+            else if(filtteredNote.size == 2 && (filtteredNote.tail.contains("#") || filtteredNote.tail.contains("b")) && !(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   
+               return "tarkoititko "+ syote + "1 vai " + syote + "2?"      
             else if(filtteredNote.tail.contains("#b") ||  filtteredNote.tail.contains("b#"))    
                 return "nuotissa on ylennys- ja alennusmerkki"   
             else if( !(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   

@@ -1,3 +1,11 @@
+Ihan ensiksi luo uusi tiedosto input -hakemistoon.
+
+Sitten voit ruveta kirjoittamaan nuotteja G-avaimelle. Alin mahdollinen ääni on keski-c, ylin 2-viivainen a.
+Erottele äänet toisistaan välilyönnillä (saa olla useitakin).
+Tahtiviivoja ei merkitä.
+
+Rivinvaihtoja saa käyttää vapaasti.
+
 Tässä esimerkki kuinka kirjoitat Ukko Nooan alkaen keski-c:stä:
 c1- c1- c1- e1- d1- d1- d1- f1- e1- e1- d1- d1- c1----
 
@@ -21,13 +29,13 @@ yksiviivainen fis ja f peräkkäin, kirjoita f#1 f1.
 Muista aina oktaaviala (1 tai 2), muutoin ohjelma ei tiedä, kumpaa nuottia tarkoitat.  
 
 
-_______ JO NÄILLÄ OHJEILLA KANNATTAA KOKEILLA OHJELMAN KÄYTTÖÄ _____________________
-_______ JOS OLET ENSIKERTALAINEN.___________________________________________________
+_______ JO NÄILLÄ OHJEILLA KANNATTAA KOKEILLA OHJELMAN KÄYTTÖÄ _______________________________
+_______ JOS OLET ENSIKERTALAINEN______________________________________________________________
 
 
 
 
-_______ ALLA LISÄOHJEITA EDISTYNEILLE:______________________________________________
+_______ ALLA LISÄOHJEITA EDISTYNEILLE:________________________________________________________
 
 Soinnut: ..... blaah......
 
@@ -40,3 +48,6 @@ Jos haluat kappaleelle nimen, kirjoita esim #nimi Säkkijärven polkka
 
 Jos kappale ei mene 4/4-tahtilajissa, tulee merkitä (jonkin) rivin alkuun moneenko lasketaan seuraavasti: 
 #3 (kolmijakoinen) tai vaikkapa #5 (viisijakoinen)
+
+________________________________________________________________________________________________________________
+____________________________________TIEDOSTOJA:_________________________________________________________________
