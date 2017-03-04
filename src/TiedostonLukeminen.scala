@@ -58,7 +58,7 @@ class TiedostonLukeminen {
      }
 
      kasitteleTunnisteet(inputFromFile) // tämä pitää tehdä ennen splittaamista !!!! esim tunniste  #Let's get together
-     println("nuottiDataRiveina :" + nuottiDataRiveina + " nuottiDatanRivinumerot: " + nuottiDatanRivinumerot)
+     // println("nuottiDataRiveina :" + nuottiDataRiveina + " nuottiDatanRivinumerot: " + nuottiDatanRivinumerot)
  
      // splittaus & virheiden tarkistus:  
      var virheitaNolla = true
@@ -70,6 +70,11 @@ class TiedostonLukeminen {
              
           // S O I N T U   
              else if (alkio.head == '<'){ 
+                 if(alkio.last != '>'){
+                      val korjattuVersio = readLine("\n syöte '" + alkio +"' on virheellinen:  puuttuu soinnun lopetussymboli '>'" + 
+                       "\n Virhe on rivillä " + (nuottiDatanRivinumerot(i)+1)  +
+                       "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")
+                 }      
                  val sointu =  alkio.tail.substring(0, alkio.size -2).split(",")  
                  for(aani <- sointu) {
                     if (oikeellisuusTesti(aani) == "") {}
@@ -117,7 +122,6 @@ class TiedostonLukeminen {
           //         if(inputFromFile(i).tail.trim.substring(1,inputFromFile(i).tail.size) != 0)  //  TODO samalla rivillä tahtilaji ja nuotteja
           //           nuottiDataRiveina += inputFromFile(i).tail.trim.substring(1,inputFromFile(i).tail.size)
              if (inputFromFile(i).tail.toLowerCase().contains("nimi")) {
-               println(inputFromFile(i).size)
                kappaleenNimi = inputFromFile(i).tail.substring(5, inputFromFile(i).tail.size)
                
              }

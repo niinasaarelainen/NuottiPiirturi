@@ -116,8 +116,9 @@ class NuottiPiirturi(){
    } 
   
    
-   def tutkiEtumerkit(nuotinNimi: String): String = {     
+   def tutkiEtumerkit(nuotinNimi: String): String = {  
      
+      // tutkitaan ylennettyjä ja alennettuja nuotteja
       if(nuotinNimi.contains("#") || nuotinNimi.contains("b")){
               if(this.tahdinAikaisetEtumerkit.contains(nuotinNimi))
                   return "n"   // n = nuottikuva neutral, nuotti on ylennetty/alennettu mutta merkkiä ei piirretä
@@ -128,19 +129,20 @@ class NuottiPiirturi(){
               }  // tai vain lisätään puskuriin
               else  this.tahdinAikaisetEtumerkit += nuotinNimi   
              
+     // selvitetään tarvitaanko palautusmerkkiä         
       } else if ( this.tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last).size > 0  ){
-              val tulokset = tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last)
-              for(tulos <- tulokset)  tahdinAikaisetEtumerkit -= tulos              // otetaan esim g#1 pois puskurista, koska se on nyt §-tilassa
-              return "§"   // esim f#1 ja f1 peräkkäin, tarvitaan palautusmerkki                  
-      } else if ( this.tahdinAikaisetEtumerkit.contains("b1") && nuotinNimi == "h1"){
-               tahdinAikaisetEtumerkit -= "b1"
-               return "§"
-      } else if ( this.tahdinAikaisetEtumerkit.contains("b2") && nuotinNimi == "h2"){
+             val tulokset = tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last)
+             for(tulos <- tulokset)  tahdinAikaisetEtumerkit -= tulos              // otetaan esim g#1 pois puskurista, koska se on nyt §-tilassa
+              // vielä pari poikkeustapausta johtuen epäloogisesta nuotinnimestä b
+             if ( this.tahdinAikaisetEtumerkit.contains("b1") && nuotinNimi == "h1"){
+                tahdinAikaisetEtumerkit -= "b1"
+             } else if ( this.tahdinAikaisetEtumerkit.contains("b2") && nuotinNimi == "h2"){
                tahdinAikaisetEtumerkit -= "b2"
-               return "§"
-      }    
+             }  
+             return "§"                  
+      } 
       
-      return ""        
+      return ""        // muutoin ei tarvita puskuritoimenpiteitä tai extraetumerkkiä
    }
    
    

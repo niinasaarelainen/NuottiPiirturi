@@ -260,10 +260,9 @@ class KahdeksasosaPari (ekaNuotti: KahdeksasosaNuotti, tokaNuotti: KahdeksasosaN
            viivasto(y("c1")) = viivasto(y("c1")).substring(0, 6) + "--" +  viivasto(y("c1")).substring(8, 10) + "--"     
        if(tokaNuotti.nimiMapissa == "a2")        
            viivasto(y("a2")) = viivasto(y("a2")).substring(0, 6) + "--" +  viivasto(y("a2")).substring(8, 10) + "--"     
-       if(Array("h2", "b2", "bb2").contains(tokaNuotti.nimiMapissa)) {  
+       if(Array("h2", "b2", "bb2").contains(tokaNuotti.nimiMapissa))  
              viivasto(y("a2")) = viivasto(y("a2")).substring(0, 6) + "--" +  viivasto(y("a2")).substring(7, 8) + "--"  +  viivasto(y("a2")).substring(11)
-             println("apua")
-       }    
+            
        if(tokaNuotti.etumerkki.size == 0 && tokaNuotti.extraetumerkkiDef.size == 0)  // ei etumerkkiä
             viivasto(y(tokaNuotti.nimiMapissa)) = viivasto(y(tokaNuotti.nimiMapissa)).substring(0, 8) + tokaNuotti.nuppi + viivasto(y(tokaNuotti.nimiMapissa)).substring(10)  
        else
