@@ -46,9 +46,7 @@ class TiedostonLukeminen {
   def lueJaTarkistaVirheet() = {
     try {
       for (rivi <- tiedosto.getLines) {
-        if (rivi.trim.size != 0) {            
           inputFromFile += rivi.trim
-        }
       }
     } finally {
       tiedosto.close()
@@ -66,7 +64,7 @@ class TiedostonLukeminen {
         else if (oikeellisuusTesti(alkio)) {
           nuottiAlkiot = nuottiAlkiot :+ alkio
         } else {
-          val korjattuVersio = readLine("\nvirhe xxx rivillä : " + (i +nuottiDatanRivinumerot.min +1) + "  Korjaa tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")
+          val korjattuVersio = readLine("\nvirhe xxx rivillä : " + (i +nuottiDatanRivinumerot.max +1) + "  Korjaa tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")
         }
       }
     } // end koko syöte
@@ -80,6 +78,7 @@ class TiedostonLukeminen {
 
     var seuraavatrivitLyriikkaan = false
     for (i <- 0 until inputFromFile.size) {
+      if (inputFromFile(i).trim.size != 0){  
       if (inputFromFile(i).head == '#') {
         if (inputFromFile(i).tail.toLowerCase().trim.contains("sanat")) //  T U N N I S T E E T
           seuraavatrivitLyriikkaan = true
@@ -96,13 +95,18 @@ class TiedostonLukeminen {
         }
 
       } else if (seuraavatrivitLyriikkaan)
-        lyriikkadata += (inputFromFile(i)) // L Y R I I K A 
+         if (inputFromFile(i).trim.size != 0)
+            lyriikkadata += (inputFromFile(i)) // L Y R I I K A 
+           else (" trim.size == 0  @ lyr")   
 
-      else {
-        nuottiDataRiveina += inputFromFile(i).toLowerCase() // L O P U T   ELI   N U O T I T
-        nuottiDatanRivinumerot += i
+      else {    // L O P U T   ELI   N U O T I T      
+         nuottiDatanRivinumerot += i
+         if (inputFromFile(i).trim.size != 0)    // edellisellä rivillä otetaan tyhjänkin rivin indeksi talteen ennen trimmausta
+            nuottiDataRiveina += inputFromFile(i).toLowerCase() 
+         else (" trim.size == 0  @ nuotit") 
       }
     }
+    } // if   .size != 0 
   }
 
   def helppiTeksti() = {
@@ -118,7 +122,7 @@ class TiedostonLukeminen {
   }
 
   def oikeellisuusTesti(nuottiJaPituus: String): Boolean = {
-
+   // true
     false
   } // end oikeellisuusTesti
 
