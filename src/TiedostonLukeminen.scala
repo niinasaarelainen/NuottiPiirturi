@@ -39,10 +39,7 @@ class TiedostonLukeminen {
 
   val tiedosto = Source.fromFile("input_virheita/" + tiedostonNimi)
 
-  do {
-    MIDIPatch = readLine("\nMillä soundilla haluat kuulla kappaleen?\n" +
-      "ENTER= en millään,  1= piano,  2= vibrafoni,  3= rock-urut,  4= syna,  5= akustinen kitara,  6= rokkibändi,  7=music box  ")
-  } while (!"1234567".contains(MIDIPatch))
+ 
 
   def onkoListalla(nimi: String): Boolean = {
     for (tiedosto <- inputhakemisto.listFiles())
@@ -64,6 +61,7 @@ class TiedostonLukeminen {
      println("nuottiDataRiveina :" + nuottiDataRiveina + " nuottiDatanRivinumerot: " + nuottiDatanRivinumerot)
  
      // splittaus & virheiden tarkistus:  
+     var virheitaNolla = true
      for (i <- 0 until nuottiDataRiveina.size) {
            var splitattuRivi = nuottiDataRiveina(i).split(" ") // mieti tunnisteiden ja sointujen caset myöhemmin
            for (alkio <- splitattuRivi) {
@@ -74,13 +72,15 @@ class TiedostonLukeminen {
         //   else
                   nuottiAlkiot = nuottiAlkiot :+ alkio
              } else {
+             virheitaNolla =  false  
              val korjattuVersio = readLine("\n syöte '" + alkio +"' on virheellinen: " + oikeellisuusTesti(alkio) + 
                "\n Virhe on rivillä " + (nuottiDatanRivinumerot(i)+1)  +
                "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")
              }
            }
     } // end for nuottiDataRiveina
-    
+     
+    if (virheitaNolla) soundiValinta()
     println("nuottiAlkiot.size: " + nuottiAlkiot.size)
     //     for (i <- 0 until nuottiAlkiot.size)
     //        println (nuottiAlkiot(i))     
@@ -128,6 +128,13 @@ class TiedostonLukeminen {
       helpFile.close()
     }
   }
+  
+  def soundiValinta() = {
+     do {
+     MIDIPatch = readLine("\nMillä soundilla haluat kuulla kappaleen?\n" +
+      "ENTER= en millään,  1= piano,  2= vibrafoni,  3= rock-urut,  4= syna,  5= akustinen kitara,  6= rokkibändi,  7=music box  ")
+     } while (!"1234567".contains(MIDIPatch))
+  }
 
   def oikeellisuusTesti(syote: String): String = {    // esim. g#1---
   
@@ -137,8 +144,8 @@ class TiedostonLukeminen {
          if(filtteredNote == "z")
             return ""
          else{
-            if(!"cdefgah".contains(filtteredNote.toLowerCase().head.toString()))
-               return "nuotin/tauon pitää alkaa kirjaimilla cdefgahz"   // väärä teksti jos "zz"
+            if(!"cdefgahb".contains(filtteredNote.toLowerCase().head.toString()))
+               return "nuotin/tauon pitää alkaa kirjaimilla cdefgahbz"   // väärä teksti jos "zz"
             else if(filtteredNote.size == 1 && !(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   
                return "tarkoititko "+ syote + "1 vai " + syote + "2?"   
             else if(filtteredNote.size == 2 && (filtteredNote.tail.contains("#") || filtteredNote.tail.contains("b")) && !(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   

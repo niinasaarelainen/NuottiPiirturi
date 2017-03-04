@@ -5,7 +5,7 @@ import scala.collection.mutable.Map
 trait ViivastolleLaitettava {  
   
    var viivasto = Buffer[String]()   
-   val y = Map("lyr" -> 17, "alatila" ->16, "c1" -> 15, "d1" -> 14,  "e1" -> 13,  "f1" -> 12,  "g1"-> 11,  "a1"->10,  "h1" -> 9, "c2" -> 8, "d2" -> 7,  "e2" -> 6,  "f2" -> 5,  "g2"-> 4,  "a2"-> 3, "ylatila1" -> 2, "ylatila2" -> 1, "ylatila3" -> 0)
+   val y = Map("lyr" -> 17, "alatila" ->16, "c1" -> 15, "d1" -> 14,  "e1" -> 13,  "f1" -> 12,  "g1"-> 11,  "a1"->10,  "h1" -> 9, "b1" -> 9, "c2" -> 8, "d2" -> 7,  "e2" -> 6,  "f2" -> 5,  "g2"-> 4,  "a2"-> 3, "ylatila1" -> 2, "ylatila2" -> 1, "ylatila3" -> 0)
 
    
    def kuva: Buffer[String]   
@@ -112,8 +112,16 @@ class KokoNuotti(nuotinNimi: String, extraetumerkki: String = "") extends Nuotti
      def korkeus = nuotinNimi
      def pituus = 4.0
      def kuvanLeveys = 20
-     def nimiMapissa = nuotinNimi.filter(_ !='#').filter(_ != 'b') // esim. gb1 --> g1
-     def etumerkki = if(extraetumerkki == "n") "" else if (nuotinNimi.size == 3) nuotinNimi(1).toString else ""
+     def nimiMapissa = {
+       if(nuotinNimi.head == 'b' ) nuotinNimi    // caset b1
+       else  nuotinNimi.filter(_ !='#').filter(_ != 'b') // esim. gb1 --> g1
+     }
+     def etumerkki = {
+       if(extraetumerkki == "n") "" 
+       else if (nuotinNimi.size == 3) nuotinNimi(1).toString 
+       else if (nuotinNimi.head == 'b') "b"
+       else ""
+     }
      def extraetumerkkiDef = if(extraetumerkki == "n") "" else extraetumerkki   
      def getExtraetumerkki = extraetumerkki
   
