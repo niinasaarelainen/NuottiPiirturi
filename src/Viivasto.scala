@@ -75,7 +75,7 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
          kasitteleYksiTavu(laitettava.kuvanLeveys/2)    // ekan tavun tila on puolet parin tilasta   TODO miksi  laitettava.kuvanLeveys/2 kaataa??
          
          if ( lyricsBuffer(lyricsInd).size > laitettava.kuvanLeveys/2){ 
-              tavu2 = lyricsBuffer(lyricsInd).substring(0, laitettava.kuvanLeveys/2 -1)
+              tavu2 = lyricsBuffer(lyricsInd).substring(0, laitettava.kuvanLeveys/2 )
          } else {
               tavu2 = lyricsBuffer(lyricsInd)
          }

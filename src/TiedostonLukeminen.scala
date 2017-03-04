@@ -48,7 +48,7 @@ class TiedostonLukeminen {
     false
   }
 
-  def lueJaTarkistaVirheet() = {       // TODO   <  eli soinnut !?!?!?
+  def lueJaTarkistaVirheet() = {      
      try {
        for (rivi <- tiedosto.getLines) {
           inputFromFile += rivi.trim
@@ -139,7 +139,7 @@ class TiedostonLukeminen {
   }
 
   def helppiTeksti() = {
-    val helpFile = Source.fromFile("help.txt")    // TODO 2 helppiä: basic ja advanced teksit. "Tarvitsetko ohjeita sanoituksiin? "
+    val helpFile = Source.fromFile("help.txt")   
 
     try {
       for (rivi <- helpFile.getLines) {
