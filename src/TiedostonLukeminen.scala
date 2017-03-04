@@ -6,7 +6,8 @@ import java.io._
 class TiedostonLukeminen {
 
   var inputFromFile = Buffer[String]() // kaikki input, paitsi tyhjät rivit
-  val nuottidata = Buffer[String]() // loput, eli nuottidata
+  val nuottiDataRiveina = Buffer[String]() // loput, eli nuottiDataRiveina
+  var nuottiDatanRivinumerot = Buffer[Int]()
   val lyriikkadata = Buffer[String]() // biisin sanat
   var nuottiAlkiot = Array[String]() // splitattuna yllä oleva tiedosto
 
@@ -45,7 +46,7 @@ class TiedostonLukeminen {
   def lueJaTarkistaVirheet() = {
     try {
       for (rivi <- tiedosto.getLines) {
-        if (rivi.trim.size != 0) {
+        if (rivi.trim.size != 0) {            
           inputFromFile += rivi.trim
         }
       }
@@ -54,18 +55,18 @@ class TiedostonLukeminen {
     }
 
     kasitteleTunnisteet(inputFromFile) // tämä pitää tehdä ennen splittaamista !!!! esim tunniste  #Let's get together
-    println("nuottidata :" + nuottidata)
+    println("nuottiDataRiveina :" + nuottiDataRiveina)
  
     // splittaus & virheiden tarkistus:  
-    for (i <- 0 until nuottidata.size) {
-      var splitattuRivi = nuottidata(i).split(" ") // mieti tunnisteiden ja sointujen caset myöhemmin
+    for (i <- 0 until nuottiDataRiveina.size) {
+      var splitattuRivi = nuottiDataRiveina(i).split(" ") // mieti tunnisteiden ja sointujen caset myöhemmin
       for (alkio <- splitattuRivi) {
         //    println("rivillä " + i + alkio)
         if (alkio == "") {} // ylimääräisiä välilyöntejä ei nuottiAlkiot:hin
         else if (oikeellisuusTesti(alkio)) {
           nuottiAlkiot = nuottiAlkiot :+ alkio
         } else {
-          val korjattuVersio = readLine("\nvirhe xxx. Korjaa tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")
+          val korjattuVersio = readLine("\nvirhe xxx rivillä : " + (i +nuottiDatanRivinumerot.min +1) + "  Korjaa tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")
         }
       }
     } // end koko syöte
@@ -86,7 +87,7 @@ class TiedostonLukeminen {
          if ("2345678".contains(inputFromFile(i).tail))
             tahtilaji = inputFromFile(i).tail
           //         if(inputFromFile(i).tail.trim.substring(1,inputFromFile(i).tail.size) != 0)  //  TODO samalla rivillä tahtilaji ja nuotteja
-          //           nuottidata += inputFromFile(i).tail.trim.substring(1,inputFromFile(i).tail.size)
+          //           nuottiDataRiveina += inputFromFile(i).tail.trim.substring(1,inputFromFile(i).tail.size)
           if (inputFromFile(i).tail.toLowerCase().contains("nimi")) {
             println(inputFromFile(i).size)
             kappaleenNimi = inputFromFile(i).tail.substring(5, inputFromFile(i).tail.size)
@@ -97,12 +98,15 @@ class TiedostonLukeminen {
       } else if (seuraavatrivitLyriikkaan)
         lyriikkadata += (inputFromFile(i)) // L Y R I I K A 
 
-      else nuottidata += inputFromFile(i).toLowerCase() // L O P U T   ELI   N U O T I T
+      else {
+        nuottiDataRiveina += inputFromFile(i).toLowerCase() // L O P U T   ELI   N U O T I T
+        nuottiDatanRivinumerot += i
+      }
     }
   }
 
   def helppiTeksti() = {
-    val helpFile = Source.fromFile("help.txt")
+    val helpFile = Source.fromFile("help.txt")    // TODO 2 helppiä: basic ja advanced teksit. "Tarvitsetko ohjeita sanoituksiin? "
 
     try {
       for (rivi <- helpFile.getLines) {
@@ -115,7 +119,7 @@ class TiedostonLukeminen {
 
   def oikeellisuusTesti(nuottiJaPituus: String): Boolean = {
 
-    true
+    false
   } // end oikeellisuusTesti
 
 }

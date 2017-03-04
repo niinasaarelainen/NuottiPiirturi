@@ -138,13 +138,10 @@ class NuottiPiirturi(){
    
    
    def kasitteleLyriikat() = {
-     
          for (rivi <-  inputTiedostosta.lyriikkadata){
             var splitattuRivi = rivi.replaceAll("-", "- ").split(" ")
-            for (alkio <- splitattuRivi) {
-                if (alkio == "") {}             // jos oli enemmän kuin 1 välilyönti, tulee turha alkio, ei mukaan lyricsBuffer:iin
-                else lyricsBuffer += alkio
-            }   
+            for (alkio <- splitattuRivi) 
+                if (alkio != "") lyricsBuffer += alkio
          }  
    }
  
