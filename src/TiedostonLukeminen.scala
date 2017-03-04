@@ -18,7 +18,7 @@ class TiedostonLukeminen {
 
   helppiTeksti()
 
-  val inputhakemisto = new File("./input")
+  val inputhakemisto = new File("./input_virheita")
   for (tiedosto <- inputhakemisto.listFiles()) {
     if (tiedosto.isFile) {
       println(tiedosto.getName)
@@ -29,7 +29,7 @@ class TiedostonLukeminen {
     tiedostonNimi = readLine("\nMinkä nimisen tiedoston haluat nuoteiksi? Valitse ylläolevista. ")
   } while (!onkoListalla(tiedostonNimi))
 
-  val tiedosto = Source.fromFile("input/" + tiedostonNimi)
+  val tiedosto = Source.fromFile("input_virheita/" + tiedostonNimi)
 
   do {
     MIDIPatch = readLine("\nMillä soundilla haluat kuulla kappaleen?\n" +
@@ -43,7 +43,7 @@ class TiedostonLukeminen {
     false
   }
 
-  def lueJaTarkistaVirheet() = {
+  def lueJaTarkistaVirheet() = {       // TODO   <  eli soinnut !?!?!?
     try {
       for (rivi <- tiedosto.getLines) {
           inputFromFile += rivi.trim
@@ -61,10 +61,12 @@ class TiedostonLukeminen {
       for (alkio <- splitattuRivi) {
         //    println("rivillä " + i + alkio)
         if (alkio == "") {} // ylimääräisiä välilyöntejä ei nuottiAlkiot:hin
-        else if (oikeellisuusTesti(alkio)) {
+        else if (oikeellisuusTesti(alkio) == "") {
           nuottiAlkiot = nuottiAlkiot :+ alkio
         } else {
-          val korjattuVersio = readLine("\nvirhe xxx rivillä : " + (i +nuottiDatanRivinumerot.max +1) + "  Korjaa tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")
+          val korjattuVersio = readLine("\n syöte '" + alkio +"' on virheellinen: " + oikeellisuusTesti(alkio) + 
+              "\n Virhe on rivillä " + (i +nuottiDatanRivinumerot.min +1) +
+              "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")
         }
       }
     } // end koko syöte
@@ -121,9 +123,33 @@ class TiedostonLukeminen {
     }
   }
 
-  def oikeellisuusTesti(nuottiJaPituus: String): Boolean = {
-   // true
-    false
+  def oikeellisuusTesti(syote: String): String = {    // esim. g#1---
+  
+         var virheita = 0
+         val filtteredNote = syote.filter(_ != '-').filter(_ != '.')
+         
+         if(filtteredNote == "z")
+            return ""
+         else{
+            if(!"cdefgah".contains(filtteredNote.toLowerCase().head.toString()))
+               return "nuotin/tauon pitää alkaa kirjaimilla cdefgahz"   // väärä teksti jos "zz"
+            else if(!(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   
+               return "oktaavialat ovat joko 1 tai 2"
+            else if(filtteredNote.size < 2)
+               return "oktaaviala puuttuu"
+            else if(filtteredNote.size > 3)
+                return "liian pitkä nuotin nimi"
+            else if(filtteredNote.tail.contains("#b") ||  filtteredNote.tail.contains("#b"))    
+                return "nuotissa on ylennys- ja alennusmerkki"
+            else if(filtteredNote.contains("h") &&   filtteredNote.contains("2"))  // löytää h2, h#2, hb2 = piirtoalueen ulkopuolella    
+                return "noin korkeaa nuottia en osaa piirtää"            
+            else if(filtteredNote.size == 3 && !(filtteredNote.tail.contains("#") || filtteredNote.tail.contains("b")))   
+                    return "nuotissa pitäisi varmaankin olla # tai b"
+              // }     
+             else ""     
+          
+          } // iso else
+    
   } // end oikeellisuusTesti
 
 }
