@@ -19,9 +19,11 @@ class NuottiPiirturi(){
    nuottiData = kasitteleNuottiTieto(inputBuffer, nuottiData)    
    if(inputTiedostosta.lyriikkadata.size != 0)
        kasitteleLyriikat() 
-   tehdaanKahdeksasosaParit()
+//   tehdaanKahdeksasosaParit()
  
-   val viivasto = new Viivasto(nuottiDataParitettu, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)
+   val viivasto = new Viivasto(nuottiData, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)
+ 
+ //  val viivasto = new Viivasto(nuottiDataParitettu, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)
    viivasto.piirraNuotit()
    
     // jos kuunnellaan, tallennuskäsky pitää antaa kuuntelun jälkeen, muuten se tulee ruudulle ennen nuotteja

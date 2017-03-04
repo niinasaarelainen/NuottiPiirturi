@@ -7,15 +7,17 @@ class TiedostonLukeminen {
 
   var inputFromFile = Buffer[String]() // kaikki input, paitsi tyhjät rivit
   val nuottiDataRiveina = Buffer[String]() // loput, eli nuottiDataRiveina
+  var nuottiAlkiot = Array[String]() // splitattuna yllä oleva tiedosto
   var nuottiDatanRivinumerot = Buffer[Int]()
   val lyriikkadata = Buffer[String]() // biisin sanat
-  var nuottiAlkiot = Array[String]() // splitattuna yllä oleva tiedosto
 
   var MIDIPatch = ""
   var tahtilaji = "4"
   var kappaleenNimi = ""
   var tiedostonNimi = ""
 
+  
+ 
   helppiTeksti()
 
   val inputhakemisto = new File("./input_virheita")
@@ -44,36 +46,36 @@ class TiedostonLukeminen {
   }
 
   def lueJaTarkistaVirheet() = {       // TODO   <  eli soinnut !?!?!?
-    try {
-      for (rivi <- tiedosto.getLines) {
+     try {
+       for (rivi <- tiedosto.getLines) {
           inputFromFile += rivi.trim
-      }
-    } finally {
-      tiedosto.close()
-    }
+       }
+     } finally {
+        tiedosto.close()
+     }
 
-    kasitteleTunnisteet(inputFromFile) // tämä pitää tehdä ennen splittaamista !!!! esim tunniste  #Let's get together
-    println("nuottiDataRiveina :" + nuottiDataRiveina)
+     kasitteleTunnisteet(inputFromFile) // tämä pitää tehdä ennen splittaamista !!!! esim tunniste  #Let's get together
+     println("nuottiDataRiveina :" + nuottiDataRiveina + " nuottiDatanRivinumerot: " + nuottiDatanRivinumerot)
  
-    // splittaus & virheiden tarkistus:  
-    for (i <- 0 until nuottiDataRiveina.size) {
-      if (inputFromFile(i).trim.size != 0) {
-         var splitattuRivi = nuottiDataRiveina(i).split(" ") // mieti tunnisteiden ja sointujen caset myöhemmin
-         for (alkio <- splitattuRivi) {
-        //    println("rivillä " + i + alkio)
-           if (alkio == "") {} // ylimääräisiä välilyöntejä ei nuottiAlkiot:hin
-           else if (oikeellisuusTesti(alkio) == "") {
-             nuottiAlkiot = nuottiAlkiot :+ alkio
-           } else {
-           val korjattuVersio = readLine("\n syöte '" + alkio +"' on virheellinen: " + oikeellisuusTesti(alkio) + 
-              "\n Virhe on rivillä " + (nuottiDatanRivinumerot(i)+1)  +
-              "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")
+     // splittaus & virheiden tarkistus:  
+     for (i <- 0 until nuottiDataRiveina.size) {
+           var splitattuRivi = nuottiDataRiveina(i).split(" ") // mieti tunnisteiden ja sointujen caset myöhemmin
+           for (alkio <- splitattuRivi) {
+             println("rivillä " + i + ": " +  alkio)
+             if (alkio == "") {} // ylimääräisiä välilyöntejä ei nuottiAlkiot:hin
+             else if (oikeellisuusTesti(alkio) == "") {
+       //           if(filtteredNote.size == 3 && (filtteredNote.tail.contains("#")  || filtteredNote.tail.contains("b")))   
+        //   else
+                  nuottiAlkiot = nuottiAlkiot :+ alkio
+             } else {
+             val korjattuVersio = readLine("\n syöte '" + alkio +"' on virheellinen: " + oikeellisuusTesti(alkio) + 
+               "\n Virhe on rivillä " + (nuottiDatanRivinumerot(i)+1)  +
+               "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")
+             }
            }
-         }
-      } 
     } // end for nuottiDataRiveina
     
-    println(nuottiAlkiot.size)
+    println("nuottiAlkiot.size: " + nuottiAlkiot.size)
     //     for (i <- 0 until nuottiAlkiot.size)
     //        println (nuottiAlkiot(i))     
   }
@@ -83,34 +85,29 @@ class TiedostonLukeminen {
     var seuraavatrivitLyriikkaan = false
     for (i <- 0 until inputFromFile.size) {
       if (inputFromFile(i).trim.size != 0){  
-      if (inputFromFile(i).head == '#') {
-        if (inputFromFile(i).tail.toLowerCase().trim.contains("sanat")) //  T U N N I S T E E T
-          seuraavatrivitLyriikkaan = true
-        else if (seuraavatrivitLyriikkaan == false) {
-         if ("2345678".contains(inputFromFile(i).tail))
-            tahtilaji = inputFromFile(i).tail
+         if (inputFromFile(i).head == '#') {
+           if (inputFromFile(i).tail.toLowerCase().trim.contains("sanat")) //  T U N N I S T E E T
+             seuraavatrivitLyriikkaan = true
+           else if (seuraavatrivitLyriikkaan == false) {
+            if ("2345678".contains(inputFromFile(i).tail))
+               tahtilaji = inputFromFile(i).tail
           //         if(inputFromFile(i).tail.trim.substring(1,inputFromFile(i).tail.size) != 0)  //  TODO samalla rivillä tahtilaji ja nuotteja
           //           nuottiDataRiveina += inputFromFile(i).tail.trim.substring(1,inputFromFile(i).tail.size)
-          if (inputFromFile(i).tail.toLowerCase().contains("nimi")) {
-            println(inputFromFile(i).size)
-            kappaleenNimi = inputFromFile(i).tail.substring(5, inputFromFile(i).tail.size)
-            println("kappaleenNimi: " + kappaleenNimi + "tahtilaji" + tahtilaji)
-          }
+             if (inputFromFile(i).tail.toLowerCase().contains("nimi")) {
+               println(inputFromFile(i).size)
+               kappaleenNimi = inputFromFile(i).tail.substring(5, inputFromFile(i).tail.size)
+               println("kappaleenNimi: " + kappaleenNimi + "tahtilaji" + tahtilaji)
+             }
+           }
+        } else if (seuraavatrivitLyriikkaan){
+             lyriikkadata += (inputFromFile(i)) // L Y R I I K A 
         }
-
-      } else if (seuraavatrivitLyriikkaan)
-         if (inputFromFile(i).trim.size != 0)
-            lyriikkadata += (inputFromFile(i)) // L Y R I I K A 
-           else (" trim.size == 0  @ lyr")   
-
-      else {    // L O P U T   ELI   N U O T I T      
-         nuottiDatanRivinumerot += i
-           // edellisellä rivillä otetaan tyhjänkin rivin indeksi talteen ennen trimmausta
-            nuottiDataRiveina += inputFromFile(i).toLowerCase() 
-      //   else (" trim.size == 0  @ nuotit") 
-      }
-    }
-    } // if   .size != 0 
+        else {    // L O P U T   ELI   N U O T I T      
+          nuottiDatanRivinumerot += i
+          nuottiDataRiveina += inputFromFile(i).toLowerCase() 
+        }
+      }// if   .size != 0 
+    } 
   }
 
   def helppiTeksti() = {
@@ -135,20 +132,23 @@ class TiedostonLukeminen {
          else{
             if(!"cdefgah".contains(filtteredNote.toLowerCase().head.toString()))
                return "nuotin/tauon pitää alkaa kirjaimilla cdefgahz"   // väärä teksti jos "zz"
+            else if(filtteredNote.tail.contains("#b") ||  filtteredNote.tail.contains("#b"))    
+                return "nuotissa on ylennys- ja alennusmerkki"   
+             else if(filtteredNote.size == 2 && !(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   
+               return "sallitut oktaavialat ovat 1 ja 2"    
             else if(!(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   
-               return "oktaavialat ovat joko 1 tai 2"
-            else if(filtteredNote.size < 2)
-               return "oktaaviala puuttuu"
+               return "tarkoititko "+ syote + "1 vai " + syote + "2?"
+     //       else if(filtteredNote.size < 2)      turha ?
+       //        return "oktaaviala puuttuu"
             else if(filtteredNote.size > 3)
                 return "liian pitkä nuotin nimi"
-            else if(filtteredNote.tail.contains("#b") ||  filtteredNote.tail.contains("#b"))    
-                return "nuotissa on ylennys- ja alennusmerkki"
+           
             else if(filtteredNote.contains("h") &&   filtteredNote.contains("2"))  // löytää h2, h#2, hb2 = piirtoalueen ulkopuolella    
-                return "noin korkeaa nuottia en osaa piirtää"            
+                return "noin korkeaa nuottia en osaa piirtää, ylin mahdollinen nuotti on a#2"            
             else if(filtteredNote.size == 3 && !(filtteredNote.tail.contains("#") || filtteredNote.tail.contains("b")))   
                     return "nuotissa pitäisi varmaankin olla # tai b"
-              // }     
-             else ""     
+                  
+            else ""     
           
           } // iso else
     
