@@ -64,7 +64,7 @@ class TiedostonLukeminen {
              println("rivillä " + i + ": " +  alkio)
              if (alkio == "") {} // ylimääräisiä välilyöntejä ei nuottiAlkiot:hin
              else if (oikeellisuusTesti(alkio) == "") {
-       //           if(filtteredNote.size == 3 && (filtteredNote.tail.contains("#")  || filtteredNote.tail.contains("b")))   
+       //           if(filtteredNote.size == 3 && (filtteredNote.tail.contains("#")  || filtteredNote.tail.contains("b")))   e2# --> e#2 TODO
         //   else
                   nuottiAlkiot = nuottiAlkiot :+ alkio
              } else {
@@ -132,21 +132,22 @@ class TiedostonLukeminen {
          else{
             if(!"cdefgah".contains(filtteredNote.toLowerCase().head.toString()))
                return "nuotin/tauon pitää alkaa kirjaimilla cdefgahz"   // väärä teksti jos "zz"
+             else if(filtteredNote.size == 1 && !(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   
+               return "tarkoititko "+ syote + "1 vai " + syote + "2?"   
             else if(filtteredNote.tail.contains("#b") ||  filtteredNote.tail.contains("#b"))    
                 return "nuotissa on ylennys- ja alennusmerkki"   
-             else if(filtteredNote.size == 2 && !(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   
-               return "sallitut oktaavialat ovat 1 ja 2"    
-            else if(!(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   
-               return "tarkoititko "+ syote + "1 vai " + syote + "2?"
+            else if( !(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   
+               return "sallitut oktaavialat ovat 1 ja 2"   
+            else if(filtteredNote.size == 3 && !(filtteredNote.tail.contains("#") || filtteredNote.tail.contains("b")))   
+                    return "nuotissa pitäisi varmaankin olla # tai b"   
+            else if(filtteredNote.size > 3)
+                return "liian pitkä nuotin nimi, puuttuukohan välilyönti?"        
+           
      //       else if(filtteredNote.size < 2)      turha ?
        //        return "oktaaviala puuttuu"
-            else if(filtteredNote.size > 3)
-                return "liian pitkä nuotin nimi"
            
             else if(filtteredNote.contains("h") &&   filtteredNote.contains("2"))  // löytää h2, h#2, hb2 = piirtoalueen ulkopuolella    
-                return "noin korkeaa nuottia en osaa piirtää, ylin mahdollinen nuotti on a#2"            
-            else if(filtteredNote.size == 3 && !(filtteredNote.tail.contains("#") || filtteredNote.tail.contains("b")))   
-                    return "nuotissa pitäisi varmaankin olla # tai b"
+                return "noin korkeaa nuottia ei pysty piirtää, ylin mahdollinen nuotti on a#2"    
                   
             else ""     
           
