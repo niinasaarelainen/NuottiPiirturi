@@ -5,7 +5,7 @@ import scala.collection.mutable.Map
 trait ViivastolleLaitettava {  
   
    var viivasto = Buffer[String]()   
-   val y = Map("lyr" -> 18, "alatila" ->17, "c1" -> 16, "d1" -> 15,  "e1" -> 14,  "f1" -> 13,  "g1"-> 12,  "a1"->11,  "h1" -> 10, "b1" -> 10, "c2" -> 9, "d2" -> 8,  "e2" -> 7,  "f2" -> 6,  "g2"-> 5,  "a2"-> 4, "h2" -> 3, "b2" -> 3, "ylatila2" -> 2, "ylatila3" -> 1, "ylatila4" -> 0)
+   val y = Map("lyr" -> 18, "alatila" ->17, "c1" -> 16, "d1" -> 15,  "e1" -> 14,  "f1" -> 13,  "g1"-> 12,  "a1"->11,  "h1" -> 10, "b1" -> 10, "bb1" -> 10, "c2" -> 9, "d2" -> 8,  "e2" -> 7,  "f2" -> 6,  "g2"-> 5,  "a2"-> 4, "h2" -> 3, "b2" -> 3, "bb2" -> 3, "ylatila2" -> 2, "ylatila3" -> 1, "ylatila4" -> 0)
 
    
    def kuva: Buffer[String]   
@@ -50,7 +50,7 @@ class Sointu(aanet: Buffer[ViivastolleLaitettava]) extends ViivastolleLaitettava
          val nuppi = aani.asInstanceOf[Nuotti].nuppi
          korkeudet += y(nimiMapissa)
          if(nimiMapissa == "c1")  viivasto(y("c1")) = viivasto(y("c1")).substring(0, 1) + "--" +  viivasto(y("c1")).substring(4, 6) + "--" + viivasto(y("c1")).substring(7)         
-         if(nimiMapissa == "a2")  viivasto(y("a2")) = viivasto(y("a2")).substring(0, 1) + "--" +  viivasto(y("a2")).substring(4, 6) + "--" + viivasto(y("a2")).substring(7)         
+         if(Array("a2", "h2", "b2", "bb2").contains(nimiMapissa))  viivasto(y("a2")) = viivasto(y("a2")).substring(0, 1) + "--" +  viivasto(y("a2")).substring(4, 6) + "--" + viivasto(y("a2")).substring(7)         
      
          if(etumerkki.size == 0 && extraetumerkki.size == 0)  // ei etumerkkiä
             viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 3) + nuppi + viivasto(y(nimiMapissa)).substring(5)  
@@ -113,7 +113,7 @@ class KokoNuotti(nuotinNimi: String, extraetumerkki: String = "") extends Nuotti
      def pituus = 4.0
      def kuvanLeveys = 20
      def nimiMapissa = {
-       if(nuotinNimi.head == 'b' ) nuotinNimi    // caset b1
+       if(nuotinNimi.head == 'b' ) nuotinNimi    // caset b1, b2
        else  nuotinNimi.filter(_ !='#').filter(_ != 'b') // esim. gb1 --> g1
      }
      def etumerkki = {
@@ -127,7 +127,7 @@ class KokoNuotti(nuotinNimi: String, extraetumerkki: String = "") extends Nuotti
   
      def piirraNuppi() = { 
         if(nimiMapissa=="c1") piirraAlaApuviiva()
-        if(nimiMapissa=="a2" || nimiMapissa=="h2" || nimiMapissa=="b2") piirraYlaApuviiva()
+        if(Array("a2", "h2", "b2", "bb2").contains(nimiMapissa)) piirraYlaApuviiva()
         if(etumerkki.size == 0 && extraetumerkkiDef.size == 0)  // ei etumerkkiä
            viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 3) + nuppi + viivasto(y(nimiMapissa)).substring(5)  
         else
@@ -258,11 +258,12 @@ class KahdeksasosaPari (ekaNuotti: KahdeksasosaNuotti, tokaNuotti: KahdeksasosaN
        // tokan nuppi:
        if(tokaNuotti.nimiMapissa == "c1")        
            viivasto(y("c1")) = viivasto(y("c1")).substring(0, 6) + "--" +  viivasto(y("c1")).substring(8, 10) + "--"     
-        if(tokaNuotti.nimiMapissa == "a2")        
+       if(tokaNuotti.nimiMapissa == "a2")        
            viivasto(y("a2")) = viivasto(y("a2")).substring(0, 6) + "--" +  viivasto(y("a2")).substring(8, 10) + "--"     
-         if(Array("h2", "b2").contains(tokaNuotti.nimiMapissa))   
+       if(Array("h2", "b2", "bb2").contains(tokaNuotti.nimiMapissa)) {  
              viivasto(y("a2")) = viivasto(y("a2")).substring(0, 6) + "--" +  viivasto(y("a2")).substring(7, 8) + "--"  +  viivasto(y("a2")).substring(11)
-           
+             println("apua")
+       }    
        if(tokaNuotti.etumerkki.size == 0 && tokaNuotti.extraetumerkkiDef.size == 0)  // ei etumerkkiä
             viivasto(y(tokaNuotti.nimiMapissa)) = viivasto(y(tokaNuotti.nimiMapissa)).substring(0, 8) + tokaNuotti.nuppi + viivasto(y(tokaNuotti.nimiMapissa)).substring(10)  
        else

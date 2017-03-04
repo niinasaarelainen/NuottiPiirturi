@@ -70,7 +70,6 @@ class TiedostonLukeminen {
              
           // S O I N T U   
              else if (alkio.head == '<'){ 
-                 var sointuBuffer = Buffer[String]()
                  val sointu =  alkio.tail.substring(0, alkio.size -2).split(",")  
                  for(aani <- sointu) {
                     if (oikeellisuusTesti(aani) == "") {}
