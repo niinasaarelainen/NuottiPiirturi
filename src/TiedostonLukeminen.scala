@@ -138,7 +138,7 @@ class TiedostonLukeminen {
 
   def oikeellisuusTesti(syote: String): String = {    // esim. g#1---
   
-         var virheita = 0
+    // N U O T T I E N   S Y N T A K SI ,  EI PITUUDET
          val filtteredNote = syote.filter(_ != '-').filter(_ != '.')
          
          if(filtteredNote == "z")
@@ -157,15 +157,22 @@ class TiedostonLukeminen {
             else if(filtteredNote.size == 3 && !(filtteredNote.tail.contains("#") || filtteredNote.tail.contains("b")))   
                     return "nuotissa pitäisi varmaankin olla # tai b"   
             else if(filtteredNote.size > 3)
-                return "liian pitkä nuotin nimi, puuttuukohan välilyönti?"        
-           
-     //       else if(filtteredNote.size < 2)      turha ?
-       //        return "oktaaviala puuttuu"
-                    
-            else ""     
-          
+                return "liian pitkä nuotin nimi, puuttuukohan välilyönti?"  
           } // iso else
+     
+     //  P I T U U D E T  
+         val lkm = syote.count(_ == '-')
+         if(lkm > 4)
+            return "maksimipituus nuotille on 4, eli viivoja korkeintaan ----"
+        else if(lkm == 3 && syote.contains("."))    // ohjelmassa ei määritelty pisteellistä pisteellistä puolinuottia
+          return "väärä pituus"
+        else if(lkm == 4 && syote.contains("."))   // max pituus 4
+           return "pisteellistä kokonuottia ei ole määritelty, tee kokonuotti ja 2 taukoa"
+        else if(lkm == 0 && syote.contains("."))    // ei pisteellistä kahdeksasosaa
+           return "tämä ohjelma ei osaa käsitellä pisteellistä kahdeksasosaa"
     
+        else ""     
+          
   } // end oikeellisuusTesti
 
 }

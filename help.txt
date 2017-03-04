@@ -1,6 +1,6 @@
 Ihan ensiksi luo uusi tiedosto input -hakemistoon.
 
-Sitten voit ruveta kirjoittamaan nuotteja G-avaimelle. Alin mahdollinen ääni on keski-c, ylin 2-viivainen a.
+Sitten voit ruveta kirjoittamaan nuotteja G-avaimelle. Alin mahdollinen ääni on keski-c, ylin 2-viivainen h.
 Erottele äänet toisistaan välilyönnillä (saa olla useitakin).
 Tahtiviivoja ei merkitä.
 
