@@ -57,20 +57,22 @@ class TiedostonLukeminen {
  
     // splittaus & virheiden tarkistus:  
     for (i <- 0 until nuottiDataRiveina.size) {
-      var splitattuRivi = nuottiDataRiveina(i).split(" ") // mieti tunnisteiden ja sointujen caset myöhemmin
-      for (alkio <- splitattuRivi) {
+      if (inputFromFile(i).trim.size != 0) {
+         var splitattuRivi = nuottiDataRiveina(i).split(" ") // mieti tunnisteiden ja sointujen caset myöhemmin
+         for (alkio <- splitattuRivi) {
         //    println("rivillä " + i + alkio)
-        if (alkio == "") {} // ylimääräisiä välilyöntejä ei nuottiAlkiot:hin
-        else if (oikeellisuusTesti(alkio) == "") {
-          nuottiAlkiot = nuottiAlkiot :+ alkio
-        } else {
-          val korjattuVersio = readLine("\n syöte '" + alkio +"' on virheellinen: " + oikeellisuusTesti(alkio) + 
-              "\n Virhe on rivillä " + (i +nuottiDatanRivinumerot.min +1) +
+           if (alkio == "") {} // ylimääräisiä välilyöntejä ei nuottiAlkiot:hin
+           else if (oikeellisuusTesti(alkio) == "") {
+             nuottiAlkiot = nuottiAlkiot :+ alkio
+           } else {
+           val korjattuVersio = readLine("\n syöte '" + alkio +"' on virheellinen: " + oikeellisuusTesti(alkio) + 
+              "\n Virhe on rivillä " + (nuottiDatanRivinumerot(i)+1)  +
               "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")
-        }
-      }
-    } // end koko syöte
-
+           }
+         }
+      } 
+    } // end for nuottiDataRiveina
+    
     println(nuottiAlkiot.size)
     //     for (i <- 0 until nuottiAlkiot.size)
     //        println (nuottiAlkiot(i))     
@@ -103,9 +105,9 @@ class TiedostonLukeminen {
 
       else {    // L O P U T   ELI   N U O T I T      
          nuottiDatanRivinumerot += i
-         if (inputFromFile(i).trim.size != 0)    // edellisellä rivillä otetaan tyhjänkin rivin indeksi talteen ennen trimmausta
+           // edellisellä rivillä otetaan tyhjänkin rivin indeksi talteen ennen trimmausta
             nuottiDataRiveina += inputFromFile(i).toLowerCase() 
-         else (" trim.size == 0  @ nuotit") 
+      //   else (" trim.size == 0  @ nuotit") 
       }
     }
     } // if   .size != 0 
