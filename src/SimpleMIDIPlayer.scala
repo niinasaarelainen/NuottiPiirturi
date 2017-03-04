@@ -10,8 +10,10 @@ import scala.io.StdIn._
 class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, kappale: Kappale, tahtilaji: Int) {   // Tuple (korkeus/korkeudet, pituus)
   
     val ms = 480     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
-  
     val synth = MidiSystem.getSynthesizer()
+    var uudestaan = "0"
+      
+   do{	
     synth.open()  
 
     val channels  =  synth.getChannels()
@@ -31,8 +33,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
         case 7 => ch1.programChange(10)   // music box
      }
 	
-    var uudestaan = "0"
-   do{	
+  
     var olisiAikaSkrollata = 0
 		var riviInd = 0
     skrollaaa(riviInd)     // laitetaan näytölle valmiiksi biisin nimi... 
@@ -74,8 +75,8 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
     Thread.sleep(900)   // parempi soundi vikaan ääneen
     synth.close()
     
-    uudestaan = readLine("\n\nSoitetaanko uudestaan? ENTER = Kyllä,  0 = Ei")
-	} while (uudestaan == "0")
+    uudestaan = readLine("\n\nSoitetaanko uudestaan? ENTER = Kyllä,  0 = Ei ")
+	} while (uudestaan != "0")
     
     new TiedostonTallennus(kappale)  
     
