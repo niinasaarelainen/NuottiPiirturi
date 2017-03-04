@@ -173,8 +173,8 @@ class PisteellinenPuoliNuotti(nuotinNimi: String, extraetumerkki: String = "") e
       override def kuvanLeveys = 16
       
       override def kuva = {
-   //     super.kuva
-        viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 5) + "." + viivasto(y(nimiMapissa)).substring(6)  
+        super.kuva
+        viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 5) + "." + viivasto(y(nimiMapissa)).substring(5,6) +  viivasto(y(nimiMapissa)).substring(7)  
         viivasto
       }
 }
@@ -196,7 +196,7 @@ class PisteellinenNeljasosaNuotti(nuotinNimi: String, extraetumerkki: String = "
     
     override def kuva = {
        super.kuva
-       viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 5) + "." + viivasto(y(nimiMapissa)).substring(6)  
+       viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 5) + "." + viivasto(y(nimiMapissa)).substring(5,6) +  viivasto(y(nimiMapissa)).substring(7)  
        viivasto
     }
 }   

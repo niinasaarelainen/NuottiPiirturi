@@ -67,8 +67,26 @@ class TiedostonLukeminen {
            for (alkio <- splitattuRivi) {
       //       println("rivillä " + i + ": " +  alkio)
              if (alkio == "") {} // ylimääräisiä välilyöntejä ei nuottiAlkiot:hin
+             
+          // S O I N T U   
+             else if (alkio.head == '<'){ 
+                 var sointuBuffer = Buffer[String]()
+                 val sointu =  alkio.tail.substring(0, alkio.size -2).split(",")  
+                 for(aani <- sointu) {
+                    if (oikeellisuusTesti(aani) == "") {}
+                    else {
+                       virheitaNolla =  false  
+                       val korjattuVersio = readLine("\n syöte '" + aani +"' on virheellinen: " + oikeellisuusTesti(aani) + 
+                       "\n Virhe on rivillä " + (nuottiDatanRivinumerot(i)+1)  +
+                       "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")
+                    }
+                 }
+                 nuottiAlkiot = nuottiAlkiot :+ alkio
+             }    // end soinnnun käsittely
+            
+            //  N U O T T I   T A I   T A U K O
              else if (oikeellisuusTesti(alkio) == "") {
-       //           if(filtteredNote.size == 3 && (filtteredNote.tail.contains("#")  || filtteredNote.tail.contains("b")))   e2# --> e#2 TODO
+       //     if(filtteredNote.size == 3 && (filtteredNote.tail.contains("#")  || filtteredNote.tail.contains("b")))   e2# --> e#2 TODO
         //   else
                   nuottiAlkiot = nuottiAlkiot :+ alkio
              } else {
@@ -81,11 +99,11 @@ class TiedostonLukeminen {
     } // end for nuottiDataRiveina
      
     if (virheitaNolla) soundiValinta()
-    println("nuottiAlkiot.size: " + nuottiAlkiot.size)
     //     for (i <- 0 until nuottiAlkiot.size)
     //        println (nuottiAlkiot(i))     
   }
 
+  
   def kasitteleTunnisteet(inputFromFile: Buffer[String]) = {  // tekstisyöterivejä
 
     var seuraavatrivitLyriikkaan = false
@@ -102,7 +120,7 @@ class TiedostonLukeminen {
              if (inputFromFile(i).tail.toLowerCase().contains("nimi")) {
                println(inputFromFile(i).size)
                kappaleenNimi = inputFromFile(i).tail.substring(5, inputFromFile(i).tail.size)
-               println("kappaleenNimi: " + kappaleenNimi + "tahtilaji" + tahtilaji)
+               
              }
            }
         } else if (seuraavatrivitLyriikkaan){
@@ -114,6 +132,7 @@ class TiedostonLukeminen {
         }
       }// if   .size != 0 
     } 
+    println("kappaleenNimi: " + kappaleenNimi + "tahtilaji" + tahtilaji)
   }
 
   def helppiTeksti() = {
