@@ -10,7 +10,7 @@ class NuottiPiirturi(){
    var tahdinAikaisetEtumerkit = Buffer[String]()
    var lyricsBuffer = Buffer[String]()  
    val inputTiedostosta = new TiedostonLukeminen
-   inputTiedostosta.lueJaTarkistaVirheet()
+   inputTiedostosta.lueTiedosto()
    val tahtilaji = inputTiedostosta.tahtilaji.toDouble 
   
     

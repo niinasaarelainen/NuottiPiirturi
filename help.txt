@@ -23,8 +23,8 @@ Tässä kaikki käytettävissä olevat pituudet:
 Tauon symboli on z. Et tarvitse muita merkkejä. Perään muista laittaa pituus, esim.
 puolitauko merkitään z--
 
-Etumerkit: ylennä nuotti näin: g#1, alenna näin: gb1. Palautusmerkkejä ei tarvita, eli jos on
-yksiviivainen fis ja f peräkkäin, kirjoita f#1 f1. 
+Etumerkit: ylennä nuotti näin: g#1, alenna näin: gb1. Älä siis kirjoita gis tai ges
+Palautusmerkkejä ei tarvita, eli jos on yksiviivainen fis ja f ovat peräkkäin, kirjoita f#1 f1. 
 
 Muista aina oktaaviala (1 tai 2), muutoin ohjelma ei tiedä, kumpaa nuottia tarkoitat.  
 
@@ -37,14 +37,20 @@ _______ JOS OLET ENSIKERTALAINEN________________________________________________
 
 _______ ALLA LISÄOHJEITA EDISTYNEILLE:________________________________________________________
 
-Soinnut: ..... blaah......
+Soinnut merkitään <>-merkkien sisään seuraavasti:
+<c1,d1,g1>   tai vaikkapa  <f#2,h2>
+Huomaa että soinnun sisällä ei saa olla välilyöntejä.
+
 
 Jos haluat kappaleeseen sanat, toimi seuraavasti: 
-1) tee nuotit (ja tauot) normaalisti, esim. c1 z d1 z e1 z 
-2) kun kaikki nuotit on laitetu, kirjoita seuraavalle riville tunniste #Sanat ja sen perään sanoja:
+1) tee ensin kaikki nuottidata(nuotit, tauot, soinnut) eli biisi valmiiksi 
+2) seuraavalle riville tunniste #Sanat ja sen perään sanoja, joko uudelle tai samalle riville:
    Jaak-ko kul-ta Jaak-ko kul-ta
+
    
-Jos haluat kappaleelle nimen, kirjoita esim #nimi Säkkijärven polkka
+Jos haluat kappaleelle nimen, kirjoita esim 
+#nimi Säkkijärven polkka
+
 
 Jos kappale ei mene 4/4-tahtilajissa, tulee merkitä (jonkin) rivin alkuun moneenko lasketaan seuraavasti: 
 #3 (kolmijakoinen) tai vaikkapa #5 (viisijakoinen)

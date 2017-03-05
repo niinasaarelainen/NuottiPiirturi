@@ -5,42 +5,48 @@ import java.io._
 
 class TiedostonLukeminen {
 
-  var inputFromFile = Buffer[String]() // kaikki input, paitsi tyhjät rivit
-  val nuottiDataRiveina = Buffer[String]() // loput, eli nuottiDataRiveina
-  var nuottiAlkiot = Array[String]() // splitattuna yllä oleva tiedosto
-  var nuottiDatanRivinumerot = Buffer[Int]()
-  val lyriikkadata = Buffer[String]() // biisin sanat
+  var inputFromFile = Buffer[String]()       // kaikki input, paitsi tyhjät rivit
+  val nuottiDataRiveina = Buffer[String]()  
+  var nuottiAlkiot = Array[String]()         // splitattuna yllä oleva data
+  var nuottiDatanRivinumerot = Buffer[Int]() // syötetiedoston nuottidatarivit muistiin, ei tyhjiä rivejä
+  val lyriikkadata = Buffer[String]()        // biisin sanat
 
   var MIDIPatch = ""
   var tahtilaji = "4"
   var kappaleenNimi = ""
   var tiedostonNimi = ""
+  val inputhakemisto = new File("./input_virheita/")
 
   
  
   helppiTeksti()
-
-  val inputhakemisto = new File("./input_virheita")
-  var montakoNimeaRiville = 0
-  for (tiedosto <- inputhakemisto.listFiles()) {     
-     if (tiedosto.isFile) {
-        print(tiedosto.getName + "         ")
-        montakoNimeaRiville += 1
-        if (montakoNimeaRiville == 7){
-          println()
-          montakoNimeaRiville = 0
-        }
-     }    
-  }
-
+  listaaTiedostot()
+ 
   do {
     tiedostonNimi = readLine("\n\nMinkä nimisen tiedoston haluat nuoteiksi? Valitse ylläolevista. ")
   } while (!onkoListalla(tiedostonNimi))
 
-  val tiedosto = Source.fromFile("input_virheita/" + tiedostonNimi)
+  val kayttajanValitsemaTiedosto = Source.fromFile("./input_virheita/" + tiedostonNimi)
 
  
+  
+ ///// F U N K T I O T: ////////////////////////////////////////////////////////////// 
+  
+  def listaaTiedostot() = {
+    var montakoNimeaRiville = 0
+    for (tiedosto <- inputhakemisto.listFiles()) {     
+       if (tiedosto.isFile) {
+          print(tiedosto.getName + "         ")
+          montakoNimeaRiville += 1
+          if (montakoNimeaRiville == 7){
+            println()
+            montakoNimeaRiville = 0
+          }
+       }    
+    }
+  } 
 
+  
   def onkoListalla(nimi: String): Boolean = {
     for (tiedosto <- inputhakemisto.listFiles())
       if (tiedosto.isFile && tiedosto.getName.toLowerCase() == nimi.toLowerCase())
@@ -48,16 +54,21 @@ class TiedostonLukeminen {
     false
   }
 
-  def lueJaTarkistaVirheet() = {      
+  
+  def lueTiedosto() = {      
      try {
-       for (rivi <- tiedosto.getLines) {
+       for (rivi <- this.kayttajanValitsemaTiedosto.getLines) {
           inputFromFile += rivi.trim
        }
      } finally {
-        tiedosto.close()
+        this.kayttajanValitsemaTiedosto.close()
      }
-
-     kasitteleTunnisteet(inputFromFile) // tämä pitää tehdä ennen splittaamista !!!! esim tunniste  #Let's get together
+     kasitteleTunnisteet(inputFromFile) 
+     tarkistaVirheet()
+  }   
+  
+  
+  def tarkistaVirheet() = {
      // println("nuottiDataRiveina :" + nuottiDataRiveina + " nuottiDatanRivinumerot: " + nuottiDatanRivinumerot)
  
      // splittaus & virheiden tarkistus:  
@@ -111,25 +122,27 @@ class TiedostonLukeminen {
   }
 
   
-  def infoParempaanJarjestykseen(alkio:String)= {
-         var alkionInfoParempaanJarjestykseen = ""
-         alkionInfoParempaanJarjestykseen += alkio(0)
-         alkionInfoParempaanJarjestykseen += alkio(2)
-         alkionInfoParempaanJarjestykseen += alkio(1)
-         alkionInfoParempaanJarjestykseen
-  }
+  def infoParempaanJarjestykseen(alkio:String)=  "" + alkio(0) + alkio(2) +alkio(1)
+ 
   
   def kasitteleTunnisteet(inputFromFile: Buffer[String]) = {  // tekstisyöterivejä
 
     var seuraavatrivitLyriikkaan = false
     for (i <- 0 until inputFromFile.size) {
       if (inputFromFile(i).trim.size != 0){  
-         if (inputFromFile(i).head == '#') {
-           if (inputFromFile(i).tail.toLowerCase().trim.contains("sanat")) //  T U N N I S T E E T
+         if (inputFromFile(i).head == '#') {    //  T U N N I S T E E T
+           if (inputFromFile(i).tail.toLowerCase().trim.contains("sanat")){
              seuraavatrivitLyriikkaan = true
+             // varaudutaan siihen että joku kirjoittaa sanoja jo samalle riville kuin missä tunniste:
+             if(inputFromFile(i).tail.trim.substring(6) != 0)  {
+                      lyriikkadata += inputFromFile(i).tail.trim.substring(6)
+             }   
+           }  
+           
            else if (seuraavatrivitLyriikkaan == false) {
               if ("2345678".contains(inputFromFile(i)(1))){
                 tahtilaji = inputFromFile(i)(1).toString
+                   // varaudutaan siihen että joku kirjoittaa nuotteja jo samalle riville kuin missä tahtilaji-tunniste:
                    if(inputFromFile(i).tail.trim.substring(1) != 0)  {
                       nuottiDataRiveina += inputFromFile(i).tail.trim.substring(1)
                       nuottiDatanRivinumerot += i
@@ -140,9 +153,11 @@ class TiedostonLukeminen {
                
               }
            }  // end lyriikat false
-        } else if (seuraavatrivitLyriikkaan){
-             lyriikkadata += (inputFromFile(i)) // L Y R I I K A 
+           
+        } else if (seuraavatrivitLyriikkaan){    // L Y R I I K K A 
+             lyriikkadata += inputFromFile(i)
         }
+         
         else {    // L O P U T   ELI   N U O T I T      
           nuottiDatanRivinumerot += i
           nuottiDataRiveina += inputFromFile(i).toLowerCase() 
@@ -177,11 +192,10 @@ class TiedostonLukeminen {
   
   def oikeellisuusTesti(syote: String): String = {    // esim. g#1---
   
-    // N U O T T I E N   S Y N T A K SI ,  EI PITUUDET
+    // ALUKSI TUTKITAAN  N U O T T I E N   S Y N T A K SI ,  EI PITUUDET
          val filtteredNote = syote.filter(_ != '-').filter(_ != '.')
          
-         if(filtteredNote == "z")
-            return ""
+         if(filtteredNote == "z") {}  // taukojen syntaksi helppo, tehdään pituustesti myöhemmin
          else{
             if(!"cdefgahb".contains(filtteredNote.toLowerCase().head.toString()))
                return "nuotin/tauon pitää alkaa kirjaimilla cdefgahbz"   // väärä teksti jos "zz"
@@ -194,7 +208,7 @@ class TiedostonLukeminen {
             else if( !(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   
                return "sallitut oktaavialat ovat 1 ja 2"   
             else if(filtteredNote.size == 3 && !(filtteredNote.tail.contains("#") || filtteredNote.tail.contains("b")))   
-                    return "nuotissa pitäisi varmaankin olla # tai b"   
+                    return "väärä formaatti. Muistathan syntaksin: esim. alennettu e on Eb, ei es"   
             else if(filtteredNote.size > 3)
                 return "liian pitkä nuotin nimi, puuttuukohan välilyönti?"  
           } // iso else
@@ -203,12 +217,12 @@ class TiedostonLukeminen {
          val lkm = syote.count(_ == '-')
          if(lkm > 4)
             return "maksimipituus nuotille on 4, eli viivoja korkeintaan ----"
-        else if(lkm == 3 && syote.contains("."))    // ohjelmassa ei määritelty pisteellistä pisteellistä puolinuottia
-          return "väärä pituus"
-        else if(lkm == 4 && syote.contains("."))   // max pituus 4
-           return "pisteellistä kokonuottia ei ole määritelty, tee kokonuotti ja 2 taukoa"
-        else if(lkm == 0 && syote.contains("."))    // ei pisteellistä kahdeksasosaa
-           return "tämä ohjelma ei osaa käsitellä pisteellistä kahdeksasosaa"
+         else if(lkm == 3 && syote.contains("."))    // ohjelmassa ei määritelty pisteellistä pisteellistä puolinuottia
+            return "väärä pituus"
+         else if(lkm == 4 && syote.contains("."))   // max pituus 4
+            return "pisteellistä kokonuottia ei ole määritelty, tee kokonuotti ja 2 taukoa"
+         else if(lkm == 0 && syote.contains("."))    // ei pisteellistä kahdeksasosaa
+            return "tämä ohjelma ei osaa käsitellä pisteellistä kahdeksasosaa"
     
         else ""     
           
