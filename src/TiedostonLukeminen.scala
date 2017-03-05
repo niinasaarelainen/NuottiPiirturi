@@ -89,11 +89,14 @@ class TiedostonLukeminen {
              }    // end soinnnun käsittely
             
             //  N U O T T I   T A I   T A U K O
-             else if (oikeellisuusTesti(alkio) == "") {
-       //     if(filtteredNote.size == 3 && (filtteredNote.tail.contains("#")  || filtteredNote.tail.contains("b")))   e2# --> e#2 TODO
-        //   else
-                  nuottiAlkiot = nuottiAlkiot :+ alkio
-             } else {
+             else if (oikeellisuusTesti(alkio) == "") {  // ei virhettä alkiossa, tarpeeksi infoa nuotin tekemiseen
+                 if(alkio.size == 3 && (alkio.tail.contains("#")  || alkio.tail.contains("b"))) { 
+                     if(!alkio(2).isDigit){  // ei ole muotoa "c#2", mutta hyväksytään c2# ilman varoitusta kirjainten uudelleenjärjestelyn avulla
+                       nuottiAlkiot = nuottiAlkiot :+ infoParempaanJarjestykseen(alkio)
+                     }  
+                 }
+                 else nuottiAlkiot = nuottiAlkiot :+ alkio
+             } else {  // virheellinen alkio:
              virheitaNolla =  false  
              val korjattuVersio = readLine("\n\n syöte '" + alkio +"' on virheellinen: " + oikeellisuusTesti(alkio) + 
                "\n Virhe on rivillä " + (nuottiDatanRivinumerot(i)+1)  +
@@ -108,6 +111,14 @@ class TiedostonLukeminen {
   }
 
   
+  def infoParempaanJarjestykseen(alkio:String)= {
+         var alkionInfoParempaanJarjestykseen = ""
+         alkionInfoParempaanJarjestykseen += alkio(0)
+         alkionInfoParempaanJarjestykseen += alkio(2)
+         alkionInfoParempaanJarjestykseen += alkio(1)
+         alkionInfoParempaanJarjestykseen
+  }
+  
   def kasitteleTunnisteet(inputFromFile: Buffer[String]) = {  // tekstisyöterivejä
 
     var seuraavatrivitLyriikkaan = false
@@ -117,15 +128,18 @@ class TiedostonLukeminen {
            if (inputFromFile(i).tail.toLowerCase().trim.contains("sanat")) //  T U N N I S T E E T
              seuraavatrivitLyriikkaan = true
            else if (seuraavatrivitLyriikkaan == false) {
-            if ("2345678".contains(inputFromFile(i)(1)))
-               tahtilaji = inputFromFile(i)(1).toString
-          //         if(inputFromFile(i).tail.trim.substring(1,inputFromFile(i).tail.size) != 0)  //  TODO samalla rivillä tahtilaji ja nuotteja
-          //           nuottiDataRiveina += inputFromFile(i).tail.trim.substring(1)
-             if (inputFromFile(i).tail.toLowerCase().contains("nimi")) {
-               kappaleenNimi = inputFromFile(i).tail.substring(5, inputFromFile(i).tail.size)
+              if ("2345678".contains(inputFromFile(i)(1))){
+                tahtilaji = inputFromFile(i)(1).toString
+                   if(inputFromFile(i).tail.trim.substring(1) != 0)  {
+                      nuottiDataRiveina += inputFromFile(i).tail.trim.substring(1)
+                      nuottiDatanRivinumerot += i
+                   }   
+              }         
+              if (inputFromFile(i).tail.toLowerCase().contains("nimi")) {
+                kappaleenNimi = inputFromFile(i).tail.substring(5, inputFromFile(i).tail.size)
                
-             }
-           }
+              }
+           }  // end lyriikat false
         } else if (seuraavatrivitLyriikkaan){
              lyriikkadata += (inputFromFile(i)) // L Y R I I K A 
         }

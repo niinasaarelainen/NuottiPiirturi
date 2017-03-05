@@ -30,7 +30,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
         case 3 => ch1.programChange(18)   //program #19 = Rock Organ
         case 4 => ch1.programChange(1024, 50)   //program #19 = Syn.Strings3 ,  eri bank:sta
         case 5 => ch1.programChange(24)    // nylon guitar
-        case 6 => ch1.programChange(29) ; ch2.programChange(1024, 81) ; ch3.programChange(33)    // myös 30   ERI DEF ?????   TODO
+        case 6 => ch1.programChange(29) ; ch2.programChange(1024, 81) ; ch3.programChange(33)  
         case 7 => ch1.programChange(10)   // music box
      }
 	
