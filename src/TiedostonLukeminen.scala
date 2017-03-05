@@ -117,10 +117,10 @@ class TiedostonLukeminen {
            if (inputFromFile(i).tail.toLowerCase().trim.contains("sanat")) //  T U N N I S T E E T
              seuraavatrivitLyriikkaan = true
            else if (seuraavatrivitLyriikkaan == false) {
-            if ("2345678".contains(inputFromFile(i).tail))
-               tahtilaji = inputFromFile(i).tail
+            if ("2345678".contains(inputFromFile(i)(1)))
+               tahtilaji = inputFromFile(i)(1).toString
           //         if(inputFromFile(i).tail.trim.substring(1,inputFromFile(i).tail.size) != 0)  //  TODO samalla rivillä tahtilaji ja nuotteja
-          //           nuottiDataRiveina += inputFromFile(i).tail.trim.substring(1,inputFromFile(i).tail.size)
+          //           nuottiDataRiveina += inputFromFile(i).tail.trim.substring(1)
              if (inputFromFile(i).tail.toLowerCase().contains("nimi")) {
                kappaleenNimi = inputFromFile(i).tail.substring(5, inputFromFile(i).tail.size)
                
@@ -135,7 +135,7 @@ class TiedostonLukeminen {
         }
       }// if   .size != 0 
     } 
-//    println("kappaleenNimi: " + kappaleenNimi + "tahtilaji" + tahtilaji)
+    println("kappaleenNimi: " + kappaleenNimi + "tahtilaji" + tahtilaji)
   }
 
   

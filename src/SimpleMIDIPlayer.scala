@@ -68,7 +68,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
               olisiAikaSkrollata = 0
            }
         }   
-        
+         
         if (nuottiTaiSointu._1(0) != 0)
           for (nuotti <- nuottiTaiSointu._1)  {            
              ch1.noteOff(nuotti)
