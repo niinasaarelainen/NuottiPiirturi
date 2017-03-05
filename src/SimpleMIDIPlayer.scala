@@ -9,7 +9,7 @@ import scala.io.StdIn._
 
 class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, kappale: Kappale, tahtilaji: Int) {   // Tuple (korkeus/korkeudet, pituus)
   
-    val ms = 160     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
+    val ms = 460     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
     val synth = MidiSystem.getSynthesizer()
     var uudestaan = "0"
       
@@ -19,6 +19,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
     val channels  =  synth.getChannels()
 		val ch1 = channels(0)
 		val ch2 = channels(1)
+		val ch3 = channels(3)
 		
 //		for(patch <- synth.getAvailableInstruments)
 //	 	  println(patch)
@@ -29,7 +30,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
         case 3 => ch1.programChange(18)   //program #19 = Rock Organ
         case 4 => ch1.programChange(1024, 50)   //program #19 = Syn.Strings3 ,  eri bank:sta
         case 5 => ch1.programChange(24)    // nylon guitar
-        case 6 => ch1.programChange(29) ; ch2.programChange(1024, 81)    // myös 30   ERI DEF ?????   TODO
+        case 6 => ch1.programChange(29) ; ch2.programChange(1024, 81) ; ch3.programChange(33)    // myös 30   ERI DEF ?????   TODO
         case 7 => ch1.programChange(10)   // music box
      }
 	
@@ -50,10 +51,12 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
         if (nuottiTaiSointu._1(0) != 0)   //taukojen "korkeus", eli tauoille tehdään vain sleep ja skrollausrutiinit
               for (nuotti <-  nuottiTaiSointu._1)
               if(nuotti !=  nuottiTaiSointu._1.last){
-                 ch1.noteOn(nuotti, 75)         // 68 = velocity (127 = max), säestysäänet, jos niitä on
+                 ch1.noteOn(nuotti, 75)         // 75 = velocity (127 = max), säestysäänet, jos niitä on
+                 if(MIDIPatch == 6) ch2.noteOn(nuotti -12, 75)   // okt. alas
                }   
               else { 
                 ch1.noteOn(nuotti, 114)  // oltiin sortattu, eli melodia on vikana (ylin ääni = isoin numero)  
+                if(MIDIPatch == 6) ch2.noteOn(nuotti -12, 114); ch3.noteOn(nuotti -24, 75)  
                }
            
         Thread.sleep((nuottiTaiSointu._2 * ms).toInt)  // ms 
@@ -69,6 +72,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
         if (nuottiTaiSointu._1(0) != 0)
           for (nuotti <- nuottiTaiSointu._1)  {            
              ch1.noteOff(nuotti)
+             if(MIDIPatch == 6) ch2.noteOff(nuotti -12) ; ch3.noteOff(nuotti -24) 
           }   
     }
     

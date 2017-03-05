@@ -66,9 +66,9 @@ class Sointu(aanet: Buffer[ViivastolleLaitettava]) extends ViivastolleLaitettava
          if (!ylospain && Array( "h2", "b2", "bb2").contains(nimiMapissa))
               viivasto(y("a2")) = viivasto(y("a2")).substring(0, 1) + "--" +  viivasto(y("a2")).substring(4, 5) + "--" + viivasto(y("a2")).substring(6)         
          if (ylospain && Array( "h2", "b2", "bb2").contains(nimiMapissa))
-              viivasto(y("a2")) = viivasto(y("a2")).substring(0, 2) + "-----" + viivasto(y("a2")).substring(7)         
+              viivasto(y("a2")) = viivasto(y("a2")).substring(0, 2) + "----" + viivasto(y("a2")).substring(6)         
          if("a2" == nimiMapissa)
-              viivasto(y("a2")) = viivasto(y("a2")).substring(0, 1) + "--" +  viivasto(y("a2")).substring(4, 6) + "-"   + viivasto(y("a2")).substring(6)         
+              viivasto(y("a2")) = viivasto(y("a2")).substring(0, 1) + "--" +  viivasto(y("a2")).substring(4, 6) + "--"   + viivasto(y("a2")).substring(7)         
 
          // etumerkki:     
          if(etumerkki.size == 0 && extraetumerkki.size == 0)  // ei etumerkkiä
@@ -118,7 +118,7 @@ abstract class Nuotti extends ViivastolleLaitettava {
      }
      
       def piirraYlaApuviiva() = {                       
-           viivasto(y("a2")) = viivasto(y("a2")).substring(0, 1) + "--" +  viivasto(y("a2")).substring(4, 6) + "-"   + viivasto(y("a2")).substring(6)         
+           viivasto(y("a2")) = viivasto(y("a2")).substring(0, 1) + "--" +  viivasto(y("a2")).substring(4, 6) + "--"   + viivasto(y("a2")).substring(7)         
      }
   }
  
@@ -194,7 +194,7 @@ class PisteellinenPuoliNuotti(nuotinNimi: String, extraetumerkki: String = "") e
       
       override def kuva = {
         super.kuva
-        viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 5) + "." + viivasto(y(nimiMapissa)).substring(5,6) +  viivasto(y(nimiMapissa)).substring(7)  
+        viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 5) + "." +  viivasto(y(nimiMapissa)).substring(6)  
         viivasto
       }
 }
@@ -216,7 +216,7 @@ class PisteellinenNeljasosaNuotti(nuotinNimi: String, extraetumerkki: String = "
     
     override def kuva = {
        super.kuva
-       viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 5) + "." + viivasto(y(nimiMapissa)).substring(5,6) +  viivasto(y(nimiMapissa)).substring(7)  
+       viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 5) + "."  +  viivasto(y(nimiMapissa)).substring(6)  
        viivasto
     }
 }   
@@ -249,7 +249,7 @@ class KahdeksasosaNuotti(nuotinNimi: String, extraetumerkki: String = "") extend
   
 class KahdeksasosaPari (ekaNuotti: KahdeksasosaNuotti, tokaNuotti: KahdeksasosaNuotti)  extends KokoNuotti(ekaNuotti.korkeus: String, ekaNuotti.getExtraetumerkki: String){
 
-// (ekaNuotti: ViivastolleLaitettava, tokaNuotti: ViivastolleLaitettava)  extends Nuotti{
+//class KahdeksasosaPari  (ekaNuotti: ViivastolleLaitettava, tokaNuotti: ViivastolleLaitettava)  extends Nuotti{
   
 
      override def korkeus = ekaNuotti.korkeus
@@ -275,7 +275,8 @@ class KahdeksasosaPari (ekaNuotti: KahdeksasosaNuotti, tokaNuotti: KahdeksasosaN
      override def kuva = {
        viivasto = piirraTyhjaViivasto(kuvanLeveys)
        super.kuva     // piirtää ekan nuotin nupin 
-       // tokan nuppi:
+      
+       // tokan mahd. apuviiva ja nuppi:
        if(tokaNuotti.nimiMapissa == "c1")        
            viivasto(y("c1")) = viivasto(y("c1")).substring(0, 6) + "--" +  viivasto(y("c1")).substring(8, 10) + "--"     
        if(tokaNuotti.nimiMapissa == "a2")        
@@ -315,10 +316,10 @@ class NeljasosaTauko extends Tauko {
     
     def kuva = {                                    // korkeus on pelkkä piirtokorkeus
       viivasto = piirraTyhjaViivasto(kuvanLeveys) 
-      viivasto(y(korkeus)) = viivasto(y(korkeus)).substring(0, 3) + "\\" +  viivasto(y(korkeus)).substring(4, kuvanLeveys)
-      viivasto(y(korkeus)+1) = viivasto(y(korkeus)+1).substring(0, 3) + "/" +  viivasto(y(korkeus)+1).substring(4, kuvanLeveys)
-      viivasto(y(korkeus)+2) = viivasto(y(korkeus)+2).substring(0, 3) + "\\" +  viivasto(y(korkeus)+2).substring(4, kuvanLeveys)
-      viivasto(y(korkeus)+3) = viivasto(y(korkeus)+3).substring(0, 3) + "/" +  viivasto(y(korkeus)+3).substring(4, kuvanLeveys)
+      viivasto(y(korkeus)) = viivasto(y(korkeus)).substring(0, 3) + "\\" +  viivasto(y(korkeus)).substring(4)
+      viivasto(y(korkeus)+1) = viivasto(y(korkeus)+1).substring(0, 3) + "/" +  viivasto(y(korkeus)+1).substring(4)
+      viivasto(y(korkeus)+2) = viivasto(y(korkeus)+2).substring(0, 3) + "\\" +  viivasto(y(korkeus)+2).substring(4)
+      viivasto(y(korkeus)+3) = viivasto(y(korkeus)+3).substring(0, 3) + "/" +  viivasto(y(korkeus)+3).substring(4)
       viivasto 
     }
 }   
@@ -330,7 +331,7 @@ class PisteellinenNeljasosaTauko extends NeljasosaTauko{
     
       override def kuva = {
         super.kuva  
-        viivasto(y(korkeus)+3) = viivasto(y(korkeus)+3).substring(0, 4) + "." + viivasto(y(korkeus)+3).substring(5, kuvanLeveys)  
+        viivasto(y(korkeus)+3) = viivasto(y(korkeus)+3).substring(0, 4) + "." + viivasto(y(korkeus)+3).substring(5)  
         viivasto   
       } 
 }
@@ -342,8 +343,8 @@ class KahdeksasosaTauko extends NeljasosaTauko{
     
       override def kuva = {
          viivasto = piirraTyhjaViivasto(kuvanLeveys) 
-         viivasto(y(korkeus)) = viivasto(y(korkeus)).substring(0, 2) + "/|" + viivasto(y(korkeus)).substring(4, kuvanLeveys)
-         viivasto(y(korkeus)+1) = viivasto(y(korkeus)+1).substring(0, 3) + "|" + viivasto(y(korkeus)+1).substring(4, kuvanLeveys)
+         viivasto(y(korkeus)) = viivasto(y(korkeus)).substring(0, 2) + "/|" + viivasto(y(korkeus)).substring(4)
+         viivasto(y(korkeus)+1) = viivasto(y(korkeus)+1).substring(0, 3) + "|" + viivasto(y(korkeus)+1).substring(4)
        viivasto   
       }  
 }
