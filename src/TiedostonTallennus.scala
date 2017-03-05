@@ -13,23 +13,12 @@ class TiedostonTallennus(biisi: Kappale) {
    try {
       for {
           viivasto <- biisi.kappale 
-          i <- 0 until viivasto.size
-      } kohdetiedosto.println(viivasto(i))
+          rivi <- viivasto
+      } kohdetiedosto.println(rivi)
    
             
    } finally {
      kohdetiedosto.close()
   }
    
-   
-/*   
-   try {
-      for { 
-        viivasto<- biisi.kappale      
-        rivi<-viivasto.viivasto            // ei ole enää viivasto-olioita !!!
-      }  kohdetiedosto.println(rivi)
-   } finally {
-     kohdetiedosto.close()
-  }
-  */     
 }

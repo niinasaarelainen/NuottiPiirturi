@@ -102,11 +102,11 @@ class NuottiPiirturi(){
                   palautetaan +=  new KahdeksasosaNuotti (nuotinNimi, extraetumerkki)     
                   if(ok >= 0) iskujaMennyt += 0.5
             }    
-             println(nuotinNimi + " " + iskujaMennyt + " tahdinAikaisetEtumerkit: " + tahdinAikaisetEtumerkit + "tahtilaji: " + tahtilaji + "extraetumerkki: " + extraetumerkki)
+        //     println(nuotinNimi + " " + iskujaMennyt + " tahdinAikaisetEtumerkit: " + tahdinAikaisetEtumerkit + "tahtilaji: " + tahtilaji + "extraetumerkki: " + extraetumerkki)
         }   // iso else: ei-sointu.
         
         if (iskujaMennyt == tahtilaji) {
-           println("-----------------")
+      //     println("-----------------")
            iskujaMennyt = 0.0  
            tahdinAikaisetEtumerkit = Buffer[String]()
         }

@@ -30,7 +30,7 @@ class TiedostonLukeminen {
 
  
   
- ///// F U N K T I O T: ////////////////////////////////////////////////////////////// 
+ ///// F U N K T I O T: ///////////////////////////////////////////////////////////////////////// 
   
   def listaaTiedostot() = {
     var montakoNimeaRiville = 0
@@ -104,8 +104,10 @@ class TiedostonLukeminen {
                  if(alkio.size == 3 && (alkio.tail.contains("#")  || alkio.tail.contains("b"))) { 
                      if(!alkio(2).isDigit){  // ei ole muotoa "c#2", mutta hyväksytään c2# ilman varoitusta kirjainten uudelleenjärjestelyn avulla
                        nuottiAlkiot = nuottiAlkiot :+ infoParempaanJarjestykseen(alkio)
+                       println(infoParempaanJarjestykseen(alkio))
                      }  
-                 }
+                     else nuottiAlkiot = nuottiAlkiot :+ alkio
+                 } 
                  else nuottiAlkiot = nuottiAlkiot :+ alkio
              } else {  // virheellinen alkio:
              virheitaNolla =  false  
@@ -144,7 +146,7 @@ class TiedostonLukeminen {
                 tahtilaji = inputFromFile(i)(1).toString
                    // varaudutaan siihen että joku kirjoittaa nuotteja jo samalle riville kuin missä tahtilaji-tunniste:
                    if(inputFromFile(i).tail.trim.substring(1) != 0)  {
-                      nuottiDataRiveina += inputFromFile(i).tail.trim.substring(1)
+                      nuottiDataRiveina += inputFromFile(i).tail.trim.substring(1)   // kaatuu jos käyttäjä on laittanut 5/4 --> /4 on  "nuottidataa"
                       nuottiDatanRivinumerot += i
                    }   
               }         

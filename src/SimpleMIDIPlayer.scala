@@ -9,7 +9,7 @@ import scala.io.StdIn._
 
 class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, kappale: Kappale, tahtilaji: Int) {   // Tuple (korkeus/korkeudet, pituus)
   
-    val ms = 460     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
+    val ms = 160     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
     val synth = MidiSystem.getSynthesizer()
     var uudestaan = "0"
       
@@ -56,7 +56,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
                }   
               else { 
                 ch1.noteOn(nuotti, 114)  // oltiin sortattu, eli melodia on vikana (ylin ääni = isoin numero)  
-                if(MIDIPatch == 6) ch2.noteOn(nuotti -12, 114); ch3.noteOn(nuotti -24, 75)  
+                if(MIDIPatch == 6) {ch2.noteOn(nuotti -12, 114); ch3.noteOn(nuotti -24, 75)  }
                }
            
         Thread.sleep((nuottiTaiSointu._2 * ms).toInt)  // ms 
@@ -72,7 +72,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
         if (nuottiTaiSointu._1(0) != 0)
           for (nuotti <- nuottiTaiSointu._1)  {            
              ch1.noteOff(nuotti)
-             if(MIDIPatch == 6) ch2.noteOff(nuotti -12) ; ch3.noteOff(nuotti -24) 
+             if(MIDIPatch == 6) {ch2.noteOff(nuotti -12) ; ch3.noteOff(nuotti -24) }
           }   
     }
     
