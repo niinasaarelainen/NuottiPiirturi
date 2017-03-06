@@ -77,15 +77,16 @@ class TiedostonLukeminen {
            var splitattuRivi = nuottiDataRiveina(i).split(" ") // mieti tunnisteiden ja sointujen caset myöhemmin
            for (alkio <- splitattuRivi) {
       //       println("rivillä " + i + ": " +  alkio)
-             if (alkio == "") {} // ylimääräisiä välilyöntejä ei nuottiAlkiot:hin
+             if (alkio == "") {} // ylimääräisiä välilyöntejä ei nuottiAlkiot:hin   TODO tabulaattori '\t'
              
           // S O I N T U   
              else if (alkio.head == '<'){ 
                  if(alkio.last != '>'){
                       val korjattuVersio = readLine("\n\n syöte '" + alkio +"' on virheellinen:  puuttuu soinnun lopetussymboli '>' tai olet vahingossa laittanut välilyönnin soinnun sisään" + 
                        "\n Virhe on rivillä " + (nuottiDatanRivinumerot(i)+1)  +
-                       "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")  // TODO Enter ei tee mitä lupaa
-                 }      
+                       "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")  
+                 }      // TODO Enter ei tee mitä lupaa
+                 
                  val sointu =  alkio.tail.substring(0, alkio.size -2).split(",")  
                  for(aani <- sointu) {
                     if (oikeellisuusTesti(aani) == "") {}
@@ -136,9 +137,9 @@ class TiedostonLukeminen {
            if (inputFromFile(i).tail.toLowerCase().trim.contains("sanat")){
              seuraavatrivitLyriikkaan = true
              // varaudutaan siihen että joku kirjoittaa sanoja jo samalle riville kuin missä tunniste:
-             if(inputFromFile(i).tail.trim.substring(6) != 0)  {
-                      lyriikkadata += inputFromFile(i).tail.trim.substring(6)
-             }   
+//             if(inputFromFile(i).tail.trim.substring(6) != 0)  {
+//                      lyriikkadata += inputFromFile(i).tail.trim.substring(6)
+//             }   
            }  
            
            else if (seuraavatrivitLyriikkaan == false) {

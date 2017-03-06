@@ -9,7 +9,7 @@ import scala.io.StdIn._
 
 class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, kappale: Kappale, tahtilaji: Int) {   // Tuple (korkeus/korkeudet, pituus)
   
-    val ms = 160     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
+    val ms = 400     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
     val synth = MidiSystem.getSynthesizer()
     var uudestaan = "0"
       
@@ -19,7 +19,9 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
     val channels  =  synth.getChannels()
 		val ch1 = channels(0)
 		val ch2 = channels(1)
-		val ch3 = channels(3)
+		val ch3 = channels(2)
+		val ch4 = channels(3)
+		val ch5 = channels(4)
 		
 //		for(patch <- synth.getAvailableInstruments)
 //	 	  println(patch)
@@ -30,7 +32,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
         case 3 => ch1.programChange(18)   //program #19 = Rock Organ
         case 4 => ch1.programChange(1024, 50)   //program #19 = Syn.Strings3 ,  eri bank:sta
         case 5 => ch1.programChange(24)    // nylon guitar
-        case 6 => ch1.programChange(29) ; ch2.programChange(1024, 81) ; ch3.programChange(33)  
+        case 6 => ch1.programChange(30); ch2.programChange(1024, 81); ch3.programChange(33); ch4.programChange(29); ch5.programChange(1024, 81);  
         case 7 => ch1.programChange(10)   // music box
      }
 	
@@ -43,20 +45,18 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
 		riviInd += 1
 		olisiAikaSkrollata += ms     // ja alkuarvo, jotta skrollaus tapahtuu hieman ennen kuin rivi oikeasti vaihtuu
 		
-		Thread.sleep(900)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
+		Thread.sleep(500)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
   
 		
-	
+	if(MIDIPatch != 6){  //normaali soitto, yksiääninen
 	  for(nuottiTaiSointu <- nuotit){      
         if (nuottiTaiSointu._1(0) != 0)   //taukojen "korkeus", eli tauoille tehdään vain sleep ja skrollausrutiinit
               for (nuotti <-  nuottiTaiSointu._1)
               if(nuotti !=  nuottiTaiSointu._1.last){
                  ch1.noteOn(nuotti, 75)         // 75 = velocity (127 = max), säestysäänet, jos niitä on
-                 if(MIDIPatch == 6) ch2.noteOn(nuotti -12, 75)   // okt. alas
                }   
               else { 
                 ch1.noteOn(nuotti, 114)  // oltiin sortattu, eli melodia on vikana (ylin ääni = isoin numero)  
-                if(MIDIPatch == 6) {ch2.noteOn(nuotti -12, 114); ch3.noteOn(nuotti -24, 75)  }
                }
            
         Thread.sleep((nuottiTaiSointu._2 * ms).toInt)  // ms 
@@ -72,11 +72,67 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
         if (nuottiTaiSointu._1(0) != 0)
           for (nuotti <- nuottiTaiSointu._1)  {            
              ch1.noteOff(nuotti)
-             if(MIDIPatch == 6) {ch2.noteOff(nuotti -12) ; ch3.noteOff(nuotti -24) }
           }   
     }
+	} 
     
-    Thread.sleep(900)   // parempi soundi vikaan ääneen
+	else if(MIDIPatch == 6){  // rokkibändi, 3-ääninen, "delay":       // START   R O K K I B Ä N D I 
+	  for(nuottiTaiSointu <- nuotit){      
+        if (nuottiTaiSointu._1(0) != 0)  
+              for (nuotti <-  nuottiTaiSointu._1)
+              if(nuotti !=  nuottiTaiSointu._1.last){
+                 ch1.noteOn(nuotti, 75)        
+                 ch2.noteOn(nuotti -12, 75)   // okt. alas
+               }   
+              else { 
+                ch1.noteOn(nuotti, 114)      // guit1
+                ch2.noteOn(nuotti -12, 114)  // guit2
+                ch3.noteOn(nuotti -24, 124)  // bass, -2okt., basso tuplaa vain melodian
+               }
+           
+        Thread.sleep(ms/4)   // 1/16 - delay              // R O K K I B Ä N D I  
+       
+      //delay:  
+        if (nuottiTaiSointu._1(0) != 0)  
+              for (nuotti <-  nuottiTaiSointu._1){
+                ch4.noteOn(nuotti -12, 77)
+                ch5.noteOn(nuotti -24 , 47)  
+               }
+	  
+        
+     //   if(nuottiTaiSointu._2 != 0.5){
+            Thread.sleep(((nuottiTaiSointu._2 * ms) - (ms/4)).toInt)   
+     //   }    
+        olisiAikaSkrollata += (nuottiTaiSointu._2 * ms).toInt
+        if(olisiAikaSkrollata >= ms*tahtilaji*2 ){            
+           if ( riviInd < kappale.kappale.size){
+              skrollaaa(riviInd)
+              riviInd += 1
+              olisiAikaSkrollata = 0
+           }
+        }   
+   
+    //      Thread.sleep((nuottiTaiSointu._2 * ms/2).toInt)       // R O K K I B Ä N D I 
+        
+        // noteOff:
+        if (nuottiTaiSointu._1(0) != 0)
+          for (nuotti <- nuottiTaiSointu._1)  {            
+              ch1.noteOff(nuotti)
+              ch2.noteOff(nuotti -12) 
+              ch3.noteOff(nuotti -24) 
+          }   
+         
+         
+          // noteOff, delayed:
+        if (nuottiTaiSointu._1(0) != 0)
+          for (nuotti <- nuottiTaiSointu._1)  {   
+             ch4.noteOff(nuotti -12)
+             ch5.noteOff(nuotti -24) 
+          }   
+    }
+	}
+    
+    Thread.sleep(1500)   // parempi soundi vikaan ääneen
     synth.close()
     
     uudestaan = readLine("\n\nSoitetaanko uudestaan? ENTER = Kyllä,  0 = Ei ")
