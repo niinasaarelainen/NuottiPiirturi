@@ -77,9 +77,9 @@ class TiedostonLukeminen {
            var splitattuRivi = nuottiDataRiveina(i).split(" ") // mieti tunnisteiden ja sointujen caset myöhemmin
            for (alkio <- splitattuRivi) {
       //       println("rivillä " + i + ": " +  alkio)
-             if (alkio == "") {} // ylimääräisiä välilyöntejä ei nuottiAlkiot:hin   TODO tabulaattori '\t'
+             if (alkio == "" ) {} // ylimääräisiä välilyöntejä ei nuottiAlkiot:hin  
              
-          // S O I N T U   
+          // S O I N T U    
              else if (alkio.head == '<'){ 
                  if(alkio.last != '>'){
                       val korjattuVersio = readLine("\n\n syöte '" + alkio +"' on virheellinen:  puuttuu soinnun lopetussymboli '>' tai olet vahingossa laittanut välilyönnin soinnun sisään" + 
@@ -133,37 +133,39 @@ class TiedostonLukeminen {
     var seuraavatrivitLyriikkaan = false
     for (i <- 0 until inputFromFile.size) {
       if (inputFromFile(i).trim.size != 0){  
-         if (inputFromFile(i).head == '#') {    //  T U N N I S T E E T
-           if (inputFromFile(i).tail.toLowerCase().trim.contains("sanat")){
+         var kelvollinenSyoteRivi = inputFromFile(i).replaceAll("\t", "")
+         if (kelvollinenSyoteRivi.head == '#') {    //  T U N N I S T E E T
+           if (kelvollinenSyoteRivi.tail.toLowerCase().trim.contains("sanat")){
              seuraavatrivitLyriikkaan = true
              // varaudutaan siihen että joku kirjoittaa sanoja jo samalle riville kuin missä tunniste:
-//             if(inputFromFile(i).tail.trim.substring(6) != 0)  {
-//                      lyriikkadata += inputFromFile(i).tail.trim.substring(6)
+//             if(kelvollinenSyoteRivi.tail.trim.substring(6) != 0)  {
+//                      lyriikkadata += kelvollinenSyoteRivi.tail.trim.substring(6)
 //             }   
            }  
            
+           
            else if (seuraavatrivitLyriikkaan == false) {
-              if ("2345678".contains(inputFromFile(i)(1))){
-                tahtilaji = inputFromFile(i)(1).toString
+              if ("2345678".contains(kelvollinenSyoteRivi(1))){
+                tahtilaji = kelvollinenSyoteRivi(1).toString
                    // varaudutaan siihen että joku kirjoittaa nuotteja jo samalle riville kuin missä tahtilaji-tunniste:
-                   if(inputFromFile(i).tail.trim.substring(1) != 0)  {
-                      nuottiDataRiveina += inputFromFile(i).tail.trim.substring(1)   // kaatuu jos käyttäjä on laittanut 5/4 --> /4 on  "nuottidataa"
+                   if(kelvollinenSyoteRivi.tail.trim.substring(1) != 0)  {
+                      nuottiDataRiveina += kelvollinenSyoteRivi.tail.trim.substring(1)   // kaatuu jos käyttäjä on laittanut 5/4 --> /4 on  "nuottidataa"
                       nuottiDatanRivinumerot += i
                    }   
               }         
-              if (inputFromFile(i).tail.toLowerCase().contains("nimi")) {
-                kappaleenNimi = inputFromFile(i).tail.substring(5, inputFromFile(i).tail.size)
+              if (kelvollinenSyoteRivi.tail.toLowerCase().contains("nimi")) {
+                kappaleenNimi = kelvollinenSyoteRivi.tail.substring(5, kelvollinenSyoteRivi.tail.size)
                
               }
            }  // end lyriikat false
            
         } else if (seuraavatrivitLyriikkaan){    // L Y R I I K K A 
-             lyriikkadata += inputFromFile(i)
+             lyriikkadata += kelvollinenSyoteRivi
         }
          
         else {    // L O P U T   ELI   N U O T I T      
           nuottiDatanRivinumerot += i
-          nuottiDataRiveina += inputFromFile(i).toLowerCase() 
+          nuottiDataRiveina += kelvollinenSyoteRivi.toLowerCase() 
         }
       }// if   .size != 0 
     } 

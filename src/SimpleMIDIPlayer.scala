@@ -12,19 +12,18 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
     val ms = 400     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
     val synth = MidiSystem.getSynthesizer()
     var uudestaan = "0"
-      
-   do{	
-    synth.open()  
-
+    var olisiAikaSkrollata = 0
+		var riviInd = 0
+    
     val channels  =  synth.getChannels()
-		val ch1 = channels(0)
-		val ch2 = channels(1)
-		val ch3 = channels(2)
-		val ch4 = channels(3)
-		val ch5 = channels(4)
-		
+		val ch1 = channels(0); val ch2 = channels(1);  val ch3 = channels(2);	val ch4 = channels(3);  val ch5 = channels(4)
+      
+				
 //		for(patch <- synth.getAvailableInstruments)
 //	 	  println(patch)
+		
+   do{	
+    synth.open()  
 		
 		MIDIPatch match {
         case 1 => ch1.programChange(0)    //program #0 = Piano
@@ -36,9 +35,8 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
         case 7 => ch1.programChange(10)   // music box
      }
 	
-  
-    var olisiAikaSkrollata = 0
-		var riviInd = 0
+    olisiAikaSkrollata = 0
+    riviInd = 0
     skrollaaa(riviInd)     // laitetaan näytölle valmiiksi biisin nimi... 
 		riviInd += 1
 		skrollaaa(riviInd)    // ... ja eka rivi
@@ -48,8 +46,26 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
 		Thread.sleep(500)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
   
 		
-	if(MIDIPatch != 6){  //normaali soitto, yksiääninen
-	  for(nuottiTaiSointu <- nuotit){      
+	  if(MIDIPatch != 6)  //normaali soitto, yksikanavainen
+	     normaalisoitto()
+	  else rocknroll()   // rokkibändi, 5-kanavainen, "delay":      
+    
+    Thread.sleep(1500)   // parempi soundi vikaan ääneen
+    synth.close()
+    
+    uudestaan = readLine("\n\nSoitetaanko uudestaan? ENTER = Kyllä,  0 = Ei ")
+	} while (uudestaan != "0")
+    
+    new TiedostonTallennus(kappale)  
+    
+    
+    def skrollaaa(riviInd: Int)= {
+         for (i <- 0 until kappale.kappale(riviInd).size)
+           println(kappale.kappale(riviInd)(i))
+    }
+	
+	  def normaalisoitto() = {
+	     for(nuottiTaiSointu <- nuotit){      
         if (nuottiTaiSointu._1(0) != 0)   //taukojen "korkeus", eli tauoille tehdään vain sleep ja skrollausrutiinit
               for (nuotti <-  nuottiTaiSointu._1)
               if(nuotti !=  nuottiTaiSointu._1.last){
@@ -74,9 +90,9 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
              ch1.noteOff(nuotti)
           }   
     }
-	} 
-    
-	else if(MIDIPatch == 6){  // rokkibändi, 3-ääninen, "delay":       // START   R O K K I B Ä N D I 
+	  }
+	
+    def rocknroll() = {
 	  for(nuottiTaiSointu <- nuotit){      
         if (nuottiTaiSointu._1(0) != 0)  
               for (nuotti <-  nuottiTaiSointu._1)
@@ -91,17 +107,23 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
                }
            
         Thread.sleep(ms/4)   // 1/16 - delay              // R O K K I B Ä N D I  
-       
-      //delay:  
+         //1. delay:  
         if (nuottiTaiSointu._1(0) != 0)  
               for (nuotti <-  nuottiTaiSointu._1){
-                ch4.noteOn(nuotti -12, 77)
-                ch5.noteOn(nuotti -24 , 47)  
+                ch4.noteOn(nuotti -12, 85)
+                ch5.noteOn(nuotti -24 , 60)  
                }
 	  
+         Thread.sleep(ms/4)   // 1/16 - doubledelay              // R O K K I B Ä N D I  
+         //2. delay:  
+        if (nuottiTaiSointu._1(0) != 0)  
+              for (nuotti <-  nuottiTaiSointu._1){
+                ch4.noteOn(nuotti -12, 80)
+                ch5.noteOn(nuotti -24 , 55)  
+               }
         
      //   if(nuottiTaiSointu._2 != 0.5){
-            Thread.sleep(((nuottiTaiSointu._2 * ms) - (ms/4)).toInt)   
+            Thread.sleep(((nuottiTaiSointu._2 * ms) - (ms/2)).toInt)   
      //   }    
         olisiAikaSkrollata += (nuottiTaiSointu._2 * ms).toInt
         if(olisiAikaSkrollata >= ms*tahtilaji*2 ){            
@@ -120,31 +142,12 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
               ch1.noteOff(nuotti)
               ch2.noteOff(nuotti -12) 
               ch3.noteOff(nuotti -24) 
-          }   
-         
-         
-          // noteOff, delayed:
-        if (nuottiTaiSointu._1(0) != 0)
-          for (nuotti <- nuottiTaiSointu._1)  {   
              ch4.noteOff(nuotti -12)
              ch5.noteOff(nuotti -24) 
-          }   
-    }
-	}
-    
-    Thread.sleep(1500)   // parempi soundi vikaan ääneen
-    synth.close()
-    
-    uudestaan = readLine("\n\nSoitetaanko uudestaan? ENTER = Kyllä,  0 = Ei ")
-	} while (uudestaan != "0")
-    
-    new TiedostonTallennus(kappale)  
-    
-    
-    def skrollaaa(riviInd: Int)= {
-         for (i <- 0 until kappale.kappale(riviInd).size)
-           println(kappale.kappale(riviInd)(i))
-    }
+          } 
+        
+      }	//end for
+    } // end rocknroll
     
 }
  ////// end   simpleMIDIPlayer   ///////////////////////////////////////////////
