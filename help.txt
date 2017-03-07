@@ -31,6 +31,9 @@ puolitauko merkitään z--
 
 Muista aina oktaaviala (1 tai 2), muutoin ohjelma ei tiedä, kumpaa nuottia tarkoitat.  
 
+Kannattaa katsoa mallia valmiista kappaleista, eli avaa vaikkapa kappale jaakko
+kirjoittamalla komentoriville: notepad input/jaakko
+
 
 
 _______ JO NÄILLÄ OHJEILLA KANNATTAA KOKEILLA OHJELMAN KÄYTTÖÄ, _________________________________

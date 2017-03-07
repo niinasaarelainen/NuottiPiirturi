@@ -102,8 +102,7 @@ class TiedostonLukeminen {
             
             //  N U O T T I   T A I   T A U K O
              else if (oikeellisuusTesti(alkio) == "") {  // ei virhettä alkiossa, tarpeeksi infoa nuotin tekemiseen
-                   
-                
+                  println(erikoistapauksetNuotinNimessa(alkio))
                   nuottiAlkiot = nuottiAlkiot :+ erikoistapauksetNuotinNimessa(alkio) // alkio sellaisenaan tai "fixattuna"
              } else {  // virheellinen alkio:
              virheitaNolla =  false  
@@ -122,12 +121,16 @@ class TiedostonLukeminen {
   
   def erikoistapauksetNuotinNimessa(alkio:String): String=  {
     
+     val alkioPituustietoPois = alkio.filter(_ != '-')
      // case  c2# --> c#2
-     if(alkio.size == 3 && (alkio.tail.contains("#")  || alkio.tail.contains("b")) && !alkio(2).isDigit)  
-        return "" + alkio(0) + alkio(2) +alkio(1)     
-     else if(alkio == "b#1"  )      // popmuusikot kutsuvat h:ta b:ksi
+     if(alkioPituustietoPois.size == 3 && (alkio.tail.contains("#")  || alkio.tail.contains("b")) && !alkioPituustietoPois(2).isDigit)  {
+         println("==3")
+         return "" + alkio(0) + alkio(2) +alkio(1) +alkio.substring(3)  
+     }
+          
+     else if(alkioPituustietoPois == "b#1"  )      // popmuusikot kutsuvat h:ta b:ksi
         return "h#1" 
-     else if(alkio == "b#2" )
+     else if(alkioPituustietoPois == "b#2" )
         return "h#2"
      alkio             // palautetaan alkio muuttumattomana jos ei tehdä mitään ylläolevista toimenpiteistä
   }
@@ -151,10 +154,10 @@ class TiedostonLukeminen {
            
            else if (seuraavatrivitLyriikkaan == false) {
               if ("2345678".contains(kelvollinenSyoteRivi(1))){
-                tahtilaji = kelvollinenSyoteRivi(1).toString
+                tahtilaji = kelvollinenSyoteRivi(1).toString      // tahtilaji pilalla jos myöhemmässä kommentissa on numero  TODO
                    // varaudutaan siihen että joku kirjoittaa nuotteja jo samalle riville kuin missä tahtilaji-tunniste:
                    if(kelvollinenSyoteRivi.tail.trim.substring(1) != 0)  {
-                      nuottiDataRiveina += kelvollinenSyoteRivi.tail.trim.substring(1)   // kaatuu jos käyttäjä on laittanut 5/4 --> /4 on  "nuottidataa"
+                      nuottiDataRiveina += kelvollinenSyoteRivi.tail.trim.substring(1)   // kaatuu jos käyttäjä on laittanut 5/4 --> /4 on  "nuottidataa"  TODO
                       nuottiDatanRivinumerot += i
                    }   
               }         

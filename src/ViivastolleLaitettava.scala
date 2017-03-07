@@ -203,7 +203,7 @@ class PisteellinenPuoliNuotti(nuotinNimi: String, extraetumerkki: String = "") e
 class NeljasosaNuotti(nuotinNimi: String, extraetumerkki: String = "") extends PuoliNuotti(nuotinNimi: String, extraetumerkki: String){
       override def korkeus = nuotinNimi
       override def pituus = 1.0
-      override def kuvanLeveys = 10
+      override def kuvanLeveys = 9
       override def nuppi = "@@"
     
 }   
