@@ -87,23 +87,28 @@ class TiedostonLukeminen {
                        "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")  
                  }      // TODO Enter ei tee mitä lupaa
                  
-                 val sointu =  alkio.tail.substring(0, alkio.size -2).split(",")  
-                 for(aani <- sointu) {
-                    if (oikeellisuusTesti(aani) == "") {}
+                 var sointu =  alkio.tail.substring(0, alkio.size -2).split(",")  
+                 for(i <- 0 until sointu.size) {
+                    if (oikeellisuusTesti(sointu(i)) == "") {
+                      println(erikoistapauksetNuotinNimessa(sointu(i)))
+                        sointu(i) = erikoistapauksetNuotinNimessa(sointu(i))  // korvataan soinnun alkiot mahdollisilla fixauksilla
+                    }
                     else {
                        virheitaNolla =  false  
-                       val korjattuVersio = readLine("\n\n syöte '" + aani +"' on virheellinen: " + oikeellisuusTesti(aani) + 
+                       val korjattuVersio = readLine("\n\n syöte '" + sointu(i) +"' on virheellinen: " + oikeellisuusTesti(sointu(i)) + 
                        "\n Virhe on rivillä " + (nuottiDatanRivinumerot(i)+1)  +
                        "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")
                     }
                  }
-                 nuottiAlkiot = nuottiAlkiot :+ alkio  
+                 var korjattuAlkio = "<"
+                 for (aani<- sointu) korjattuAlkio+= aani + ","
+                 korjattuAlkio += ">"
+                 nuottiAlkiot = nuottiAlkiot :+ korjattuAlkio  // alkio = <g1,h1>
              }    // end soinnnun käsittely
             
             //  N U O T T I   T A I   T A U K O
              else if (oikeellisuusTesti(alkio) == "") {  // ei virhettä alkiossa, tarpeeksi infoa nuotin tekemiseen
-                  println(erikoistapauksetNuotinNimessa(alkio))
-                  nuottiAlkiot = nuottiAlkiot :+ erikoistapauksetNuotinNimessa(alkio) // alkio sellaisenaan tai "fixattuna"
+                  nuottiAlkiot = nuottiAlkiot :+ erikoistapauksetNuotinNimessa(alkio) // alkio sellaisenaan tai fixattuna
              } else {  // virheellinen alkio:
              virheitaNolla =  false  
              val korjattuVersio = readLine("\n\n syöte '" + alkio +"' on virheellinen: " + oikeellisuusTesti(alkio) + 
@@ -120,14 +125,10 @@ class TiedostonLukeminen {
 
   
   def erikoistapauksetNuotinNimessa(alkio:String): String=  {
-    
      val alkioPituustietoPois = alkio.filter(_ != '-')
      // case  c2# --> c#2
-     if(alkioPituustietoPois.size == 3 && (alkio.tail.contains("#")  || alkio.tail.contains("b")) && !alkioPituustietoPois(2).isDigit)  {
-         println("==3")
-         return "" + alkio(0) + alkio(2) +alkio(1) +alkio.substring(3)  
-     }
-          
+     if(alkioPituustietoPois.size == 3 && (alkio.tail.contains("#")  || alkio.tail.contains("b")) && !alkioPituustietoPois(2).isDigit) 
+          return "" + alkio(0) + alkio(2) +alkio(1) +alkio.substring(3)  
      else if(alkioPituustietoPois == "b#1"  )      // popmuusikot kutsuvat h:ta b:ksi
         return "h#1" 
      else if(alkioPituustietoPois == "b#2" )
