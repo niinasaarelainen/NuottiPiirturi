@@ -15,45 +15,52 @@ c2- c2- c2- e2- d2- d2- d2- f2- e2- e2- d2- d2- c2----
 Viivojen (----) määrä viittaa pituuteen, eli neljäsosanuotti on yhden iskun eli yhden viivan mittainen: c1-
 
 Tässä kaikki käytettävissä olevat pituudet:
-               |            |                     |          |            |\
+			   |	        |                     |          |            |\
+               |            |                     |          |            |
                |            |                     |          |            |
 () = ----     () = --      (). = --- tai --.     @@ = -     @@. = -.     @@ = (ei tarvita viivoja)
+
+
+Etumerkit: ylennä nuotti näin: g#1, alenna näin: gb1. Älä siis kirjoita gis tai ges
+Palautusmerkkejä ei tarvita, eli jos on yksiviivainen fis ja f ovat peräkkäin, kirjoita f#1 f1. 
 
 
 Tauon symboli on z. Et tarvitse muita merkkejä. Perään muista laittaa pituus, esim.
 puolitauko merkitään z--
 
-Etumerkit: ylennä nuotti näin: g#1, alenna näin: gb1. Älä siis kirjoita gis tai ges
-Palautusmerkkejä ei tarvita, eli jos on yksiviivainen fis ja f ovat peräkkäin, kirjoita f#1 f1. 
 
 Muista aina oktaaviala (1 tai 2), muutoin ohjelma ei tiedä, kumpaa nuottia tarkoitat.  
 
 
-_______ JO NÄILLÄ OHJEILLA KANNATTAA KOKEILLA OHJELMAN KÄYTTÖÄ _______________________________
-_______ JOS OLET ENSIKERTALAINEN______________________________________________________________
+
+_______ JO NÄILLÄ OHJEILLA KANNATTAA KOKEILLA OHJELMAN KÄYTTÖÄ, _________________________________
+_______ JOS OLET ENSIKERTALAINEN ! ______________________________________________________________
+_______ SEURAAVAT OPTIOT EIVÄT OLE PAKOLLISIA ___________________________________________________
 
 
 
+_______ ALLA LISÄOHJEITA EDISTYNEILLE:___________________________________________________________
+_________________________________________________________________________________________________
 
-_______ ALLA LISÄOHJEITA EDISTYNEILLE:________________________________________________________
-
-Soinnut merkitään <>-merkkien sisään seuraavasti:
-<c1,d1,g1>   tai vaikkapa  <f#2,h2>
-Huomaa että soinnun sisällä ei saa olla välilyöntejä.
+Soinnut merkitään <>-merkkien sisään. Esimerkkeinä 
+ c-molli: <c1,eb1,g1>
+ G7: <g1,h1,d2,f2>
+Huomaa että soinnun sisällä ei saa olla välilyöntejä. Soinnussa voi olla ääniä kaksi tai enemmän.
 
 
 Jos haluat kappaleeseen sanat, toimi seuraavasti: 
 1) tee ensin kaikki nuottidata(nuotit, tauot, soinnut) eli biisi valmiiksi 
-2) seuraavalle riville tunniste #Sanat ja sen perään sanoja, joko uudelle tai samalle riville:
+2) seuraavalle riville tunniste #Sanat ja sen perään sanoja, joko uudelle tai samalle riville, tavutettuna:
    Jaak-ko kul-ta Jaak-ko kul-ta
 
    
-Jos haluat kappaleelle nimen, kirjoita esim 
+Jos haluat kappaleelle nimen, kirjoita esim. 
 #nimi Säkkijärven polkka
 
 
 Jos kappale ei mene 4/4-tahtilajissa, tulee merkitä (jonkin) rivin alkuun moneenko lasketaan seuraavasti: 
 #3 (kolmijakoinen) tai vaikkapa #5 (viisijakoinen)
 
+Huomaa siis tunnisteen # käyttö, jos teet
 ________________________________________________________________________________________________________________
 ____________________________________TIEDOSTOJA:_________________________________________________________________

@@ -136,11 +136,12 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
      g +=" | /|  \\  " 
      g +="-\\-\\|---|-" 
      g +="  \\_|__/  " 
-     g +="----|-----" 
+     g +="----|-----"
+     g +="    |     "
      g +="  \\_/     " 
      g += "          "
      g += "          "
-     g += "          "
+     
      
    g
   }
