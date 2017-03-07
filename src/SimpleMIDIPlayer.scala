@@ -16,7 +16,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
 		var riviInd = 0
     
     val channels  =  synth.getChannels()
-		val ch1 = channels(0); val ch2 = channels(1);  val ch3 = channels(2);	val ch4 = channels(3);  val ch5 = channels(4)
+		val ch1 = channels(0); val ch2 = channels(1);  val ch3 = channels(2);	val ch4 = channels(3);  val ch5 = channels(4);  val ch6 = channels(5)
       
 				
 //		for(patch <- synth.getAvailableInstruments)
@@ -31,7 +31,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
         case 3 => ch1.programChange(18)   //program #19 = Rock Organ
         case 4 => ch1.programChange(1024, 50)   //program #19 = Syn.Strings3 ,  eri bank:sta
         case 5 => ch1.programChange(24)    // nylon guitar
-        case 6 => ch1.programChange(30); ch2.programChange(1024, 81); ch3.programChange(33); ch4.programChange(29); ch5.programChange(1024, 81);  
+        case 6 => ch1.programChange(30); ch2.programChange(1024, 81); ch3.programChange(35); ch4.programChange(29); ch5.programChange(1024, 81); ch6.programChange(39); 
         case 7 => ch1.programChange(10)   // music box
      }
 	
@@ -89,7 +89,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
           for (nuotti <- nuottiTaiSointu._1)  {            
              ch1.noteOff(nuotti)
           }   
-    }
+      }
 	  }
 	
     def rocknroll() = {
@@ -103,7 +103,8 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
               else { 
                 ch1.noteOn(nuotti, 114)      // guit1
                 ch2.noteOn(nuotti -12, 114)  // guit2
-                ch3.noteOn(nuotti -24, 124)  // bass, -2okt., basso tuplaa vain melodian
+                ch3.noteOn(nuotti -24, 127)  // bass, -2okt., basso tuplaa vain melodian
+                ch6.noteOn(nuotti -24, 127)
                }
            
         Thread.sleep(ms/4)   // 1/16 - delay              // R O K K I B Ä N D I  
@@ -142,8 +143,9 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
               ch1.noteOff(nuotti)
               ch2.noteOff(nuotti -12) 
               ch3.noteOff(nuotti -24) 
-             ch4.noteOff(nuotti -12)
-             ch5.noteOff(nuotti -24) 
+              ch4.noteOff(nuotti -12)
+              ch5.noteOff(nuotti -24) 
+              ch6.noteOff(nuotti -24) 
           } 
         
       }	//end for

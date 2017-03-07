@@ -97,19 +97,14 @@ class TiedostonLukeminen {
                        "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")
                     }
                  }
-                 nuottiAlkiot = nuottiAlkiot :+ alkio
+                 nuottiAlkiot = nuottiAlkiot :+ alkio  
              }    // end soinnnun käsittely
             
             //  N U O T T I   T A I   T A U K O
              else if (oikeellisuusTesti(alkio) == "") {  // ei virhettä alkiossa, tarpeeksi infoa nuotin tekemiseen
-                 if(alkio.size == 3 && (alkio.tail.contains("#")  || alkio.tail.contains("b"))) { 
-                     if(!alkio(2).isDigit){  // ei ole muotoa "c#2", mutta hyväksytään c2# ilman varoitusta kirjainten uudelleenjärjestelyn avulla
-                       nuottiAlkiot = nuottiAlkiot :+ infoParempaanJarjestykseen(alkio)
-                       println(infoParempaanJarjestykseen(alkio))
-                     }  
-                     else nuottiAlkiot = nuottiAlkiot :+ alkio
-                 } 
-                 else nuottiAlkiot = nuottiAlkiot :+ alkio
+                   
+                
+                  nuottiAlkiot = nuottiAlkiot :+ erikoistapauksetNuotinNimessa(alkio) // alkio sellaisenaan tai "fixattuna"
              } else {  // virheellinen alkio:
              virheitaNolla =  false  
              val korjattuVersio = readLine("\n\n syöte '" + alkio +"' on virheellinen: " + oikeellisuusTesti(alkio) + 
@@ -125,7 +120,17 @@ class TiedostonLukeminen {
   }
 
   
-  def infoParempaanJarjestykseen(alkio:String)=  "" + alkio(0) + alkio(2) +alkio(1)
+  def erikoistapauksetNuotinNimessa(alkio:String): String=  {
+    
+     // case  c2# --> c#2
+     if(alkio.size == 3 && (alkio.tail.contains("#")  || alkio.tail.contains("b")) && !alkio(2).isDigit)  
+        return "" + alkio(0) + alkio(2) +alkio(1)     
+     else if(alkio == "b#1"  )      // popmuusikot kutsuvat h:ta b:ksi
+        return "h#1" 
+     else if(alkio == "b#2" )
+        return "h#2"
+     alkio             // palautetaan alkio muuttumattomana jos ei tehdä mitään ylläolevista toimenpiteistä
+  }
  
   
   def kasitteleTunnisteet(inputFromFile: Buffer[String]) = {  // tekstisyöterivejä
@@ -202,9 +207,11 @@ class TiedostonLukeminen {
          
          if(filtteredNote == "z") {}  // taukojen syntaksi helppo, tehdään pituustesti myöhemmin
          else{
+            if(filtteredNote.count(_ == 'z') > 1)
+               return "taukojen pituudet merkitään viivoilla, esim puolitauko z--"
             if(!"cdefgahb".contains(filtteredNote.toLowerCase().head.toString()))
-               return "nuotin/tauon pitää alkaa kirjaimilla cdefgahbz"   // väärä teksti jos "zz"
-            else if(filtteredNote.size == 1 && !(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   
+               return "nuotin pitää alkaa kirjaimilla c,C, d,D e,E f,F g,G a,A h,H, b tai B"   // väärä teksti jos "zz"
+            else if(filtteredNote.size == 1 )   
                return "tarkoititko "+ syote + "1 vai " + syote + "2?"   
             else if(filtteredNote.size == 2 && (filtteredNote.tail.contains("#") || filtteredNote.tail.contains("b")) && !(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   
                return "tarkoititko "+ syote + "1 vai " + syote + "2?"      
@@ -215,7 +222,7 @@ class TiedostonLukeminen {
             else if(filtteredNote.size == 3 && !(filtteredNote.tail.contains("#") || filtteredNote.tail.contains("b")))   
                     return "väärä formaatti. Muistathan syntaksin: esim. alennettu e on Eb, ei es"   
             else if(filtteredNote.size > 3)
-                return "liian pitkä nuotin nimi, puuttuukohan välilyönti?"  
+                return "liian pitkä nuotin nimi, puuttuukohan välilyönti?" 
           } // iso else
      
      //  P I T U U D E T  

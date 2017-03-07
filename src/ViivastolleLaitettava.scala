@@ -131,7 +131,7 @@ abstract class Tauko extends ViivastolleLaitettava{
 class KokoNuotti(nuotinNimi: String, extraetumerkki: String = "") extends Nuotti{    
      def korkeus = nuotinNimi
      def pituus = 4.0
-     def kuvanLeveys = 20
+     def kuvanLeveys = 22
      def nimiMapissa = {
        if(nuotinNimi.head == 'b' ) nuotinNimi    // caset b1, b2
        else  nuotinNimi.filter(_ !='#').filter(_ != 'b') // esim. gb1 --> g1
@@ -166,7 +166,7 @@ class KokoNuotti(nuotinNimi: String, extraetumerkki: String = "") extends Nuotti
 class PuoliNuotti(nuotinNimi: String, extraetumerkki: String = "") extends KokoNuotti(nuotinNimi: String, extraetumerkki: String){
     override def korkeus = nuotinNimi
     override def pituus = 2.0
-    override def kuvanLeveys = 12
+    override def kuvanLeveys = 13
     
     override def kuva = {
       super.kuva
@@ -203,7 +203,7 @@ class PisteellinenPuoliNuotti(nuotinNimi: String, extraetumerkki: String = "") e
 class NeljasosaNuotti(nuotinNimi: String, extraetumerkki: String = "") extends PuoliNuotti(nuotinNimi: String, extraetumerkki: String){
       override def korkeus = nuotinNimi
       override def pituus = 1.0
-      override def kuvanLeveys = 8
+      override def kuvanLeveys = 10
       override def nuppi = "@@"
     
 }   
@@ -212,7 +212,7 @@ class NeljasosaNuotti(nuotinNimi: String, extraetumerkki: String = "") extends P
 class PisteellinenNeljasosaNuotti(nuotinNimi: String, extraetumerkki: String = "") extends NeljasosaNuotti(nuotinNimi: String, extraetumerkki: String){
     override def korkeus = nuotinNimi
     override def pituus = 1.5
-    override def kuvanLeveys = 8
+    override def kuvanLeveys = 11
     
     override def kuva = {
        super.kuva
@@ -225,7 +225,7 @@ class PisteellinenNeljasosaNuotti(nuotinNimi: String, extraetumerkki: String = "
 class KahdeksasosaNuotti(nuotinNimi: String, extraetumerkki: String = "") extends NeljasosaNuotti(nuotinNimi: String, extraetumerkki: String){
      override def korkeus = nuotinNimi
      override def pituus = 0.5
-     override def kuvanLeveys = 7
+     override def kuvanLeveys = 8
     
      override def kuva = {
         super.kuva
