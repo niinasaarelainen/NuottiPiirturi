@@ -3,8 +3,7 @@ import scala.collection.mutable.Buffer
 
 class NuottiPiirturi(){
    
-  
-   
+    
    var nuottiData= Buffer[ViivastolleLaitettava]()    
    var nuottiDataParitettu= Buffer[ViivastolleLaitettava]()    
    var tahdinAikaisetEtumerkit = Buffer[String]()
@@ -12,9 +11,7 @@ class NuottiPiirturi(){
    val inputTiedostosta = new TiedostonLukeminen
    inputTiedostosta.lueTiedosto()
    val tahtilaji = inputTiedostosta.tahtilaji.toDouble 
-  
     
-  
    val inputBuffer = inputTiedostosta.nuottiAlkiot.toBuffer  
    nuottiData = kasitteleNuottiTieto(inputBuffer, nuottiData)    
    if(inputTiedostosta.lyriikkadata.size != 0)
@@ -47,15 +44,8 @@ class NuottiPiirturi(){
     for ( alkio <- inputBuffer ){      // alkio esim. "g#1--"   tai   "<f1,d1>"
    
       // S O I N N U T
-        if (alkio.head == '<'){                                                
-            val sointu =  alkio.tail.substring(0, alkio.size -2).split(",")    
-            var sointuBuffer = Buffer[String]()
-            var viivastolleLaitettavaBuffer = Buffer[ViivastolleLaitettava]()
-            for(aani <- sointu) 
-               sointuBuffer += aani
-            ok = 0- sointuBuffer.size +1    
-            nuottiData += new Sointu(kasitteleNuottiTieto(sointuBuffer, viivastolleLaitettavaBuffer) ) 
-        }      
+        if (alkio.head == '<')
+            kasitteleSoinnut(alkio)
        
       // N U O T I T  J A   T A U O T 
         else {                                                            
@@ -112,7 +102,25 @@ class NuottiPiirturi(){
         }
         ok += 1
      }  // for 
-   palautetaan   // tätä tarvitaan sointuja muodostettaessa
+  
+   
+   
+   def kasitteleSoinnut(alkio: String) = {
+                                                     
+            val sointu =  alkio.tail.substring(0, alkio.size -2).split(",")    
+            var sointuBuffer = Buffer[String]()
+            var viivastolleLaitettavaBuffer = Buffer[ViivastolleLaitettava]()
+            for(aani <- sointu) 
+               sointuBuffer += aani
+            ok = 0- sointuBuffer.size +1    
+            nuottiData += new Sointu(kasitteleNuottiTieto(sointuBuffer, viivastolleLaitettavaBuffer) ) 
+   }
+   
+   def kasitteleTauot(alkio: String) = {
+     
+   }
+   
+    palautetaan   // tätä tarvitaan sointuja muodostettaessa
    } 
   
    

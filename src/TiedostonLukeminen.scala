@@ -92,14 +92,14 @@ class TiedostonLukeminen {
                "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")
              }
            }
-    } // end for nuottiDataRiveina
+     } // end for nuottiDataRiveina
      
-    if (virheitaNolla) soundiValinta()
-    //     for (i <- 0 until nuottiAlkiot.size)
-    //        println (nuottiAlkiot(i))   
+     if (virheitaNolla) soundiValinta()
+     //     for (i <- 0 until nuottiAlkiot.size)
+     //        println (nuottiAlkiot(i))   
     
     
-      def tarkistaSoinnunVirheet(alkio:String, ind:Int) = {
+       def tarkistaSoinnunVirheet(alkio:String, ind:Int) = {
     
                  if(alkio.last != '>'){
                       val korjattuVersio = readLine("\n\n syöte '" + alkio +"' on virheellinen:  puuttuu soinnun lopetussymboli '>' tai olet vahingossa laittanut välilyönnin soinnun sisään" + 
@@ -152,30 +152,16 @@ class TiedostonLukeminen {
     for (i <- 0 until inputFromFile.size) {
       if (inputFromFile(i).trim.size != 0){  
          var kelvollinenSyoteRivi = inputFromFile(i).replaceAll("\t", "")
+         
          if (kelvollinenSyoteRivi.head == '#') {    //  T U N N I S T E E T
-           if (kelvollinenSyoteRivi.tail.toLowerCase().trim.contains("sanat")){
-             seuraavatrivitLyriikkaan = true
-             // varaudutaan siihen että joku kirjoittaa sanoja jo samalle riville kuin missä tunniste:
-//             if(kelvollinenSyoteRivi.tail.trim.substring(6) != 0)  {
+            if (kelvollinenSyoteRivi.tail.toLowerCase().trim.contains("sanat")){
+               seuraavatrivitLyriikkaan = true
+              // varaudutaan siihen että joku kirjoittaa sanoja jo samalle riville kuin missä tunniste:
+//              if(kelvollinenSyoteRivi.tail.trim.substring(6) != 0)  {
 //                      lyriikkadata += kelvollinenSyoteRivi.tail.trim.substring(6)
 //             }   
-           }  
-           
-           
-           else if (seuraavatrivitLyriikkaan == false) {
-              if ("2345678".contains(kelvollinenSyoteRivi(1))){
-                tahtilaji = kelvollinenSyoteRivi(1).toString      // tahtilaji pilalla jos myöhemmässä kommentissa on numero  TODO
-                   // varaudutaan siihen että joku kirjoittaa nuotteja jo samalle riville kuin missä tahtilaji-tunniste:
-                   if(kelvollinenSyoteRivi.tail.trim.substring(1) != 0)  {
-                      nuottiDataRiveina += kelvollinenSyoteRivi.tail.trim.substring(1)   // kaatuu jos käyttäjä on laittanut 5/4 --> /4 on  "nuottidataa"  TODO
-                      nuottiDatanRivinumerot += i
-                   }   
-              }         
-              if (kelvollinenSyoteRivi.tail.toLowerCase().contains("nimi")) {
-                kappaleenNimi = kelvollinenSyoteRivi.tail.substring(5, kelvollinenSyoteRivi.tail.size)
-               
-              }
-           }  // end lyriikat false
+            } 
+            else if (seuraavatrivitLyriikkaan == false) kasitteleKappaleenNimiJaTahtilaji(kelvollinenSyoteRivi, i)  // end lyriikat false
            
         } else if (seuraavatrivitLyriikkaan){    // L Y R I I K K A 
              lyriikkadata += kelvollinenSyoteRivi
@@ -187,7 +173,25 @@ class TiedostonLukeminen {
         }
       }// if   .size != 0 
     } 
-    println("kappaleenNimi: " + kappaleenNimi + "tahtilaji" + tahtilaji)
+    println("kappaleenNimi: " + kappaleenNimi + ", tahtilaji" + tahtilaji)
+  }
+  
+  
+  def kasitteleKappaleenNimiJaTahtilaji(kelvollinenSyoteRivi:String, ind:Int) ={
+    
+           if (kelvollinenSyoteRivi.tail.toLowerCase().contains("nimi")) {
+                kappaleenNimi = kelvollinenSyoteRivi.tail.substring(5, kelvollinenSyoteRivi.tail.size)
+               
+           }
+           else if ("2345678".contains(kelvollinenSyoteRivi(1))){
+                tahtilaji = kelvollinenSyoteRivi(1).toString      // tahtilaji pilalla jos myöhemmässä kommentissa on numero  TODO
+                   // varaudutaan siihen että joku kirjoittaa nuotteja jo samalle riville kuin missä tahtilaji-tunniste:
+                   if(kelvollinenSyoteRivi.tail.trim.substring(1) != 0)  {
+                      nuottiDataRiveina += kelvollinenSyoteRivi.tail.trim.substring(1)   // kaatuu jos käyttäjä on laittanut 5/4 --> /4 on  "nuottidataa"  TODO
+                      nuottiDatanRivinumerot += ind
+                   }   
+           }         
+            
   }
 
   

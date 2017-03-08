@@ -7,10 +7,10 @@ Tahtiviivoja ei merkitä.
 Rivinvaihtoja saa käyttää vapaasti.
 
 Tässä esimerkki kuinka kirjoitat Ukko Nooan alkaen keski-c:stä:
-c1- c1- c1- e1- d1- d1- d1- f1- e1- e1- d1- d1- c1----
+c1- c1- c1- e1- d1- d1- d1- f1-   e1- e1- d1- d1- c1----
 
 Sama biisi oktaavia ylempää: 
-c2- c2- c2- e2- d2- d2- d2- f2- e2- e2- d2- d2- c2----
+c2- c2- c2- e2- d2- d2- d2- f2-   e2- e2- d2- d2- c2----
 
 Viivojen (----) määrä viittaa pituuteen, eli neljäsosanuotti on yhden iskun eli yhden viivan mittainen: c1-
 
