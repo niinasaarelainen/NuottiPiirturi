@@ -65,6 +65,8 @@ class TiedostonLukeminen {
      this.nuottiDatanRivinumerot = Buffer[Int]()
      this.nuottiAlkiot = Array[String]() 
      val kayttajanValitsemaTiedosto = Source.fromFile(inputhakemistonNimi + tiedostonNimi)
+     
+     println("-----lueTiedosto-----")
       
      try {
        for (rivi <- kayttajanValitsemaTiedosto.getLines) {
@@ -90,7 +92,7 @@ class TiedostonLukeminen {
         if(jatketaanko == true){        // jos löytyi virhe, loppuja alkioita ei haluta talteen
             var splitattuRivi = nuottiDataRiveina(i).split(" ") 
             for (alkio <- splitattuRivi) {
-               if(jatketaanko == true){ 
+               if(jatketaanko){ 
                  if (alkio == "" ) {} // ylimääräisiä välilyöntejä ei nuottiAlkiot:hin  
                  
                  else if (alkio.head == '<'){
@@ -116,14 +118,13 @@ class TiedostonLukeminen {
      
      println("nuottiAlkiot after nuottiDataRiveina-for: " +nuottiAlkiot.size )
      
-     if (virheitaNolla) soundiValinta()
-     //     for (i <- 0 until nuottiAlkiot.size)
-     //        println (nuottiAlkiot(i))   
-    
+     if (virheitaNolla && !jatketaanko) soundiValinta()
+        
     
        def tarkistaSoinnunVirheet(alkio:String, ind:Int) = {
         
        var jatketaanko = true
+       println("--tarkistaSoinnunVirheet--")
          
                 if(alkio.last != '>'){
                      jatketaanko = false
@@ -151,7 +152,7 @@ class TiedostonLukeminen {
                       }
                    }
                    
-                   if(virheitaNolla == true){
+                   if(virheitaNolla){
                        var korjattuAlkio = "<"
                        for (aani<- sointu) korjattuAlkio += aani + ","
                        korjattuAlkio = korjattuAlkio.substring(0,korjattuAlkio.size-1) // ei vikaa pilkkua
