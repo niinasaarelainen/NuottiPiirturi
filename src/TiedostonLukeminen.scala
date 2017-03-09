@@ -84,26 +84,28 @@ class TiedostonLukeminen {
      var virheitaNolla = true
      var korjattuVersio= ""
      for (i <- 0 until nuottiDataRiveina.size) {
-           var splitattuRivi = nuottiDataRiveina(i).split(" ") 
-           for (alkio <- splitattuRivi) {
-             if (alkio == "" ) {} // ylimääräisiä välilyöntejä ei nuottiAlkiot:hin  
-             
-             else if (alkio.head == '<')
-                tarkistaSoinnunVirheet(alkio, i)
-                
-             else if (oikeellisuusTesti(alkio) == "") {  // ei virhettä alkiossa, tarpeeksi infoa nuotin tekemiseen
-                  nuottiAlkiot = nuottiAlkiot :+ erikoistapauksetNuotinNimessa(alkio) // alkio sellaisenaan tai fixattuna
-                  
-             } else {  // virheellinen alkio:
-             virheitaNolla =  false  
-             korjattuVersio = readLine("\n\n syöte '" + alkio +"' on virheellinen: " + oikeellisuusTesti(alkio) + 
-               "\n Virhe on rivillä " + (nuottiDatanRivinumerot(i)+1)  +
-               "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")
+          var splitattuRivi = nuottiDataRiveina(i).split(" ") 
+          for (alkio <- splitattuRivi) {
+               if (alkio == "" ) {} // ylimääräisiä välilyöntejä ei nuottiAlkiot:hin  
                
-               if(korjattuVersio == "")  {println("mene lueTiedostoon"); lueTiedosto() }
-             }
-           }
+               else if (alkio.head == '<')
+                  tarkistaSoinnunVirheet(alkio, i)
+                  
+               else if (oikeellisuusTesti(alkio) == "") {  // ei virhettä alkiossa, tarpeeksi infoa nuotin tekemiseen
+                    nuottiAlkiot = nuottiAlkiot :+ erikoistapauksetNuotinNimessa(alkio) // alkio sellaisenaan tai fixattuna
+                    
+               } else {  // virheellinen alkio:
+               virheitaNolla =  false  
+               korjattuVersio = readLine("\n\n syöte '" + alkio +"' on virheellinen: " + oikeellisuusTesti(alkio) + 
+                 "\n Virhe on rivillä " + (nuottiDatanRivinumerot(i)+1)  +
+                 "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu. ")
+                 
+                 if(korjattuVersio == "")   lueTiedosto() 
+               }
+          }
      } // end for nuottiDataRiveina
+     
+     println("nuottiAlkiot after nuottiDataRiveina-for: " +nuottiAlkiot )
      
      if (virheitaNolla) soundiValinta()
      //     for (i <- 0 until nuottiAlkiot.size)
@@ -111,34 +113,43 @@ class TiedostonLukeminen {
     
     
        def tarkistaSoinnunVirheet(alkio:String, ind:Int) = {
-    
-       
         
-                 if(alkio.last != '>'){
-                      korjattuVersio = readLine("\n\n syöte '" + alkio +"' on virheellinen:  puuttuu soinnun lopetussymboli '>' tai olet vahingossa laittanut välilyönnin soinnun sisään" + 
-                       "\n Virhe on rivillä " + (nuottiDatanRivinumerot(ind)+1)  +
-                       "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")  
-                       if(korjattuVersio == "\n")  lueTiedosto()
-                 }      // TODO Enter ei tee mitä lupaa
+                if(alkio.last != '>'){
+                     korjattuVersio = readLine("\n\n syöte '" + alkio +"' on virheellinen:  puuttuu soinnun lopetussymboli '>' tai olet vahingossa laittanut välilyönnin soinnun sisään" + 
+                      "\n Virhe on rivillä " + (nuottiDatanRivinumerot(ind)+1)  +
+                      "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu. ")  
+                     if(korjattuVersio == "")  lueTiedosto()
+                }     
                  
-                 var sointu =  alkio.tail.substring(0, alkio.size -2).split(",")  
-                 for(i <- 0 until sointu.size) {
-                    if (oikeellisuusTesti(sointu(i)) == "") {
-                    //   println(erikoistapauksetNuotinNimessa(sointu(i)))
-                        sointu(i) = erikoistapauksetNuotinNimessa(sointu(i))  // korvataan soinnun alkiot mahdollisilla fixauksilla
-                    }
-                    else {
-                       virheitaNolla =  false  
-                       korjattuVersio = readLine("\n\n syöte '" + sointu(i) +"' on virheellinen: " + oikeellisuusTesti(sointu(i)) + 
-                       "\n Virhe on rivillä " + (nuottiDatanRivinumerot(ind)+1)  +
-                       "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")
-                        if(korjattuVersio == "\n")  lueTiedosto()
-                    }
-                 }
-                 var korjattuAlkio = "<"
-                 for (aani<- sointu) korjattuAlkio+= aani + ","
-                 korjattuAlkio += ">"
-                 nuottiAlkiot = nuottiAlkiot :+ korjattuAlkio  // alkio = <g1,h1>
+                else {
+                   println("tarkistaSoinnunVirheet-  else")
+                   var sointu =  alkio.tail.substring(0, alkio.size -2).split(",")  
+                   for(i <- 0 until sointu.size) {
+                      if (oikeellisuusTesti(sointu(i)) == "") {
+                      //   println(erikoistapauksetNuotinNimessa(sointu(i)))
+                          sointu(i) = erikoistapauksetNuotinNimessa(sointu(i))  // korvataan soinnun alkiot mahdollisilla fixauksilla
+                      }
+                      else {
+                         virheitaNolla =  false  
+                         korjattuVersio = readLine("\n\n syöte '" + sointu(i) +"' on virheellinen: " + oikeellisuusTesti(sointu(i)) + 
+                         "\n Virhe on rivillä " + (nuottiDatanRivinumerot(ind)+1)  +
+                         "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu. ")
+                          if(korjattuVersio == "")  lueTiedosto()
+                      }
+                   }
+                   
+                   if(virheitaNolla){
+                       var korjattuAlkio = "<"
+                       for (aani<- sointu) korjattuAlkio += aani + ","
+                       korjattuAlkio = korjattuAlkio.substring(0,korjattuAlkio.size-1) // ei vikaa pilkkua
+                       korjattuAlkio += ">"
+                       
+                       println("korjattuAlkio: " + korjattuAlkio)
+                       
+                       nuottiAlkiot = nuottiAlkiot :+ korjattuAlkio  // alkio = <g1,h1>
+                   }
+                 
+                 }  // end else: ei ole kyse koko alkiosta <....>
                 // end soinnnun käsittely
      
     }// end tarkistaSoinnunVirheet
@@ -254,7 +265,7 @@ class TiedostonLukeminen {
             else if(filtteredNote.size == 3 && !(filtteredNote.tail.contains("#") || filtteredNote.tail.contains("b")))   
                     return "väärä formaatti. Muistathan syntaksin: esim. alennettu e on Eb, ei es"   
             else if(filtteredNote.size > 3)
-                return "liian pitkä nuotin nimi, puuttuukohan välilyönti?" 
+                return "liian pitkä nuotin nimi" 
           } // iso else
      
      //  P I T U U D E T  
