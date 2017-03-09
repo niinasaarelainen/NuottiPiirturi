@@ -8,7 +8,7 @@ class Kappale {
   
   def lisaaKappaleenNimi(kappaleenNimi: String){
     var apuPuskuri = Buffer[String]()
-    apuPuskuri += "\n                                        " + kappaleenNimi
+    apuPuskuri += "\n\n\t\t\t\t\t" + kappaleenNimi
     this.kappale += apuPuskuri    
   }
   
@@ -19,6 +19,7 @@ class Kappale {
   
   
   def printtaaRuudulleIlmanAjastusta() = {
+    println(); println()
     for {
           viivasto <- kappale     // kappaleen nimikin on "viivasto"
           rivi <- viivasto

@@ -36,6 +36,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
 	
     olisiAikaSkrollata = 0
     riviInd = 0
+    println(); println()
     skrollaaa(riviInd)     // laitetaan näytölle valmiiksi biisin nimi... 
 		riviInd += 1
 		skrollaaa(riviInd)    // ... ja eka rivi
@@ -131,7 +132,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
                 ch5.noteOn(delayedNuotti -24 , 60)  
                  
               }
-              Thread.sleep(ms/2)
+              Thread.sleep(ms/2)   // tämä for delayedNuotti:n sisään --> ReallyWeirdDelay  :->>
         }	  
         
      

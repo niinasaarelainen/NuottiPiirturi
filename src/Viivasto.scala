@@ -30,16 +30,18 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
           tahtiaMennyt = 0.0
           lisaaTahtiviiva()
         }
-        if (riviaMennytMontakoTahtia == 2 ){      // printtaukseen 2, voisi kysyä käyttäjältä  //TODO      
+        if (riviaMennytMontakoTahtia == 2 ){      // printtaukseen 2, voisi kysyä käyttäjältä  //TODO  ?
+           if(laitettava == nuottiData.last) lisaaTahtiviiva()   // kappaleen lopetusviiva
            vaihdaRivi()
         }
+        
+          
      } // end for, kaikki nuottiData käsitelty
     
-     lisaaTahtiviiva()   // biisin lopetusviiva, tulee vain vajaissa riveissä    TODO  : myös täyteen riviin    
     
      if(tahtiaMennyt != 0.0 || riviaMennytMontakoTahtia > 0 ){  // pelkkää G-avainta ei haluta mukaan kappaleeseen
+        lisaaTahtiviiva()   
         vaihdaRivi()   
-        lisaaTahtiviiva()       
      }    
   }
   

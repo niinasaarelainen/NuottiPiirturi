@@ -94,7 +94,6 @@ class TiedostonLukeminen {
                  else if (alkio.head == '<'){
                     tarkistaSoinnunVirheet(alkio, i)
                     if (!jatketaanko)  virheitaNolla =  false  
-                    println(jatketaanko)
                  }   
                  else if (oikeellisuusTesti(alkio) == "") {  // ei virhettä alkiossa, tarpeeksi infoa nuotin tekemiseen
                       nuottiAlkiot = nuottiAlkiot :+ erikoistapauksetNuotinNimessa(alkio) // alkio sellaisenaan tai fixattuna
@@ -114,7 +113,7 @@ class TiedostonLukeminen {
      } // end for nuottiDataRiveina
      
       
-     if (virheitaNolla) soundiValinta()     //  && !jatketaanko : < > toimii, mutta muissa tapauksissa soundivalintaa ei tule   TODO
+     if (virheitaNolla) soundiValinta()    
         
     
        def tarkistaSoinnunVirheet(alkio:String, ind:Int) = {
@@ -128,7 +127,6 @@ class TiedostonLukeminen {
                 }     
                  
                 else {
-                   println("tarkistaSoinnunVirheet-  else")
                    var sointu =  alkio.tail.substring(0, alkio.size -2).split(",")  
                    for(i <- 0 until sointu.size) {
                       if (oikeellisuusTesti(sointu(i)) == "") {
@@ -248,27 +246,27 @@ class TiedostonLukeminen {
   
   def oikeellisuusTesti(syote: String): String = {    // esim. g#1---
   
-    // ALUKSI TUTKITAAN  N U O T T I E N   S Y N T A K SI ,  EI PITUUDET
+    // ALUKSI TUTKITAAN  N U O T T I E N   S Y N T A K SI ,  _EI_ PITUUDET
          val filtteredNote = syote.filter(_ != '-').filter(_ != '.')
          
          if(filtteredNote == "z") {}  // taukojen syntaksi helppo, tehdään pituustesti myöhemmin
          else{
-            if(filtteredNote.count(_ == 'z') > 1)
-               return "taukojen pituudet merkitään viivoilla, esim puolitauko z--"
-            if(!"cdefgahb".contains(filtteredNote.toLowerCase().head.toString()))
-               return "nuotin pitää alkaa kirjaimilla c,C, d,D e,E f,F g,G a,A h,H, b tai B"   // väärä teksti jos "zz"
-            else if(filtteredNote.size == 1 )   
-               return "tarkoititko "+ syote + "1 vai " + syote + "2?"   
-            else if(filtteredNote.size == 2 && (filtteredNote.tail.contains("#") || filtteredNote.tail.contains("b")) && !(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   
-               return "tarkoititko "+ syote + "1 vai " + syote + "2?"      
-            else if(filtteredNote.tail.contains("#b") ||  filtteredNote.tail.contains("b#"))    
-                return "nuotissa on ylennys- ja alennusmerkki"   
-            else if( !(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   
-               return "sallitut oktaavialat ovat 1 ja 2"   
-            else if(filtteredNote.size == 3 && !(filtteredNote.tail.contains("#") || filtteredNote.tail.contains("b")))   
-                    return "väärä formaatti. Muistathan syntaksin: esim. alennettu e on Eb, ei es"   
-            else if(filtteredNote.size > 3)
-                return "liian pitkä nuotin nimi" 
+              if(filtteredNote.count(_ == 'z') > 1)
+                 return "taukojen pituudet merkitään viivoilla, esim puolitauko z--"
+              if(!"cdefgahb".contains(filtteredNote.toLowerCase().head.toString()))
+                 return "nuotin pitää alkaa kirjaimilla c,C, d,D e,E f,F g,G a,A h,H, b tai B"   // väärä teksti jos "zz"
+              else if(filtteredNote.size == 1 )   
+                 return "tarkoititko "+ syote + "1 vai " + syote + "2?"   
+              else if(filtteredNote.size == 2 && (filtteredNote.tail.contains("#") || filtteredNote.tail.contains("b")) && !(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   
+                 return "tarkoititko "+ syote + "1 vai " + syote + "2?"      
+              else if(filtteredNote.tail.contains("#b") ||  filtteredNote.tail.contains("b#"))    
+                  return "nuotissa on ylennys- ja alennusmerkki"   
+              else if( !(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   
+                 return "sallitut oktaavialat ovat 1 ja 2"   
+              else if(filtteredNote.size == 3 && !(filtteredNote.tail.contains("#") || filtteredNote.tail.contains("b")))   
+                      return "väärä formaatti. Muistathan syntaksin: esim. alennettu e on Eb, ei es"   
+              else if(filtteredNote.size > 3)
+                  return "liian pitkä nuotin nimi" 
           } // iso else
      
      //  P I T U U D E T  
