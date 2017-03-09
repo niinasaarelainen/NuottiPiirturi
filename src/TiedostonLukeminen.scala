@@ -6,7 +6,7 @@ import java.io._
 class TiedostonLukeminen {
 
   var inputFromFile = Buffer[String]()       // kaikki input, paitsi tyhjät rivit
-  val nuottiDataRiveina = Buffer[String]()  
+  var nuottiDataRiveina = Buffer[String]()  
   var nuottiAlkiot = Array[String]()         // splitattuna yllä oleva data
   var nuottiDatanRivinumerot = Buffer[Int]() // syötetiedoston nuottidatarivit muistiin, ei tyhjiä rivejä
   val lyriikkadata = Buffer[String]()        // biisin sanat
@@ -27,7 +27,7 @@ class TiedostonLukeminen {
     tiedostonNimi = readLine("\n\nMinkä nimisen tiedoston haluat nuoteiksi? Valitse ylläolevista. ")
   } while (!onkoListalla(tiedostonNimi))
 
-  val kayttajanValitsemaTiedosto = Source.fromFile(inputhakemistonNimi + tiedostonNimi)
+ 
 
  
   
@@ -50,21 +50,29 @@ class TiedostonLukeminen {
   
   def onkoListalla(nimi: String): Boolean = {
     for (tiedosto <- inputhakemisto.listFiles())
-      if (tiedosto.isFile && tiedosto.getName.toLowerCase() == nimi.toLowerCase())
+      if (tiedosto.isFile && tiedosto.getName.toLowerCase() == nimi.toLowerCase().trim())
         return true
     false
   }
 
   
-  def lueTiedosto() = {      
+  def lueTiedosto(): Unit = {  
+    
+     this.inputFromFile = Buffer[String]()       // pitää nollata, jos tänne tullaan virheidentarkistuksesta
+     this.nuottiDataRiveina = Buffer[String]() 
+     this.nuottiDatanRivinumerot = Buffer[Int]()
+     this.nuottiAlkiot = Array[String]() 
+     val kayttajanValitsemaTiedosto = Source.fromFile(inputhakemistonNimi + tiedostonNimi)
+      
      try {
-       for (rivi <- this.kayttajanValitsemaTiedosto.getLines) {
-          inputFromFile += rivi.trim
+       for (rivi <- kayttajanValitsemaTiedosto.getLines) {
+          this.inputFromFile += rivi.trim
        }
      } finally {
-        this.kayttajanValitsemaTiedosto.close()
+        kayttajanValitsemaTiedosto.close()
      }
-     kasitteleTunnisteet(inputFromFile) 
+          
+     kasitteleTunnisteet(this.inputFromFile) 
      tarkistaVirheet()
   }   
   
@@ -74,6 +82,7 @@ class TiedostonLukeminen {
  
      // splittaus & virheiden tarkistus:  
      var virheitaNolla = true
+     var korjattuVersio= ""
      for (i <- 0 until nuottiDataRiveina.size) {
            var splitattuRivi = nuottiDataRiveina(i).split(" ") 
            for (alkio <- splitattuRivi) {
@@ -87,9 +96,11 @@ class TiedostonLukeminen {
                   
              } else {  // virheellinen alkio:
              virheitaNolla =  false  
-             val korjattuVersio = readLine("\n\n syöte '" + alkio +"' on virheellinen: " + oikeellisuusTesti(alkio) + 
+             korjattuVersio = readLine("\n\n syöte '" + alkio +"' on virheellinen: " + oikeellisuusTesti(alkio) + 
                "\n Virhe on rivillä " + (nuottiDatanRivinumerot(i)+1)  +
                "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")
+               
+               if(korjattuVersio == "")  {println("mene lueTiedostoon"); lueTiedosto() }
              }
            }
      } // end for nuottiDataRiveina
@@ -101,10 +112,13 @@ class TiedostonLukeminen {
     
        def tarkistaSoinnunVirheet(alkio:String, ind:Int) = {
     
+       
+        
                  if(alkio.last != '>'){
-                      val korjattuVersio = readLine("\n\n syöte '" + alkio +"' on virheellinen:  puuttuu soinnun lopetussymboli '>' tai olet vahingossa laittanut välilyönnin soinnun sisään" + 
+                      korjattuVersio = readLine("\n\n syöte '" + alkio +"' on virheellinen:  puuttuu soinnun lopetussymboli '>' tai olet vahingossa laittanut välilyönnin soinnun sisään" + 
                        "\n Virhe on rivillä " + (nuottiDatanRivinumerot(ind)+1)  +
                        "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")  
+                       if(korjattuVersio == "\n")  lueTiedosto()
                  }      // TODO Enter ei tee mitä lupaa
                  
                  var sointu =  alkio.tail.substring(0, alkio.size -2).split(",")  
@@ -115,9 +129,10 @@ class TiedostonLukeminen {
                     }
                     else {
                        virheitaNolla =  false  
-                       val korjattuVersio = readLine("\n\n syöte '" + sointu(i) +"' on virheellinen: " + oikeellisuusTesti(sointu(i)) + 
+                       korjattuVersio = readLine("\n\n syöte '" + sointu(i) +"' on virheellinen: " + oikeellisuusTesti(sointu(i)) + 
                        "\n Virhe on rivillä " + (nuottiDatanRivinumerot(ind)+1)  +
                        "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu input-kansioon. ")
+                        if(korjattuVersio == "\n")  lueTiedosto()
                     }
                  }
                  var korjattuAlkio = "<"
@@ -157,9 +172,9 @@ class TiedostonLukeminen {
             if (kelvollinenSyoteRivi.tail.toLowerCase().trim.contains("sanat")){
                seuraavatrivitLyriikkaan = true
               // varaudutaan siihen että joku kirjoittaa sanoja jo samalle riville kuin missä tunniste:
-//              if(kelvollinenSyoteRivi.tail.trim.substring(6) != 0)  {
-//                      lyriikkadata += kelvollinenSyoteRivi.tail.trim.substring(6)
-//             }   
+              if(kelvollinenSyoteRivi.tail.trim.substring(6).length != 0)  {
+                      lyriikkadata += kelvollinenSyoteRivi.tail.trim.substring(6)
+             }   
             } 
             else if (seuraavatrivitLyriikkaan == false) kasitteleKappaleenNimiJaTahtilaji(kelvollinenSyoteRivi, i)  // end lyriikat false
            
@@ -184,7 +199,7 @@ class TiedostonLukeminen {
                
            }
            else if ("2345678".contains(kelvollinenSyoteRivi(1))){
-                tahtilaji = kelvollinenSyoteRivi(1).toString      // tahtilaji pilalla jos myöhemmässä kommentissa on numero  TODO
+                tahtilaji = kelvollinenSyoteRivi(1).toString      // tahtilaji pilalla jos myöhemmässä kommentissa on numero heti #:n jälkeen TODO
                    // varaudutaan siihen että joku kirjoittaa nuotteja jo samalle riville kuin missä tahtilaji-tunniste:
                    if(kelvollinenSyoteRivi.tail.trim.substring(1) != 0)  {
                       nuottiDataRiveina += kelvollinenSyoteRivi.tail.trim.substring(1)   // kaatuu jos käyttäjä on laittanut 5/4 --> /4 on  "nuottidataa"  TODO

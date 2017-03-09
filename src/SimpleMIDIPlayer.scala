@@ -9,15 +9,14 @@ import scala.io.StdIn._
 
 class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, kappale: Kappale, tahtilaji: Int) {   // Tuple (korkeus/korkeudet, pituus)
   
-    val ms = 420     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
+    val ms = 200     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
     val synth = MidiSystem.getSynthesizer()
-    var uudestaan = "0"
-    var olisiAikaSkrollata = 0
-		var riviInd = 0
-    
     val channels  =  synth.getChannels()
 		val ch1 = channels(0); val ch2 = channels(1);  val ch3 = channels(2);	val ch4 = channels(3);  val ch5 = channels(4);  val ch6 = channels(5)
       
+		var uudestaan = "0"
+    var olisiAikaSkrollata = 0
+		var riviInd = 0
 				
 //		for(patch <- synth.getAvailableInstruments)
 //	 	  println(patch)
@@ -125,14 +124,15 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
         val montakoKertaaEhtiiSoittaaKahdeksasosan = (nuottiTaiSointu._2 / 0.5).toInt
         
        
-        for( i<- 0 until montakoKertaaEhtiiSoittaaKahdeksasosan)
+        for( i<- 0 until montakoKertaaEhtiiSoittaaKahdeksasosan){
         
               for (delayedNuotti <- delayedNotes){
-                ch4.noteOn(delayedNuotti -12, 90)
-                ch5.noteOn(delayedNuotti -24 , 90)  
-                 Thread.sleep(ms/2)
+                ch4.noteOn(delayedNuotti -12, 70)
+                ch5.noteOn(delayedNuotti -24 , 60)  
+                 
               }
-	  
+              Thread.sleep(ms/2)
+        }	  
         
      
         Thread.sleep(((nuottiTaiSointu._2 * ms) - (montakoKertaaEhtiiSoittaaKahdeksasosan*ms/2)) .toInt)   

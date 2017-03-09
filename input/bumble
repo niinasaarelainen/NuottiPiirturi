@@ -1,22 +1,24 @@
-<a1,f1,d1> g#1 g1 f#1 f1 hb1 a1 g#1    <a1,f1,d1> g#1 g1 f#1 <f1,d1,cb1> f#1 g1 g#1
-<a1,f1,d1> g#1 g1 f#1 f1 hb1 a1 g#1    <a1,f1,d1> g#1 g1 f#1 <f1,d1,cb1> f#1 g1 g#1
+#nimi Kimalaisen lento
 
-<a1,f1,d1> g#1 g1 f#1 <g1,d1> f#1 f1 e1    <f1,d1> f#1 g1 g#1 <a1,g1,c#1> hb1 a1 g#1 
-<a1,f1,d1> g#1 g1 f#1 <g1,d1> f#1 f1 e1    <f1,d1> f#1 g1 g#1 <a1,g1,c#1> hb1 h1 c2 
+<a1,f1,d1> g#1 g1 f#1 f1 b1 a1 g#1    <a1,f1,d1> g#1 g1 f#1 <f1,d1,cb1> f#1 g1 g#1
+<a1,f1,d1> g#1 g1 f#1 f1 b1 a1 g#1    <a1,f1,d1> g#1 g1 f#1 <f1,d1,cb1> f#1 g1 g#1
+
+<a1,f1,d1> g#1 g1 f#1 <g1,d1> f#1 f1 e1    <f1,d1> f#1 g1 g#1 <a1,g1,c#1> b1 a1 g#1 
+<a1,f1,d1> g#1 g1 f#1 <g1,d1> f#1 f1 e1    <f1,d1> f#1 g1 g#1 <a1,g1,c#1> b1 h1 c2 
 
 #pääteema transponoituna:
-<d2,hb1,g1> c#2 c2 h1 hb1 eb2 d2 c#2    <d2,hb1,g1> c#2 c2 h1 <hb1,g1,e1> h1 c2 c#2 
-<d2,hb1,g1> c#2 c2 h1 hb1 eb2 d2 c#2    <d2,hb1,g1> c#2 c2 h1 <hb1,g1,e1> h1 c2 c#2 
+<d2,b1,g1> c#2 c2 h1 b1 eb2 d2 c#2    <d2,b1,g1> c#2 c2 h1 <b1,g1,e1> h1 c2 c#2 
+<d2,b1,g1> c#2 c2 h1 b1 eb2 d2 c#2    <d2,b1,g1> c#2 c2 h1 <b1,g1,e1> h1 c2 c#2 
 
-<d2,hb1,g1> c#2 c2 h1  <c2,g1,eb1> h1 hb1 a1     <hb1,g1,d1> h1 c2 c#2    <d2,c2,f#1> eb2 d2 c#2
-<d2,hb1,g1> c#2 c2 h1  <c2,g1,eb1> h1 hb1 a1     <hb1,g1,d1> h1 c2 c#2    <d2,c2,f#1> eb2 d2 c#2
+<d2,b1,g1> c#2 c2 h1  <c2,g1,eb1> h1 b1 a1     <b1,g1,d1> h1 c2 c#2    <d2,c2,f#1> eb2 d2 c#2
+<d2,b1,g1> c#2 c2 h1  <c2,g1,eb1> h1 b1 a1     <b1,g1,d1> h1 c2 c#2    <d2,c2,f#1> eb2 d2 c#2
 
 #vasemman soolo:
 <d2,d1> eb1 d1 eb1 d1 eb1 d1 eb1   <d1,c#2,eb2> eb1 d1 eb1 d1 eb1 d1 eb1
 <d2,d1> eb1 d1 eb1 d1 eb1 d1 eb1   <d1,c#2,eb2> eb1 d1 eb1 d1 eb1 d1 eb1
 
 <d2,d1> eb1 d1 eb1 <d1,c#2,eb2> eb1 d1 eb1     <d2,d1> eb1 <d1,c#2,eb2> eb1 <d1,c2,e2> eb1 <d1,f2,h1> eb1
-<d1,f#2,d2,hb1> eb1 e1 f1  f#1 f1 e1 eb1       d1 eb1 e1 f1  f#1 f1 e1 eb1
+<d1,f#2,d2,b1> eb1 e1 f1  f#1 f1 e1 eb1       d1 eb1 e1 f1  f#1 f1 e1 eb1
 
 <d1-,h1-,d1-,g2-> g1 ab1 g1 ab1 g1 ab1    <g1,f#2,g#2> ab1 g1 ab1 g1 ab1 g1 ab1      
 <g1,g2> ab1 g1 ab1 g1 ab1 g1 ab1          <g1,f#2,g#2> ab1 g1 ab1 g1 ab1 g1 ab1
@@ -27,25 +29,25 @@
 #teema g:stä
 <eb2,g1> f#1 f1 e1 eb1 ab1 g1 f#1    <g1,eb1,c1> f#1 f1 e1 <eb1,c1> e1 f1 f#1
 <eb1,g1,c1> f#1 f1 e1 <f1,d1,cb1> e1 eb1 d1    <eb1,c1> e1 f1 f#1 <f1,d1> f#1 g1 g#1
-<a1,g1,c#1> g#1 g1 f#1 g1 f#1 f1 e1   f2 e2 eb2 d2 c#2 c2 h1 hb1
+<a1,g1,c#1> g#1 g1 f#1 g1 f#1 f1 e1   f2 e2 eb2 d2 c#2 c2 h1 b1
 
-a1 hb1 a1 hb1 <a2,a1> hb1 <a1,f2> hb1     <a1,d2> hb1 hb1 hb1 <a1,d2> hb1 <a1,f2> hb1
-<a2,a1> hb1 a1 hb1 <a2,a1> hb1 <a1,f2> hb1     <a1,d2> hb1 <a1,hb1> hb1 <a1,d2> hb1 <a1,f2> hb1
+a1 b1 a1 b1 <a2,a1> b1 <a1,f2> b1     <a1,d2> b1 b1 b1 <a1,d2> b1 <a1,f2> b1
+<a2,a1> b1 a1 b1 <a2,a1> b1 <a1,f2> b1     <a1,d2> b1 b1 b1 <a1,d2> b1 <a1,f2> b1
 
-<a2,a1> hb1 h1 c2 c#2 d2 d#2 e2    f1 f#1 g1 g#1 a1 a#1 h1 c2
+<a2,a1> b1 h1 c2 c#2 d2 d#2 e2    f1 f#1 g1 g#1 a1 a#1 h1 c2
 c#2 d2 d#2 e2 f2 f#2 g2 g#2   a2 a#2 a2 g#2 a2 a#2 a2 g#2
 
 
 # kuten alku mutta okt ylempää  
 <a2,f1,d1,a1> g#2 g2 f#2 f2 b2 a2 g#2    <a2,f1,d1,a1> g#2 g2 f#2 <f2,d1,h1,g1> f#2 g2 g#2
-<a2,f1,d1,a1> g#2 g2 f#2 f2 b2 a2 g#2    <a2,f1,d1,a1> g#2 g2 f#2 <f2,d1,h1,g1> f#2 g2 g#2
+<a2,f1,d1,a1> g#2 g2 f#2 f2 b2 a2 g2#    <a2,f1,d1,a1> g#2 g2 f#2 <f2,d1,h1,g1> f#2 g2 g#2
 
 <a2,f1,d1,a1> g#2 g2 f#2 <g2,d1,b1,g1> f#2 f2 e2    <f2,d1,a1,f1> f#2 g2 g#2 <a2,g1,c#1,e1> b2 a2 g#2 
 <a2,a1,f1,d1> g#2 g2 f#2 <g2,d1,b1,g1> f#2 f2 e2    <f2,d1,a1,f1> f#2 g2 g#2 <a2,g1,c#1,e1> h2 c2 c#2
 
 # nyt eri tavalla
-<d2,a1,f1> c#2 c2 h1 <c2,a1,f#1> h1 hb1 a1    <hb1,g1,d1> a1 g#1 g1 f#1 f1 e1 eb1
-<d2,a1,f1> c#2 c2 h1 <c2,a1,f#1> h1 hb1 a1    <hb1,g1,d1> a1 g#1 g1 f#1 f1 e1 eb1
+<d2,a1,f1> c#2 c2 h1 <c2,a1,f#1> h1 b1 a1    <b1,g1,d1> a1 g#1 g1 f#1 f1 e1 eb1
+<d2,a1,f1> c#2 c2 h1 <c2,a1,f#1> h1 b1 a1    <b1,g1,d1> a1 g#1 g1 f#1 f1 e1 eb1
 
 d1- z- a1 a#1 h1 c2       c#2 d2 d#2 e2 f2 f#2 g2 g#2 
 a1 a#1 h1 c2  c#2 d2 d#2 e2     f2 f#1 g1 g#1  a1 h1 c2 c#2
