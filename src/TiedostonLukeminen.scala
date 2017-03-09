@@ -87,32 +87,31 @@ class TiedostonLukeminen {
      var jatketaanko = true
      var korjattuVersio= ""
      for (i <- 0 until nuottiDataRiveina.size) {
-        rekursioCounter += 1
-        println("rekursioCounter forin alussa" + rekursioCounter)
         if(jatketaanko == true){        // jos löytyi virhe, loppuja alkioita ei haluta talteen
-          var splitattuRivi = nuottiDataRiveina(i).split(" ") 
-          for (alkio <- splitattuRivi) {
-               if (alkio == "" ) {} // ylimääräisiä välilyöntejä ei nuottiAlkiot:hin  
-               
-               else if (alkio.head == '<'){
-                  jatketaanko = tarkistaSoinnunVirheet(alkio, i)
-                  println(jatketaanko)
-               }   
-               else if (oikeellisuusTesti(alkio) == "") {  // ei virhettä alkiossa, tarpeeksi infoa nuotin tekemiseen
-                    println("rivi 95")
-                    nuottiAlkiot = nuottiAlkiot :+ erikoistapauksetNuotinNimessa(alkio) // alkio sellaisenaan tai fixattuna
-                    
-               } else {  // virheellinen alkio:
-               virheitaNolla =  false  
-               korjattuVersio = readLine("\n\n syöte '" + alkio +"' on virheellinen: " + oikeellisuusTesti(alkio) + 
-                 "\n Virhe on rivillä " + (nuottiDatanRivinumerot(i)+1)  +
-                 "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu. ")
+            var splitattuRivi = nuottiDataRiveina(i).split(" ") 
+            for (alkio <- splitattuRivi) {
+               if(jatketaanko == true){ 
+                 if (alkio == "" ) {} // ylimääräisiä välilyöntejä ei nuottiAlkiot:hin  
                  
-                 if(korjattuVersio == "")   lueTiedosto() 
-               }
-          }
-     }  
-         println("rekursioCounter forin lopussa" + rekursioCounter)
+                 else if (alkio.head == '<'){
+                    jatketaanko = tarkistaSoinnunVirheet(alkio, i)
+                    println(jatketaanko)
+                 }   
+                 else if (oikeellisuusTesti(alkio) == "") {  // ei virhettä alkiossa, tarpeeksi infoa nuotin tekemiseen
+                      nuottiAlkiot = nuottiAlkiot :+ erikoistapauksetNuotinNimessa(alkio) // alkio sellaisenaan tai fixattuna
+                      
+                 } else {  // virheellinen alkio:
+                 virheitaNolla =  false  
+                 jatketaanko =  false
+                 korjattuVersio = readLine("\n\n syöte '" + alkio +"' on virheellinen: " + oikeellisuusTesti(alkio) + 
+                   "\n Virhe on rivillä " + (nuottiDatanRivinumerot(i)+1)  +
+                   "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu. ")
+                   
+                   if(korjattuVersio == "")   lueTiedosto() 
+                 }
+            }
+          }     
+        } // end if(jatketaanko == true)  
      } // end for nuottiDataRiveina
      
      println("nuottiAlkiot after nuottiDataRiveina-for: " +nuottiAlkiot.size )
