@@ -17,6 +17,8 @@ class TiedostonLukeminen {
   var tiedostonNimi = ""
   val inputhakemistonNimi =  "./input_virheita/"
   val inputhakemisto = new File(inputhakemistonNimi)
+  
+  var rekursioCounter = 0
 
   
  
@@ -82,16 +84,22 @@ class TiedostonLukeminen {
  
      // splittaus & virheiden tarkistus:  
      var virheitaNolla = true
+     var jatketaanko = true
      var korjattuVersio= ""
      for (i <- 0 until nuottiDataRiveina.size) {
+        rekursioCounter += 1
+        println("rekursioCounter forin alussa" + rekursioCounter)
+        if(jatketaanko == true){        // jos löytyi virhe, loppuja alkioita ei haluta talteen
           var splitattuRivi = nuottiDataRiveina(i).split(" ") 
           for (alkio <- splitattuRivi) {
                if (alkio == "" ) {} // ylimääräisiä välilyöntejä ei nuottiAlkiot:hin  
                
-               else if (alkio.head == '<')
-                  tarkistaSoinnunVirheet(alkio, i)
-                  
+               else if (alkio.head == '<'){
+                  jatketaanko = tarkistaSoinnunVirheet(alkio, i)
+                  println(jatketaanko)
+               }   
                else if (oikeellisuusTesti(alkio) == "") {  // ei virhettä alkiossa, tarpeeksi infoa nuotin tekemiseen
+                    println("rivi 95")
                     nuottiAlkiot = nuottiAlkiot :+ erikoistapauksetNuotinNimessa(alkio) // alkio sellaisenaan tai fixattuna
                     
                } else {  // virheellinen alkio:
@@ -103,9 +111,11 @@ class TiedostonLukeminen {
                  if(korjattuVersio == "")   lueTiedosto() 
                }
           }
+     }  
+         println("rekursioCounter forin lopussa" + rekursioCounter)
      } // end for nuottiDataRiveina
      
-     println("nuottiAlkiot after nuottiDataRiveina-for: " +nuottiAlkiot )
+     println("nuottiAlkiot after nuottiDataRiveina-for: " +nuottiAlkiot.size )
      
      if (virheitaNolla) soundiValinta()
      //     for (i <- 0 until nuottiAlkiot.size)
@@ -114,11 +124,14 @@ class TiedostonLukeminen {
     
        def tarkistaSoinnunVirheet(alkio:String, ind:Int) = {
         
+       var jatketaanko = true
+         
                 if(alkio.last != '>'){
+                     jatketaanko = false
                      korjattuVersio = readLine("\n\n syöte '" + alkio +"' on virheellinen:  puuttuu soinnun lopetussymboli '>' tai olet vahingossa laittanut välilyönnin soinnun sisään" + 
                       "\n Virhe on rivillä " + (nuottiDatanRivinumerot(ind)+1)  +
                       "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu. ")  
-                     if(korjattuVersio == "")  lueTiedosto()
+                     if(korjattuVersio == "")  lueTiedosto() else {}
                 }     
                  
                 else {
@@ -131,6 +144,7 @@ class TiedostonLukeminen {
                       }
                       else {
                          virheitaNolla =  false  
+                         jatketaanko = false
                          korjattuVersio = readLine("\n\n syöte '" + sointu(i) +"' on virheellinen: " + oikeellisuusTesti(sointu(i)) + 
                          "\n Virhe on rivillä " + (nuottiDatanRivinumerot(ind)+1)  +
                          "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu. ")
@@ -138,7 +152,7 @@ class TiedostonLukeminen {
                       }
                    }
                    
-                   if(virheitaNolla){
+                   if(virheitaNolla == true){
                        var korjattuAlkio = "<"
                        for (aani<- sointu) korjattuAlkio += aani + ","
                        korjattuAlkio = korjattuAlkio.substring(0,korjattuAlkio.size-1) // ei vikaa pilkkua
@@ -150,10 +164,11 @@ class TiedostonLukeminen {
                    }
                  
                  }  // end else: ei ole kyse koko alkiosta <....>
-                // end soinnnun käsittely
-     
+    println(" @sointu: " +jatketaanko)          
+    jatketaanko 
     }// end tarkistaSoinnunVirheet
-    
+   
+   println("rekursioCounter tarkistaVirheet lopussa" + rekursioCounter)   
   }  // end tarkistaVirheet
 
   
@@ -199,7 +214,7 @@ class TiedostonLukeminen {
         }
       }// if   .size != 0 
     } 
-    println("kappaleenNimi: " + kappaleenNimi + ", tahtilaji" + tahtilaji)
+  //  println("kappaleenNimi: " + kappaleenNimi + ", tahtilaji" + tahtilaji)
   }
   
   
