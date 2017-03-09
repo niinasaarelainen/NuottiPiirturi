@@ -18,9 +18,7 @@ class TiedostonLukeminen {
   val inputhakemistonNimi =  "./input_virheita/"
   val inputhakemisto = new File(inputhakemistonNimi)
   
-  var rekursioCounter = 0
-
-  
+    
  
   helppiTeksti()
   listaaTiedostot()
@@ -65,8 +63,6 @@ class TiedostonLukeminen {
      this.nuottiDatanRivinumerot = Buffer[Int]()
      this.nuottiAlkiot = Array[String]() 
      val kayttajanValitsemaTiedosto = Source.fromFile(inputhakemistonNimi + tiedostonNimi)
-     
-     println("-----lueTiedosto-----")
       
      try {
        for (rivi <- kayttajanValitsemaTiedosto.getLines) {
@@ -89,14 +85,15 @@ class TiedostonLukeminen {
      var jatketaanko = true
      var korjattuVersio= ""
      for (i <- 0 until nuottiDataRiveina.size) {
-        if(jatketaanko == true){        // jos löytyi virhe, loppuja alkioita ei haluta talteen
+        if(jatketaanko){        // jos löytyi virhe, loppuja alkioita ei haluta talteen rekursion tullessa "takaisinpäin" kutsupinossa
             var splitattuRivi = nuottiDataRiveina(i).split(" ") 
             for (alkio <- splitattuRivi) {
                if(jatketaanko){ 
-                 if (alkio == "" ) {} // ylimääräisiä välilyöntejä ei nuottiAlkiot:hin  
+                 if (alkio == "" ) {} // ylimääräisiä välilyöntejä ei nuottiAlkiot:hin 
                  
                  else if (alkio.head == '<'){
-                    jatketaanko = tarkistaSoinnunVirheet(alkio, i)
+                    tarkistaSoinnunVirheet(alkio, i)
+                    if (!jatketaanko)  virheitaNolla =  false  
                     println(jatketaanko)
                  }   
                  else if (oikeellisuusTesti(alkio) == "") {  // ei virhettä alkiossa, tarpeeksi infoa nuotin tekemiseen
@@ -116,16 +113,12 @@ class TiedostonLukeminen {
         } // end if(jatketaanko == true)  
      } // end for nuottiDataRiveina
      
-     println("nuottiAlkiot after nuottiDataRiveina-for: " +nuottiAlkiot.size )
-     
-     if (virheitaNolla && !jatketaanko) soundiValinta()
+      
+     if (virheitaNolla) soundiValinta()     //  && !jatketaanko : < > toimii, mutta muissa tapauksissa soundivalintaa ei tule   TODO
         
     
        def tarkistaSoinnunVirheet(alkio:String, ind:Int) = {
         
-       var jatketaanko = true
-       println("--tarkistaSoinnunVirheet--")
-         
                 if(alkio.last != '>'){
                      jatketaanko = false
                      korjattuVersio = readLine("\n\n syöte '" + alkio +"' on virheellinen:  puuttuu soinnun lopetussymboli '>' tai olet vahingossa laittanut välilyönnin soinnun sisään" + 
@@ -157,18 +150,13 @@ class TiedostonLukeminen {
                        for (aani<- sointu) korjattuAlkio += aani + ","
                        korjattuAlkio = korjattuAlkio.substring(0,korjattuAlkio.size-1) // ei vikaa pilkkua
                        korjattuAlkio += ">"
-                       
-                       println("korjattuAlkio: " + korjattuAlkio)
-                       
                        nuottiAlkiot = nuottiAlkiot :+ korjattuAlkio  // alkio = <g1,h1>
                    }
                  
                  }  // end else: ei ole kyse koko alkiosta <....>
-    println(" @sointu: " +jatketaanko)          
-    jatketaanko 
-    }// end tarkistaSoinnunVirheet
+ 
+       }// end tarkistaSoinnunVirheet
    
-   println("rekursioCounter tarkistaVirheet lopussa" + rekursioCounter)   
   }  // end tarkistaVirheet
 
   
