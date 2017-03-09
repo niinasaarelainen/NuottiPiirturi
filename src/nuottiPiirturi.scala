@@ -53,6 +53,8 @@ class NuottiPiirturi(){
             var pituus = alkio.count(_ == '-')     
             var extraetumerkki = tutkiEtumerkit(nuotinNimi)  
            
+            /* jos tauot yrittää siirtää omaksi sisäkkäiseksi funktioksi, tulee valitus reassignment to val palautetaan */
+            
             if (nuotinNimi == "z"){                                 //   T A U O T
                pituus match{
                   case 0 =>  palautetaan += new KahdeksasosaTauko; if(ok >= 0) iskujaMennyt += 0.5
@@ -116,9 +118,6 @@ class NuottiPiirturi(){
             nuottiData += new Sointu(kasitteleNuottiTieto(sointuBuffer, viivastolleLaitettavaBuffer) ) 
    }
    
-   def kasitteleTauot(alkio: String) = {
-     
-   }
    
     palautetaan   // tätä tarvitaan sointuja muodostettaessa
    } 
@@ -180,7 +179,6 @@ class NuottiPiirturi(){
                  minutOnJoKasitelty = true  
                  iskujaMennyt += nuottiData(i+1).pituus
                  if(nuottiData.last.eq(nuottiData(i+1))) paastiinTiedostonloppuun = true
-             //    if(i+1 == nuottiData.size-1) paastiinTiedostonloppuun = true
               } else {
                  nuottiDataParitettu += nuottiData(i)     // 1/8 talteen, jos se ei löytänyt paria
               }
@@ -198,6 +196,5 @@ class NuottiPiirturi(){
           nuottiDataParitettu += nuottiData(nuottiData.size-1)   // viimeinenkin nuottiolio messiin, jos se ei ollut 1/8-parin puolisko
    }  
   
- 
-    
+  
 }

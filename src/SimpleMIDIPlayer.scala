@@ -50,7 +50,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
 	     normaalisoitto()
 	  else rocknroll()   // rokkibändi, 5-kanavainen, "delay":      
     
-    Thread.sleep(1500)   // parempi soundi vikaan ääneen
+    Thread.sleep(1900)   // parempi soundi vikaan ääneen
     synth.close()
     
     uudestaan = readLine("\n\nSoitetaanko uudestaan? ENTER = Kyllä,  0 = Ei ")
@@ -93,45 +93,51 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
 	  }
 	
 	  
-    def rocknroll() = {                                  // R O K K I B Ä N D I  
+    def rocknroll() = {                                  // R O K K I B Ä N D I    S T A R T
+      
+     
+      var delayedNotes = Buffer[Int]()
+      
 	  for(nuottiTaiSointu <- nuotit){      
         if (nuottiTaiSointu._1(0) != 0)  
-              for (nuotti <-  nuottiTaiSointu._1)
-              if(nuotti !=  nuottiTaiSointu._1.last){
-                 ch1.noteOn(nuotti, 75)  
-                 ch1.noteOn(nuotti, 75)   
-                 ch2.noteOn(nuotti -12, 75)   // okt. alas
-                 ch2.noteOn(nuotti -12, 75)
-               }   
-              else { 
-                ch1.noteOn(nuotti, 114)      // guit1
-                ch1.noteOn(nuotti, 114)      // guit1 , "chorus"-efektiä vähän, kun sama info x 2
-                ch2.noteOn(nuotti -12, 114)  // guit2
-                ch3.noteOn(nuotti -24, 127)  // bass, -2okt., basso tuplaa vain melodian
-                ch6.noteOn(nuotti -24, 127)  // bass2
-                ch6.noteOn(nuotti -36, 107)  // bass3
+              for (nuotti <-  nuottiTaiSointu._1){
+                
+                 delayedNotes +=  nuotti 
+                 if (delayedNotes.size > 3)
+                   delayedNotes -= delayedNotes(0)
+                
+                  if(nuotti !=  nuottiTaiSointu._1.last){
+                     ch1.noteOn(nuotti, 75)  
+                     ch1.noteOn(nuotti, 75)   
+                     ch2.noteOn(nuotti -12, 75)   // okt. alas
+                     ch2.noteOn(nuotti -12, 75)
+                  }   
+                  else { 
+                    ch1.noteOn(nuotti, 114)      // guit1
+                    ch1.noteOn(nuotti, 114)      // guit1 , "chorus"-efektiä vähän, kun sama info x 2
+                    ch2.noteOn(nuotti -12, 114)  // guit2
+                    ch3.noteOn(nuotti -24, 127)  // bass, -2okt., basso tuplaa vain melodian
+                    ch6.noteOn(nuotti -24, 127)  // bass2
+                    ch6.noteOn(nuotti -36, 107)  // bass3
+                  }
               }
-           
-        Thread.sleep(ms/4)   // 1/16 - delay              // R O K K I B Ä N D I  
-         //1. delay:  
-        if (nuottiTaiSointu._1(0) != 0)  
-              for (nuotti <-  nuottiTaiSointu._1){
-                ch4.noteOn(nuotti -12, 85)
-                ch5.noteOn(nuotti -24 , 60)  
-               }
+        
+        val montakoKertaaEhtiiSoittaaKahdeksasosan = (nuottiTaiSointu._2 / 0.5).toInt
+        
+       
+        for( i<- 0 until montakoKertaaEhtiiSoittaaKahdeksasosan)
+        
+              for (delayedNuotti <- delayedNotes){
+                ch4.noteOn(delayedNuotti -12, 90)
+                ch5.noteOn(delayedNuotti -24 , 90)  
+                 Thread.sleep(ms/2)
+              }
 	  
-         Thread.sleep(ms/4)   // 1/16 - doubledelay             
-         //2. delay:  
-        if (nuottiTaiSointu._1(0) != 0 && nuottiTaiSointu._2 != 0.5)  // 1/8-nuoteille ehtii tehdä vain yhden delayn
-              for (nuotti <-  nuottiTaiSointu._1){
-                ch4.noteOn(nuotti -12, 80)
-                ch5.noteOn(nuotti -24 , 55)  
-               }
         
      
-        Thread.sleep(((nuottiTaiSointu._2 * ms) - (ms/2)).toInt)   
+        Thread.sleep(((nuottiTaiSointu._2 * ms) - (montakoKertaaEhtiiSoittaaKahdeksasosan*ms/2)) .toInt)   
     
-        olisiAikaSkrollata += (nuottiTaiSointu._2 * ms).toInt      // R O K K I B Ä N D I 
+        olisiAikaSkrollata += (nuottiTaiSointu._2 * ms).toInt          // R O K K I B Ä N D I 
         if(olisiAikaSkrollata >= ms*tahtilaji*2 ){            
            if ( riviInd < kappale.kappale.size){
               skrollaaa(riviInd)
@@ -143,9 +149,12 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
    
         // noteOff:
         if (nuottiTaiSointu._1(0) != 0)
-          for (nuotti <- nuottiTaiSointu._1)  {            
-              ch1.noteOff(nuotti); ch2.noteOff(nuotti -12); ch3.noteOff(nuotti -24); ch4.noteOff(nuotti -12); ch5.noteOff(nuotti -24) ; ch6.noteOff(nuotti -24) ; ch6.noteOff(nuotti -36) 
-          } 
+            for (nuotti <- nuottiTaiSointu._1)  {            
+                ch1.noteOff(nuotti); ch2.noteOff(nuotti -12); ch3.noteOff(nuotti -24); ch4.noteOff(nuotti -12); ch5.noteOff(nuotti -24) ; ch6.noteOff(nuotti -24) ; ch6.noteOff(nuotti -36) 
+            } 
+            for (delayedNuotti <- delayedNotes)  {            
+                ch4.noteOff(delayedNuotti -12); ch5.noteOff(delayedNuotti -24)          
+            } 
         
       }	//end for
     } // end rocknroll
