@@ -92,13 +92,12 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
             
             else if(olisiAikaSkrollata > ms*tahtilaji*2 ){ 
               val paljonkoMentiinYliSkrollausRajan = olisiAikaSkrollata - ms*tahtilaji*2
-              println(paljonkoMentiinYliSkrollausRajan)
-              Thread.sleep((nuottiTaiSointu._2 * ms).toInt - paljonkoMentiinYliSkrollausRajan )  // !!! kaatuu: 8soint TODO
+              Thread.sleep((nuottiTaiSointu._2 * ms).toInt - paljonkoMentiinYliSkrollausRajan )  
                if ( riviInd < kappale.kappale.size){
                   skrollaaa(riviInd)
                   riviInd += 1
                }
-               olisiAikaSkrollata = 0
+               olisiAikaSkrollata = ms
               Thread.sleep(paljonkoMentiinYliSkrollausRajan )
             }
             
