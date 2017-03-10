@@ -230,24 +230,24 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPa
        for (alkio<- nuottiData) {
          var apubufferInt = Buffer[Int]()   // luodaan aina tyhjä buffer
          
-         
-           alkio.isInstanceOf[Sointu] match {
-           case true  => pituudet += alkio.asInstanceOf[Sointu].pituus         // yhteinen pituus talteen vain kerran
-                         for(nuotti <- alkio.asInstanceOf[Sointu].nuotit){
+           alkio match {
+           case s: Sointu  => 
+                       pituudet += s.pituus         // yhteinen pituus talteen vain kerran
+                       for(nuotti <- s.nuotit){
                               apubufferInt += MIDINoteNumber(nuotti.asInstanceOf[Nuotti].korkeus)  // Map("nuotinnimi" --> Int)     
-                         }   
-                         nuottiNumberit += apubufferInt.sorted  // melodia menee vikaksi
+                       }   
+                       nuottiNumberit += apubufferInt.sorted  // melodia menee vikaksi
                          
-           case false => if (alkio.isInstanceOf[Nuotti]){
-                 apubufferInt += MIDINoteNumber(alkio.asInstanceOf[Nuotti].korkeus)
-                 nuottiNumberit += apubufferInt
-                 pituudet += alkio.asInstanceOf[Nuotti].pituus
-                 } 
-                 else if (alkio.isInstanceOf[Tauko]){
-                      pituudet += alkio.asInstanceOf[Tauko].pituus   
-                      apubufferInt += 0  // tauon "korkeus" on 0
+           case n: Nuotti => 
+                       apubufferInt += MIDINoteNumber(n.korkeus)
+                       nuottiNumberit += apubufferInt
+                       pituudet += n.pituus
+                 
+           case t: Tauko =>
+                      pituudet += t.pituus   
+                      apubufferInt += 0  // sovin itseni kanssa että tauon "korkeus" on 0
                       nuottiNumberit += apubufferInt
-                 }
+                 
             } 
        } // end for
    
