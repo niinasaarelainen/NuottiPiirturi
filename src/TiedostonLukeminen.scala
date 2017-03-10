@@ -83,7 +83,6 @@ class TiedostonLukeminen {
  
      ekaKerta = false
      var virheitaNolla = true
-     var korjattuVersio= ""
      
      do {
        virheitaNolla = true
@@ -100,21 +99,19 @@ class TiedostonLukeminen {
                    if(virheitaNolla){
                        if (alkio == "" ) {} // ylimääräisiä välilyöntejä ei nuottiAlkiot:hin 
                        
-                       else if (alkio.head == '<'){
-                          val fixattuAlkio = alkio.replaceAll(", ", ",")
-                          tarkistaSoinnunVirheet(fixattuAlkio, i)
-                       }   
-                       else if (oikeellisuusTesti(alkio) == "") {  // ei virhettä alkiossa, tarpeeksi infoa nuotin tekemiseen
-                            nuottiAlkiot = nuottiAlkiot :+ erikoistapauksetNuotinNimessa(alkio) // alkio sellaisenaan tai fixattuna
-                            println("rivi 106")    
-                        
-                       } else {  // virheellinen alkio:
-                       virheitaNolla =  false  
-                       korjattuVersio = readLine("\n\n syöte '" + alkio +"' on virheellinen: " + oikeellisuusTesti(alkio) + 
-                         "\n Virhe on rivillä " + (nuottiDatanRivinumerot(i)+1)  +
-                         "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu. ")
+                       else if (alkio.head == '<')
+                          tarkistaSoinnunVirheet(alkio.replaceAll(", " , ","), i)
                          
-                         if(korjattuVersio == "")  { lueTiedosto(); return}
+                       else if (oikeellisuusTesti(alkio) == "")   // ei virhettä alkiossa, tarpeeksi infoa nuotin tekemiseen
+                           nuottiAlkiot = nuottiAlkiot :+ erikoistapauksetNuotinNimessa(alkio) // alkio sellaisenaan tai fixattuna
+                        
+                       else {  // virheellinen alkio:
+                           virheitaNolla =  false  
+                           readLine("\n\n syöte '" + alkio +"' on virheellinen: " + oikeellisuusTesti(alkio) + 
+                             "\n Virhe on rivillä " + (nuottiDatanRivinumerot(i)+1)  +
+                             "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu. ")
+                             
+                           lueTiedosto(); return
                        }
                   }   
               }         
@@ -127,10 +124,10 @@ class TiedostonLukeminen {
         
                 if(alkio.last != '>'){
                      virheitaNolla = false
-                     korjattuVersio = readLine("\n\n syöte '" + alkio +"' on virheellinen:  puuttuu soinnun lopetussymboli '>' tai olet vahingossa laittanut välilyönnin soinnun sisään" + 
+                     readLine("\n\n syöte '" + alkio +"' on virheellinen:  puuttuu soinnun lopetussymboli '>' tai olet vahingossa laittanut välilyönnin soinnun sisään" + 
                       "\n Virhe on rivillä " + (nuottiDatanRivinumerot(ind)+1)  +
                       "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu. ")  
-                     if(korjattuVersio == "") { lueTiedosto(); return}  else {}
+                      lueTiedosto(); return  
                 }     
                  
                 else {
@@ -141,10 +138,10 @@ class TiedostonLukeminen {
                       }
                       else {
                          virheitaNolla =  false  
-                         korjattuVersio = readLine("\n\n syöte '" + sointu(i) +"' on virheellinen: " + oikeellisuusTesti(sointu(i)) + 
+                         readLine("\n\n syöte '" + sointu(i) +"' on virheellinen: " + oikeellisuusTesti(sointu(i)) + 
                          "\n Virhe on rivillä " + (nuottiDatanRivinumerot(ind)+1)  +
                          "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu. ")
-                          if(korjattuVersio == "")  {lueTiedosto(); return}
+                        lueTiedosto(); return
                       }
                    }
                    

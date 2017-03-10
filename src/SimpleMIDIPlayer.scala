@@ -9,7 +9,7 @@ import scala.io.StdIn._
 
 class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, kappale: Kappale, tahtilaji: Int) {   // Tuple (korkeus/korkeudet, pituus)
   
-    val ms = 550     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
+    val ms = 500     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
     val synth = MidiSystem.getSynthesizer()
     val channels  =  synth.getChannels()
 		val ch1 = channels(0); val ch2 = channels(1);  val ch3 = channels(2);	val ch4 = channels(3);  val ch5 = channels(4);  val ch6 = channels(5)
@@ -78,30 +78,35 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
                }
            
         
-      // nuotin pituus & skrollaus:
-        olisiAikaSkrollata += (nuottiTaiSointu._2 * ms).toInt
-        if(olisiAikaSkrollata == ms*tahtilaji*2 ){            // rivillä on 2 tahtia 
-          Thread.sleep((nuottiTaiSointu._2 * ms).toInt)  // ms 
-           if ( riviInd < kappale.kappale.size){
-              skrollaaa(riviInd)
-              riviInd += 1
-              olisiAikaSkrollata = 0
-           }
-        }   
-        
-        else if(olisiAikaSkrollata > ms*tahtilaji*2 ){ 
-          val paljonkoMentiinYliSkrollausRajan = olisiAikaSkrollata - ms*tahtilaji*2
-          Thread.sleep((nuottiTaiSointu._2 * ms).toInt - paljonkoMentiinYliSkrollausRajan )  // ms 
-           if ( riviInd < kappale.kappale.size){
-              skrollaaa(riviInd)
-              riviInd += 1
-              olisiAikaSkrollata = 0
-           }
-          Thread.sleep(paljonkoMentiinYliSkrollausRajan )
-        }
-        
-        else Thread.sleep((nuottiTaiSointu._2 * ms).toInt)
+      // nuotin pituus & skrollaus:            // TODO entä jos tahtiviivat eivät mene kuin Strömssöössä = ollut "liian" pitkiä nuotteja --> ei tahtiviivaa
+	      if(nuottiTaiSointu._2 !=  nuotit.last){
+            olisiAikaSkrollata += (nuottiTaiSointu._2 * ms).toInt
+            if(olisiAikaSkrollata == ms*tahtilaji*2 ){            // rivillä on 2 tahtia (4000ms)
+              Thread.sleep((nuottiTaiSointu._2 * ms).toInt)  // ms 
+               if ( riviInd < kappale.kappale.size){
+                  skrollaaa(riviInd)
+                  riviInd += 1
+               }
+               olisiAikaSkrollata = 0
+            }   
+            
+            else if(olisiAikaSkrollata > ms*tahtilaji*2 ){ 
+              val paljonkoMentiinYliSkrollausRajan = olisiAikaSkrollata - ms*tahtilaji*2
+              println(paljonkoMentiinYliSkrollausRajan)
+              Thread.sleep((nuottiTaiSointu._2 * ms).toInt - paljonkoMentiinYliSkrollausRajan )  // !!! kaatuu: 8soint TODO
+               if ( riviInd < kappale.kappale.size){
+                  skrollaaa(riviInd)
+                  riviInd += 1
+               }
+               olisiAikaSkrollata = 0
+              Thread.sleep(paljonkoMentiinYliSkrollausRajan )
+            }
+            
+            else Thread.sleep((nuottiTaiSointu._2 * ms).toInt)
+	      }  // end (if nuotit.last)
          
+	      else Thread.sleep((nuottiTaiSointu._2 * ms).toInt)
+	      
     // noteOff:
         if (nuottiTaiSointu._1(0) != 0)
           for (nuotti <- nuottiTaiSointu._1)  {            
