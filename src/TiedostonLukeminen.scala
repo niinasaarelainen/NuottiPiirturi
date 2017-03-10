@@ -74,29 +74,24 @@ class TiedostonLukeminen {
      }
           
      kasitteleTunnisteet(this.inputFromFile) 
-     if(ekaKerta) tarkistaVirheet()
-    
-     println("palattiin lueTiedoston loppuun")
-     return
+     if(ekaKerta) tarkistaVirheet()     // loput virheidentarkistukset do while-loopissa, kutsu rivillä 94
+   
   }   
   
   
-  def tarkistaVirheet(): Unit = {
-     // println("nuottiDataRiveina :" + nuottiDataRiveina + " nuottiDatanRivinumerot: " + nuottiDatanRivinumerot)
+  def tarkistaVirheet() = {
  
-     // splittaus & virheiden tarkistus:  
      ekaKerta = false
      var virheitaNolla = true
      var korjattuVersio= ""
      
      do {
-       var virheitaNolla = true
+       virheitaNolla = true
        tarkistaVirheetForLoop()
      } while (!virheitaNolla) 
        
-       soundiValinta()   
-      println("soundiValinta tehty")
-     
+     soundiValinta()   
+       
      def tarkistaVirheetForLoop(): Unit = {
          for (i <- 0 until nuottiDataRiveina.size) {
                  var splitattuRivi = nuottiDataRiveina(i).split(" ") 
@@ -136,12 +131,10 @@ class TiedostonLukeminen {
                    var sointu =  alkio.tail.substring(0, alkio.size -2).split(",")  
                    for(i <- 0 until sointu.size) {
                       if (oikeellisuusTesti(sointu(i)) == "") {
-                      //   println(erikoistapauksetNuotinNimessa(sointu(i)))
                           sointu(i) = erikoistapauksetNuotinNimessa(sointu(i))  // korvataan soinnun alkiot mahdollisilla fixauksilla
                       }
                       else {
                          virheitaNolla =  false  
-                   //      jatketaanko = false
                          korjattuVersio = readLine("\n\n syöte '" + sointu(i) +"' on virheellinen: " + oikeellisuusTesti(sointu(i)) + 
                          "\n Virhe on rivillä " + (nuottiDatanRivinumerot(ind)+1)  +
                          "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu. ")
@@ -152,15 +145,13 @@ class TiedostonLukeminen {
                    if(virheitaNolla){
                        var korjattuAlkio = "<"
                        for (aani<- sointu) korjattuAlkio += aani + ","
-                       korjattuAlkio = korjattuAlkio.substring(0,korjattuAlkio.size-1) // ei vikaa pilkkua
-                       korjattuAlkio += ">"
+                       korjattuAlkio = korjattuAlkio.substring(0,korjattuAlkio.size-1) + ">" // ei vikaa pilkkua
                        nuottiAlkiot = nuottiAlkiot :+ korjattuAlkio  // alkio = <g1,h1>
                    }
                  
                  }  // end else: ei ole kyse koko alkiosta <....>
  
        }// end tarkistaSoinnunVirheet
-  // return 
   }  // end tarkistaVirheet
 
   
@@ -244,7 +235,7 @@ class TiedostonLukeminen {
   
   def soundiValinta() = {
      do {
-     MIDIPatch = readLine("\nMillä soundilla haluat kuulla kappaleen?\n" +
+     MIDIPatch = readLine("\n\nMillä soundilla haluat kuulla kappaleen?\n" +
       "ENTER= en millään,  1= piano,  2= vibrafoni,  3= rock-urut,  4= syna,  5= akustinen kitara,  6= rokkibändi,  7=music box  ")
      } while (!"1234567".contains(MIDIPatch))
   }

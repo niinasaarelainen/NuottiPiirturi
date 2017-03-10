@@ -9,9 +9,7 @@ class NuottiPiirturi(){
    var tahdinAikaisetEtumerkit = Buffer[String]()
    var lyricsBuffer = Buffer[String]()  
    val inputTiedostosta = new TiedostonLukeminen
-   println("ennen lueT")
    inputTiedostosta.lueTiedosto()
-   println("jälk lueT")
    val tahtilaji = inputTiedostosta.tahtilaji.toDouble 
     
    val inputBuffer = inputTiedostosta.nuottiAlkiot.toBuffer  
@@ -20,7 +18,6 @@ class NuottiPiirturi(){
        kasitteleLyriikat() 
    tehdaanKahdeksasosaParit()
  
-  // val viivasto = new Viivasto(nuottiData, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)
    val viivasto = new Viivasto(nuottiDataParitettu, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)
    viivasto.piirraNuotit()
    
