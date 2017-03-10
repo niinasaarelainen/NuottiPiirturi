@@ -101,7 +101,8 @@ class TiedostonLukeminen {
                        if (alkio == "" ) {} // ylimääräisiä välilyöntejä ei nuottiAlkiot:hin 
                        
                        else if (alkio.head == '<'){
-                          tarkistaSoinnunVirheet(alkio, i)
+                          val fixattuAlkio = alkio.replaceAll(", ", ",")
+                          tarkistaSoinnunVirheet(fixattuAlkio, i)
                        }   
                        else if (oikeellisuusTesti(alkio) == "") {  // ei virhettä alkiossa, tarpeeksi infoa nuotin tekemiseen
                             nuottiAlkiot = nuottiAlkiot :+ erikoistapauksetNuotinNimessa(alkio) // alkio sellaisenaan tai fixattuna

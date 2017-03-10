@@ -43,7 +43,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
 		riviInd += 1
 		olisiAikaSkrollata += ms     // ja alkuarvo, jotta skrollaus tapahtuu hieman ennen kuin rivi oikeasti vaihtuu
 		
-		Thread.sleep(500)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
+		Thread.sleep(ms)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
   
 		
 	  if(MIDIPatch != 6)  //normaali soitto, yksikanavainen
@@ -66,7 +66,9 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
 	
 	  def normaalisoitto() = {
 	     for(nuottiTaiSointu <- nuotit){      
-        if (nuottiTaiSointu._1(0) != 0)   //taukojen "korkeus", eli tauoille tehdään vain sleep ja skrollausrutiinit
+        
+	     // noteOn:
+	       if (nuottiTaiSointu._1(0) != 0)   //taukojen "korkeus", eli tauoille tehdään vain sleep ja skrollausrutiinit
               for (nuotti <-  nuottiTaiSointu._1)
               if(nuotti !=  nuottiTaiSointu._1.last){
                  ch1.noteOn(nuotti, 75)         // 75 = velocity (127 = max), säestysäänet, jos niitä on
@@ -75,16 +77,32 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
                 ch1.noteOn(nuotti, 114)  // oltiin sortattu, eli melodia on vikana (ylin ääni = isoin numero)  
                }
            
-        Thread.sleep((nuottiTaiSointu._2 * ms).toInt)  // ms 
+        
+      // nuotin pituus & skrollaus:
         olisiAikaSkrollata += (nuottiTaiSointu._2 * ms).toInt
-        if(olisiAikaSkrollata >= ms*tahtilaji*2 ){            // rivillä on 2 tahtia 
+        if(olisiAikaSkrollata == ms*tahtilaji*2 ){            // rivillä on 2 tahtia 
+          Thread.sleep((nuottiTaiSointu._2 * ms).toInt)  // ms 
            if ( riviInd < kappale.kappale.size){
               skrollaaa(riviInd)
               riviInd += 1
               olisiAikaSkrollata = 0
            }
         }   
+        
+        else if(olisiAikaSkrollata > ms*tahtilaji*2 ){ 
+          val paljonkoMentiinYliSkrollausRajan = olisiAikaSkrollata - ms*tahtilaji*2
+          Thread.sleep((nuottiTaiSointu._2 * ms).toInt - paljonkoMentiinYliSkrollausRajan )  // ms 
+           if ( riviInd < kappale.kappale.size){
+              skrollaaa(riviInd)
+              riviInd += 1
+              olisiAikaSkrollata = 0
+           }
+          Thread.sleep(paljonkoMentiinYliSkrollausRajan )
+        }
+        
+        else Thread.sleep((nuottiTaiSointu._2 * ms).toInt)
          
+    // noteOff:
         if (nuottiTaiSointu._1(0) != 0)
           for (nuotti <- nuottiTaiSointu._1)  {            
              ch1.noteOff(nuotti)
