@@ -207,7 +207,7 @@ class simpleChordPlayer (sointumerkit: Buffer[(Buffer[Int], Int)]) {   // Tuple 
               ch2.noteOff(soinnunaani)
        }        
 
-    Thread.sleep(900)   // parempi soundi vikaan ääneen
+    Thread.sleep(1100)   // parempi soundi vikaan ääneen
     synth.close()
 }
  /////////    end  simpleChordPlayer   /////////////////////////////////////////////////////////////////
