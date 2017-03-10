@@ -94,26 +94,31 @@ class TiedostonLukeminen {
        
      def tarkistaVirheetForLoop(): Unit = {
          for (i <- 0 until nuottiDataRiveina.size) {
-                 var splitattuRivi = nuottiDataRiveina(i).split(" ") 
+                var splitattuRivi = nuottiDataRiveina(i).split(" ") 
+                
                 for (alkio <- splitattuRivi) {
-                     if (alkio == "" ) {} // ylimääräisiä välilyöntejä ei nuottiAlkiot:hin 
-                     
-                     else if (alkio.head == '<'){
-                        tarkistaSoinnunVirheet(alkio, i)
-                     }   
-                     else if (oikeellisuusTesti(alkio) == "") {  // ei virhettä alkiossa, tarpeeksi infoa nuotin tekemiseen
-                          nuottiAlkiot = nuottiAlkiot :+ erikoistapauksetNuotinNimessa(alkio) // alkio sellaisenaan tai fixattuna
-                          
-                     } else {  // virheellinen alkio:
-                     virheitaNolla =  false  
-                     korjattuVersio = readLine("\n\n syöte '" + alkio +"' on virheellinen: " + oikeellisuusTesti(alkio) + 
-                       "\n Virhe on rivillä " + (nuottiDatanRivinumerot(i)+1)  +
-                       "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu. ")
+                   if(virheitaNolla){
+                       if (alkio == "" ) {} // ylimääräisiä välilyöntejä ei nuottiAlkiot:hin 
                        
-                       if(korjattuVersio == "")  { lueTiedosto(); return}
-                     }
-              }     
+                       else if (alkio.head == '<'){
+                          tarkistaSoinnunVirheet(alkio, i)
+                       }   
+                       else if (oikeellisuusTesti(alkio) == "") {  // ei virhettä alkiossa, tarpeeksi infoa nuotin tekemiseen
+                            nuottiAlkiot = nuottiAlkiot :+ erikoistapauksetNuotinNimessa(alkio) // alkio sellaisenaan tai fixattuna
+                            println("rivi 106")    
+                        
+                       } else {  // virheellinen alkio:
+                       virheitaNolla =  false  
+                       korjattuVersio = readLine("\n\n syöte '" + alkio +"' on virheellinen: " + oikeellisuusTesti(alkio) + 
+                         "\n Virhe on rivillä " + (nuottiDatanRivinumerot(i)+1)  +
+                         "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu. ")
+                         
+                         if(korjattuVersio == "")  { lueTiedosto(); return}
+                       }
+                  }   
+              }         
          } // end for nuottiDataRiveina
+     
      }
      
           
@@ -175,7 +180,7 @@ class TiedostonLukeminen {
     var seuraavatrivitLyriikkaan = false
     for (i <- 0 until inputFromFile.size) {
       if (inputFromFile(i).trim.size != 0){  
-         var kelvollinenSyoteRivi = inputFromFile(i).replaceAll("\t", "")
+         var kelvollinenSyoteRivi = inputFromFile(i).replaceAll("\t", "").replaceAll("><", "> <")
          
          if (kelvollinenSyoteRivi.head == '#') {    //  T U N N I S T E E T
             if (kelvollinenSyoteRivi.tail.toLowerCase().trim.contains("sanat")){

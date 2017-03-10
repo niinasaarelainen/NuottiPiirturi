@@ -18,29 +18,28 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
     
   def piirraNuotit() = {
      for (laitettava <- nuottiData) {      
-                      // jos sanoja oli vähemmän kuin nuotteja, ei haluta kaataa ohjelmaa
-        if(laitettava.soiva && lyricsBuffer.size != 0 && lyricsBuffer.size - lyricsInd >= 1 ){     // nuotti ja sointu => soiva= true, tauko=> soiva=false
-           kasitteleLyriikat(laitettava) 
-        }    
-        liita(laitettava)
-        tahtiaMennyt += laitettava.pituus
-        if (tahtiaMennyt == tahtilaji.toDouble){
-     //     println("laitettava: " + laitettava + ", pit:" + laitettava.pituus + "riviaMennytMontakoTahtia " +riviaMennytMontakoTahtia)
-          riviaMennytMontakoTahtia += 1
-          tahtiaMennyt = 0.0
-          lisaaTahtiviiva()
-        }
-        if (riviaMennytMontakoTahtia == 2 ){      // printtaukseen 2, voisi kysyä käyttäjältä  //TODO  ?
-           if(laitettava == nuottiData.last) lisaaTahtiviiva()   // kappaleen lopetusviiva
-           vaihdaRivi()
-        }
-        
+                        // jos sanoja oli vähemmän kuin nuotteja, ei haluta kaataa ohjelmaa
+          if(laitettava.soiva && lyricsBuffer.size != 0 && lyricsBuffer.size - lyricsInd >= 1 ){     // nuotti ja sointu => soiva= true, tauko=> soiva=false
+             kasitteleLyriikat(laitettava) 
+          }    
+          liita(laitettava)
+          tahtiaMennyt += laitettava.pituus
+          if (tahtiaMennyt == tahtilaji.toDouble){
+       //     println("laitettava: " + laitettava + ", pit:" + laitettava.pituus + "riviaMennytMontakoTahtia " +riviaMennytMontakoTahtia)
+            riviaMennytMontakoTahtia += 1
+            tahtiaMennyt = 0.0
+            lisaaTahtiviiva()
+          }
+          if (riviaMennytMontakoTahtia == 2 ){      // printtaukseen 2, voisi kysyä käyttäjältä  //TODO  ?
+             if(laitettava == nuottiData.last) lisaaTahtiviiva()   // kappaleen lopetusviiva
+             vaihdaRivi()
+          }
           
      } // end for, kaikki nuottiData käsitelty
     
     
      if(tahtiaMennyt != 0.0 || riviaMennytMontakoTahtia > 0 ){  // pelkkää G-avainta ei haluta mukaan kappaleeseen
-        lisaaTahtiviiva()   
+        lisaaTahtiviiva() 
         vaihdaRivi()   
      }    
   }

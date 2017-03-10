@@ -46,9 +46,10 @@ _______ ALLA LISÄOHJEITA EDISTYNEILLE:_________________________________________
 _________________________________________________________________________________________________
 
 Soinnut merkitään <>-merkkien sisään. Esimerkkeinä 
- c-molli: <c1,eb1,g1>
- G7: <g1,h1,d2,f2>
+ c-molli kahdeksasosina: <c1,eb1,g1>
+ G7 puolinuotteina: <g1--,h1--,d2--,f2-->
 Huomaa että soinnun sisällä ei saa olla välilyöntejä. Soinnussa voi olla ääniä kaksi tai enemmän.
+Soinnun äänten tulee olla yhtä pitkiä keskenään
 
 
 Jos haluat kappaleeseen sanat, toimi seuraavasti: 
@@ -64,6 +65,8 @@ Jos haluat kappaleelle nimen, kirjoita esim.
 Jos kappale ei mene 4/4-tahtilajissa, tulee merkitä (jonkin) rivin alkuun moneenko lasketaan seuraavasti: 
 #3 (kolmijakoinen) tai vaikkapa #5 (viisijakoinen)
 
-Huomaa siis tunnisteen # käyttö, jos teet
+Huomaa siis tunnisteen # käyttö, jos teet nimen, tahtilajin tai sanat. 
+Ylimääräisiä kommentteja voi tehdä tyyliin
+# kertosäe
 ________________________________________________________________________________________________________________
 ____________________________________TIEDOSTOJA:_________________________________________________________________
