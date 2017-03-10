@@ -9,7 +9,9 @@ class NuottiPiirturi(){
    var tahdinAikaisetEtumerkit = Buffer[String]()
    var lyricsBuffer = Buffer[String]()  
    val inputTiedostosta = new TiedostonLukeminen
+   println("ennen lueT")
    inputTiedostosta.lueTiedosto()
+   println("jälk lueT")
    val tahtilaji = inputTiedostosta.tahtilaji.toDouble 
     
    val inputBuffer = inputTiedostosta.nuottiAlkiot.toBuffer  
