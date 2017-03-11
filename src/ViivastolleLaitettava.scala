@@ -11,7 +11,7 @@ trait ViivastolleLaitettava {
    def kuva: Buffer[String]   
    def kuvanLeveys: Int   
    def pituus : Double
-   def soiva: Boolean    // tarvitaan tieto sanoja laittaessa, tauko= false
+   def soiva: Boolean    // tarvitaan tieto sanoja laitettaessa, tauko= false
   
   
    def piirraTyhjaViivasto(pituus: Int) = {
