@@ -2,7 +2,7 @@ import scala.collection.mutable.Buffer
 import scala.collection.mutable.Map
 
 
-trait ViivastolleLaitettava {  
+trait ViivastolleLaitettava {   
   
    var viivasto = Buffer[String]()   
    val y = Map("lyr" -> 18, "alatila" ->17, "c1" -> 16, "d1" -> 15,  "e1" -> 14,  "f1" -> 13,  "g1"-> 12,  "a1"->11,  "h1" -> 10, "b1" -> 10, "bb1" -> 10, "c2" -> 9, "d2" -> 8,  "e2" -> 7,  "f2" -> 6,  "g2"-> 5,  "a2"-> 4, "h2" -> 3, "b2" -> 3, "bb2" -> 3, "ylatila2" -> 2, "ylatila3" -> 1, "ylatila4" -> 0)
