@@ -93,14 +93,14 @@ class TiedostonLukeminen {
        
      def tarkistaVirheetForLoop(): Unit = {
          for (i <- 0 until nuottiDataRiveina.size) {
-                var splitattuRivi = nuottiDataRiveina(i).split(" ") 
+                var splitattuRivi = nuottiDataRiveina(i).replaceAll(", " , ",").replaceAll(" ," , ",").replaceAll("< " , "<").replaceAll(" >" , ">").replaceAll("<>", "").split(" ") 
                 
                 for (alkio <- splitattuRivi) {
                    if(virheitaNolla){
                        if (alkio == "" ) {} // ylimääräisiä välilyöntejä ei nuottiAlkiot:hin 
                        
                        else if (alkio.head == '<')
-                          tarkistaSoinnunVirheet(alkio.replaceAll(", " , ","), i)
+                          tarkistaSoinnunVirheet(alkio.trim(), i)
                          
                        else if (oikeellisuusTesti(alkio) == "")   // ei virhettä alkiossa, tarpeeksi infoa nuotin tekemiseen
                            nuottiAlkiot = nuottiAlkiot :+ erikoistapauksetNuotinNimessa(alkio) // alkio sellaisenaan tai fixattuna
@@ -122,10 +122,13 @@ class TiedostonLukeminen {
           
        def tarkistaSoinnunVirheet(alkio:String, ind:Int): Unit = {
         
+                println(alkio) 
+         
                 if(alkio.last != '>'){
                      virheitaNolla = false
-                     readLine("\n\n syöte '" + alkio +"' on virheellinen:  puuttuu soinnun lopetussymboli '>' tai olet vahingossa laittanut välilyönnin soinnun sisään" + 
-                      "\n Virhe on rivillä " + (nuottiDatanRivinumerot(ind)+1)  +
+                     readLine("\n\n syöte '" + alkio +"' on virheellinen: soinnun sävelten väliin tulee kirjoittaa pilkku. "+
+                                "\n Tai jos tarkoitit että sointu loppuu, niin muista laittaa >" + 
+                      "\n\n Virhe on rivillä " + (nuottiDatanRivinumerot(ind)+1)  +
                       "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu. ")  
                       lueTiedosto(); return  
                 }     
@@ -133,7 +136,7 @@ class TiedostonLukeminen {
                 else {
                    var sointu =  alkio.tail.substring(0, alkio.size -2).split(",")  
                    for(i <- 0 until sointu.size) {
-                      if (oikeellisuusTesti(sointu(i)) == "") {
+                      if (alkio != ""  && oikeellisuusTesti(sointu(i)) == "") {
                           sointu(i) = erikoistapauksetNuotinNimessa(sointu(i))  // korvataan soinnun alkiot mahdollisilla fixauksilla
                       }
                       else {
@@ -184,8 +187,8 @@ class TiedostonLukeminen {
             if (kelvollinenSyoteRivi.tail.toLowerCase().trim.contains("sanat")){
                seuraavatrivitLyriikkaan = true
               // varaudutaan siihen että joku kirjoittaa sanoja jo samalle riville kuin missä tunniste:
-              if(kelvollinenSyoteRivi.tail.trim.substring(6).length != 0)  {
-                      lyriikkadata += kelvollinenSyoteRivi.tail.trim.substring(6)
+              if(kelvollinenSyoteRivi.tail.trim.substring(5).length > 0)  {
+                      lyriikkadata += kelvollinenSyoteRivi.tail.trim.substring(5)
              }   
             } 
             else if (seuraavatrivitLyriikkaan == false) kasitteleKappaleenNimiJaTahtilaji(kelvollinenSyoteRivi, i)  // end lyriikat false

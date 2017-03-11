@@ -154,7 +154,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
                 ch5.noteOn(delayedNuotti -24 , 60)  
                  
               }
-              Thread.sleep(ms/2)   // tämä for delayedNuotti:n sisään --> ReallyWeirdDelay  :->>
+              Thread.sleep(ms/2)   // tämä rivi for delayedNuotti:n sisään --> ReallyWeirdDelay  :->>
         }	  
         
      
