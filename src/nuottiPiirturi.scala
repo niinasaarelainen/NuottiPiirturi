@@ -13,23 +13,26 @@ class NuottiPiirturi(){
    val tahtilaji = inputTiedostosta.tahtilaji.toDouble 
     
    val inputBuffer = inputTiedostosta.nuottiAlkiot.toBuffer  
-   nuottiData = kasitteleNuottiTieto(inputBuffer, nuottiData)    
-   if(inputTiedostosta.lyriikkadata.size != 0)
-       kasitteleLyriikat() 
-   tehdaanKahdeksasosaParit()
+   
  
-   val viivasto = new Viivasto(nuottiDataParitettu, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)
-   viivasto.piirraNuotit()
-   
-    // jos kuunnellaan, tallennuskäsky pitää antaa kuuntelun jälkeen, muuten se tulee ruudulle ennen nuotteja
-   if(!inputTiedostosta.MIDIPatch.equals(""))  // kuunnellaan  
-        new simpleMIDIPlayerAdapter(nuottiData, inputTiedostosta.MIDIPatch.toInt, viivasto.kappale, inputTiedostosta.tahtilaji.toInt)
-   else {        // käyttäjä valitsi että ei kuunnella
-       viivasto.kappale.printtaaRuudulleIlmanAjastusta()
-       new TiedostonTallennus(viivasto.kappale)    
-   }                                               
+     
+       nuottiData = kasitteleNuottiTieto(inputBuffer, nuottiData)    
+       if(inputTiedostosta.lyriikkadata.size != 0)
+           kasitteleLyriikat() 
+       tehdaanKahdeksasosaParit()
+     
+       val viivasto = new Viivasto(nuottiDataParitettu, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)
+       viivasto.piirraNuotit()
+       
+        // jos kuunnellaan, tallennuskäsky pitää antaa kuuntelun jälkeen, muuten se tulee ruudulle ennen nuotteja
+       if(!inputTiedostosta.MIDIPatch.equals(""))  // kuunnellaan  
+            new simpleMIDIPlayerAdapter(nuottiData, inputTiedostosta.MIDIPatch.toInt, viivasto.kappale, inputTiedostosta.tahtilaji.toInt)
+       else {        // käyttäjä valitsi että ei kuunnella
+           viivasto.kappale.printtaaRuudulleIlmanAjastusta()
+           new TiedostonTallennus(viivasto.kappale)    
+       }                                               
   
-   
+ 
      
  
 ///// F U N K T I O T  ja niihin liittyvät muuttujat (ei voi määritellä funktion sisällä rekursion takia): /////////////////////////  

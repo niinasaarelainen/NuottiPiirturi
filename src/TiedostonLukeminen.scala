@@ -73,9 +73,15 @@ class TiedostonLukeminen {
         kayttajanValitsemaTiedosto.close()
      }
           
-     kasitteleTunnisteet(this.inputFromFile) 
-     if(ekaKerta) tarkistaVirheet()     // loput virheidentarkistukset do while-loopissa, kutsu rivillä 94
-   
+     if (this.inputFromFile.size != 0){
+         kasitteleTunnisteet(this.inputFromFile) 
+         if(nuottiDataRiveina.size ==0) {println("\n\nei nuottidataa, ei tehdä mitään."); System.exit(1)}
+         else if(ekaKerta) tarkistaVirheet()     // loput virheidentarkistukset do while-loopissa, kutsu rivillä 94
+     }
+     else {
+       println("\n\ntyhjästä tiedostosta ei voi tehdä nuotteja")
+       System.exit(1)
+     }
   }   
   
   
