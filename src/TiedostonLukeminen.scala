@@ -19,6 +19,7 @@ class TiedostonLukeminen {
   val inputhakemisto = new File(inputhakemistonNimi)
   
   var ekaKerta = true
+  var tahtilajiOnJoLuettu = false
     
  
   helppiTeksti()
@@ -64,6 +65,7 @@ class TiedostonLukeminen {
      this.nuottiDatanRivinumerot = Buffer[Int]()
      this.nuottiAlkiot = Array[String]() 
      val kayttajanValitsemaTiedosto = Source.fromFile(inputhakemistonNimi + tiedostonNimi)
+     tahtilajiOnJoLuettu = false
       
      try {
        for (rivi <- kayttajanValitsemaTiedosto.getLines) {
@@ -106,7 +108,7 @@ class TiedostonLukeminen {
                        if (alkio == "" ) {} // ylimääräisiä välilyöntejä ei nuottiAlkiot:hin 
                        
                        else if (alkio.head == '<')
-                          tarkistaSoinnunVirheet(alkio, i)
+                          tarkistaSoinnunVirheet(alkio.trim(), i)
                          
                        else if (oikeellisuusTesti(alkio) == "")   // ei virhettä alkiossa, tarpeeksi infoa nuotin tekemiseen
                            nuottiAlkiot = nuottiAlkiot :+ erikoistapauksetNuotinNimessa(alkio) // alkio sellaisenaan tai fixattuna
@@ -122,6 +124,7 @@ class TiedostonLukeminen {
                   }   
               }         
          } // end for nuottiDataRiveina
+     
      }
      
           
@@ -212,23 +215,21 @@ class TiedostonLukeminen {
   }
   
   
-  var tahtilajiOnJoLuettu = false
   def kasitteleKappaleenNimiJaTahtilaji(kelvollinenSyoteRivi:String, ind:Int) ={
     
            if (kelvollinenSyoteRivi.tail.toLowerCase().contains("nimi")) {
                 kappaleenNimi = kelvollinenSyoteRivi.tail.substring(5, kelvollinenSyoteRivi.tail.size)
                
            }
-           else if (!tahtilajiOnJoLuettu && "2345678".contains(kelvollinenSyoteRivi(1))){  // kommentti saattaa olla tyyliinn #2.säe --> EI haluta muuttaa tahtilajia 2/4:ksi
-                tahtilaji = kelvollinenSyoteRivi(1).toString      
+           else if (!tahtilajiOnJoLuettu && "2345678".contains(kelvollinenSyoteRivi(1))){  // boolean onjoLuettu ?? TODO
+                tahtilaji = kelvollinenSyoteRivi(1).toString      // tahtilaji pilalla jos myöhemmässä kommentissa on numero heti #:n jälkeen TODO
                    // varaudutaan siihen että joku kirjoittaa nuotteja jo samalle riville kuin missä tahtilaji-tunniste:
                 if(kelvollinenSyoteRivi.tail.trim.substring(1) != 0)  {
                       nuottiDataRiveina += kelvollinenSyoteRivi.tail.trim.substring(1)   // kaatuu jos käyttäjä on laittanut 5/4 --> /4 on  "nuottidataa"  TODO
                       nuottiDatanRivinumerot += ind
                 }   
                 tahtilajiOnJoLuettu = true
-           }         
-            
+           }
   }
 
   
