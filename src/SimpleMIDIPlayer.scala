@@ -48,7 +48,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
 		
 	  if(MIDIPatch != 6)  //normaali soitto, yksikanavainen
 	     normaalisoitto()
-	  else rocknroll()   // rokkibändi, 5-kanavainen, "delay":      
+	  else rocknroll()   // rokkibändi, 6-kanavainen, "delay":      
     
     Thread.sleep(1900)   // parempi soundi vikaan ääneen
     synth.close()
@@ -130,10 +130,10 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
                    delayedNotes -= delayedNotes(0)
                 
                   if(nuotti !=  nuottiTaiSointu._1.last){
-                     ch1.noteOn(nuotti, 75)  
-                     ch1.noteOn(nuotti, 75)   
-                     ch2.noteOn(nuotti -12, 75)   // okt. alas
-                     ch2.noteOn(nuotti -12, 75)
+                     ch1.noteOn(nuotti, 90)  
+                     ch1.noteOn(nuotti, 90)   
+                     ch2.noteOn(nuotti -12, 85)   // okt. alas
+                     ch2.noteOn(nuotti -12, 85)
                   }   
                   else { 
                     ch1.noteOn(nuotti, 114)      // guit1
@@ -148,7 +148,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
           val montakoKertaaEhtiiSoittaaKahdeksasosan = (nuottiTaiSointu._2 / 0.5).toInt
         
         
-          if (nuottiTaiSointu._1(0) != 0) vol = 70      // tauon aikana jatketaan volan "feidautumista"
+          if (nuottiTaiSointu._1(0) != 0) vol = 73      // tauon aikana jatketaan volan "feidautumista"
           
           for( i<- 0 until montakoKertaaEhtiiSoittaaKahdeksasosan){
               
