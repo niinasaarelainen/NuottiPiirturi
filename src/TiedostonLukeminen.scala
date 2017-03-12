@@ -219,7 +219,7 @@ class TiedostonLukeminen {
                 kappaleenNimi = kelvollinenSyoteRivi.tail.substring(5, kelvollinenSyoteRivi.tail.size)
                
            }
-           else if ("2345678".contains(kelvollinenSyoteRivi(1))){
+           else if ("2345678".contains(kelvollinenSyoteRivi(1))){  // boolean onjoLuettu ?? TODO
                 tahtilaji = kelvollinenSyoteRivi(1).toString      // tahtilaji pilalla jos myöhemmässä kommentissa on numero heti #:n jälkeen TODO
                    // varaudutaan siihen että joku kirjoittaa nuotteja jo samalle riville kuin missä tahtilaji-tunniste:
                    if(kelvollinenSyoteRivi.tail.trim.substring(1) != 0)  {

@@ -9,7 +9,7 @@ import scala.io.StdIn._
 
 class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, kappale: Kappale, tahtilaji: Int) {   // Tuple (korkeus/korkeudet, pituus)
   
-    val ms = 500     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
+    val ms = 300     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
     val synth = MidiSystem.getSynthesizer()
     val channels  =  synth.getChannels()
 		val ch1 = channels(0); val ch2 = channels(1);  val ch3 = channels(2);	val ch4 = channels(3);  val ch5 = channels(4);  val ch6 = channels(5)
@@ -119,9 +119,10 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
       
      
       var delayedNotes = Buffer[Int]()
+      var vol = 70
       
-	  for(nuottiTaiSointu <- nuotit){      
-        if (nuottiTaiSointu._1(0) != 0)  
+	    for(nuottiTaiSointu <- nuotit){      
+          if (nuottiTaiSointu._1(0) != 0)  
               for (nuotti <-  nuottiTaiSointu._1){
                 
                  delayedNotes +=  nuotti 
@@ -144,15 +145,17 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
                   }
               }
         
-        val montakoKertaaEhtiiSoittaaKahdeksasosan = (nuottiTaiSointu._2 / 0.5).toInt
+          val montakoKertaaEhtiiSoittaaKahdeksasosan = (nuottiTaiSointu._2 / 0.5).toInt
         
-       
-        for( i<- 0 until montakoKertaaEhtiiSoittaaKahdeksasosan){
         
+          if (nuottiTaiSointu._1(0) != 0) vol = 70      // tauon aikana jatketaan volan "feidautumista"
+          
+          for( i<- 0 until montakoKertaaEhtiiSoittaaKahdeksasosan){
+              
               for (delayedNuotti <- delayedNotes){
-                ch4.noteOn(delayedNuotti -12, 70)
-                ch5.noteOn(delayedNuotti -24 , 60)  
-                 
+                ch4.noteOn(delayedNuotti -12, vol)
+                ch5.noteOn(delayedNuotti -24 , vol-10)  
+                vol -= 3 
               }
               Thread.sleep(ms/2)   // tämä rivi for delayedNuotti:n sisään --> ReallyWeirdDelay  :->>
         }	  

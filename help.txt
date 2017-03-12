@@ -1,15 +1,20 @@
 Ihan ensiksi luo uusi tiedosto input -hakemistoon.
 
-Sitten voit ruveta kirjoittamaan nuotteja G-avaimelle. Alin mahdollinen ääni on keski-c, ylin 2-viivainen h.
+Sitten voit ruveta kirjoittamaan nuotteja G-avaimelle. Alin mahdollinen ääni on keski-c, ylin kaksiviivainen h.
 Erottele äänet toisistaan välilyönnillä (saa olla useitakin).
 Tahtiviivoja ei merkitä.
 
-Rivinvaihtoja saa käyttää vapaasti.
+Rivinvaihtoja saa käyttää vapaasti. Rivinvaihto ei vaihda riviä nuottiviivastolla, eli käytä
+rivinvaihtoa esim. tahdin tai fraasin lopussa, kunhan itse tiedät miten löydät haluamasi kohdan kappaleessa.
 
-Tässä esimerkki kuinka kirjoitat Ukko Nooan alkaen keski-c:stä:
-c1- c1- c1- e1- d1- d1- d1- f1-   e1- e1- d1- d1- c1----
 
-Sama biisi oktaavia ylempää: 
+Tässä esimerkki kuinka kirjoitat Ukko Nooan alun alkaen keski-c:stä:
+c1- c1- c1- e1- 
+d1- d1- d1- f1-   
+e1- e1- d1- d1- 
+c1----
+
+Sama oktaavia ylempää, rivinvaihtojen puuttuminen ei muuta nuottikuvaa: 
 c2- c2- c2- e2- d2- d2- d2- f2-   e2- e2- d2- d2- c2----
 
 Viivojen (----) määrä viittaa pituuteen, eli neljäsosanuotti on yhden iskun eli yhden viivan mittainen: c1-
@@ -31,8 +36,9 @@ puolitauko merkitään z--
 
 Muista aina oktaaviala (1 tai 2), muutoin ohjelma ei tiedä, kumpaa nuottia tarkoitat.  
 
+
 Kannattaa katsoa mallia valmiista kappaleista, eli avaa vaikkapa kappale jaakko
-kirjoittamalla komentoriville: notepad input/jaakko
+kirjoittamalla komentoriville: notepad input/jaakko tai nano input/jaakko
 
 
 
@@ -45,10 +51,12 @@ _______ SEURAAVAT OPTIOT EIVÄT OLE PAKOLLISIA _________________________________
 _______ ALLA LISÄOHJEITA EDISTYNEILLE:___________________________________________________________
 _________________________________________________________________________________________________
 
-Soinnut merkitään <>-merkkien sisään. Esimerkkeinä 
+Soinnut merkitään <>-merkkien sisään pilkuilla erotettuina. Esimerkkeinä 
    c-molli kahdeksasosina: <c1,eb1,g1>
    G7 puolinuotteina: <g1--,h1--,d2--,f2-->
+   
 Soinnussa voi olla ääniä kaksi tai enemmän. Soinnun äänten tulee olla yhtä pitkiä keskenään.
+Muista pilkut !
 
 
 Jos haluat kappaleeseen sanat, toimi seuraavasti: 
@@ -64,9 +72,11 @@ Jos haluat kappaleelle nimen, kirjoita esim.
 Jos kappale ei mene 4/4-tahtilajissa, tulee merkitä (jonkin) rivin alkuun moneenko lasketaan seuraavasti: 
 #3 (kolmijakoinen) tai vaikkapa #5 (viisijakoinen)
 
+
 Huomaa siis tunnisteen # käyttö, jos teet nimen, tahtilajin tai sanat. 
+
 Ylimääräisiä kommentteja voi tehdä tyyliin
-# kertosäe   tai   
+# kertosäe       tai   
 #sopisikohan tähän paremmin c2?
 
 ________________________________________________________________________________________________________________
