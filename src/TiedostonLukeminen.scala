@@ -189,7 +189,7 @@ class TiedostonLukeminen {
     var seuraavatrivitLyriikkaan = false
     for (i <- 0 until inputFromFile.size) {
       if (inputFromFile(i).trim.size != 0){  
-         var kelvollinenSyoteRivi = inputFromFile(i).replaceAll("\t", "").replaceAll("><", "> <")
+         var kelvollinenSyoteRivi = inputFromFile(i).replaceAll("\t", "").replaceAll("><", "> <").replaceAll("  ", " ")
          
          if (kelvollinenSyoteRivi.head == '#') {    //  T U N N I S T E E T
             if (kelvollinenSyoteRivi.tail.toLowerCase().trim.contains("sanat")){

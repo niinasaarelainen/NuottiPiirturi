@@ -120,10 +120,11 @@ abstract class Nuotti extends ViivastolleLaitettava {
       def piirraYlaApuviiva() = {                       
            viivasto(y("a2")) = viivasto(y("a2")).substring(0, 1) + "--" +  viivasto(y("a2")).substring(4, 6) + "--"   + viivasto(y("a2")).substring(7)         
      }
-  }
+}
  
+
 abstract class Tauko extends ViivastolleLaitettava{
-     def korkeus = "c2"    
+     def korkeus = "c2"    // piirtokorkeus
      def soiva = false
 }
 
@@ -249,9 +250,6 @@ class KahdeksasosaNuotti(nuotinNimi: String, extraetumerkki: String = "") extend
   
 class KahdeksasosaPari (ekaNuotti: KahdeksasosaNuotti, tokaNuotti: KahdeksasosaNuotti)  extends KokoNuotti(ekaNuotti.korkeus: String, ekaNuotti.getExtraetumerkki: String){
 
-//class KahdeksasosaPari  (ekaNuotti: ViivastolleLaitettava, tokaNuotti: ViivastolleLaitettava)  extends Nuotti{
-  
-
      override def korkeus = ekaNuotti.korkeus
      def korkeus2 = tokaNuotti.korkeus
      override def pituus = 1.0
@@ -291,23 +289,54 @@ class KahdeksasosaPari (ekaNuotti: KahdeksasosaNuotti, tokaNuotti: KahdeksasosaN
      
        // varret ja palkki:    
        if(ylospain)  {           
-          for (i <- 1 to ekanVarrenPit)  
-                   viivasto( y(ekaNuotti.nimiMapissa)-i) = viivasto( y(ekaNuotti.nimiMapissa)-i).substring(0, 4) + "|" + viivasto( y(ekaNuotti.nimiMapissa)-i).substring(5)  
-        
-          for(i<- 1 to tokanVarrenPit) viivasto(y(tokaNuotti.nimiMapissa)-i) = viivasto(y(tokaNuotti.nimiMapissa)-i).substring(0, 9) + "|"  + viivasto(y(tokaNuotti.nimiMapissa)-i).substring(10)    
-          viivasto(korkeudet.min -3) = viivasto(korkeudet.min -3).substring(0, 4) + "======"  + viivasto(korkeudet.min -3).substring(10)    
+            for (i <- 1 to ekanVarrenPit)  
+                     viivasto( y(ekaNuotti.nimiMapissa)-i) = viivasto( y(ekaNuotti.nimiMapissa)-i).substring(0, 4) + "|" + viivasto( y(ekaNuotti.nimiMapissa)-i).substring(5)  
+          
+            for(i<- 1 to tokanVarrenPit) viivasto(y(tokaNuotti.nimiMapissa)-i) = viivasto(y(tokaNuotti.nimiMapissa)-i).substring(0, 9) + "|"  + viivasto(y(tokaNuotti.nimiMapissa)-i).substring(10)    
+            viivasto(korkeudet.min -3) = viivasto(korkeudet.min -3).substring(0, 4) + "======"  + viivasto(korkeudet.min -3).substring(10)    
        } else { 
          // varret alaspäin
-          for (i <- 1 to ekanVarrenPit)   
-                   viivasto( y(ekaNuotti.nimiMapissa)+i) = viivasto( y(ekaNuotti.nimiMapissa)+i).substring(0, 3) + "|" + viivasto( y(ekaNuotti.nimiMapissa)+i).substring(4)  
-        
-          for(i<- 1 to tokanVarrenPit) viivasto(y(tokaNuotti.nimiMapissa)+i) = viivasto(y(tokaNuotti.nimiMapissa)+i).substring(0, 8) + "|"  + viivasto(y(tokaNuotti.nimiMapissa)+i).substring(9)    
-          viivasto(korkeudet.max +3) = viivasto(korkeudet.max +3).substring(0, 3) + "======"  + viivasto(korkeudet.max +3).substring(9)    
+            for (i <- 1 to ekanVarrenPit)   
+                     viivasto( y(ekaNuotti.nimiMapissa)+i) = viivasto( y(ekaNuotti.nimiMapissa)+i).substring(0, 3) + "|" + viivasto( y(ekaNuotti.nimiMapissa)+i).substring(4)  
+          
+            for(i<- 1 to tokanVarrenPit) viivasto(y(tokaNuotti.nimiMapissa)+i) = viivasto(y(tokaNuotti.nimiMapissa)+i).substring(0, 8) + "|"  + viivasto(y(tokaNuotti.nimiMapissa)+i).substring(9)    
+            viivasto(korkeudet.max +3) = viivasto(korkeudet.max +3).substring(0, 3) + "======"  + viivasto(korkeudet.max +3).substring(9)    
        }  
        viivasto   
      }
     
 }
+
+class KahdeksasosaPariSisaltaaSoinnun  (ekaNuotti: ViivastolleLaitettava, tokaNuotti: ViivastolleLaitettava)  extends Nuotti{
+  
+    var parinTyyppi = ""    // vaihtoehdot:  1) sointu-nuotti  2) nuotti-sointu  3) sointu-sointu   (nuotti-nuotti on oma luokka)
+    
+    ekaNuotti match{
+      case sointu: Sointu => if (tokaNuotti.isInstanceOf[Sointu]) parinTyyppi = "sointu-sointu"
+                             else parinTyyppi = "sointu-nuotti"
+      case nuotti: KahdeksasosaNuotti => parinTyyppi = "nuotti-sointu"
+    } 
+  
+  
+     override def korkeus = if (parinTyyppi == "nuotti-sointu") ekaNuotti.asInstanceOf[KahdeksasosaNuotti].korkeus else ""
+     def korkeus2 = if (parinTyyppi == "sointu-nuotti") tokaNuotti.asInstanceOf[KahdeksasosaNuotti].korkeus else ""
+     override def pituus = 1.0
+     override def kuvanLeveys = 12
+     override def nuppi = "@@"
+     var ekanVarrenPit, tokanVarrenPit = 0
+     var ylospain = true
+     
+   //  val korkeudet = Array( y(ekaNuotti.nimiMapissa),  y(tokaNuotti.nimiMapissa))
+    
+     override def kuva = {
+         viivasto = piirraTyhjaViivasto(kuvanLeveys)
+         super.kuva     // piirtää ekan nuotin nupin 
+         
+     }     
+     
+     
+}
+
  
   
 class NeljasosaTauko extends Tauko {   
