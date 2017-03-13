@@ -307,8 +307,9 @@ class KahdeksasosaPari (ekaNuotti: KahdeksasosaNuotti, tokaNuotti: KahdeksasosaN
     
 }
 
-class KahdeksasosaPariSisaltaaSoinnun  (ekaNuotti: ViivastolleLaitettava, tokaNuotti: ViivastolleLaitettava)  extends Nuotti{
+class KahdeksasosaPariSisaltaaSoinnun  (ekaNuotti: ViivastolleLaitettava, tokaNuotti: ViivastolleLaitettava)  extends Sointu(ekaNuotti.asInstanceOf[Sointu].nuotit){
   
+   
     var parinTyyppi = ""    // vaihtoehdot:  1) sointu-nuotti  2) nuotti-sointu  3) sointu-sointu   (nuotti-nuotti on oma luokka)
     
     ekaNuotti match{
@@ -318,20 +319,21 @@ class KahdeksasosaPariSisaltaaSoinnun  (ekaNuotti: ViivastolleLaitettava, tokaNu
     } 
   
   
-     override def korkeus = if (parinTyyppi == "nuotti-sointu") ekaNuotti.asInstanceOf[KahdeksasosaNuotti].korkeus else ""
+  //   override def korkeus = if (parinTyyppi == "nuotti-sointu") ekaNuotti.asInstanceOf[KahdeksasosaNuotti].korkeus else ""
      def korkeus2 = if (parinTyyppi == "sointu-nuotti") tokaNuotti.asInstanceOf[KahdeksasosaNuotti].korkeus else ""
      override def pituus = 1.0
      override def kuvanLeveys = 12
-     override def nuppi = "@@"
+     def nuppi = "@@"
      var ekanVarrenPit, tokanVarrenPit = 0
-     var ylospain = true
+     ylospain = true
+     
+     
      
    //  val korkeudet = Array( y(ekaNuotti.nimiMapissa),  y(tokaNuotti.nimiMapissa))
     
      override def kuva = {
-         viivasto = piirraTyhjaViivasto(kuvanLeveys)
-         super.kuva     // piirtää ekan nuotin nupin 
          
+         viivasto
      }     
      
      
