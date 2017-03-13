@@ -20,7 +20,9 @@ class NuottiPiirturi(){
        if(inputTiedostosta.lyriikkadata.size != 0)
            kasitteleLyriikat() 
        tehdaanKahdeksasosaParit()
-     
+       
+       
+         
        val viivasto = new Viivasto(nuottiDataParitettu, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)
        viivasto.piirraNuotit()
        
@@ -185,6 +187,23 @@ class NuottiPiirturi(){
                  nuottiDataParitettu += nuottiData(i)     // 1/8 talteen, jos se ei löytänyt paria
               }
           }
+          
+          
+      /*    
+          else if(nuottiData(i).isInstanceOf[Sointu] && nuottiData(i).asInstanceOf[Sointu].pituus == 0.5 && (iskujaMennyt % 1== 0.5)){
+              if(nuottiData(i+1).isInstanceOf[KahdeksasosaNuotti]){
+                 nuottiDataParitettu += new KahdeksasosaPariSointuEnsimmaisena(nuottiData(i).asInstanceOf[Sointu], nuottiData(i+1).asInstanceOf[KahdeksasosaNuotti])
+                 minutOnJoKasitelty = true  
+                 iskujaMennyt += nuottiData(i+1).pituus
+                 if(nuottiData.last.eq(nuottiData(i+1))) paastiinTiedostonloppuun = true
+              } else {
+                 nuottiDataParitettu += nuottiData(i)     // 1/8 talteen, jos se ei löytänyt paria
+              } 
+             
+          }   */
+          
+          
+          
           else {
              nuottiDataParitettu += nuottiData(i)     // ei-1/8:kin talteen
           }
