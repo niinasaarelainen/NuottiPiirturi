@@ -10,6 +10,7 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
 
    var tahtiaMennyt = 0.0        // laskee iskuja
    var riviaMennytMontakoTahtia = 0             // halutaan max 4 tahtia riville
+   var backUpPituuslaskuri = 0.0     // vaihdetaan riviä jos ei löydy tahtiviivalle paikkaa ja pituus on melkoinen
    var kappale = new Kappale
    this.kappale.lisaaKappaleenNimi(kappaleenNimi)
    var lyricsInd = 0
@@ -24,6 +25,7 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
           }    
           liita(laitettava)
           tahtiaMennyt += laitettava.pituus
+          backUpPituuslaskuri += laitettava.pituus
           if (tahtiaMennyt == tahtilaji.toDouble){
        //     println("laitettava: " + laitettava + ", pit:" + laitettava.pituus + "riviaMennytMontakoTahtia " +riviaMennytMontakoTahtia)
             riviaMennytMontakoTahtia += 1
@@ -31,8 +33,10 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
             lisaaTahtiviiva()
           }
           if (riviaMennytMontakoTahtia == 2 ){      // printtaukseen 2, voisi kysyä käyttäjältä  //TODO  ?
-             if(laitettava == nuottiData.last) lisaaTahtiviiva()   // kappaleen lopetusviiva
-             vaihdaRivi()
+              if(laitettava == nuottiData.last) lisaaTahtiviiva()   // kappaleen lopetusviiva
+              vaihdaRivi()
+          } else if (backUpPituuslaskuri > 8.0) {
+              vaihdaRivi()              
           }
           
      } // end for, kaikki nuottiData käsitelty
@@ -115,6 +119,7 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
      kappale.lisaaViivasto(this.viivasto)    
      viivasto = piirraGavain 
      this.riviaMennytMontakoTahtia = 0
+     this.backUpPituuslaskuri = 0.0
   }
     
  
