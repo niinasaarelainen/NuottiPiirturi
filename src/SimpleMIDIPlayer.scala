@@ -154,7 +154,8 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
               for (delayedNuotti <- delayedNotes){
                 ch4.noteOn(delayedNuotti -12, vol)
                 ch5.noteOn(delayedNuotti -24 , vol-10)  
-                if (vol > 30) vol -= 2 
+                if (vol > 30) vol -= 2    // jätetään tauoille hiljainen delay-jumitus
+                else  delayedNotes = Buffer[Int]()   // pitkän nuotin tai tauon jälkeen ei haluta delayata vanhoja ääniä
               }
               Thread.sleep(ms/2)   // tämä rivi for delayedNuotti:n sisään --> ReallyWeirdDelay  :->>
         }	  

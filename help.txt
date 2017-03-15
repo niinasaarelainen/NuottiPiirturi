@@ -20,8 +20,8 @@ c2- c2- c2- e2- d2- d2- d2- f2-   e2- e2- d2- d2- c2----
 Viivojen (----) määrä viittaa pituuteen, eli neljäsosanuotti on yhden iskun eli yhden viivan mittainen: c1-
 
 Tässä kaikki käytettävissä olevat pituudet:
-			   |	        |                     |          |            |\
-               |            |                     |          |            |
+
+               |            |                     |          |            |\
                |            |                     |          |            |
 () = ----     () = --      (). = --- tai --.     @@ = -     @@. = -.     @@ = (ei tarvita viivoja)
 

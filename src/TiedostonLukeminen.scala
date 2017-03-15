@@ -103,7 +103,7 @@ class TiedostonLukeminen {
          for (i <- 0 until nuottiDataRiveina.size) {
            
                 val ylimaaraisetValilyonnitPois = nuottiDataRiveina(i).trim().replaceAll(" +", " ");
-                val splitattuRivi = ylimaaraisetValilyonnitPois.replaceAll(", " , ",").replaceAll(" ," , ",").replaceAll("< " , "<").replaceAll(" >" , ">").replaceAll("<>", "").replaceAll("><", "> <").split(" ") 
+                val splitattuRivi = ylimaaraisetValilyonnitPois.replaceAll(", " , ",").replaceAll(" ," , ",").replaceAll("< " , "<").replaceAll(" >" , ">").replaceAll("<>", "").replaceAll("><", "> <").replaceAll(" -", "-").split(" ") 
                 
                 for (alkio <- splitattuRivi) {
                    if(virheitaNolla){
@@ -262,6 +262,7 @@ class TiedostonLukeminen {
     // ALUKSI TUTKITAAN  N U O T T I E N   S Y N T A K SI ,  _EI_ PITUUDET
          val filtteredNote = syote.filter(_ != '-').filter(_ != '.')
          
+         if(filtteredNote == "") return "nuotin pituustieto pitää olla kiinni nuotissa, älä kirjoita esim c1 -- "
          if(filtteredNote == "z") {}  // taukojen syntaksi helppo, tehdään pituustesti myöhemmin
          else{
               if(filtteredNote.count(_ == 'z') > 1)
