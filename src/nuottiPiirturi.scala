@@ -192,7 +192,7 @@ class NuottiPiirturi(){
       /*    
           else if(nuottiData(i).isInstanceOf[Sointu] && nuottiData(i).asInstanceOf[Sointu].pituus == 0.5 && (iskujaMennyt % 1== 0.5)){
               if(nuottiData(i+1).isInstanceOf[KahdeksasosaNuotti]){
-                 nuottiDataParitettu += new KahdeksasosaPariSointuEnsimmaisena(nuottiData(i).asInstanceOf[Sointu], nuottiData(i+1).asInstanceOf[KahdeksasosaNuotti])
+                 nuottiDataParitettu += new KahdeksasosaPariSointuNuotti(nuottiData(i).asInstanceOf[Sointu], nuottiData(i+1).asInstanceOf[KahdeksasosaNuotti])
                  minutOnJoKasitelty = true  
                  iskujaMennyt += nuottiData(i+1).pituus
                  if(nuottiData.last.eq(nuottiData(i+1))) paastiinTiedostonloppuun = true

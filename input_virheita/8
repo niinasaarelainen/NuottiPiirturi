@@ -2,7 +2,7 @@
  # virheitä, virheitä
  
  b1
- c1    c1  f1  b2 b2 h2  b2 h2  h#2 b2 a2  a#2
+ c1    c1  f1  <b2,   b2> h2   b2  h2   < h#2 ,  b2 ,   a2   a#2 >  
  
  z z f2 g2 
  

@@ -147,7 +147,6 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
         
           val montakoKertaaEhtiiSoittaaKahdeksasosan = (nuottiTaiSointu._2 / 0.5).toInt
         
-        
           if (nuottiTaiSointu._1(0) != 0) vol = 73      // tauon aikana jatketaan volan "feidautumista"
           
           for( i<- 0 until montakoKertaaEhtiiSoittaaKahdeksasosan){
@@ -155,7 +154,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
               for (delayedNuotti <- delayedNotes){
                 ch4.noteOn(delayedNuotti -12, vol)
                 ch5.noteOn(delayedNuotti -24 , vol-10)  
-                vol -= 3 
+                if (vol > 30) vol -= 2 
               }
               Thread.sleep(ms/2)   // tämä rivi for delayedNuotti:n sisään --> ReallyWeirdDelay  :->>
         }	  

@@ -307,15 +307,9 @@ class KahdeksasosaPari (ekaNuotti: KahdeksasosaNuotti, tokaNuotti: KahdeksasosaN
     
 }
 
-class KahdeksasosaPariSointuEnsimmaisena  (ekaNuotti: ViivastolleLaitettava, tokaNuotti: ViivastolleLaitettava)  extends Sointu(ekaNuotti.asInstanceOf[Sointu].nuotit){
+class KahdeksasosaPariSointuNuotti  (ekaNuotti: Sointu, tokaNuotti: KahdeksasosaPari)  extends Sointu(ekaNuotti.nuotit){
   
-     var parinTyyppi = ""    // vaihtoehdot:  1) sointu-nuotti  2) sointu-sointu   
-    
-     if (tokaNuotti.isInstanceOf[Sointu]) parinTyyppi = "sointu-sointu"
-     else parinTyyppi = "sointu-nuotti"
-  
-  
-     def korkeus2 = if (parinTyyppi == "sointu-nuotti") tokaNuotti.asInstanceOf[KahdeksasosaNuotti].korkeus else ""
+     def korkeus2 =  tokaNuotti.korkeus 
      override def pituus = 1.0
      override def kuvanLeveys = 12
      def nuppi = "@@"

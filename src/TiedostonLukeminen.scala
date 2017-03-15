@@ -101,7 +101,9 @@ class TiedostonLukeminen {
        
      def tarkistaVirheetForLoop(): Unit = {
          for (i <- 0 until nuottiDataRiveina.size) {
-                var splitattuRivi = nuottiDataRiveina(i).replaceAll(", " , ",").replaceAll(" ," , ",").replaceAll("< " , "<").replaceAll(" >" , ">").replaceAll("<>", "").split(" ") 
+           
+                val ylimaaraisetValilyonnitPois = nuottiDataRiveina(i).trim().replaceAll(" +", " ");
+                val splitattuRivi = ylimaaraisetValilyonnitPois.replaceAll(", " , ",").replaceAll(" ," , ",").replaceAll("< " , "<").replaceAll(" >" , ">").replaceAll("<>", "").replaceAll("><", "> <").split(" ") 
                 
                 for (alkio <- splitattuRivi) {
                    if(virheitaNolla){
@@ -127,8 +129,8 @@ class TiedostonLukeminen {
      
      }
      
-          
-       def tarkistaSoinnunVirheet(alkio:String, ind:Int): Unit = {
+        //nested function:  
+        def tarkistaSoinnunVirheet(alkio:String, ind:Int): Unit = {
         
                 println(alkio) 
          
@@ -172,7 +174,7 @@ class TiedostonLukeminen {
   
   
   def erikoistapauksetNuotinNimessa(alkio:String): String=  {
-     val alkioPituustietoPois = alkio.filter(_ != '-')
+     val alkioPituustietoPois = alkio.filter(_ != '-').filter(_ != '.')
      // case  c2# --> c#2
      if(alkioPituustietoPois.size == 3 && (alkio.tail.contains("#")  || alkio.tail.contains("b")) && !alkioPituustietoPois(2).isDigit) 
           return "" + alkio(0) + alkio(2) +alkio(1) +alkio.substring(3)  
@@ -186,32 +188,32 @@ class TiedostonLukeminen {
   
   def kasitteleTunnisteet(inputFromFile: Buffer[String]) = {  // tekstisyöterivejä
 
-    var seuraavatrivitLyriikkaan = false
-    for (i <- 0 until inputFromFile.size) {
-      if (inputFromFile(i).trim.size != 0){  
-         var kelvollinenSyoteRivi = inputFromFile(i).replaceAll("\t", "").replaceAll("><", "> <").replaceAll("  ", " ")
-         
-         if (kelvollinenSyoteRivi.head == '#') {    //  T U N N I S T E E T
-            if (kelvollinenSyoteRivi.tail.toLowerCase().trim.contains("sanat")){
-               seuraavatrivitLyriikkaan = true
-              // varaudutaan siihen että joku kirjoittaa sanoja jo samalle riville kuin missä tunniste:
-              if(kelvollinenSyoteRivi.tail.trim.substring(5).length > 0)  {
-                      lyriikkadata += kelvollinenSyoteRivi.tail.trim.substring(5)
-             }   
-            } 
-            else if (seuraavatrivitLyriikkaan == false) kasitteleKappaleenNimiJaTahtilaji(kelvollinenSyoteRivi, i)  // end lyriikat false
+      var seuraavatrivitLyriikkaan = false
+      for (i <- 0 until inputFromFile.size) {
+        if (inputFromFile(i).trim.size != 0){  
+           var kelvollinenSyoteRivi = inputFromFile(i).replaceAll("\t", "")
            
-        } else if (seuraavatrivitLyriikkaan){    // L Y R I I K K A 
-             lyriikkadata += kelvollinenSyoteRivi
-        }
-         
-        else {    // L O P U T   ELI   N U O T I T      
-          nuottiDatanRivinumerot += i
-          nuottiDataRiveina += kelvollinenSyoteRivi.toLowerCase() 
-        }
-      }// if   .size != 0 
-    } 
-  //  println("kappaleenNimi: " + kappaleenNimi + ", tahtilaji" + tahtilaji)
+           if (kelvollinenSyoteRivi.head == '#') {    //  T U N N I S T E E T
+              if (kelvollinenSyoteRivi.tail.toLowerCase().trim.contains("sanat")){
+                 seuraavatrivitLyriikkaan = true
+                // varaudutaan siihen että joku kirjoittaa sanoja jo samalle riville kuin missä tunniste:
+                if(kelvollinenSyoteRivi.tail.trim.substring(5).length > 0)  {
+                        lyriikkadata += kelvollinenSyoteRivi.tail.trim.substring(5)
+               }   
+              } 
+              else if (seuraavatrivitLyriikkaan == false) kasitteleKappaleenNimiJaTahtilaji(kelvollinenSyoteRivi, i)  // end lyriikat false
+             
+          } else if (seuraavatrivitLyriikkaan){    // L Y R I I K K A 
+               lyriikkadata += kelvollinenSyoteRivi
+          }
+           
+          else {    // L O P U T   ELI   N U O T I T      
+            nuottiDatanRivinumerot += i
+            nuottiDataRiveina += kelvollinenSyoteRivi.toLowerCase() 
+          }
+        }// if   .size != 0 
+      } 
+    //  println("kappaleenNimi: " + kappaleenNimi + ", tahtilaji" + tahtilaji)
   }
   
   
@@ -234,24 +236,24 @@ class TiedostonLukeminen {
 
   
   def helppiTeksti() = {
-    val helpFile = Source.fromFile("help.txt")   
-
-    try {
-      for (rivi <- helpFile.getLines) {
-        println(rivi)
+      val helpFile = Source.fromFile("help.txt")   
+  
+      try {
+        for (rivi <- helpFile.getLines) {
+          println(rivi)
+        }
+        println()
+      } finally {
+        helpFile.close()
       }
-      println()
-    } finally {
-      helpFile.close()
-    }
   }
   
   
   def soundiValinta() = {
-     do {
-     MIDIPatch = readLine("\n\nMillä soundilla haluat kuulla kappaleen?\n" +
-      "ENTER= en millään,  1= piano,  2= vibrafoni,  3= rock-urut,  4= syna,  5= akustinen kitara,  6= rokkibändi,  7=music box  ")
-     } while (!"1234567".contains(MIDIPatch))
+       do {
+       MIDIPatch = readLine("\n\nMillä soundilla haluat kuulla kappaleen?\n" +
+        "ENTER= en millään,  1= piano,  2= vibrafoni,  3= rock-urut,  4= syna,  5= akustinen kitara,  6= rokkibändi,  7=music box  ")
+       } while (!"1234567".contains(MIDIPatch))
   }
 
   
