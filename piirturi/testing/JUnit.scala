@@ -1,4 +1,5 @@
- package nuottipiirturi.testing
+package piirturi.testing
+
 
  import scala.collection.mutable.Buffer
  
@@ -8,7 +9,9 @@
  import org.scalatest.Matchers
  import org.scalatest.Assertions._
  
- //import nuottipiirturi.src._
+// import piirturi.src._
+
+
 
 
 @RunWith(classOf[JUnitRunner])
