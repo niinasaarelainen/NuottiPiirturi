@@ -102,7 +102,7 @@ class NuottiPiirturi(){
         }   // iso else: ei-sointu.
         
         if (iskujaMennyt == tahtilaji) {
-      //     println("-----------------")
+           println("-----------------")
            iskujaMennyt = 0.0  
            tahdinAikaisetEtumerkit = Buffer[String]()
         }
@@ -129,6 +129,8 @@ class NuottiPiirturi(){
    
    def tutkiEtumerkit(nuotinNimi: String): String = {  
      
+      println(nuotinNimi + ", " + tahdinAikaisetEtumerkit)
+     
       // tutkitaan ylennettyjä ja alennettuja nuotteja
       if(nuotinNimi.contains("#") || nuotinNimi.contains("b")){
               if(this.tahdinAikaisetEtumerkit.contains(nuotinNimi))
@@ -139,6 +141,8 @@ class NuottiPiirturi(){
                   this.tahdinAikaisetEtumerkit += nuotinNimi 
               }  // tai vain lisätään puskuriin
               else  this.tahdinAikaisetEtumerkit += nuotinNimi   
+              
+             
              
      // selvitetään tarvitaanko palautusmerkkiä         
       } else if ( this.tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last).size > 0  ){
@@ -148,7 +152,7 @@ class NuottiPiirturi(){
              if ( this.tahdinAikaisetEtumerkit.contains("b1") && nuotinNimi == "h1"){
                 tahdinAikaisetEtumerkit -= "b1"
              } else if ( this.tahdinAikaisetEtumerkit.contains("b2") && nuotinNimi == "h2"){
-               tahdinAikaisetEtumerkit -= "b2"
+                tahdinAikaisetEtumerkit -= "b2"
              }  
              return "§"                  
       } 

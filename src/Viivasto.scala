@@ -35,7 +35,7 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
           if (riviaMennytMontakoTahtia == 2 ){      // printtaukseen 2, voisi kysyä käyttäjältä  //TODO  ?
               if(laitettava == nuottiData.last) lisaaTahtiviiva()   // kappaleen lopetusviiva
               vaihdaRivi()
-          } else if (backUpPituuslaskuri > 8.0) {
+          } else if (backUpPituuslaskuri > 16.0) {
               vaihdaRivi()              
           }
           
