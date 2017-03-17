@@ -1,22 +1,19 @@
-package piirturi.testing
-
+//package piirturi.src
 
  import scala.collection.mutable.Buffer
- 
- import org.junit.runner.RunWith
- import org.scalatest.junit.JUnitRunner
- import org.scalatest.FlatSpec
- import org.scalatest.Matchers
- import org.scalatest.Assertions._
- 
-// import piirturi.src._
+import org.junit.runner.RunWith
+import org.scalatest._
+import org.scalatest.junit.JUnitRunner
+import org.scalatest.FlatSpec
+import org.scalatest.Matchers
+import org.scalatest.Assertions._
+
+//import piirturi.src._
 
 
-
-
-@RunWith(classOf[JUnitRunner])
-class NuottiPTest extends FlatSpec with Matchers {
-    
+ @RunWith(classOf[JUnitRunner])
+class NTest extends FlatSpec with Matchers {
+  
   
  // #1 
 "NuottiPiirturi" should "find non-valid note names (not investigating length)" in {
@@ -105,9 +102,12 @@ class NuottiPTest extends FlatSpec with Matchers {
    } 
 
 // #3   
-"NuottiPiirturi" should "draw half note stem down" in {
+"NeljasosaNuotti" should "nuppi == @@" in {
   
- //  assert()
+   val neljasOsa = new NeljasosaNuotti("c2")
+   neljasOsa.nuppi
+   assert(neljasOsa.nuppi == "!@@")
+   
 }
 
 // #   

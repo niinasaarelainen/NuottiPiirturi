@@ -1,10 +1,8 @@
-
+// package piirturi.src
 
 import scala.collection.mutable.Buffer
 import scala.collection.mutable.Map
-/*
-import src.KahdeksasosaPari
-import src.ViivastolleLaitettava  */
+
 
 class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[String], tahtilaji:String, kappaleenNimi:String) {
   

@@ -1,4 +1,4 @@
-
+// package piirturi.src
 
 import scala.collection.mutable.Buffer
 import scala.collection.mutable.Map
@@ -130,6 +130,7 @@ abstract class Tauko extends ViivastolleLaitettava{
      def soiva = false
 }
 
+
  
 class KokoNuotti(nuotinNimi: String, extraetumerkki: String = "") extends Nuotti{    
      def korkeus = nuotinNimi
@@ -212,16 +213,12 @@ class NeljasosaNuotti(nuotinNimi: String, extraetumerkki: String = "") extends P
 }   
   
 
-class PisteellinenNeljasosaNuotti(nuotinNimi: String, extraetumerkki: String = "") extends NeljasosaNuotti(nuotinNimi: String, extraetumerkki: String){
+class PisteellinenNeljasosaNuotti(nuotinNimi: String, extraetumerkki: String = "") extends PisteellinenPuoliNuotti(nuotinNimi: String, extraetumerkki: String){
     override def korkeus = nuotinNimi
     override def pituus = 1.5
     override def kuvanLeveys = 11
+    override def nuppi = "@@"
     
-    override def kuva = {
-       super.kuva
-       viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 5) + "."  +  viivasto(y(nimiMapissa)).substring(6)  
-       viivasto
-    }
 }   
   
     
@@ -309,6 +306,7 @@ class KahdeksasosaPari (ekaNuotti: KahdeksasosaNuotti, tokaNuotti: KahdeksasosaN
     
 }
 
+//TODO ehkä vasta versioon 2.0 ?
 class KahdeksasosaPariSointuNuotti  (ekaNuotti: Sointu, tokaNuotti: KahdeksasosaPari)  extends Sointu(ekaNuotti.nuotit){
   
      def korkeus2 =  tokaNuotti.korkeus 

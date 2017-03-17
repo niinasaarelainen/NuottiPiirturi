@@ -1,34 +1,18 @@
+// package piirturi.src
 
 import scala.collection.mutable.Buffer
 
-/*
-import src.KahdeksasosaNuotti
-import src.KahdeksasosaPari
-import src.KahdeksasosaTauko
-import src.KokoNuotti
-import src.NeljasosaNuotti
-import src.NeljasosaTauko
-import src.PisteellinenNeljasosaNuotti
-import src.PisteellinenNeljasosaTauko
-import src.PisteellinenPuoliNuotti
-import src.PuoliNuotti
-import src.Sointu
-import src.TiedostonLukeminen
-import src.TiedostonTallennus
-import src.ViivastolleLaitettava
-*/
 
 class NuottiPiirturi(){
    
     
    var nuottiData= Buffer[ViivastolleLaitettava]()    
    var nuottiDataParitettu= Buffer[ViivastolleLaitettava]()    
-   var tahdinAikaisetEtumerkit = Buffer[String]()
+   var tahdinAikaisetEtumerkit = Buffer[String]()     // Set olisi muuten hyvä mutta on immutable
    var lyricsBuffer = Buffer[String]()  
    val inputTiedostosta = new TiedostonLukeminen
    inputTiedostosta.lueTiedosto()
    val tahtilaji = inputTiedostosta.tahtilaji.toDouble 
-    
    val inputBuffer = inputTiedostosta.nuottiAlkiot.toBuffer  
    
  

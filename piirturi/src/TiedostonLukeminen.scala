@@ -1,8 +1,10 @@
+// package piirturi.src
 
 import scala.io.Source
 import scala.collection.mutable.Buffer
 import scala.io.StdIn._
 import java.io._
+
 
 class TiedostonLukeminen {
 

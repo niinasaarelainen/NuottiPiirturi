@@ -1,15 +1,9 @@
+// package piirturi.src
 
 import javax.sound.midi.MidiSystem
 import scala.collection.mutable.Map
 import scala.collection.mutable.Buffer
 import scala.io.StdIn._
-/*
-import src.Kappale
-import src.TiedostonTallennus
-import src.ViivastolleLaitettava
-import src.Tauko
-import src.Sointu
-import src.Nuotti  */
 
 
 class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, kappale: Kappale, tahtilaji: Int) {   // Tuple (korkeus/korkeudet, pituus)
