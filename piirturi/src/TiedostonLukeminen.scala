@@ -25,15 +25,7 @@ class TiedostonLukeminen {
   var tahtilajiOnJoLuettu = false
     
  
-  helppiTeksti()
-  listaaTiedostot()
- 
-  do {
-    tiedostonNimi = readLine("\n\nMinkä nimisen tiedoston haluat nuoteiksi? Valitse ylläolevista. ")
-  } while (!onkoListalla(tiedostonNimi))
-
- 
-
+  
  
   
  ///// F U N K T I O T: ///////////////////////////////////////////////////////////////////////// 
@@ -61,8 +53,9 @@ class TiedostonLukeminen {
   }
 
   
-  def lueTiedosto(): Unit = {  
+  def lueTiedosto(tiedostonNimi: String): Unit = {  
     
+     this.tiedostonNimi = tiedostonNimi
      this.inputFromFile = Buffer[String]()       // pitää nollata, jos tänne tullaan virheidentarkistuksesta
      this.nuottiDataRiveina = Buffer[String]() 
      this.nuottiDatanRivinumerot = Buffer[Int]()
@@ -100,7 +93,7 @@ class TiedostonLukeminen {
        tarkistaVirheetForLoop()
      } while (!virheitaNolla) 
        
-     soundiValinta()   
+    
        
      def tarkistaVirheetForLoop(): Unit = {
          for (i <- 0 until nuottiDataRiveina.size) {
@@ -124,7 +117,7 @@ class TiedostonLukeminen {
                              "\n Virhe on rivillä " + (nuottiDatanRivinumerot(i)+1)  +
                              "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu. ")
                              
-                           lueTiedosto(); return
+                           lueTiedosto(tiedostonNimi); return
                        }
                   }   
               }         
@@ -143,7 +136,7 @@ class TiedostonLukeminen {
                                 "\n Tai jos tarkoitit että sointu loppuu, niin muista laittaa >" + 
                       "\n\n Virhe on rivillä " + (nuottiDatanRivinumerot(ind)+1)  +
                       "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu. ")  
-                      lueTiedosto(); return  
+                      lueTiedosto(tiedostonNimi); return  
                 }     
                  
                 else {
@@ -157,7 +150,7 @@ class TiedostonLukeminen {
                          readLine("\n\n syöte '" + sointu(i) +"' on virheellinen: " + oikeellisuusTesti(sointu(i)) + 
                          "\n Virhe on rivillä " + (nuottiDatanRivinumerot(ind)+1)  +
                          "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu. ")
-                        lueTiedosto(); return
+                        lueTiedosto(tiedostonNimi); return
                       }
                    }
                    
@@ -252,13 +245,7 @@ class TiedostonLukeminen {
   }
   
   
-  def soundiValinta() = {
-       do {
-       MIDIPatch = readLine("\n\nMillä soundilla haluat kuulla kappaleen?\n" +
-        "ENTER= en millään,  1= piano,  2= vibrafoni,  3= rock-urut,  4= syna,  5= akustinen kitara,  6= rokkibändi,  7=music box  ")
-       } while (!"1234567".contains(MIDIPatch))
-  }
-
+ 
   
   def oikeellisuusTesti(syote: String): String = {    // esim. g#1---
   

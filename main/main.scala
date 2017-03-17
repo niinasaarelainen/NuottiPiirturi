@@ -2,6 +2,6 @@
 
 object test extends App{
   
-     new NuottiPiirturi()
+     new UI()
   
 }  

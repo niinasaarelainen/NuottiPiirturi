@@ -1,17 +1,17 @@
-//package piirturi.src
+
 
  import scala.collection.mutable.Buffer
+ import org.scalatest._
+ /*
 import org.junit.runner.RunWith
-import org.scalatest._
 import org.scalatest.junit.JUnitRunner
 import org.scalatest.FlatSpec
 import org.scalatest.Matchers
-import org.scalatest.Assertions._
+import org.scalatest.Assertions._  */
+ 
+ 
 
-//import piirturi.src._
-
-
- @RunWith(classOf[JUnitRunner])
+// @RunWith(classOf[JUnitRunner])
 class NTest extends FlatSpec with Matchers {
   
   

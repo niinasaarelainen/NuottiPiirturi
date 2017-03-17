@@ -3,33 +3,33 @@
 import scala.collection.mutable.Buffer
 
 
-class NuottiPiirturi(){
+class NuottiPiirturi(lukija: TiedostonLukeminen, MIDIPatch: String){
    
     
    var nuottiData= Buffer[ViivastolleLaitettava]()    
    var nuottiDataParitettu= Buffer[ViivastolleLaitettava]()    
    var tahdinAikaisetEtumerkit = Buffer[String]()     // Set olisi muuten hyvä mutta on immutable
    var lyricsBuffer = Buffer[String]()  
-   val inputTiedostosta = new TiedostonLukeminen
-   inputTiedostosta.lueTiedosto()
-   val tahtilaji = inputTiedostosta.tahtilaji.toDouble 
-   val inputBuffer = inputTiedostosta.nuottiAlkiot.toBuffer  
+ //  val inputTiedostosta = new TiedostonLukeminen
+  // inputTiedostosta.lueTiedosto()
+   val tahtilaji = lukija.tahtilaji.toDouble 
+   val inputBuffer = lukija.nuottiAlkiot.toBuffer  
    
  
      
        nuottiData = kasitteleNuottiTieto(inputBuffer, nuottiData)    
-       if(inputTiedostosta.lyriikkadata.size != 0)
+       if(lukija.lyriikkadata.size != 0)
            kasitteleLyriikat() 
        tehdaanKahdeksasosaParit()
        
        
          
-       val viivasto = new Viivasto(nuottiDataParitettu, lyricsBuffer, inputTiedostosta.tahtilaji, inputTiedostosta.kappaleenNimi)
+       val viivasto = new Viivasto(nuottiDataParitettu, lyricsBuffer, lukija.tahtilaji, lukija.kappaleenNimi)
        viivasto.piirraNuotit()
        
         // jos kuunnellaan, tallennuskäsky pitää antaa kuuntelun jälkeen, muuten se tulee ruudulle ennen nuotteja
-       if(!inputTiedostosta.MIDIPatch.equals(""))  // kuunnellaan  
-            new simpleMIDIPlayerAdapter(nuottiData, inputTiedostosta.MIDIPatch.toInt, viivasto.kappale, inputTiedostosta.tahtilaji.toInt)
+       if(!MIDIPatch.equals(""))  // kuunnellaan  
+            new simpleMIDIPlayerAdapter(nuottiData, MIDIPatch.toInt, viivasto.kappale, lukija.tahtilaji.toInt)
        else {        // käyttäjä valitsi että ei kuunnella
            viivasto.kappale.printtaaRuudulleIlmanAjastusta()
            new TiedostonTallennus(viivasto.kappale)    
@@ -164,7 +164,7 @@ class NuottiPiirturi(){
    
    
    def kasitteleLyriikat() = {
-         for (rivi <-  inputTiedostosta.lyriikkadata){
+         for (rivi <-  lukija.lyriikkadata){
             var splitattuRivi = rivi.replaceAll("-", "- ").split(" ")
             for (alkio <- splitattuRivi) 
                 if (alkio != "") lyricsBuffer += alkio
