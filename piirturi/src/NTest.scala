@@ -6,7 +6,7 @@ class NTest extends FlatSpec with Matchers {
   
   
  // #1 
-"TiedostonLukeminen.oikeellisuusTesti()" should "find non-valid note names and length" in {
+"TiedostonLukeminen.oikeellisuusTesti()" should "find non-valid note names and lengths" in {
      
      val luk = new TiedostonLukeminen
   
@@ -35,7 +35,7 @@ class NTest extends FlatSpec with Matchers {
         for (syote <- syotteet) {
           if (luk.oikeellisuusTesti(syote) != "")
              virheita += 1
-        }  // for
+        }  
         virheita
      }
      
@@ -44,6 +44,7 @@ class NTest extends FlatSpec with Matchers {
    } 
   
 
+// #2 
 "NuottiPiirturi.lyricsBuffer" should "have right lyrics" in {
   
     val sanat = Buffer("Jaak-", "ko", "kul-", "ta,", "Jaak-", "ko", "kul-", "ta,", "he-", "rää", "jo,", "he-", "rää", "jo.", "Kel-", "lo-", "ja-", "si", "soi-", "ta,", "kel-", "lo-", "ja-", "si", "soi-", "ta,", "pium", "paum", "poum,","pium", "paum", "poum.")
@@ -63,7 +64,8 @@ class NTest extends FlatSpec with Matchers {
   
 }
 
- 
+
+ // #3
 "NeljasosaNuotti" should "have right nuppi, nimiMapissa and etumerkki" in {
   
      val neljasOsa = new NeljasosaNuotti("c#2")
@@ -71,7 +73,7 @@ class NTest extends FlatSpec with Matchers {
    
 }
 
- 
+  // #4
 "KahdeksasosaPari" should "draw eight note couple stems down and ignore second flat" in {
     
     var kuva = Buffer[String]()	
@@ -114,6 +116,7 @@ class NTest extends FlatSpec with Matchers {
 } 
 
 
+ // #5
 "Pisteellinen NeljasosaNuotti" should "draw dotted quarter note stem up" in {
       
       var kuva = Buffer[String]()	
@@ -149,12 +152,7 @@ class NTest extends FlatSpec with Matchers {
 
 
 
-"NuottiPiirturi" should "draw chords right" in {
-  
- //  assert()
-}
-
-
+ // #6
 "TiedostonLukeminen" should "find tahtilaji and kappaleenNimi" in {
   
       val luk = new TiedostonLukeminen()
