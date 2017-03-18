@@ -36,6 +36,9 @@ trait ViivastolleLaitettava {
   
 
 class Sointu(aanet: Buffer[ViivastolleLaitettava]) extends ViivastolleLaitettava{
+  
+     viivasto = piirraTyhjaViivasto(kuvanLeveys)
+  
      def nuotit = aanet   // korkeuden joutuu laskemaan jokaiselle nuotille erikseen
      def soiva =  true
      def pituus = aanet(0).pituus   // kaikkien soinnun sävelten tulee olla samanpituisia 
@@ -53,8 +56,7 @@ class Sointu(aanet: Buffer[ViivastolleLaitettava]) extends ViivastolleLaitettava
  
           
     def kuva = {              
-        
-      viivasto = piirraTyhjaViivasto(kuvanLeveys)
+      
       for (aani <- aanet){
          val nimiMapissa = aani.asInstanceOf[Nuotti].nimiMapissa 
          val etumerkki = aani.asInstanceOf[Nuotti].etumerkki
@@ -132,7 +134,11 @@ abstract class Tauko extends ViivastolleLaitettava{
 
 
  
-class KokoNuotti(nuotinNimi: String, extraetumerkki: String = "") extends Nuotti{    
+class KokoNuotti(nuotinNimi: String, extraetumerkki: String = "") extends Nuotti{   
+  
+   // jos tämä kuva-metodin sisällä, appendaa aina tyhjän viivaston, jos kuvaa kutsutaan
+     viivasto = piirraTyhjaViivasto(kuvanLeveys) 
+   
      def korkeus = nuotinNimi
      def pituus = 4.0
      def kuvanLeveys = 22
@@ -160,7 +166,7 @@ class KokoNuotti(nuotinNimi: String, extraetumerkki: String = "") extends Nuotti
       }
      
       def kuva = {
-         viivasto = piirraTyhjaViivasto(kuvanLeveys) 
+         
          piirraNuppi()
          viivasto
       }
@@ -219,6 +225,7 @@ class PisteellinenNeljasosaNuotti(nuotinNimi: String, extraetumerkki: String = "
     override def kuvanLeveys = 11
     override def nuppi = "@@"
     
+ //   println("@ViivastolleL: " + kuva)
 }   
   
     
@@ -270,7 +277,6 @@ class KahdeksasosaPari (ekaNuotti: KahdeksasosaNuotti, tokaNuotti: KahdeksasosaN
      }
        
      override def kuva = {
-       viivasto = piirraTyhjaViivasto(kuvanLeveys)
        super.kuva     // piirtää ekan nuotin nupin 
       
        // tokan mahd. apuviiva ja nuppi:
@@ -327,12 +333,14 @@ class KahdeksasosaPariSointuNuotti  (ekaNuotti: Sointu, tokaNuotti: Kahdeksasosa
 
  
   
-class NeljasosaTauko extends Tauko {   
+class NeljasosaTauko extends Tauko { 
+  
+    viivasto = piirraTyhjaViivasto(kuvanLeveys) 
+  
     def pituus = 1.0
     def kuvanLeveys = 7    
     
     def kuva = {                                    // korkeus on pelkkä piirtokorkeus
-      viivasto = piirraTyhjaViivasto(kuvanLeveys) 
       viivasto(y(korkeus)) = viivasto(y(korkeus)).substring(0, 3) + "\\" +  viivasto(y(korkeus)).substring(4)
       viivasto(y(korkeus)+1) = viivasto(y(korkeus)+1).substring(0, 3) + "/" +  viivasto(y(korkeus)+1).substring(4)
       viivasto(y(korkeus)+2) = viivasto(y(korkeus)+2).substring(0, 3) + "\\" +  viivasto(y(korkeus)+2).substring(4)
@@ -359,10 +367,8 @@ class KahdeksasosaTauko extends NeljasosaTauko{
       override def kuvanLeveys = 6
     
       override def kuva = {
-         viivasto = piirraTyhjaViivasto(kuvanLeveys) 
          viivasto(y(korkeus)) = viivasto(y(korkeus)).substring(0, 2) + "/|" + viivasto(y(korkeus)).substring(4)
          viivasto(y(korkeus)+1) = viivasto(y(korkeus)+1).substring(0, 3) + "|" + viivasto(y(korkeus)+1).substring(4)
        viivasto   
       }  
 }
-  

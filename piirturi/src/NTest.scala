@@ -110,33 +110,77 @@ class NTest extends FlatSpec with Matchers {
    
 }
 
-// #   
+ /* 
 "NuottiPiirturi" should "draw eight note couple stems down and ignore second flat" in {
   
   var kuva = Buffer[String]()	
   
- kuva +="            \n" +
- kuva +="            \n" +
- kuva +="            \n" +
- kuva +="  b@@   @@  \n" +
- kuva +=" --|----|-- \n" +
- kuva +="   |    |   \n"+
- kuva +="---======---\n"+
- kuva +="            \n"+
- kuva +="------------\n"+
- kuva +="            \n"+
- kuva +="------------\n"+
- kuva +="            \n"+
- kuva +="------------\n"+
- kuva +="            \n"+
- kuva +="------------\n"+
- kuva +="            \n" +
- kuva +="            \n" +
+ kuva +="            " 
+ kuva +="            " 
+ kuva +="            " 
+ kuva +="  b@@   @@  " 
+ kuva +=" --|----|-- " 
+ kuva +="   |    |   "
+ kuva +="---======---"
+ kuva +="            "
+ kuva +="------------"
+ kuva +="            "
+ kuva +="------------"
+ kuva +="            "
+ kuva +="------------"
+ kuva +="            "
+ kuva +="------------"
+ kuva +="            " 
+ kuva +="            " 
+ kuva +="            " 
  kuva +="            " 
         
  val pari = new KahdeksasosaPari(new KahdeksasosaNuotti("b2"), new KahdeksasosaNuotti("b2"))
-                
+  println(pari.kuva)
+  println(kuva)
+  
+  val neljas = new NeljasosaNuotti("b2")
+   println(neljas.kuva)
+   
    assert(pari.kuva.eq(kuva))
+} */
+
+"Pisteellinen NeljasosaNuotti" should "draw dotted quarter note stem up" in {
+  
+  var kuva = Buffer[String]()	
+  
+ kuva +="           " 
+ kuva +="           " 
+ kuva +="           " 
+ kuva +="           " 
+ kuva +="           " 
+ kuva +="           " 
+ kuva +="-----------" 
+ kuva +="    |      "
+ kuva +="----|------"
+ kuva +="    |      "              
+ kuva +="---@@.-----" 
+ kuva +="           " 
+ kuva +="-----------" 
+ kuva +="           " 
+ kuva +="-----------" 
+ kuva +="           " 
+ kuva +="           " 
+ kuva +="           " 
+ kuva +="           " 
+        
+  
+  val n = new PisteellinenNeljasosaNuotti("h1")
+   println("n.kuva: " + n.kuva)
+   println(" nkuva: " + kuva)
+   
+   println("n.kuva: " + n.kuva)
+   println(" nkuva: " + kuva)
+   
+   for (i <-0 until kuva.size) {
+      val success = n.kuva(i).equals(kuva(i))
+      assert(success && kuva.size == n.kuva.size)
+   }   
 }
 
 // #  
