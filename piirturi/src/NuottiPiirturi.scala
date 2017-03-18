@@ -10,20 +10,17 @@ class NuottiPiirturi(lukija: TiedostonLukeminen, MIDIPatch: String){
    var nuottiDataParitettu= Buffer[ViivastolleLaitettava]()    
    var tahdinAikaisetEtumerkit = Buffer[String]()     // Set olisi muuten hyvä mutta on immutable
    var lyricsBuffer = Buffer[String]()  
- //  val inputTiedostosta = new TiedostonLukeminen
-  // inputTiedostosta.lueTiedosto()
    val tahtilaji = lukija.tahtilaji.toDouble 
    val inputBuffer = lukija.nuottiAlkiot.toBuffer  
    
  
-     
+   // P Ä Ä M E T O D I: 
+   def execute() = {
        nuottiData = kasitteleNuottiTieto(inputBuffer, nuottiData)    
        if(lukija.lyriikkadata.size != 0)
            kasitteleLyriikat() 
        tehdaanKahdeksasosaParit()
-       
-       
-         
+              
        val viivasto = new Viivasto(nuottiDataParitettu, lyricsBuffer, lukija.tahtilaji, lukija.kappaleenNimi)
        viivasto.piirraNuotit()
        
@@ -33,12 +30,11 @@ class NuottiPiirturi(lukija: TiedostonLukeminen, MIDIPatch: String){
        else {        // käyttäjä valitsi että ei kuunnella
            viivasto.kappale.printtaaRuudulleIlmanAjastusta()
            new TiedostonTallennus(viivasto.kappale)    
-       }                                               
-  
- 
+       }  
+   }
      
  
-///// F U N K T I O T  ja niihin liittyvät muuttujat (ei voi määritellä funktion sisällä rekursion takia): /////////////////////////  
+/////M U U T   M E T O D I T  ja niihin liittyvät muuttujat (ei voi määritellä metodin sisällä rekursion takia): /////////////////////////  
    
    var iskujaMennyt =  0.0
    var ok= 0   // nollana/positiivisena ok kasvattaa iskujaMennyt. 

@@ -102,11 +102,11 @@ class NTest extends FlatSpec with Matchers {
    } 
 
 // #3   
-"NeljasosaNuotti" should "nuppi == @@" in {
+"NeljasosaNuotti" should "have right nuppi, nimiMapissa and etumerkki" in {
   
-   val neljasOsa = new NeljasosaNuotti("c2")
+   val neljasOsa = new NeljasosaNuotti("c#2")
    neljasOsa.nuppi
-   assert(neljasOsa.nuppi == "!@@")
+   assert(neljasOsa.nuppi == "@@" && neljasOsa.nimiMapissa == "c2" && neljasOsa.etumerkki == "#")
    
 }
 
@@ -123,11 +123,13 @@ class NTest extends FlatSpec with Matchers {
 }
 
 // #
-"NuottiPiirturi" should "exit with empty file and with empty note data" in {
+
+"TiedostonLukeminen" should "find tahtilaji and kappaleen nimi" in {
   
-//  val luk = new TiedostonLukeminen()
- // luk.
- //  assert()
-}
+  val luk = new TiedostonLukeminen()
+  luk.lueTiedosto("kalevala")
+  
+   assert(luk.kappaleenNimi == " Kalevala - kuudestoista runo (ote)" && luk.tahtilaji == "5")
+} 
 
 }

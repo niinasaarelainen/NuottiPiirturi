@@ -1,9 +1,9 @@
 // package piirturi.src
 
 import scala.io.Source
-import scala.collection.mutable.Buffer
-import scala.io.StdIn._
 import java.io._
+import scala.collection.mutable.Buffer
+
 
 
 class TiedostonLukeminen {
@@ -14,7 +14,6 @@ class TiedostonLukeminen {
   var nuottiDatanRivinumerot = Buffer[Int]() // syötetiedoston nuottidatarivit muistiin, ei tyhjiä rivejä
   val lyriikkadata = Buffer[String]()        // biisin sanat
 
-  var MIDIPatch = ""
   var tahtilaji = "4"
   var kappaleenNimi = ""
   var tiedostonNimi = ""
@@ -25,7 +24,6 @@ class TiedostonLukeminen {
   var tahtilajiOnJoLuettu = false
     
  
-  
  
   
  ///// F U N K T I O T: ///////////////////////////////////////////////////////////////////////// 
@@ -64,9 +62,9 @@ class TiedostonLukeminen {
      tahtilajiOnJoLuettu = false
       
      try {
-       for (rivi <- kayttajanValitsemaTiedosto.getLines) {
-          this.inputFromFile += rivi.trim
-       }
+        for (rivi <- kayttajanValitsemaTiedosto.getLines) {
+           this.inputFromFile += rivi.trim
+        }
      } finally {
         kayttajanValitsemaTiedosto.close()
      }
@@ -93,7 +91,6 @@ class TiedostonLukeminen {
        tarkistaVirheetForLoop()
      } while (!virheitaNolla) 
        
-    
        
      def tarkistaVirheetForLoop(): Unit = {
          for (i <- 0 until nuottiDataRiveina.size) {
@@ -117,56 +114,52 @@ class TiedostonLukeminen {
                              "\n Virhe on rivillä " + (nuottiDatanRivinumerot(i)+1)  +
                              "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu. ")
                              
-                           lueTiedosto(tiedostonNimi); return
+                           lueTiedosto(this.tiedostonNimi); return
                        }
                   }   
               }         
          } // end for nuottiDataRiveina
-     
      }
      
         //nested function:  
-        def tarkistaSoinnunVirheet(alkio:String, ind:Int): Unit = {
+     def tarkistaSoinnunVirheet(alkio:String, ind:Int): Unit = {
         
-                println(alkio) 
+              println(alkio) 
          
-                if(alkio.last != '>'){
-                     virheitaNolla = false
-                     readLine("\n\n syöte '" + alkio +"' on virheellinen: soinnun sävelten väliin tulee kirjoittaa pilkku. "+
-                                "\n Tai jos tarkoitit että sointu loppuu, niin muista laittaa >" + 
-                      "\n\n Virhe on rivillä " + (nuottiDatanRivinumerot(ind)+1)  +
-                      "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu. ")  
-                      lueTiedosto(tiedostonNimi); return  
-                }     
+              if(alkio.last != '>'){
+                    virheitaNolla = false
+                    readLine("\n\n syöte '" + alkio +"' on virheellinen: soinnun sävelten väliin tulee kirjoittaa pilkku. "+
+                               "\n Tai jos tarkoitit että sointu loppuu, niin muista laittaa >" + 
+                     "\n\n Virhe on rivillä " + (nuottiDatanRivinumerot(ind)+1)  +
+                     "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu. ")  
+                     lueTiedosto(this.tiedostonNimi); return  
+              }     
                  
-                else {
-                   var sointu =  alkio.tail.substring(0, alkio.size -2).split(",")  
-                   for(i <- 0 until sointu.size) {
-                      if (alkio != ""  && oikeellisuusTesti(sointu(i)) == "") {
-                          sointu(i) = erikoistapauksetNuotinNimessa(sointu(i))  // korvataan soinnun alkiot mahdollisilla fixauksilla
-                      }
-                      else {
-                         virheitaNolla =  false  
-                         readLine("\n\n syöte '" + sointu(i) +"' on virheellinen: " + oikeellisuusTesti(sointu(i)) + 
-                         "\n Virhe on rivillä " + (nuottiDatanRivinumerot(ind)+1)  +
-                         "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu. ")
-                        lueTiedosto(tiedostonNimi); return
-                      }
-                   }
+              else {
+                 var sointu =  alkio.tail.substring(0, alkio.size -2).split(",")  
+                 for(i <- 0 until sointu.size) {
+                     if (alkio != ""  && oikeellisuusTesti(sointu(i)) == "") {
+                         sointu(i) = erikoistapauksetNuotinNimessa(sointu(i))  // korvataan soinnun alkiot mahdollisilla fixauksilla
+                     }
+                     else {
+                        virheitaNolla =  false  
+                        readLine("\n\n syöte '" + sointu(i) +"' on virheellinen: " + oikeellisuusTesti(sointu(i)) + 
+                        "\n Virhe on rivillä " + (nuottiDatanRivinumerot(ind)+1)  +
+                        "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu. ")
+                        lueTiedosto(this.tiedostonNimi); return
+                     }
+                 }
                    
-                   if(virheitaNolla){
-                       var korjattuAlkio = "<"
-                       for (aani<- sointu) korjattuAlkio += aani + ","
-                       korjattuAlkio = korjattuAlkio.substring(0,korjattuAlkio.size-1) + ">" // ei vikaa pilkkua
-                       nuottiAlkiot = nuottiAlkiot :+ korjattuAlkio  // alkio = <g1,h1>
-                   }
-                 
-                 }  // end else: ei ole kyse koko alkiosta <....>
- 
+                 if(virheitaNolla){
+                      var korjattuAlkio = "<"
+                      for (aani<- sointu) korjattuAlkio += aani + ","
+                      korjattuAlkio = korjattuAlkio.substring(0,korjattuAlkio.size-1) + ">" // ei vikaa pilkkua
+                      nuottiAlkiot = nuottiAlkiot :+ korjattuAlkio  // alkio = <g1,h1>
+                 }
+              }  // end else: ei ole kyse koko alkiosta <....>
        }// end tarkistaSoinnunVirheet
   }  // end tarkistaVirheet
 
-  
   
   
   def erikoistapauksetNuotinNimessa(alkio:String): String=  {
@@ -244,8 +237,6 @@ class TiedostonLukeminen {
       }
   }
   
-  
- 
   
   def oikeellisuusTesti(syote: String): String = {    // esim. g#1---
   
