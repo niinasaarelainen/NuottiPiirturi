@@ -3,7 +3,7 @@
 import scala.collection.mutable.Buffer
 
 
-class NuottiPiirturi(lukija: TiedostonLukeminen, MIDIPatch: String){
+class NuottiPiirturi(lukija: TiedostonLukeminen, MIDIPatch: String = ""){
    
     
    var nuottiData= Buffer[ViivastolleLaitettava]()    

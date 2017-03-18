@@ -7,9 +7,7 @@ import scala.collection.mutable.Map
 class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[String], tahtilaji:String, kappaleenNimi:String) {
   
    var viivasto = piirraGavain()   //Buffer[String]()
-  
    val nuotitYAkselilla = Map("lyr" -> 18, "alatila" ->17, "c1" -> 16, "d1" -> 15,  "e1" -> 14,  "f1" -> 13,  "g1"-> 12,  "a1"->11,  "h1" -> 10, "b1" -> 10, "c2" -> 9, "d2" -> 8,  "e2" -> 7,  "f2" -> 6,  "g2"-> 5,  "a2"-> 4, "h2" -> 3, "b2" -> 3, "ylatila2" -> 2, "ylatila3" -> 1, "ylatila4" -> 0)
-
    var tahtiaMennyt = 0.0        // laskee iskuja
    var riviaMennytMontakoTahtia = 0             // halutaan max 4 tahtia riville
    var backUpPituuslaskuri = 0.0     // vaihdetaan riviä jos ei löydy tahtiviivalle paikkaa ja pituus on melkoinen
@@ -19,39 +17,39 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
   
  
     
-  def piirraNuotit() = {
-     for (laitettava <- nuottiData) {      
-                        // jos sanoja oli vähemmän kuin nuotteja, ei haluta kaataa ohjelmaa
-          if(laitettava.soiva && lyricsBuffer.size != 0 && lyricsBuffer.size - lyricsInd >= 1 ){     // nuotti ja sointu => soiva= true, tauko=> soiva=false
-             kasitteleLyriikat(laitettava) 
-          }    
-          liita(laitettava)
-          tahtiaMennyt += laitettava.pituus
-          backUpPituuslaskuri += laitettava.pituus
-          if (tahtiaMennyt == tahtilaji.toDouble){
-       //     println("laitettava: " + laitettava + ", pit:" + laitettava.pituus + "riviaMennytMontakoTahtia " +riviaMennytMontakoTahtia)
-            riviaMennytMontakoTahtia += 1
-            tahtiaMennyt = 0.0
-            lisaaTahtiviiva()
-          }
-          if (riviaMennytMontakoTahtia == 2 ){      // printtaukseen 2, voisi kysyä käyttäjältä  //TODO  ?
-              if(laitettava == nuottiData.last) lisaaTahtiviiva()   // kappaleen lopetusviiva
-              vaihdaRivi()
-          } else if (backUpPituuslaskuri > 16.0) {
-              vaihdaRivi()              
-          }
-          
-     } // end for, kaikki nuottiData käsitelty
-    
-   
-     if(tahtiaMennyt != 0.0 || riviaMennytMontakoTahtia > 0 ){  // pelkkää G-avainta ei haluta mukaan kappaleeseen
-        if (tahtiaMennyt == 0.0) lisaaTahtiviiva()
-        vaihdaRivi()   
-     }    
-  }
+   def piirraNuotit() = {
+        for (laitettava <- nuottiData) {      
+                          // jos sanoja oli vähemmän kuin nuotteja, ei haluta kaataa ohjelmaa
+            if(laitettava.soiva && lyricsBuffer.size != 0 && lyricsBuffer.size - lyricsInd >= 1 ){     // nuotti ja sointu => soiva= true, tauko=> soiva=false
+               kasitteleLyriikat(laitettava) 
+            }    
+            liita(laitettava)
+            tahtiaMennyt += laitettava.pituus
+            backUpPituuslaskuri += laitettava.pituus
+            if (tahtiaMennyt == tahtilaji.toDouble){
+         //     println("laitettava: " + laitettava + ", pit:" + laitettava.pituus + "riviaMennytMontakoTahtia " +riviaMennytMontakoTahtia)
+              riviaMennytMontakoTahtia += 1
+              tahtiaMennyt = 0.0
+              lisaaTahtiviiva()
+            }
+            if (riviaMennytMontakoTahtia == 2 ){      // printtaukseen 2, voisi kysyä käyttäjältä  //TODO  ?
+                if(laitettava == nuottiData.last) lisaaTahtiviiva()   // kappaleen lopetusviiva
+                vaihdaRivi()
+            } else if (backUpPituuslaskuri > 16.0) {
+                vaihdaRivi()              
+            }
+            
+       } // end for, kaikki nuottiData käsitelty
+      
+     
+       if(tahtiaMennyt != 0.0 || riviaMennytMontakoTahtia > 0 ){  // pelkkää G-avainta ei haluta mukaan kappaleeseen
+          if (tahtiaMennyt == 0.0) lisaaTahtiviiva()
+          vaihdaRivi()   
+       }    
+   }
   
   
-  def kasitteleLyriikat(laitettava: ViivastolleLaitettava) = {
+   def kasitteleLyriikat(laitettava: ViivastolleLaitettava) = {
      
       var tavu, tavu2 = ""
       if(!laitettava.isInstanceOf[KahdeksasosaPari])
@@ -95,64 +93,62 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
          lyricsInd += 1
       }
         
-  }
+   }
   
   
   
-  def liita(liitosOlio: ViivastolleLaitettava) = {
-     for (i <- 0 until this.viivasto.size)
-         viivasto(i) += liitosOlio.kuva(i)
-  }
+   def liita(liitosOlio: ViivastolleLaitettava) = {
+       for (i <- 0 until this.viivasto.size)
+          viivasto(i) += liitosOlio.kuva(i)
+   }
   
   
    
-  def lisaaTahtiviiva() = {
+   def lisaaTahtiviiva() = {
        for(i<-nuotitYAkselilla("ylatila4") to nuotitYAkselilla("g2"))   
          viivasto(i) += " "                                       // tänne tyhjää, jotta mahdollisesti tänne tuleva nuotti/varsi asemoituu oikein    
        for(i<-nuotitYAkselilla("f2") to nuotitYAkselilla("e1"))   // tahtiviiva menee ylimmästä viivasta alimpaan
          viivasto(i) += "|"  
        for(i<-nuotitYAkselilla("d1") to nuotitYAkselilla("lyr"))  
          viivasto(i) += " "                                       // tänne tyhjää, jotta mahdollisesti tänne tuleva nuotti/lyriikka asemoituu oikein      
-  }
+   }
    
    
    
-  def vaihdaRivi() = {      
-     kappale.lisaaViivasto(this.viivasto)    
-     viivasto = piirraGavain 
-     this.riviaMennytMontakoTahtia = 0
-     this.backUpPituuslaskuri = 0.0
-  }
+   def vaihdaRivi() = {      
+      kappale.lisaaViivasto(this.viivasto)    
+      viivasto = piirraGavain 
+      this.riviaMennytMontakoTahtia = 0
+      this.backUpPituuslaskuri = 0.0
+   }
     
  
    
-  def piirraGavain() = {
+   def piirraGavain() = {
     
-     var g = Buffer[String]()                  
-
-     g +="          "
-     g +="          "
-     g +="          "
-     g +="          "
-     g +="          "
-     g +="    |\\    " 
-     g +="----|/----" 
-     g +="    /     " 
-     g +="---/|-----" 
-     g +="  / |     " 
-     g +="-|--|__---" 
-     g +=" | /|  \\  " 
-     g +="-\\-\\|---|-" 
-     g +="  \\_|__/  " 
-     g +="----|-----"
-     g +="    |     "
-     g +="  \\_/     " 
-     g += "          "
-     g += "          "
-     
-     
-   g
+       var g = Buffer[String]()                  
+  
+       g +="          "
+       g +="          "
+       g +="          "
+       g +="          "
+       g +="          "
+       g +="    |\\    " 
+       g +="----|/----" 
+       g +="    /     " 
+       g +="---/|-----" 
+       g +="  / |     " 
+       g +="-|--|__---" 
+       g +=" | /|  \\  " 
+       g +="-\\-\\|---|-" 
+       g +="  \\_|__/  " 
+       g +="----|-----"
+       g +="    |     "
+       g +="  \\_/     " 
+       g += "          "
+       g += "          "
+       
+    g
   }
- 
- 
+  
 }

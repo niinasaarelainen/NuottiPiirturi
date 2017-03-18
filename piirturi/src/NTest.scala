@@ -1,34 +1,27 @@
+import scala.collection.mutable.Buffer
+import org.scalatest._
 
-
- import scala.collection.mutable.Buffer
- import org.scalatest._
- /*
-import org.junit.runner.RunWith
-import org.scalatest.junit.JUnitRunner
-import org.scalatest.FlatSpec
-import org.scalatest.Matchers
-import org.scalatest.Assertions._  */
  
- 
-
-// @RunWith(classOf[JUnitRunner])
 class NTest extends FlatSpec with Matchers {
   
   
  // #1 
-"NuottiPiirturi" should "find non-valid note names (not investigating length)" in {
+"TiedostonLukeminen.oikeellisuusTesti()" should "find non-valid note names and length" in {
      
-     val nuottejaOikein = Buffer("d1#.----", "e1----.#", "c1-.", "g1-", "H#2", "Gb1----", "Ab1--",  "f#1---", "d2b", "a-----1#",
-         "--c1", "----g2", "ab2", "a#2----", "b1", "bb1", "b#1", "b2", "bb2", "b#2")  // 
+     val luk = new TiedostonLukeminen
   
-     val nuottejaVaarin = Buffer("t1-", "d3-", "f",  "p", "1c", "2f", "f2f2", "f2f", "f2g----", "hb22----", "c11", "d#b", "b#", 
-         "ddd", "d1d",  "#c", "dd1", "g##", "abb", "dis" ) 
-     
-     val taukojaOikein= Buffer("z", "z--", "z----", "z.", "-z", "z--.", "--.z", "z.-")   
-     
+     val nuottejaVaarin = Buffer("t1-", "d3-", "f",  "p", "1c", "2f", "f2f2", "f2f", "f2g----", "hb22----", "c11", "d#b", "db#","b#", 
+         "ddd", "d1d",  "#c", "dd1", "g##", "abb", "dis", "c1.", "c1---.", "c1-----", "c1----." )  // neljä vikaa virheelliset pituudet
+         
+     val nuottejaOikein = Buffer("d#1---", "c1-.", "g1-", "H#2", "Gb1----", "Ab1--",  "f#1---", "d2b", "a----#1",
+         "--c1", "----g2", "ab2", "a#2----", "b1", "bb1", "b2", "bb2", "b#2")  
+  
      val taukojaVaarin= Buffer("za", "z#--", "zz", "zz-top", "tauko", " z", "az")     
+     
+     val taukojaOikein = Buffer( "z", "z-", "z-.", "z--",  "z--.", "z---", "z----")  // kaikki sallitut pituudet
+         
+     
     
-   
      var virheitaHylattavillaNuoteilla, virheitaHyvaksyttavillaNuoteilla, virheitaHylattavillaTauoilla, virheitaHyvaksyttavillaTauoilla = 0
     
      virheitaHylattavillaNuoteilla     = laskeVirheet(nuottejaVaarin)
@@ -40,163 +33,134 @@ class NTest extends FlatSpec with Matchers {
      def laskeVirheet(syotteet: Buffer[String]) = {   
         var virheita = 0 
         for (syote <- syotteet) {
-         
-           val filtteredNote = syote.filter(_ != '-').filter(_ != '.')
-           
-           if(filtteredNote == "z")
-              {}
-           else{
-              if(!"cdefgahb".contains(filtteredNote.toLowerCase().head.toString()))
-                 virheita += 1
-              else if(!(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   
-                 virheita += 1  
-              else if(filtteredNote.size < 2)
-                 virheita += 1
-              else if(filtteredNote.size > 3)
-                 virheita += 1  
-              else if(filtteredNote.tail.contains("#b") ||  filtteredNote.tail.contains("b#"))    
-                 virheita += 1 
-              else if(filtteredNote.size == 3 && !(filtteredNote.tail.contains("#") || filtteredNote.tail.contains("b")))   
-                       virheita += 1  
-                 
-            } // iso else
+          if (luk.oikeellisuusTesti(syote) != "")
+             virheita += 1
         }  // for
-        
         virheita
-}     
+     }
+     
       assert(virheitaHyvaksyttavillaNuoteilla == 0  &&  virheitaHylattavillaNuoteilla == nuottejaVaarin.size && 
           virheitaHyvaksyttavillaTauoilla == 0 &&  virheitaHylattavillaTauoilla == taukojaVaarin.size)  
    } 
   
 
-// #2   
-"NuottiPiirturi" should "find non-valid lengths" in {
-     val pituuksiaVaarin = Buffer("d1#.----", "f2-----", "g1.", "h1---------", "a1---."  )
-     val pituuksiaOikein = Buffer( "c1", "c1-", "c1-.", "e1--#",  "H#2--.", "Gb1---", "Ab1----")  // kaikki sallitut pituudet
+"NuottiPiirturi.lyricsBuffer" should "have right lyrics" in {
+  
+    val sanat = Buffer("Jaak-", "ko", "kul-", "ta,", "Jaak-", "ko", "kul-", "ta,", "he-", "rää", "jo,", "he-", "rää", "jo.", "Kel-", "lo-", "ja-", "si", "soi-", "ta,", "kel-", "lo-", "ja-", "si", "soi-", "ta,", "pium", "paum", "poum,","pium", "paum", "poum.")
+    val luk = new TiedostonLukeminen
     
-     var virheitaHylattavillaPituuksilla, virheitaHyvaksyttavillaPituuksilla = 0
-     
-     virheitaHylattavillaPituuksilla = laskeVirheet( pituuksiaVaarin)
-     virheitaHyvaksyttavillaPituuksilla =  laskeVirheet( pituuksiaOikein)
+    luk.lueTiedosto("jaakko")
+    val piirturi = new NuottiPiirturi(luk)
+    piirturi.execute()
     
-     
-     def laskeVirheet(syotteet: Buffer[String] ) = {
-       var virheita = 0 
-       for (syote <- syotteet) {
-          val lkm = syote.count(_ == '-')
-          println(lkm)
-          if(lkm > 4)
-              virheita += 1
-          else if(lkm == 3 && syote.contains("."))    // ohjelmassa ei määritelty pisteellistä pisteellistä puolinuottia
-            virheita += 1   
-          else if(lkm == 4 && syote.contains("."))   // max pituus 4
-            virheita += 1  
-          else if(lkm == 0 && syote.contains("."))    // ei pisteellistä kahdeksasosaa
-            virheita += 1     
-       }     
-      
-       virheita
-   }  
+    println("piirturi.lyricsBuffer: " + piirturi.lyricsBuffer.size)
+    println("sanat.size" + sanat.size)
     
-      assert(virheitaHyvaksyttavillaPituuksilla == 0  &&  virheitaHylattavillaPituuksilla == pituuksiaVaarin.size )   
-   } 
+    for (i <-0 until sanat.size) {
+        val success = sanat(i).equals(piirturi.lyricsBuffer(i))
+        assert(success && sanat.size == piirturi.lyricsBuffer.size) // jälkimmäinen ehto tarvitaan tarkistamaan ettei pari.kuvan lopussa ole jotain ylimääräistä
+    }  
+  
+}
 
-// #3   
+ 
 "NeljasosaNuotti" should "have right nuppi, nimiMapissa and etumerkki" in {
   
-   val neljasOsa = new NeljasosaNuotti("c#2")
-   neljasOsa.nuppi
-   assert(neljasOsa.nuppi == "@@" && neljasOsa.nimiMapissa == "c2" && neljasOsa.etumerkki == "#")
+     val neljasOsa = new NeljasosaNuotti("c#2")
+     assert(neljasOsa.nuppi == "@@" && neljasOsa.nimiMapissa == "c2" && neljasOsa.etumerkki == "#")
    
 }
 
- /* 
-"NuottiPiirturi" should "draw eight note couple stems down and ignore second flat" in {
-  
-  var kuva = Buffer[String]()	
-  
- kuva +="            " 
- kuva +="            " 
- kuva +="            " 
- kuva +="  b@@   @@  " 
- kuva +=" --|----|-- " 
- kuva +="   |    |   "
- kuva +="---======---"
- kuva +="            "
- kuva +="------------"
- kuva +="            "
- kuva +="------------"
- kuva +="            "
- kuva +="------------"
- kuva +="            "
- kuva +="------------"
- kuva +="            " 
- kuva +="            " 
- kuva +="            " 
- kuva +="            " 
-        
- val pari = new KahdeksasosaPari(new KahdeksasosaNuotti("b2"), new KahdeksasosaNuotti("b2"))
-  println(pari.kuva)
-  println(kuva)
-  
-  val neljas = new NeljasosaNuotti("b2")
-   println(neljas.kuva)
-   
-   assert(pari.kuva.eq(kuva))
-} */
+ 
+"KahdeksasosaPari" should "draw eight note couple stems down and ignore second flat" in {
+    
+    var kuva = Buffer[String]()	
+    
+   kuva +="            " 
+   kuva +="            " 
+   kuva +="            " 
+   kuva +="  b@@   @@  "    // etumerkkilogiikan mukaan toista alennusta ei saa piirtää
+   kuva +=" --|----|-- " 
+   kuva +="   |    |   "
+   kuva +="---======---"
+   kuva +="            "
+   kuva +="------------"
+   kuva +="            "
+   kuva +="------------"
+   kuva +="            "
+   kuva +="------------"
+   kuva +="            "
+   kuva +="------------"
+   kuva +="            " 
+   kuva +="            " 
+   kuva +="            " 
+   kuva +="            " 
+          
+    val piirturi = new NuottiPiirturi(new TiedostonLukeminen)
+    val nuottiData = Buffer("b2", "b2")
+    var palautetaan = Buffer[ViivastolleLaitettava]()
+    piirturi.kasitteleNuottiTieto(nuottiData, palautetaan)
+    val pari = new KahdeksasosaPari(palautetaan(0).asInstanceOf[KahdeksasosaNuotti], palautetaan(1).asInstanceOf[KahdeksasosaNuotti])
+     
+    println(pari.kuva)
+    println(kuva)
+    println(kuva.size)
+    println(pari.kuva.size)
+    
+    for (i <-0 until kuva.size) {
+        val success = pari.kuva(i).equals(kuva(i))
+        assert(success && kuva.size == pari.kuva.size) // jälkimmäinen ehto tarvitaan tarkistamaan ettei pari.kuvan lopussa ole jotain ylimääräistä
+    }   
+} 
+
 
 "Pisteellinen NeljasosaNuotti" should "draw dotted quarter note stem up" in {
-  
-  var kuva = Buffer[String]()	
-  
- kuva +="           " 
- kuva +="           " 
- kuva +="           " 
- kuva +="           " 
- kuva +="           " 
- kuva +="           " 
- kuva +="-----------" 
- kuva +="    |      "
- kuva +="----|------"
- kuva +="    |      "              
- kuva +="---@@.-----" 
- kuva +="           " 
- kuva +="-----------" 
- kuva +="           " 
- kuva +="-----------" 
- kuva +="           " 
- kuva +="           " 
- kuva +="           " 
- kuva +="           " 
-        
-  
-  val n = new PisteellinenNeljasosaNuotti("h1")
-   println("n.kuva: " + n.kuva)
-   println(" nkuva: " + kuva)
-   
-   println("n.kuva: " + n.kuva)
-   println(" nkuva: " + kuva)
-   
-   for (i <-0 until kuva.size) {
-      val success = n.kuva(i).equals(kuva(i))
-      assert(success && kuva.size == n.kuva.size)
-   }   
+      
+      var kuva = Buffer[String]()	
+      
+     kuva +="           " 
+     kuva +="           " 
+     kuva +="           " 
+     kuva +="           " 
+     kuva +="           " 
+     kuva +="           " 
+     kuva +="-----------" 
+     kuva +="    |      "
+     kuva +="----|------"
+     kuva +="    |      "              
+     kuva +="---@@.-----" 
+     kuva +="           " 
+     kuva +="-----------" 
+     kuva +="           " 
+     kuva +="-----------" 
+     kuva +="           " 
+     kuva +="           " 
+     kuva +="           " 
+     kuva +="           " 
+            
+      
+      val n = new PisteellinenNeljasosaNuotti("h1")
+       
+       for (i <-0 until kuva.size) {
+          val success = n.kuva(i).equals(kuva(i))
+          assert(success && kuva.size == n.kuva.size)
+       }   
 }
 
-// #  
+
+
 "NuottiPiirturi" should "draw chords right" in {
   
  //  assert()
 }
 
-// #
 
-"TiedostonLukeminen" should "find tahtilaji and kappaleen nimi" in {
+"TiedostonLukeminen" should "find tahtilaji and kappaleenNimi" in {
   
-  val luk = new TiedostonLukeminen()
-  luk.lueTiedosto("kalevala")
-  
-   assert(luk.kappaleenNimi == " Kalevala - kuudestoista runo (ote)" && luk.tahtilaji == "5")
+      val luk = new TiedostonLukeminen()
+      luk.lueTiedosto("kalevala")
+      
+       assert(luk.kappaleenNimi == " Kalevala - kuudestoista runo (ote)" && luk.tahtilaji == "5")
 } 
 
 }
