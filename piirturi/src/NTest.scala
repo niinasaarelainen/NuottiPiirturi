@@ -111,9 +111,32 @@ class NTest extends FlatSpec with Matchers {
 }
 
 // #   
-"NuottiPiirturi" should "draw eight note couple stems up" in {
+"NuottiPiirturi" should "draw eight note couple stems down and ignore second flat" in {
   
- //  assert()
+  var kuva = Buffer[String]()	
+  
+ kuva +="            \n" +
+ kuva +="            \n" +
+ kuva +="            \n" +
+ kuva +="  b@@   @@  \n" +
+ kuva +=" --|----|-- \n" +
+ kuva +="   |    |   \n"+
+ kuva +="---======---\n"+
+ kuva +="            \n"+
+ kuva +="------------\n"+
+ kuva +="            \n"+
+ kuva +="------------\n"+
+ kuva +="            \n"+
+ kuva +="------------\n"+
+ kuva +="            \n"+
+ kuva +="------------\n"+
+ kuva +="            \n" +
+ kuva +="            \n" +
+ kuva +="            " 
+        
+ val pari = new KahdeksasosaPari(new KahdeksasosaNuotti("b2"), new KahdeksasosaNuotti("b2"))
+                
+   assert(pari.kuva.eq(kuva))
 }
 
 // #  
