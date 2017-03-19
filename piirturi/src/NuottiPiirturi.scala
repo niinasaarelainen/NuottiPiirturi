@@ -3,7 +3,7 @@
 import scala.collection.mutable.Buffer
 
 
-class NuottiPiirturi(lukija: TiedostonLukeminen, MIDIPatch: String = ""){
+class NuottiPiirturi(lukija: TiedostonLukeminen){
    
     
    var nuottiData= Buffer[ViivastolleLaitettava]()    
@@ -172,7 +172,7 @@ class NuottiPiirturi(lukija: TiedostonLukeminen, MIDIPatch: String = ""){
           iskujaMennyt += nuottiData(i).pituus
           if(nuottiData(i).isInstanceOf[KahdeksasosaNuotti] && (iskujaMennyt % 1== 0.5)){
               if(nuottiData(i+1).isInstanceOf[KahdeksasosaNuotti]){
-                 nuottiDataParitettu += new KahdeksasosaPari(nuottiData(i).asInstanceOf[KahdeksasosaNuotti], nuottiData(i+1).asInstanceOf[KahdeksasosaNuotti])
+                 nuottiDataParitettu += new KahdeksasosaPari(nuottiData(i), nuottiData(i+1))
                  minutOnJoKasitelty = true  
                  iskujaMennyt += nuottiData(i+1).pituus
                  if(nuottiData.last.eq(nuottiData(i+1))) paastiinTiedostonloppuun = true

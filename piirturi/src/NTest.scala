@@ -107,48 +107,51 @@ class NTest extends FlatSpec with Matchers {
     println(kuva.size)
     println(pari.kuva.size)
     
-    for (i <-0 until kuva.size) {
-        val success = pari.kuva(i).equals(kuva(i))
-        assert(success && kuva.size == pari.kuva.size) // jälkimmäinen ehto tarvitaan tarkistamaan ettei pari.kuvan lopussa ole jotain ylimääräistä
-    }   
+    assertKuva(kuva, pari.kuva)
+    
+  
 } 
 
 
  // #5
 "Pisteellinen NeljasosaNuotti" should "draw dotted quarter note stem up" in {
       
-      var kuva = Buffer[String]()	
+      var odotettu = Buffer[String]()	
       
-     kuva +="           " 
-     kuva +="           " 
-     kuva +="           " 
-     kuva +="           " 
-     kuva +="           " 
-     kuva +="           " 
-     kuva +="-----------" 
-     kuva +="    |      "
-     kuva +="----|------"
-     kuva +="    |      "              
-     kuva +="---@@.-----" 
-     kuva +="           " 
-     kuva +="-----------" 
-     kuva +="           " 
-     kuva +="-----------" 
-     kuva +="           " 
-     kuva +="           " 
-     kuva +="           " 
-     kuva +="           " 
-            
-      
-      val n = new PisteellinenNeljasosaNuotti("h1")
-       
-       for (i <-0 until kuva.size) {
-          val success = n.kuva(i).equals(kuva(i))
-          assert(success && kuva.size == n.kuva.size)
-       }   
+     odotettu +="           " 
+     odotettu +="           " 
+     odotettu +="           " 
+     odotettu +="           " 
+     odotettu +="           " 
+     odotettu +="           " 
+     odotettu +="-----------" 
+     odotettu +="    |      "
+     odotettu +="----|------"
+     odotettu +="    |      "              
+     odotettu +="---@@.-----" 
+     odotettu +="           " 
+     odotettu +="-----------" 
+     odotettu +="           " 
+     odotettu +="-----------" 
+     odotettu +="           " 
+     odotettu +="           " 
+     odotettu +="           " 
+     odotettu +="           " 
+  
+     assertKuva(odotettu, new PisteellinenNeljasosaNuotti("h1").kuva)
 }
 
-
+def assertKuva(odotettuKuva: Buffer[String], nuotinKuva: Buffer[String]) = {
+  
+      assertResult(odotettuKuva.size){
+        nuotinKuva.size
+      }
+  
+       for (i <-0 until odotettuKuva.size) {
+          assert(nuotinKuva(i).equals(odotettuKuva(i)))
+       }   
+    
+}
 
  // #6
 "TiedostonLukeminen" should "find tahtilaji and kappaleenNimi" in {
@@ -175,7 +178,7 @@ class NTest extends FlatSpec with Matchers {
 
 
 // #8
-"NuottiData and NuottiDataParitettu" should "have right info in them" in {
+"NuottiData and NuottiDataParitettu" should "have right amount of info in them" in {
   
       val luk = new TiedostonLukeminen()
       
@@ -186,6 +189,7 @@ class NTest extends FlatSpec with Matchers {
       
       assert(piirturi.nuottiData.size== 16, "***nuottiDatan pituus ei ollut oikein")
       assert(piirturi.nuottiDataParitettu.size== 10, "***nuottiDataParitettu pituus ei ollut oikein")
+      
       
       for(nuottiTaiTauko <- piirturi.nuottiData)
         assert(nuottiTaiTauko.pituus == 0.5, "***nuottiDatassa kaikkien elementtien pituus pitäisi olla 0.5")

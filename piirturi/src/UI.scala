@@ -26,7 +26,7 @@ class UI {
     } while (!"1234567".contains(MIDIPatch))
     
   
-    val n = new NuottiPiirturi(lukija, MIDIPatch)
+    val n = new NuottiPiirturi(lukija)
     n.execute()
     
     

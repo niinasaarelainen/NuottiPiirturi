@@ -18,3 +18,5 @@ c1 --
  
  #sanat tral-lal-lal-lal-laaaaaa
  
+ val pari = new KahdeksasosaPari(palautetaan(0), palautetaan(1))
+ 

@@ -254,8 +254,10 @@ class KahdeksasosaNuotti(nuotinNimi: String, extraetumerkki: String = "") extend
 }   
   
   
-class KahdeksasosaPari (ekaNuotti: KahdeksasosaNuotti, tokaNuotti: KahdeksasosaNuotti)  extends KokoNuotti(ekaNuotti.korkeus: String, ekaNuotti.getExtraetumerkki: String){
+class KahdeksasosaPari (eka: ViivastolleLaitettava, toka: ViivastolleLaitettava)  extends KokoNuotti(eka.asInstanceOf[KahdeksasosaNuotti].korkeus: String, eka.asInstanceOf[KahdeksasosaNuotti].getExtraetumerkki: String){
 
+     val ekaNuotti = eka.asInstanceOf[KahdeksasosaNuotti]
+     val tokaNuotti = toka.asInstanceOf[KahdeksasosaNuotti]
      override def korkeus = ekaNuotti.korkeus
      def korkeus2 = tokaNuotti.korkeus
      override def pituus = 1.0
