@@ -25,15 +25,9 @@ class NuottiPiirturi(lukija: TiedostonLukeminen, MIDIPatch: String = ""){
        this.viivasto = new Viivasto(nuottiDataParitettu, lyricsBuffer, lukija.tahtilaji )
        this.viivasto.kappale.lisaaKappaleenNimi(lukija.kappaleenNimi)
        this.viivasto.piirraNuotit()
+   }     
        
-        // jos kuunnellaan, tallennuskäsky pitää antaa kuuntelun jälkeen, muuten se tulee ruudulle ennen nuotteja
-       if(!MIDIPatch.equals(""))  // kuunnellaan  
-            new simpleMIDIPlayerAdapter(nuottiData, MIDIPatch.toInt, viivasto.kappale, lukija.tahtilaji.toInt)
-       else {        // käyttäjä valitsi että ei kuunnella
-           viivasto.kappale.printtaaRuudulleIlmanAjastusta()
-           new TiedostonTallennus(viivasto.kappale)    
-       }  
-   }
+    
      
  
 /////M U U T   M E T O D I T  ja niihin liittyvät muuttujat (ei voi määritellä metodin sisällä rekursion takia): /////////////////////////  

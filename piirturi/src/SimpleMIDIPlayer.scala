@@ -55,7 +55,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
     uudestaan = readLine("\n\nSoitetaanko uudestaan? ENTER = Kyllä,  0 = Ei ")
 	} while (uudestaan != "0")
     
-    new TiedostonTallennus(kappale)  
+ //   new TiedostonTallennus(kappale)  
     
     
     def skrollaaa(riviInd: Int)= {
@@ -279,8 +279,9 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPa
   // println(nuottiNumberit)
    
    val nuotitJaPituudet = nuottiNumberit.zip(pituudet)
-   
+   new simpleMIDIPlayer(nuotitJaPituudet, MIDIPatch, kappale, tahtilaji) 
  
+   /*
    for (i <- 1 to 2) {                        
     val thread = new Thread {
         override def run {  
@@ -291,7 +292,7 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPa
         }
     }
     thread.start
-   }  
+   }  */
     
 }  ///////////////////// end   simpleMIDIPlayerAdapter  /////////////////////////////////////////////////////////
 

@@ -215,9 +215,13 @@ class NTest extends FlatSpec with Matchers {
              assert(t.asInstanceOf[KahdeksasosaTauko].korkeus == "c2", "***nuottiDataParitettu: tauon korkeusvirhe")  // kaikkien taukojen piirtokorkeus on c2
            case _ => fail  // FAIL, koska syötteessä ei ole muuta kuin em. 3 kategoriaa
          }
-     
  
-}     
+}    
+
+
+"TiedostonLukeminen.tarkistaVirheet()" should "find 3 errors in file 3errors" in {
+  
+}
 
 
 

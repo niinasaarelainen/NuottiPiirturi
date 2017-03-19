@@ -1,4 +1,5 @@
 import scala.io.StdIn._
+import java.io.PrintWriter
 
 
 class UI {
@@ -27,5 +28,19 @@ class UI {
   
     val n = new NuottiPiirturi(lukija, MIDIPatch)
     n.execute()
+    
+    
+    // simpleMIDIPlayerAdapter --> MIDI-soitto myös kyselee käyttäjältä inputtia ! 
+       if(!MIDIPatch.equals(""))  // kuunnellaan  
+            new simpleMIDIPlayerAdapter(n.nuottiData, MIDIPatch.toInt, n.viivasto.kappale, lukija.tahtilaji.toInt)
+       else {        // käyttäjä valitsi että ei kuunnella
+           n.viivasto.kappale.printtaaRuudulleIlmanAjastusta()
+       }  
+    
+    val nimi = readLine("\nMillä nimellä talletetaan? Pelkkä ENTER ei tallenna mitään.")
+    val kohdetiedosto = new PrintWriter("output/" + nimi+".txt")
+    new TiedostonTallennus(n.viivasto.kappale, kohdetiedosto)    
+    
+    println("muista painaa F5, jotta tiedosto päivittyy Package Explorerissa.")
     
 }
