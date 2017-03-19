@@ -124,7 +124,7 @@ class TiedostonLukeminen {
         //nested function:  
      def tarkistaSoinnunVirheet(alkio:String, ind:Int): Unit = {
         
-              println(alkio) 
+            //  println(alkio) 
          
               if(alkio.last != '>'){
                     virheitaNolla = false
@@ -243,7 +243,6 @@ class TiedostonLukeminen {
     // ALUKSI TUTKITAAN  N U O T T I E N   S Y N T A K SI ,  _EI_ PITUUDET
          val filtteredNote = syote.filter(_ != '-').filter(_ != '.')
          
-         if(filtteredNote == "") return "nuotin pituustieto pitää olla kiinni nuotissa, älä kirjoita esim c1 -- "
          if(filtteredNote == "z") {}  // taukojen syntaksi helppo, tehdään pituustesti myöhemmin
          else{
               if(filtteredNote.count(_ == 'z') > 1)

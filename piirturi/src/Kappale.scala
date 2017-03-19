@@ -9,6 +9,7 @@ class Kappale {
   
   
   def lisaaKappaleenNimi(kappaleenNimi: String){
+    
     var apuPuskuri = Buffer[String]()
     apuPuskuri += "\n\n\t\t\t\t\t" + kappaleenNimi
     this.kappale += apuPuskuri    

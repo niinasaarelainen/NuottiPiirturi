@@ -5,7 +5,8 @@ import org.scalatest._
 class NTest extends FlatSpec with Matchers {
   
   
- // #1 
+  
+ // #1  
 "TiedostonLukeminen.oikeellisuusTesti()" should "find non-valid note names and lengths" in {
      
      val luk = new TiedostonLukeminen
@@ -20,10 +21,7 @@ class NTest extends FlatSpec with Matchers {
      
      val taukojaOikein = Buffer( "z", "z-", "z-.", "z--",  "z--.", "z---", "z----")  // kaikki sallitut pituudet
          
-     
-    
      var virheitaHylattavillaNuoteilla, virheitaHyvaksyttavillaNuoteilla, virheitaHylattavillaTauoilla, virheitaHyvaksyttavillaTauoilla = 0
-    
      virheitaHylattavillaNuoteilla     = laskeVirheet(nuottejaVaarin)
      virheitaHyvaksyttavillaNuoteilla  = laskeVirheet(nuottejaOikein)
      virheitaHylattavillaTauoilla      = laskeVirheet(taukojaVaarin)
@@ -160,5 +158,20 @@ class NTest extends FlatSpec with Matchers {
       
        assert(luk.kappaleenNimi == " Kalevala - kuudestoista runo (ote)" && luk.tahtilaji == "5")
 } 
+ 
+
+ // #7
+"Viivasto.kappale" should "have Title + 2 staffs" in {
+  
+      val luk = new TiedostonLukeminen()
+      luk.lueTiedosto("jaakko_2rivia")
+      val piirturi = new NuottiPiirturi(luk)
+      piirturi.execute()
+     
+       assert(piirturi.viivasto.kappale.kappale.size == 3 , "***kappale.size not 3")  // kappaleen nimi on eka entry  + 2 riviä musaa
+       assert(piirturi.viivasto.kappale.kappale(0)(0).contains("Jaakko") == true, "***kappaleen Title puuttuu/väärä")
+}     
+ 
+
 
 }

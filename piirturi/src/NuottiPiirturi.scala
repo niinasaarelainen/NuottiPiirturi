@@ -12,6 +12,7 @@ class NuottiPiirturi(lukija: TiedostonLukeminen, MIDIPatch: String = ""){
    var lyricsBuffer = Buffer[String]()  
    val tahtilaji = lukija.tahtilaji.toDouble 
    val inputBuffer = lukija.nuottiAlkiot.toBuffer  
+   var viivasto = new Viivasto(nuottiDataParitettu, lyricsBuffer, lukija.tahtilaji)
    
  
    // P Ä Ä M E T O D I: 
@@ -21,8 +22,9 @@ class NuottiPiirturi(lukija: TiedostonLukeminen, MIDIPatch: String = ""){
            kasitteleLyriikat() 
        tehdaanKahdeksasosaParit()
               
-       val viivasto = new Viivasto(nuottiDataParitettu, lyricsBuffer, lukija.tahtilaji, lukija.kappaleenNimi)
-       viivasto.piirraNuotit()
+       this.viivasto = new Viivasto(nuottiDataParitettu, lyricsBuffer, lukija.tahtilaji )
+       this.viivasto.kappale.lisaaKappaleenNimi(lukija.kappaleenNimi)
+       this.viivasto.piirraNuotit()
        
         // jos kuunnellaan, tallennuskäsky pitää antaa kuuntelun jälkeen, muuten se tulee ruudulle ennen nuotteja
        if(!MIDIPatch.equals(""))  // kuunnellaan  
@@ -99,7 +101,7 @@ class NuottiPiirturi(lukija: TiedostonLukeminen, MIDIPatch: String = ""){
         }   // iso else: ei-sointu.
         
         if (iskujaMennyt == tahtilaji) {
-           println("-----------------")
+        //   println("-----------------")
            iskujaMennyt = 0.0  
            tahdinAikaisetEtumerkit = Buffer[String]()
         }
@@ -126,7 +128,7 @@ class NuottiPiirturi(lukija: TiedostonLukeminen, MIDIPatch: String = ""){
    
    def tutkiEtumerkit(nuotinNimi: String): String = {  
      
-      println(nuotinNimi + ", " + tahdinAikaisetEtumerkit)
+   //   println(nuotinNimi + ", " + tahdinAikaisetEtumerkit)
      
       // tutkitaan ylennettyjä ja alennettuja nuotteja
       if(nuotinNimi.contains("#") || nuotinNimi.contains("b")){
