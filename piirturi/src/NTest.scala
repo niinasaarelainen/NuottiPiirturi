@@ -5,7 +5,7 @@ import org.scalatest._
 class NTest extends FlatSpec with Matchers {
   
   
-  
+
  // #1  
 "TiedostonLukeminen.oikeellisuusTesti()" should "find non-valid note names and lengths" in {
      
@@ -172,6 +172,53 @@ class NTest extends FlatSpec with Matchers {
        assert(piirturi.viivasto.kappale.kappale(0)(0).contains("Jaakko") == true, "***kappaleen Title puuttuu/väärä")
 }     
  
+
+
+// #8
+"NuottiData and NuottiDataParitettu" should "have right info in them" in {
+  
+      val luk = new TiedostonLukeminen()
+      
+      // tiedostossa on pelkkiä kahdeksasosan mittaisia "eventtejä" 2 tahtia = 8*2 = 16 nuottia/taukoa
+      luk.lueTiedosto("kahdeksasosia")
+      val piirturi = new NuottiPiirturi(luk)
+      piirturi.execute()
+      
+      assert(piirturi.nuottiData.size== 16, "***nuottiDatan pituus ei ollut oikein")
+      assert(piirturi.nuottiDataParitettu.size== 10, "***nuottiDataParitettu pituus ei ollut oikein")
+      
+      for(nuottiTaiTauko <- piirturi.nuottiData)
+        assert(nuottiTaiTauko.pituus == 0.5, "***nuottiDatassa kaikkien elementtien pituus pitäisi olla 0.5")
+        
+      // ekassa tahdissa 4 paria(parin pituus 1.0), sitten testataan että tauon jälkeinen kahdeksasosa ei ota seuraavasta nuotista itselleen paria  
+      val pariDatanPituudet = Buffer(1.0, 1.0, 1.0, 1.0, 0.5, 0.5, 1.0, 1.0, 0.5, 0.5)  
+      for(i <- 0 until piirturi.nuottiDataParitettu.size)
+        assert(piirturi.nuottiDataParitettu(i).pituus == pariDatanPituudet(i), "***nuottiDataParitettu: pituusvirhe")  
+      
+      val nuottiDatanKorkeudet = Buffer("c#1", "d#1", "e#1",  "f#1", "g#1", "a#1", "h#1", "c#2", "z", "cb2", "db2", "eb2", "fb2", "gb2", "ab2", "b2" )  
+      for(i <- 0 until piirturi.nuottiData.size)
+         piirturi.nuottiData(i) match{
+           case n: Nuotti => assert(n.asInstanceOf[KahdeksasosaNuotti].korkeus == nuottiDatanKorkeudet(i), "***nuottiData: nuotin korkeusvirhe")
+           case t: Tauko =>  assert(t.asInstanceOf[KahdeksasosaTauko].korkeus == "c2", "***nuottiData: tauon korkeusvirhe")  // kaikkien taukojen piirtokorkeus on c2
+           case _ => fail  // FAIL, koska syötteessä ei ole sointuja tai muuta kuin em. 2 kategoriaa
+         }
+      
+      val nuottiDatParitettuKorkeudet = Buffer(Array("c#1", "d#1"), Array("e#1",  "f#1"), Array("g#1", "a#1"), Array("h#1", "c#2"), Array("z"), Array("cb2"), Array("db2", "eb2"), Array("fb2", "gb2"), Array("z"), Array("b2") )  
+    
+      for(i <- 0 until piirturi.nuottiDataParitettu.size)
+         piirturi.nuottiDataParitettu(i) match{
+           case n: KahdeksasosaNuotti => 
+             assert(n.asInstanceOf[KahdeksasosaNuotti].korkeus == nuottiDatParitettuKorkeudet(i)(0), "***nuottiDataParitettu: kahdeksasosan korkeusvirhe")
+           case p: KahdeksasosaPari => 
+             assert(p.asInstanceOf[KahdeksasosaPari].korkeus == nuottiDatParitettuKorkeudet(i)(0) && p.asInstanceOf[KahdeksasosaPari].korkeus2 == nuottiDatParitettuKorkeudet(i)(1), "***nuottiDataParitettu: parin korkeusvirhe")
+           case t: Tauko =>  
+             assert(t.asInstanceOf[KahdeksasosaTauko].korkeus == "c2", "***nuottiDataParitettu: tauon korkeusvirhe")  // kaikkien taukojen piirtokorkeus on c2
+           case _ => fail  // FAIL, koska syötteessä ei ole muuta kuin em. 3 kategoriaa
+         }
+     
+ 
+}     
+
 
 
 }
