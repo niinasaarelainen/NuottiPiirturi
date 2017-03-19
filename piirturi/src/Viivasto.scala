@@ -41,7 +41,7 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
        } // end for, kaikki nuottiData käsitelty
       
      
-       if(tahtiaMennyt != 0.0 || riviaMennytMontakoTahtia > 0 ){  // pelkkää G-avainta ei haluta mukaan kappaleeseen
+       if(this.tahtiaMennyt != 0.0 || riviaMennytMontakoTahtia > 0 ){  // pelkkää G-avainta ei haluta mukaan kappaleeseen
           if (tahtiaMennyt == 0.0) lisaaTahtiviiva()
           vaihdaRivi()   
        }    

@@ -8,7 +8,7 @@ import scala.io.StdIn._
 
 class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, kappale: Kappale, tahtilaji: Int) {   // Tuple (korkeus/korkeudet, pituus)
   
-    val ms = 300     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
+    val ms = 144     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
     val synth = MidiSystem.getSynthesizer()
     val channels  =  synth.getChannels()
 		val ch1 = channels(0); val ch2 = channels(1);  val ch3 = channels(2);	val ch4 = channels(3);  val ch5 = channels(4);  val ch6 = channels(5)
@@ -47,7 +47,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
 		
 	  if(MIDIPatch != 6)  //normaali soitto, yksikanavainen
 	     normaalisoitto()
-	  else rocknroll()   // rokkibändi, 6-kanavainen, "delay":      
+	  else rocknroll()   // rokkibändi, 6-kanavainen, delay:      
     
     Thread.sleep(1900)   // parempi soundi vikaan ääneen
     synth.close()
@@ -185,56 +185,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
     } // end rocknroll
     
 }
- ///////////////////// end   simpleMIDIPlayer   /////////////////////////////////////////////////////////
-
-
-
-   
-class simpleChordPlayer (sointumerkit: Buffer[(Buffer[Int], Int)]) {   // Tuple ("Cm", pituus)
-  
-    val synth = MidiSystem.getSynthesizer()
-    synth.open()  
-
-    val channels  =  synth.getChannels()
-		val ch1 = channels(0)
-		ch1.programChange(33)  // basso
-		
-		val ch2 = channels(1)
-		ch2.programChange(89)  // warm pad
-	
-		
-	//	for(patch <- synth.getAvailableInstruments)
-	//	  println(patch)
-	
-		
-		Thread.sleep(895)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
-  
-       for(sointumerkki <- sointumerkit){
-         
-        // säestysäänet päälle: 
-           if(sointumerkki._1(0) -24 < 36)                // bassoääni ekana    -24 = 2 okt. alaspäin
-              ch1.noteOn(sointumerkki._1(0) -12,  50)   
-           else ch1.noteOn(sointumerkki._1(0) -24,  50)  
-          
-           for (soinnunaani <- sointumerkki._1)
-              ch2.noteOn(soinnunaani, 60)      // synasointu
-                   
-        // soi:   
-          Thread.sleep(sointumerkki._2 * 500)  // ms       // tässä pitää olla sama ms kuin MIDIPlayerissä !!
-        
-        // säestysäänet pois päältä:   
-          if(sointumerkki._1(0) -24 < 36)
-             ch1.noteOff(sointumerkki._1(0) -12,  60)  
-          else ch1.noteOff(sointumerkki._1(0) -24,  60)  
-          
-          for (soinnunaani <- sointumerkki._1)
-              ch2.noteOff(soinnunaani)
-       }        
-
-    Thread.sleep(1100)   // parempi soundi vikaan ääneen
-    synth.close()
-}
- /////////    end  simpleChordPlayer   /////////////////////////////////////////////////////////////////
+ ///////////////////// end   simpleMIDIPlayer   ///////////////////////////////////////////////////////////////////////////
 
 
 
@@ -248,7 +199,7 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPa
        "b2" -> 82, "hb2" -> 82, "bb2" -> 82, "h2" -> 83, "h#2" -> 84)
 
    var nuottiNumberit = Buffer[Buffer[Int]]()    // tänne nuottien korkeudet
-   var pituudet = Buffer[Double]()   // [0.5 ... 4.0]
+   var pituudet = Buffer[Double]()               // [0.5 ... 4.0]
    
    
        for (alkio<- nuottiData) {
@@ -275,57 +226,11 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPa
             } 
        } // end for
    
-   
-  // println(nuottiNumberit)
-   
+  
    val nuotitJaPituudet = nuottiNumberit.zip(pituudet)
    new simpleMIDIPlayer(nuotitJaPituudet, MIDIPatch, kappale, tahtilaji) 
  
-   /*
-   for (i <- 1 to 2) {                        
-    val thread = new Thread {
-        override def run {  
-          i match{        
-            case 1 => new simpleMIDIPlayer(nuotitJaPituudet, MIDIPatch, kappale, tahtilaji) 
-            case 2 => // new simpleChordPlayerAdapter(Buffer("C", "G", "F", "C", "G", "C",    "C", "G", "F", "C", "G", "C"))           
-          }
-        }
-    }
-    thread.start
-   }  */
+ 
     
 }  ///////////////////// end   simpleMIDIPlayerAdapter  /////////////////////////////////////////////////////////
 
-
-
-class simpleChordPlayerAdapter (sointumerkit: Buffer[String]){
-  
-  val MIDINoteNumber = Map("c" -> 60, "c#" ->61, "db" -> 61, "d" -> 62, "d#" -> 63, "eb" -> 63,  
-       "e" -> 64, "f"-> 65,  "f#"->66,  "gb" -> 66, "g" -> 67,  "g#" -> 68, "ab" -> 68, 
-       "a" -> 69, "a#" -> 70, "hb" -> 70, "b" -> 70, "bb" -> 70, "h" -> 71)
-
-  
-  val soinnut = Buffer[Buffer[Int]]() 
-  var rummut = Buffer[Int]()
-  
-  for(sointumerkki <- sointumerkit)
-    
-     if(sointumerkki.toLowerCase().contains("m"))      
-        soinnut += molli(MIDINoteNumber(sointumerkki.toLowerCase().head.toString))
-     else  soinnut += duuri(MIDINoteNumber(sointumerkki.toLowerCase()))  
-  
-    
-  def duuri(perussavel: Int) = {
-    Buffer(perussavel, perussavel+4, perussavel+7)
-  }
-  
-  def molli(perussavel: Int) = {
-     Buffer(perussavel, perussavel+3, perussavel+7)
-  }
-   
-     
-    var soinnunPituudet = Buffer(8,8,4,4,4,4, 8,8,4,4,4,4)   // 8 iskua = 2 tahtia  
-    val soinnutJaPituudet = soinnut.zip(soinnunPituudet)   
-    new simpleChordPlayer(soinnutJaPituudet)
-   
-}

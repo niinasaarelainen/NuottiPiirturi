@@ -27,10 +27,9 @@ class NuottiPiirturi(lukija: TiedostonLukeminen, MIDIPatch: String = ""){
        this.viivasto.piirraNuotit()
    }     
        
-    
      
  
-/////M U U T   M E T O D I T  ja niihin liittyvät muuttujat (ei voi määritellä metodin sisällä rekursion takia): /////////////////////////  
+/////  M U U T   M E T O D I T  ja niihin liittyvät muuttujat (ei voi määritellä metodin sisällä rekursion takia): /////////////////////////  
    
    var iskujaMennyt =  0.0
    var ok= 0   // nollana/positiivisena ok kasvattaa iskujaMennyt. 
@@ -104,8 +103,7 @@ class NuottiPiirturi(lukija: TiedostonLukeminen, MIDIPatch: String = ""){
   
    
    
-   def kasitteleSoinnut(alkio: String) = {
-                                                     
+   def kasitteleSoinnut(alkio: String) = {     
             val sointu =  alkio.tail.substring(0, alkio.size -2).split(",")    
             var sointuBuffer = Buffer[String]()
             var viivastolleLaitettavaBuffer = Buffer[ViivastolleLaitettava]()
@@ -116,7 +114,7 @@ class NuottiPiirturi(lukija: TiedostonLukeminen, MIDIPatch: String = ""){
    }
    
    
-    palautetaan   // tätä tarvitaan sointuja muodostettaessa
+   palautetaan   // tätä tarvitaan sointuja muodostettaessa
    } 
   
    
@@ -134,9 +132,7 @@ class NuottiPiirturi(lukija: TiedostonLukeminen, MIDIPatch: String = ""){
                   this.tahdinAikaisetEtumerkit += nuotinNimi 
               }  // tai vain lisätään puskuriin
               else  this.tahdinAikaisetEtumerkit += nuotinNimi   
-              
-             
-             
+            
      // selvitetään tarvitaanko palautusmerkkiä         
       } else if ( this.tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last).size > 0  ){
              val tulokset = tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last)
