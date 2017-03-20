@@ -1,5 +1,7 @@
 import scala.collection.mutable.Buffer
 import org.scalatest._
+import scala.io.Source
+import java.io._
 
  
 class NTest extends FlatSpec with Matchers {
@@ -99,17 +101,13 @@ class NTest extends FlatSpec with Matchers {
     val piirturi = new NuottiPiirturi(new TiedostonLukeminen)
     val nuottiData = Buffer("b2", "b2")
     var palautetaan = Buffer[ViivastolleLaitettava]()
-    piirturi.kasitteleNuottiTieto(nuottiData, palautetaan)
-    val pari = new KahdeksasosaPari(palautetaan(0).asInstanceOf[KahdeksasosaNuotti], palautetaan(1).asInstanceOf[KahdeksasosaNuotti])
+    palautetaan = piirturi.kasitteleNuottiTieto(nuottiData, palautetaan)
+    val pari = new KahdeksasosaPari(palautetaan(0), palautetaan(1))
      
-    println(pari.kuva)
-    println(kuva)
-    println(kuva.size)
-    println(pari.kuva.size)
+    println(pari.kuva)     // TODO   ei toimi jos tämän rivin ottaa pois ?!?!?
     
     assertKuva(kuva, pari.kuva)
-    
-  
+
 } 
 
 
@@ -141,17 +139,7 @@ class NTest extends FlatSpec with Matchers {
      assertKuva(odotettu, new PisteellinenNeljasosaNuotti("h1").kuva)
 }
 
-def assertKuva(odotettuKuva: Buffer[String], nuotinKuva: Buffer[String]) = {
-  
-      assertResult(odotettuKuva.size){
-        nuotinKuva.size
-      }
-  
-       for (i <-0 until odotettuKuva.size) {
-          assert(nuotinKuva(i).equals(odotettuKuva(i)))
-       }   
-    
-}
+
 
  // #6
 "TiedostonLukeminen" should "find tahtilaji and kappaleenNimi" in {
@@ -172,13 +160,13 @@ def assertKuva(odotettuKuva: Buffer[String], nuotinKuva: Buffer[String]) = {
       piirturi.execute()
      
        assert(piirturi.viivasto.kappale.kappale.size == 3 , "***kappale.size not 3")  // kappaleen nimi on eka entry  + 2 riviä musaa
-       assert(piirturi.viivasto.kappale.kappale(0)(0).contains("Jaakko") == true, "***kappaleen Title puuttuu/väärä")
+       assert(piirturi.viivasto.kappale.kappale(0).last.contains("Jaakko") == true, "***kappaleen Title puuttuu/väärä")
 }     
  
 
 
 // #8
-"NuottiData and NuottiDataParitettu" should "have right amount of info in them" in {
+"NuottiData and NuottiDataParitettu" should "have right info in them" in {
   
       val luk = new TiedostonLukeminen()
       
@@ -227,6 +215,49 @@ def assertKuva(odotettuKuva: Buffer[String], nuotinKuva: Buffer[String]) = {
   
 }
 
+"The program" should "produce 'Bumble Bee' similarily as in correctly printed file 'bumble.txt'" in {
+  //tämä testi on ylläpitoa varten, eli järjestelmätesti: 
+  // musiikin maisterin koulutuksella ja silmilläni olen todennut tiedoston bumble.txt oikeaksi.
+  // jos ohjelmaa tulevaisuudessa muutetaan, voi tämä testi lakata toimimasta
+  
+      val luk = new TiedostonLukeminen()
+      luk.lueTiedosto("bumble")
+      val nuottipiirturi = new NuottiPiirturi(luk)
+      nuottipiirturi.execute()
+     
+      println(nuottipiirturi.viivasto.kappale.kappale(0)(0))
+      
+      var kappaleenKaikkiRivitPerakkain = Buffer[String]()
+       for {
+          viivasto <-  nuottipiirturi.viivasto.kappale.kappale
+          rivi <- viivasto
+      } kappaleenKaikkiRivitPerakkain += rivi
+      
+      println("kappaleenKaikkiRivitPerakkain.size: " + kappaleenKaikkiRivitPerakkain.size)
+      
+      val bumblePrinted = Source.fromFile("./output/bumble.txt")
+      var i = 0
+      try {
+        for (rivi <- bumblePrinted.getLines) {
+           assert(kappaleenKaikkiRivitPerakkain(i) == rivi)
+           i += 1
+        }
+     } finally {
+        bumblePrinted.close()
+     }
+}
 
+//////// A P U M E T O D I T :  ////////////////////////////////////////////////////////////////////
+
+def assertKuva(odotettuKuva: Buffer[String], nuotinKuva: Buffer[String]) = {
+  
+      assertResult(odotettuKuva.size){
+        nuotinKuva.size
+      }
+  
+      for (i <-0 until odotettuKuva.size) {
+        assert(nuotinKuva(i).equals(odotettuKuva(i)))
+      }     
+}
 
 }

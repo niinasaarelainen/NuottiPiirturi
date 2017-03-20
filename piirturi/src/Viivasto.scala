@@ -115,8 +115,8 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
    
    
    def vaihdaRivi() = {      
-      kappale.lisaaViivasto(this.viivasto)    
-      viivasto = piirraGavain 
+      this.kappale.lisaaViivasto(this.viivasto)    
+      this.viivasto = piirraGavain 
       this.riviaMennytMontakoTahtia = 0
       this.backUpPituuslaskuri = 0.0
    }
