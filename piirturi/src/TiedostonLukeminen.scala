@@ -43,7 +43,7 @@ class TiedostonLukeminen {
   } 
 
   
-  def onkoListalla(nimi: String): Boolean = {
+  def loytyykoInputHakemistosta(nimi: String): Boolean = {
     for (tiedosto <- inputhakemisto.listFiles())
       if (tiedosto.isFile && tiedosto.getName.toLowerCase() == nimi.toLowerCase().trim())
         return true

@@ -1,7 +1,11 @@
-import scala.collection.mutable.Buffer
+import org.scalatest.Assertions._
 import org.scalatest._
+
+import scala.collection.mutable.Buffer
 import scala.io.Source
 import java.io._
+import java.io.Console._
+import scala.io.StdIn._
 
  
 class NTest extends FlatSpec with Matchers {
@@ -237,7 +241,7 @@ class NTest extends FlatSpec with Matchers {
       var i = 0
       try {
         for (rivi <- bumblePrinted.getLines) {
-           assert(kappaleenKaikkiRivitPerakkain(i) == rivi, "ensimmäinen virhe rivillä: " + (i+1))
+           assert(kappaleenKaikkiRivitPerakkain(i) == rivi, "first error in line: " + (i+1))
            i += 1
         }
      } finally {
@@ -247,36 +251,73 @@ class NTest extends FlatSpec with Matchers {
 
      
   //#9
-"TiedostonLukeminen.tarkistaVirheet()" should "find 3 syntax errors(= wrongly formulated note data) in file '3errors'" in {
+"TiedostonLukeminen.tarkistaVirheet() (as stub)" should "find 3 syntax errors(= wrongly formulated note data) in file '3errors'" in {
      /*
        Simuloidaan käyttäjän virheidenkorjausprosessia. Ensin annetaan syöte, jossa on 3 syntaksivirhettä 
        nuottidatassa.
-       Sitten kuvitellaan tilanne jossa käyttäjä korjaa yhden, annetaan syöte jossa 2 virhettä jne.
-       Ohjelma nimenomaan löytää syötetiedoston ensimmäisen virheen ja odottaa käyttäjän korjaavan sen,
+       Sitten kuvitellaan tilanne jossa käyttäjä korjaa yhden, tallettaa tiedoston ja nyt syötteessä on 2 virhettä jne.
+       Testattava ohjelma löytää syötetiedoston ensimmäisen virheen ja odottaa käyttäjän korjaavan sen,
        tutkii talletetun tiedoston ja joko löytää uuden virheen tai voi aloittaa nuottidatan jatkokäsittelyn.
       
-       Syötteessä pelkkiä sointuja, TiedostonLukeminenMock-luokassa muutettu vain sointuja
+       Syötteessä pelkkiä sointuja, TiedostonLukeminenStub-luokassa muutettu vain sointuja
        käsittelevää koodia metodissa tarkistaSoinnunVirheet(), joka on metodin tarkistaVirheet()-sisällä
      * 
      */
      val syotteet = Buffer("3errors", "2errors", "1error", "0errors")
      
-     val lukMock = new TiedostonLukeminenMock(syotteet)  // TiedostonLukeminenMock löytyy tämän tiedoston lopusta
+     val lukStub = new TiedostonLukeminenStub(syotteet)  // TiedostonLukeminenStub löytyy tämän tiedoston lopusta
      
      // kuten tiedostosta 3errors voi havaita, on rivi 1 virheetön, sen jälkeen yksi virhe riveillä 2, 3 ja 4
-     assert(lukMock.mockMessages(0)  == "löydettiin virhe rivillä 2", "eka syötevirhe-ongelma")
-     assert(lukMock.mockMessages(1)  == "löydettiin virhe rivillä 3", "toka syötevirhe-ongelma")
-     assert(lukMock.mockMessages(2)  == "löydettiin virhe rivillä 4", "kolmas syötevirhe-ongelma")
+     assert(lukStub.stubMessages(0)  == "löydettiin virhe rivillä 2", "eka syötevirhe-ongelma")
+     assert(lukStub.stubMessages(1)  == "löydettiin virhe rivillä 3", "toka syötevirhe-ongelma")
+     assert(lukStub.stubMessages(2)  == "löydettiin virhe rivillä 4", "kolmas syötevirhe-ongelma")
     
 }
    
 //#11
-"TiedostonLukeminen.onkoListalla" should "give false when file not in list and true otherwice" in {
+"TiedostonLukeminen.loytyykoInputHakemistosta" should "give false when file not found and true otherwice" in {
     val luk = new TiedostonLukeminen
+     
+    assert(luk.loytyykoInputHakemistosta("kkk")== false, "valitussa input-hakemistossa ei ole tiedostoa nimeltä \"kkk\"")
+    assert(luk.loytyykoInputHakemistosta("§")== true, "valitussa input-hakemistossa on tiedosto nimeltä \"§\"")
     
-    assert(luk.onkoListalla("kkk")== false, "valitussa input-hakemistossa ei ole tiedostoa nimeltä \"kkk\"")
-    assert(luk.onkoListalla("§")== true, "valitussa input-hakemistossa on tiedosto nimeltä \"§\"")
+    
 }
+
+//#12
+"UI.readMIDIPatch() (as stub)" should "accept user key presses 1-7 and ENTER, nothing else" in {
+ 
+     /* alkuperäinen koodi luokassa UI:
+       do {
+           MIDIPatch = readLine("\n\nMillä soundilla haluat kuulla kappaleen?\n" +
+           "ENTER= en millään,  1= piano,  2= vibrafoni,  3= rock-urut,  4= syna,  5= akustinen kitara,  6= rokkibändi,  7=music box  ")
+        } while (!"1234567".contains(MIDIPatch))
+     */
+      
+   // stubina, case 1, jossa käyttäjä syöttää 2 hylättävää ja kolmantena hyväksyttävän arvon:  
+     var i = 0;  var MIDIPatch = "alkuarvo"
+      MIDIPatchinValinta( Array("8", "11", "3"))   // "3" on ensimmäinen hyväksyttävä arvo
+      assert (MIDIPatch == "3", "käyttäjän syoteSekvenssi 1:n jälkeen MIDIPatch pitäisi olla 3")   
+     
+   // case 2:   käyttäjä painaa ENTER (=ei halua kuunnella kappaletta)
+      i = 0; MIDIPatch = "alkuarvo"
+      MIDIPatchinValinta(Array(""))   
+      assert (MIDIPatch == "", "käyttäjän syoteSekvenssi2:n jälkeen MIDIPatch pitäisi olla tyhjä merkkijono eli painettiin ENTER")   
+     
+    // case 3: simuloi tilannetta, jossa pelkkiä virheellisiä syötteitä "loputtomasti", i kasvaa Array:n indeksin ulkopuolelle, koska while-looppi vain pyörii
+       i = 0; MIDIPatch = "alkuarvo"
+       intercept[IndexOutOfBoundsException] { 
+           MIDIPatchinValinta(Array("9", "-1", "t", "0", " ", "77", "moi", "."))
+       }
+       assert (MIDIPatch == ".", "kayttajan syötesekvenssin jälkeen muistiin jää Array:n vika arvo")
+       
+       def MIDIPatchinValinta(sekvenssi: Array[String]) = {
+           do {
+             MIDIPatch = sekvenssi(i)
+             i += 1
+           } while (!"1234567".contains(MIDIPatch) ) 
+       }
+  }
      
 
 
@@ -296,13 +337,8 @@ def assertKuva(odotettuKuva: Buffer[String], nuotinKuva: Buffer[String]) = {
 //////  M O C K   C L A S S E S: ///////////////////////////////////////////////////////////////////////
 
 
-import scala.io.Source
-import java.io._
-import scala.collection.mutable.Buffer
 
-
-
-class TiedostonLukeminenMock (tiedostojenNimet: Buffer[String]) {
+class TiedostonLukeminenStub (tiedostojenNimet: Buffer[String]) {
 
   var inputFromFile = Buffer[String]()       // kaikki input, paitsi tyhjät rivit
   var nuottiDataRiveina = Buffer[String]()  
@@ -319,9 +355,9 @@ class TiedostonLukeminenMock (tiedostojenNimet: Buffer[String]) {
   var ekaKerta = true
   var tahtilajiOnJoLuettu = false
   
-  var mockMessage = "mockMessagen alustusteksti"
-  var mockMessages = Buffer[String]()
-  var mockMoneskokerta = 0  
+  var stubMessage = "stubMessagen alustusteksti"
+  var stubMessages = Buffer[String]()
+  var stubMoneskokerta = 0  
   var tiedostonNimi = tiedostojenNimet(0)
  
   
@@ -331,28 +367,7 @@ class TiedostonLukeminenMock (tiedostojenNimet: Buffer[String]) {
   
  ///// F U N K T I O T: ///////////////////////////////////////////////////////////////////////// 
   
-  def listaaTiedostot() = {
-    var montakoNimeaRiville = 0
-    for (tiedosto <- inputhakemisto.listFiles()) {     
-       if (tiedosto.isFile) {
-          print(tiedosto.getName + '\t')
-          montakoNimeaRiville += 1
-          if (montakoNimeaRiville == 8){
-            println()
-            montakoNimeaRiville = 0
-          }
-       }    
-    }
-  } 
-
-  
-  def onkoListalla(nimi: String): Boolean = {
-    for (tiedosto <- inputhakemisto.listFiles())
-      if (tiedosto.isFile && tiedosto.getName.toLowerCase() == nimi.toLowerCase().trim())
-        return true
-    false
-  }
-
+ 
   
   def lueTiedosto(tiedostonNimi: String): Unit = {  
     
@@ -450,11 +465,11 @@ class TiedostonLukeminenMock (tiedostojenNimet: Buffer[String]) {
 //                        "\n Virhe on rivillä " + (nuottiDatanRivinumerot(ind)+1)  +
 //                        "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu. ")
    
-  // Mock START: alla olevat  4 riviä korvaavat yllä olevat kommentoidut 3                 
-                        this.mockMessage = "löydettiin virhe rivillä " + (nuottiDatanRivinumerot(ind)+1) 
-                        mockMessages += this.mockMessage
-                        mockMoneskokerta += 1
-                        lueTiedosto(tiedostojenNimet(mockMoneskokerta)); return
+  // Stub START: alla olevat  4 riviä korvaavat yllä olevat kommentoidut 3                 
+                        this.stubMessage = "löydettiin virhe rivillä " + (nuottiDatanRivinumerot(ind)+1) 
+                        stubMessages += this.stubMessage
+                        stubMoneskokerta += 1
+                        lueTiedosto(tiedostojenNimet(stubMoneskokerta)); return
                      }
                  }
                    
@@ -532,19 +547,7 @@ class TiedostonLukeminenMock (tiedostojenNimet: Buffer[String]) {
   }
 
   
-  def helppiTeksti() = {
-      val helpFile = Source.fromFile("help.txt")   
-  
-      try {
-        for (rivi <- helpFile.getLines) {
-          println(rivi)
-        }
-        println()
-      } finally {
-        helpFile.close()
-      }
-  }
-  
+ 
   
   def oikeellisuusTesti(syote: String): String = {    // esim. g#1---
   
