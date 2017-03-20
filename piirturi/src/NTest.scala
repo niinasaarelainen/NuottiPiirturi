@@ -66,10 +66,10 @@ class NTest extends FlatSpec with Matchers {
 
 
  // #3
-"NeljasosaNuotti" should "have right nuppi, nimiMapissa and etumerkki" in {
+"NeljasosaNuotti" should "have right nuppi, nimiMapissa, etumerkki and extraetumerkki" in {
   
      val neljasOsa = new NeljasosaNuotti("c#2")
-     assert(neljasOsa.nuppi == "@@" && neljasOsa.nimiMapissa == "c2" && neljasOsa.etumerkki == "#")
+     assert(neljasOsa.nuppi == "@@" && neljasOsa.nimiMapissa == "c2" && neljasOsa.etumerkki == "#" && neljasOsa.getExtraetumerkki == "")
    
 }
 
@@ -99,10 +99,10 @@ class NTest extends FlatSpec with Matchers {
    kuva +="            " 
           
     val piirturi = new NuottiPiirturi(new TiedostonLukeminen)
-    val nuottiData = Buffer("b2", "b2")
-    var palautetaan = Buffer[ViivastolleLaitettava]()
-    palautetaan = piirturi.kasitteleNuottiTieto(nuottiData, palautetaan)
-    val pari = new KahdeksasosaPari(palautetaan(0), palautetaan(1))
+    val nuottiAlkiot = Buffer("b2", "b2")
+    var nuottiData = Buffer[ViivastolleLaitettava]()
+    nuottiData = piirturi.kasitteleNuottiTieto(nuottiAlkiot, nuottiData)
+    val pari = new KahdeksasosaPari(nuottiData(0), nuottiData(1))
      
     println(pari.kuva)     // TODO   ei toimi jos tämän rivin ottaa pois ?!?!?
     
@@ -155,18 +155,21 @@ class NTest extends FlatSpec with Matchers {
 "Viivasto.kappale" should "have Title + 2 staffs" in {
   
       val luk = new TiedostonLukeminen()
-      luk.lueTiedosto("jaakko_2rivia")
+      luk.lueTiedosto("jaakko_2rivia")    // kappaleessa on 4 kpl 4/4-tahteja ja ohjelma jakaa sen tasan kahdelle riville
       val piirturi = new NuottiPiirturi(luk)
       piirturi.execute()
      
        assert(piirturi.viivasto.kappale.kappale.size == 3 , "***kappale.size not 3")  // kappaleen nimi on eka entry  + 2 riviä musaa
        assert(piirturi.viivasto.kappale.kappale(0).last.contains("Jaakko") == true, "***kappaleen Title puuttuu/väärä")
+                                                  // ennen nimeä on tyhjiä rivejä muotoilun vuoksi 
 }     
  
 
 
 // #8
 "NuottiData and NuottiDataParitettu" should "have right info in them" in {
+  // tutkitaan nuottidatan säilyttäjiä, molemmat tyyppiä Buffer[ViivastolleLaitettava]
+  // NuottiDataParitettua ei voi luoda ennen NuottiData:n luontia. Kätevää tutkia molempia samalla.
   
       val luk = new TiedostonLukeminen()
       
@@ -215,17 +218,16 @@ class NTest extends FlatSpec with Matchers {
   
 }
 
+
 "The program" should "produce 'Bumble Bee' similarily as in correctly printed file 'bumble.txt'" in {
-  //tämä testi on ylläpitoa varten, eli järjestelmätesti: 
+  // tämä testi on ylläpitoa varten, eli järjestelmätesti: 
   // musiikin maisterin koulutuksella ja silmilläni olen todennut tiedoston bumble.txt oikeaksi.
-  // jos ohjelmaa tulevaisuudessa muutetaan, voi tämä testi lakata toimimasta
+  // jos ohjelmaa tulevaisuudessa muutetaan, voi tämä testi lakata toimimasta.
   
       val luk = new TiedostonLukeminen()
       luk.lueTiedosto("bumble")
       val nuottipiirturi = new NuottiPiirturi(luk)
       nuottipiirturi.execute()
-     
-      println(nuottipiirturi.viivasto.kappale.kappale(0)(0))
       
       var kappaleenKaikkiRivitPerakkain = Buffer[String]()
        for {
@@ -251,12 +253,12 @@ class NTest extends FlatSpec with Matchers {
 
 def assertKuva(odotettuKuva: Buffer[String], nuotinKuva: Buffer[String]) = {
   
-      assertResult(odotettuKuva.size){
+      assertResult(odotettuKuva.size){   // jos nuotinKuvassa on ylimääräisiä rivejä lopussa
         nuotinKuva.size
       }
   
       for (i <-0 until odotettuKuva.size) {
-        assert(nuotinKuva(i).equals(odotettuKuva(i)))
+        assert(odotettuKuva(i).equals(nuotinKuva(i)))
       }     
 }
 

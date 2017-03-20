@@ -225,7 +225,6 @@ class PisteellinenNeljasosaNuotti(nuotinNimi: String, extraetumerkki: String = "
     override def kuvanLeveys = 11
     override def nuppi = "@@"
     
- //   println("@ViivastolleL: " + kuva)
 }   
   
     
