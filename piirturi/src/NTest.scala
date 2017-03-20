@@ -142,7 +142,7 @@ class NTest extends FlatSpec with Matchers {
 
 
  // #6
-"TiedostonLukeminen" should "find tahtilaji and kappaleenNimi" in {
+"TiedostonLukeminen.kasitteleKappaleenNimiJaTahtilaji()" should "find tahtilaji and kappaleenNimi" in {
   
       val luk = new TiedostonLukeminen()
       luk.lueTiedosto("kalevala")
@@ -232,8 +232,7 @@ class NTest extends FlatSpec with Matchers {
           rivi <- viivasto
       } kappaleenKaikkiRivitPerakkain += rivi
       
-      println("kappaleenKaikkiRivitPerakkain.size: " + kappaleenKaikkiRivitPerakkain.size)
-      
+       
       val bumblePrinted = Source.fromFile("./output/bumble.txt")
       var i = 0
       try {
@@ -247,24 +246,37 @@ class NTest extends FlatSpec with Matchers {
 }
 
      
-     //#9
-"TiedostonLukeminen.tarkistaVirheet()" should "find 3 errors in file 3errors" in {
-  // simuloidaan käyttäjän virheidenkorjausprosessia. Ensin annetaan syöte, jossa on 3 syntaksivirhettä nuottidatassa.
-  // Sitten kuvitellaan tilanne jossa käyttäjä korjaa yhden, annetaan syöte jossa 2 virhettä jne.
-  // Ohjelma niemenomaan löytää syötetiedoston ensimmäisen virheen ja odottaa käyttäjän korjaavan sen,
-  // ennenkuin syötetiedoston voi tulkita nuoteiksi
-  
-  // alkuperäisessä syötteessä pelkkiä sointuja, TiedostonLukeminenMock-luokassa muutettu vain sitä
-  //   käsittelevää koodia metodissa tarkistaSoinnunVirheet(), joka on metodin tarkistaVirheet()-sisällä
+  //#9
+"TiedostonLukeminen.tarkistaVirheet()" should "find 3 syntax errors(= wrongly formulated note data) in file '3errors'" in {
+     /*
+       Simuloidaan käyttäjän virheidenkorjausprosessia. Ensin annetaan syöte, jossa on 3 syntaksivirhettä 
+       nuottidatassa.
+       Sitten kuvitellaan tilanne jossa käyttäjä korjaa yhden, annetaan syöte jossa 2 virhettä jne.
+       Ohjelma nimenomaan löytää syötetiedoston ensimmäisen virheen ja odottaa käyttäjän korjaavan sen,
+       tutkii talletetun tiedoston ja joko löytää uuden virheen tai voi aloittaa nuottidatan jatkokäsittelyn.
+      
+       Syötteessä pelkkiä sointuja, TiedostonLukeminenMock-luokassa muutettu vain sointuja
+       käsittelevää koodia metodissa tarkistaSoinnunVirheet(), joka on metodin tarkistaVirheet()-sisällä
+     * 
+     */
      val syotteet = Buffer("3errors", "2errors", "1error", "0errors")
      
-     val lukMock = new TiedostonLukeminenMock(syotteet)
-     println(lukMock.mockMessage)
+     val lukMock = new TiedostonLukeminenMock(syotteet)  // TiedostonLukeminenMock löytyy tämän tiedoston lopusta
      
-    // assert(lukMock.mockMessages(i)  == "löydettiin virhe rivillä 3")
+     // kuten tiedostosta 3errors voi havaita, on rivi 1 virheetön, sen jälkeen yksi virhe riveillä 2, 3 ja 4
+     assert(lukMock.mockMessages(0)  == "löydettiin virhe rivillä 2", "eka syötevirhe-ongelma")
+     assert(lukMock.mockMessages(1)  == "löydettiin virhe rivillä 3", "toka syötevirhe-ongelma")
+     assert(lukMock.mockMessages(2)  == "löydettiin virhe rivillä 4", "kolmas syötevirhe-ongelma")
     
 }
-     
+   
+//#11
+"TiedostonLukeminen.onkoListalla" should "give false when file not in list and true otherwice" in {
+    val luk = new TiedostonLukeminen
+    
+    assert(luk.onkoListalla("kkk")== false, "valitussa input-hakemistossa ei ole tiedostoa nimeltä \"kkk\"")
+    assert(luk.onkoListalla("§")== true, "valitussa input-hakemistossa on tiedosto nimeltä \"§\"")
+}
      
 
 
@@ -427,9 +439,6 @@ class TiedostonLukeminenMock (tiedostojenNimet: Buffer[String]) {
               }     
                  
               else {
-                
-                println("tarkistaSoinnunVirheet - else")
-                
                  var sointu =  alkio.tail.substring(0, alkio.size -2).split(",")  
                  for(i <- 0 until sointu.size) {
                      if (alkio != ""  && oikeellisuusTesti(sointu(i)) == "") {
@@ -441,10 +450,9 @@ class TiedostonLukeminenMock (tiedostojenNimet: Buffer[String]) {
 //                        "\n Virhe on rivillä " + (nuottiDatanRivinumerot(ind)+1)  +
 //                        "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu. ")
    
-  // Mock START                  
-                        this.mockMessage = " löydettiin virhe rivillä " + (nuottiDatanRivinumerot(ind)+1) 
+  // Mock START: alla olevat  4 riviä korvaavat yllä olevat kommentoidut 3                 
+                        this.mockMessage = "löydettiin virhe rivillä " + (nuottiDatanRivinumerot(ind)+1) 
                         mockMessages += this.mockMessage
-                     //   System.exit(1)
                         mockMoneskokerta += 1
                         lueTiedosto(tiedostojenNimet(mockMoneskokerta)); return
                      }
