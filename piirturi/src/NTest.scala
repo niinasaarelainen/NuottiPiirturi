@@ -213,17 +213,7 @@ class NTest extends FlatSpec with Matchers {
  
 }    
 
-//#9
-"TiedostonLukeminen.tarkistaVirheet()" should "find 3 errors in file 3errors" in {
-  // simuloidaan käyttäjän virheidenkorjausprosessia. Ensin annetaan syöte, jossa on 3 syntaksivirhettä nuottidatassa.
-  // Sitten kuvitellaan tilanne jossa käyttäjä korjaa yhden, annetaan syöte jossa 2 virhettä jne.
-  // Ohjelma niemenomaan löytää syötetiedoston ensimmäisen virheen ja odottaa käyttäjän korjaavan sen,
-  // ennenkuin syötetiedoston voi tulkita nuoteiksi
-  
-  // alkuperäisessä syötteessä pelkkiä sointuja, testataan samalla niitä
-     val luk = new TiedostonLukeminen()
-     luk.lueTiedosto("3errors") 
-}
+
 
 //#10
 "The program" should "produce 'Bumble Bee' similarily as in correctly printed file 'bumble.txt'" in {
@@ -256,6 +246,28 @@ class NTest extends FlatSpec with Matchers {
      }
 }
 
+     
+     //#9
+"TiedostonLukeminen.tarkistaVirheet()" should "find 3 errors in file 3errors" in {
+  // simuloidaan käyttäjän virheidenkorjausprosessia. Ensin annetaan syöte, jossa on 3 syntaksivirhettä nuottidatassa.
+  // Sitten kuvitellaan tilanne jossa käyttäjä korjaa yhden, annetaan syöte jossa 2 virhettä jne.
+  // Ohjelma niemenomaan löytää syötetiedoston ensimmäisen virheen ja odottaa käyttäjän korjaavan sen,
+  // ennenkuin syötetiedoston voi tulkita nuoteiksi
+  
+  // alkuperäisessä syötteessä pelkkiä sointuja, TiedostonLukeminenMock-luokassa muutettu vain sitä
+  //   käsittelevää koodia metodissa tarkistaSoinnunVirheet(), joka on metodin tarkistaVirheet()-sisällä
+     val syotteet = Buffer("3errors", "2errors", "1error", "0errors")
+     
+     val lukMock = new TiedostonLukeminenMock(syotteet)
+     println(lukMock.mockMessage)
+     
+    // assert(lukMock.mockMessages(i)  == "löydettiin virhe rivillä 3")
+    
+}
+     
+     
+
+
 //////// A P U M E T O D I T :  ////////////////////////////////////////////////////////////////////
 
 def assertKuva(odotettuKuva: Buffer[String], nuotinKuva: Buffer[String]) = {
@@ -271,7 +283,6 @@ def assertKuva(odotettuKuva: Buffer[String], nuotinKuva: Buffer[String]) = {
 
 //////  M O C K   C L A S S E S: ///////////////////////////////////////////////////////////////////////
 
-// package piirturi.src
 
 import scala.io.Source
 import java.io._
@@ -279,7 +290,7 @@ import scala.collection.mutable.Buffer
 
 
 
-class TiedostonLukeminenMock {
+class TiedostonLukeminenMock (tiedostojenNimet: Buffer[String]) {
 
   var inputFromFile = Buffer[String]()       // kaikki input, paitsi tyhjät rivit
   var nuottiDataRiveina = Buffer[String]()  
@@ -289,13 +300,20 @@ class TiedostonLukeminenMock {
 
   var tahtilaji = "4"
   var kappaleenNimi = ""
-  var tiedostonNimi = ""
+  
   val inputhakemistonNimi =  "./input_virheita/"
   val inputhakemisto = new File(inputhakemistonNimi)
   
   var ekaKerta = true
   var tahtilajiOnJoLuettu = false
-    
+  
+  var mockMessage = "mockMessagen alustusteksti"
+  var mockMessages = Buffer[String]()
+  var mockMoneskokerta = 0  
+  var tiedostonNimi = tiedostojenNimet(0)
+ 
+  
+  lueTiedosto(tiedostonNimi)
  
  
   
@@ -409,6 +427,9 @@ class TiedostonLukeminenMock {
               }     
                  
               else {
+                
+                println("tarkistaSoinnunVirheet - else")
+                
                  var sointu =  alkio.tail.substring(0, alkio.size -2).split(",")  
                  for(i <- 0 until sointu.size) {
                      if (alkio != ""  && oikeellisuusTesti(sointu(i)) == "") {
@@ -416,10 +437,16 @@ class TiedostonLukeminenMock {
                      }
                      else {
                         virheitaNolla =  false  
-                        readLine("\n\n syöte '" + sointu(i) +"' on virheellinen: " + oikeellisuusTesti(sointu(i)) + 
-                        "\n Virhe on rivillä " + (nuottiDatanRivinumerot(ind)+1)  +
-                        "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu. ")
-                        lueTiedosto(this.tiedostonNimi); return
+//                        readLine("\n\n syöte '" + sointu(i) +"' on virheellinen: " + oikeellisuusTesti(sointu(i)) + 
+//                        "\n Virhe on rivillä " + (nuottiDatanRivinumerot(ind)+1)  +
+//                        "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu. ")
+   
+  // Mock START                  
+                        this.mockMessage = " löydettiin virhe rivillä " + (nuottiDatanRivinumerot(ind)+1) 
+                        mockMessages += this.mockMessage
+                     //   System.exit(1)
+                        mockMoneskokerta += 1
+                        lueTiedosto(tiedostojenNimet(mockMoneskokerta)); return
                      }
                  }
                    
@@ -485,11 +512,11 @@ class TiedostonLukeminenMock {
                 kappaleenNimi = kelvollinenSyoteRivi.tail.substring(5, kelvollinenSyoteRivi.tail.size)
                
            }
-           else if (!tahtilajiOnJoLuettu && "2345678".contains(kelvollinenSyoteRivi(1))){  // boolean onjoLuettu ?? TODO
-                tahtilaji = kelvollinenSyoteRivi(1).toString      // tahtilaji pilalla jos myöhemmässä kommentissa on numero heti #:n jälkeen TODO
+           else if (!tahtilajiOnJoLuettu && "2345678".contains(kelvollinenSyoteRivi(1))){  
+                tahtilaji = kelvollinenSyoteRivi(1).toString      
                    // varaudutaan siihen että joku kirjoittaa nuotteja jo samalle riville kuin missä tahtilaji-tunniste:
                 if(kelvollinenSyoteRivi.tail.trim.substring(1) != 0)  {
-                      nuottiDataRiveina += kelvollinenSyoteRivi.tail.trim.substring(1)   // kaatuu jos käyttäjä on laittanut 5/4 --> /4 on  "nuottidataa"  TODO
+                      nuottiDataRiveina += kelvollinenSyoteRivi.tail.trim.substring(1)   
                       nuottiDatanRivinumerot += ind
                 }   
                 tahtilajiOnJoLuettu = true
