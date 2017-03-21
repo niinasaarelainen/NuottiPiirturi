@@ -319,7 +319,7 @@ class NTest extends FlatSpec with Matchers {
   }
      
 
-//#13
+//#13   TODO  soitto pois/soiton loop pois/stub-arvo 0, jotta päästään luupista
 "simpleMIDIPlayerAdapter" should "transform nuottiData to correct Tuple Buffer[(Buffer[Int], Double)] " in {
   
       val luk = new TiedostonLukeminen()
@@ -329,13 +329,14 @@ class NTest extends FlatSpec with Matchers {
       val MIDIAdapter = new simpleMIDIPlayerAdapter(n.nuottiData, 3, n.viivasto.kappale, luk.tahtilaji.toInt)
       
      /* Jaakko-kulta, tarkoituksella sointuja(2 ääntäkin on määritelty soinnuksi) ja taukoja seassa, 
-        jotta testidatassa on kaikki 3 pääketgoriaa: nuotti, tauko, sointu 
+        jotta testidatassa on kaikki 3 pääkategoriaa: nuotti, tauko, sointu 
            	c2- d2- e2- c2-   				c2- d2- e2- c2- 
  						<e2-, c2-> f2- g2- z-    	<e2-,c2-> f2- g2- z-
  						<g2,c2> a2 g2 f2 e2- c2- 	<g2,c2> a2 g2 f2 e2- c2-
  						c2- g1- c2-. z 						c2- g1- c2-- 
  			* 
- 			*   huom! koodi järjestää soinnut nousevaan järjestykseen .sorted, eli <e2-, c2-> onkin (72,76)   */ 
+ 			*   huom! koodi järjestää soinnut nousevaan järjestykseen .sorted, eli <e2-, c2-> onkin (72,76)   
+ 			*   tauon olen määritellyt MIDI-korkeudeksi 0 */ 
       val jaakkoKullanMIDINumbers= Array(Array(72),Array(74),Array(76),Array(72),Array(72),Array(74),Array(76),Array(72),  
           Array(72,76),Array(77),Array(79),Array(0),Array(72,76),Array(77),Array(79),Array(0),  
           Array(72,79),Array(81),Array(79),Array(77),Array(76),Array(72), Array(72,79),Array(81),Array(79),Array(77),Array(76),Array(72),
