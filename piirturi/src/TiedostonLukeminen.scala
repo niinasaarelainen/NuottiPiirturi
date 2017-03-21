@@ -243,7 +243,8 @@ class TiedostonLukeminen {
     // ALUKSI TUTKITAAN  N U O T T I E N   S Y N T A K SI ,  _EI_ PITUUDET
          val filtteredNote = syote.filter(_ != '-').filter(_ != '.')
          
-         if(filtteredNote == "z") {}  // taukojen syntaksi helppo, tehdään pituustesti myöhemmin
+         if(filtteredNote == "") return "pelkkä pituustieto, puuttuu nuotin nimi"
+         else if(filtteredNote == "z") {}  // taukojen syntaksi helppo, tehdään pituustesti myöhemmin
          else{
               if(filtteredNote.count(_ == 'z') > 1)
                  return "taukojen pituudet merkitään viivoilla, esim puolitauko z--"

@@ -217,39 +217,8 @@ class NTest extends FlatSpec with Matchers {
 }    
 
 
-
-//#9
-"The program" should "produce 'Bumble Bee' similarily as in correctly printed file 'bumble.txt'" in {
-  // tämä testi on ylläpitoa varten, eli järjestelmätesti: 
-  // musiikin maisterin koulutuksella ja silmilläni olen todennut tiedoston bumble.txt oikeaksi.
-  // jos ohjelmaa tulevaisuudessa muutetaan, voi tämä testi lakata toimimasta.
-  
-      val luk = new TiedostonLukeminen()
-      luk.lueTiedosto("bumble")   // (kansiosta input_virheita)
-      val nuottipiirturi = new NuottiPiirturi(luk)
-      nuottipiirturi.execute()
-      
-      var kappaleenKaikkiRivitPerakkain = Buffer[String]()
-      for {
-          viivasto <-  nuottipiirturi.viivasto.kappale.kappale
-          rivi <- viivasto
-      } kappaleenKaikkiRivitPerakkain += rivi
-      
-       
-      val bumblePrinted = Source.fromFile("./output/bumble.txt")
-      var i = 0
-      try {
-        for (rivi <- bumblePrinted.getLines) {
-           assert(kappaleenKaikkiRivitPerakkain(i) == rivi, "first error in line: " + (i+1))
-           i += 1
-        }
-     } finally {
-        bumblePrinted.close()
-     }
-}
-
      
-//#10
+//#9
 "TiedostonLukeminen.tarkistaVirheet() (as stub)" should "find 3 syntax errors(= wrongly formulated note data) in file '3errors'" in {
      /*
        Simuloidaan käyttäjän virheidenkorjausprosessia. Ensin annetaan syöte, jossa on 3 syntaksivirhettä 
@@ -262,7 +231,8 @@ class NTest extends FlatSpec with Matchers {
        käsittelevää koodia metodissa tarkistaSoinnunVirheet(), joka on metodin tarkistaVirheet()-sisällä
      * 
      */
-     val syotteet = Buffer("3errors", "2errors", "1error", "0errors")
+     val syotteet = Buffer("3errors", "2errors", "1error", "0errors", "0errors")  
+     // viimeinen 0errors ohjelman kannalta ylimääräinen, mutta testaa ettei lueTiedostoa lueta 5 kertaa, vaan 4, koska virheettömän tiedoston jälkeen pitäisi poistua virheenkorjaus-luupista
      
      val lukStub = new TiedostonLukeminenStub(syotteet)  // TiedostonLukeminenStub löytyy tämän tiedoston lopusta
      
@@ -270,10 +240,11 @@ class NTest extends FlatSpec with Matchers {
      assert(lukStub.stubMessages(0)  == "löydettiin virhe rivillä 2", "eka syötevirhe-ongelma")
      assert(lukStub.stubMessages(1)  == "löydettiin virhe rivillä 3", "toka syötevirhe-ongelma")
      assert(lukStub.stubMessages(2)  == "löydettiin virhe rivillä 4", "kolmas syötevirhe-ongelma")
-    
-}
+     intercept[IndexOutOfBoundsException] { lukStub.stubMessages(3) }  // tällä testataan, että tiedostolla "0errors" ei generoidu virheilmoitusta, eli stubMessages on kolmen alkoin mittainen
+     assert(lukStub.stubMoneskokerta == 3, "lueTiedosto()-metodia kutsuttiin 4 kertaa")
+}           // stubMoneskokerta alkuarvo oli 0 => arvo 3 = 4.kutsukerta
    
-//#11
+//#10
 "TiedostonLukeminen.loytyykoInputHakemistosta" should "give false when file not found and true otherwice" in {
     val luk = new TiedostonLukeminen
      
@@ -283,8 +254,9 @@ class NTest extends FlatSpec with Matchers {
     
 }
 
-//#12
-"UI.readMIDIPatch() (as stub)" should "accept user key presses 1-7 and ENTER, nothing else" in {
+
+//#11
+"UI.kayttajaValitseeMIDIPatchin() (as stub)" should "accept user key presses 1-7 and ENTER, nothing else" in {
  
      /* alkuperäinen koodi luokassa UI:
        do {
@@ -295,7 +267,7 @@ class NTest extends FlatSpec with Matchers {
       
    // stubina, case 1, jossa käyttäjä syöttää 2 hylättävää ja kolmantena hyväksyttävän arvon:  
      var i = 0;  var MIDIPatch = "alkuarvo"
-      MIDIPatchinValinta( Array("8", "11", "3"))   // "3" on ensimmäinen hyväksyttävä arvo
+      MIDIPatchinValinta( Array("8", "11", "3"))   // "3" on hyväksyttävä arvo
       assert (MIDIPatch == "3", "käyttäjän syoteSekvenssi 1:n jälkeen MIDIPatch pitäisi olla 3")   
      
    // case 2:   käyttäjä painaa ENTER (=ei halua kuunnella kappaletta)
@@ -306,9 +278,10 @@ class NTest extends FlatSpec with Matchers {
     // case 3: simuloi tilannetta, jossa pelkkiä virheellisiä syötteitä "loputtomasti", i kasvaa Array:n indeksin ulkopuolelle, koska while-looppi vain pyörii
        i = 0; MIDIPatch = "alkuarvo"
        intercept[IndexOutOfBoundsException] { 
-           MIDIPatchinValinta(Array("9", "-1", "t", "0", " ", "77", "moi", "."))
+           MIDIPatchinValinta(Array("9", "-1", "t", "0", " ", "77", "moi", "#", "."))
        }
        assert (MIDIPatch == ".", "käyttäjän syötesekvenssin jälkeen muistiin jää Array:n vika arvo")
+       
        
        def MIDIPatchinValinta(sekvenssi: Array[String]) = {
            do {
@@ -319,8 +292,8 @@ class NTest extends FlatSpec with Matchers {
   }
      
 
-//#13   
-"simpleMIDIPlayerAdapter" should "transform nuottiData to correct Tuple Buffer[(Buffer[Int], Double)] " in {
+//#12
+"simpleMIDIPlayerAdapter" should "transform nuottiData to correct Buffer[(Buffer[Int], Double)]" in {
   
       val luk = new TiedostonLukeminen()
       luk.lueTiedosto("jaakko")   // (kansiosta input_virheita)
@@ -352,7 +325,53 @@ class NTest extends FlatSpec with Matchers {
 }
 
 
-//////// A P U M E T O D I T :  ////////////////////////////////////////////////////////////////////
+//#13
+"The program" should "produce song 'Flight of the Bumble Bee' similarily as in correctly printed file 'bumble.txt'" in {
+  // tämä testi on ylläpitoa varten, eli järjestelmätesti: 
+  // musiikin maisterin koulutuksella ja silmilläni olen todennut tiedoston bumble.txt oikeaksi.
+  // jos ohjelmaa tulevaisuudessa muutetaan, voi tämä testi lakata toimimasta.
+  
+      val luk = new TiedostonLukeminen()
+      luk.lueTiedosto("bumble")   // (kansiosta input_virheita)
+      val nuottipiirturi = new NuottiPiirturi(luk)
+      nuottipiirturi.execute()
+      val bumblePrinted = Source.fromFile("./output/bumble.txt")
+      
+      assertFileVersusKappale(nuottipiirturi.viivasto.kappale.kappale, bumblePrinted)
+         
+      
+}
+//#14
+it should "produce testfile 'allViivastolleLaitettavaClasses' similarily as in correctly printed file 'all.txt'" in {
+          // in this test file there are all the different classes that inherit trait ViivastolleLaitettava,
+          // both stem up and down from each type - excluding rests which don't have stems and are always placed in constant height in staff  
+          // class Sointu is tested with all the note values as well, and 2-13 notes in chord
+          // And still, the last row of music in all.txt is correct in terms of program logic. It cannot find place for bar line, since 
+          // time signature is 4/4 and no note ends on 4, the closest is 4 and half beats. So no bar line there, which is also good sign for the user that the rhythm he/she thought probably is wrong
+      val luk = new TiedostonLukeminen()
+      luk.lueTiedosto("allViivastolleLaitettavaClasses")   // (kansiosta input_virheita)
+      val nuottipiirturi = new NuottiPiirturi(luk)
+      nuottipiirturi.execute()
+      val allPrinted = Source.fromFile("./output/all.txt")
+      
+      assertFileVersusKappale(nuottipiirturi.viivasto.kappale.kappale, allPrinted)
+}
+
+
+
+"Lyrics handling @Viivasto" should " ...  more lyrics than notes" in {
+  
+}
+
+it should  "....  less lyrics than notes" in {
+  
+}
+
+it should  "  more letters in syllables than print area" in {
+  
+}
+
+////////   A P U M E T O D I T :    /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 def assertKuva(odotettuKuva: Buffer[String], nuotinKuva: Buffer[String]) = {
   
@@ -365,6 +384,27 @@ def assertKuva(odotettuKuva: Buffer[String], nuotinKuva: Buffer[String]) = {
       }     
 }
 
+
+def assertFileVersusKappale(ohjelmanGeneroimakappale: Buffer[Buffer[String]], tiedostostaLuettuKapple: Source) = {
+  
+      var kappaleenKaikkiRivitPerakkain = Buffer[String]()
+      for {
+          viivasto <- ohjelmanGeneroimakappale
+          rivi <- viivasto
+      } kappaleenKaikkiRivitPerakkain += rivi
+      
+     
+      var i = 0
+      try {
+        for (rivi <- tiedostostaLuettuKapple.getLines) {
+           assert(kappaleenKaikkiRivitPerakkain(i) == rivi, "first error in line: " + (i+1))
+           i += 1
+        }
+     } finally {
+        tiedostostaLuettuKapple.close()
+     }
+  
+}
 //////  S T U B    C L A S S E S:  ///////////////////////////////////////////////////////////////////////
 
 
@@ -401,6 +441,8 @@ class TiedostonLukeminenStub (tiedostojenNimet: Buffer[String]) {
  
   
   def lueTiedosto(tiedostonNimi: String): Unit = {  
+    
+   //  stubMoneskokerta += 1
     
      this.tiedostonNimi = tiedostonNimi
      this.inputFromFile = Buffer[String]()       // pitää nollata, jos tänne tullaan virheidentarkistuksesta

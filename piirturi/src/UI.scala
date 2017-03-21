@@ -13,8 +13,8 @@ class UI {
     lukija.helppiTeksti()
     lukija.listaaTiedostot()
     kayttajaValitseeTiedoston()
-    lukija.lueTiedosto(tiedostonNimi)
-    readMIDIPatch()
+    lukija.lueTiedosto(tiedostonNimi.trim())
+    kayttajaValitseeMIDIPatchin()
     val n = new NuottiPiirturi(lukija)
     n.execute()
     if(!MIDIPatch.equals(""))  // kuunnellaan  
@@ -31,11 +31,11 @@ class UI {
     def kayttajaValitseeTiedoston() = {
         do {
            tiedostonNimi = readLine("\n\nMinkä nimisen tiedoston haluat nuoteiksi? Valitse ylläolevista. ")
-        } while (!lukija.loytyykoInputHakemistosta(tiedostonNimi))      
+        } while (!lukija.loytyykoInputHakemistosta(tiedostonNimi.trim()))      
     }
     
     
-    def readMIDIPatch() = {
+    def kayttajaValitseeMIDIPatchin() = {
         do {
            MIDIPatch = readLine("\n\nMillä soundilla haluat kuulla kappaleen? \nValitse 1-7 ja paina ENTER. Pelkkä ENTER ei tuota mitään ääntä.\n" +
            "ENTER= en millään,  1= piano,  2= vibrafoni,  3= rock-urut,  4= syna,  5= akustinen kitara,  6= rokkibändi,  7=music box  ")
