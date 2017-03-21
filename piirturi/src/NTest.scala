@@ -77,7 +77,7 @@ class NTest extends FlatSpec with Matchers {
    
 }
 
-  // #4
+// #4
 "KahdeksasosaPari" should "draw eight note couple stems down and ignore second flat" in {
     
     var kuva = Buffer[String]()	
@@ -214,12 +214,11 @@ class NTest extends FlatSpec with Matchers {
              assert(t.asInstanceOf[KahdeksasosaTauko].korkeus == "c2", "***nuottiDataParitettu: tauon korkeusvirhe")  // kaikkien taukojen piirtokorkeus on c2
            case _ => fail  // FAIL, koska syötteessä ei ole muuta kuin em. 3 kategoriaa
          }
- 
 }    
 
 
 
-//#10
+//#9
 "The program" should "produce 'Bumble Bee' similarily as in correctly printed file 'bumble.txt'" in {
   // tämä testi on ylläpitoa varten, eli järjestelmätesti: 
   // musiikin maisterin koulutuksella ja silmilläni olen todennut tiedoston bumble.txt oikeaksi.
@@ -250,7 +249,7 @@ class NTest extends FlatSpec with Matchers {
 }
 
      
-  //#9
+//#10
 "TiedostonLukeminen.tarkistaVirheet() (as stub)" should "find 3 syntax errors(= wrongly formulated note data) in file '3errors'" in {
      /*
        Simuloidaan käyttäjän virheidenkorjausprosessia. Ensin annetaan syöte, jossa on 3 syntaksivirhettä 
@@ -309,7 +308,7 @@ class NTest extends FlatSpec with Matchers {
        intercept[IndexOutOfBoundsException] { 
            MIDIPatchinValinta(Array("9", "-1", "t", "0", " ", "77", "moi", "."))
        }
-       assert (MIDIPatch == ".", "kayttajan syötesekvenssin jälkeen muistiin jää Array:n vika arvo")
+       assert (MIDIPatch == ".", "käyttäjän syötesekvenssin jälkeen muistiin jää Array:n vika arvo")
        
        def MIDIPatchinValinta(sekvenssi: Array[String]) = {
            do {
@@ -319,6 +318,37 @@ class NTest extends FlatSpec with Matchers {
        }
   }
      
+
+//#13
+"simpleMIDIPlayerAdapter" should "transform nuottiData to correct Tuple Buffer[(Buffer[Int], Double)] " in {
+  
+      val luk = new TiedostonLukeminen()
+      luk.lueTiedosto("jaakko")   // (kansiosta input_virheita)
+      val n = new NuottiPiirturi(luk)
+      n.execute()                                   // MIDI-Patch 3 valittu käyttäjän puolesta
+      val MIDIAdapter = new simpleMIDIPlayerAdapter(n.nuottiData, 3, n.viivasto.kappale, luk.tahtilaji.toInt)
+      
+     /* Jaakko-kulta, tarkoituksella sointuja(2 ääntäkin on määritelty soinnuksi) ja taukoja seassa, 
+        jotta testidatassa on kaikki 3 pääketgoriaa: nuotti, tauko, sointu 
+           	c2- d2- e2- c2-   				c2- d2- e2- c2- 
+ 						<e2-, c2-> f2- g2- z-    	<e2-,c2-> f2- g2- z-
+ 						<g2,c2> a2 g2 f2 e2- c2- 	<g2,c2> a2 g2 f2 e2- c2-
+ 						c2- g1- c2-. z 						c2- g1- c2-- 
+ 			* 
+ 			*   huom! koodi järjestää soinnut nousevaan järjestykseen .sorted, eli <e2-, c2-> onkin (72,76)   */ 
+      val jaakkoKullanMIDINumbers= Array(Array(72),Array(74),Array(76),Array(72),Array(72),Array(74),Array(76),Array(72),  
+          Array(72,76),Array(77),Array(79),Array(0),Array(72,76),Array(77),Array(79),Array(0),  
+          Array(72,79),Array(81),Array(79),Array(77),Array(76),Array(72), Array(72,79),Array(81),Array(79),Array(77),Array(76),Array(72),
+          Array(72),Array(67),Array(72),Array(0), Array(72),Array(67),Array(72),Array(0))
+
+      for(i <- 0 until MIDIAdapter.nuotitJaPituudet.size){ 
+          for (korkeus<- 0 until MIDIAdapter.nuotitJaPituudet(i)._1.size){  // Tuple._1 = Buffer[Int]  eventin korkeus tai korkeudet soinnun tapauksessa
+             assert(MIDIAdapter.nuotitJaPituudet(i)._1(korkeus) == jaakkoKullanMIDINumbers(i)(korkeus), "***virhe : " + (i+1) + ". eventti, " + (korkeus+1) + ". korkeus eventissä")
+             assert(MIDIAdapter.nuotitJaPituudet(i)._2 == n.nuottiData(i).pituus, "pituusongelmaa pukkasi: "+ (i+1) + ". eventti") // Tuple._2 = Double, sama kuin nuottiolion pituus-kenttä
+          }   
+         
+      }    
+}
 
 
 //////// A P U M E T O D I T :  ////////////////////////////////////////////////////////////////////
@@ -334,7 +364,7 @@ def assertKuva(odotettuKuva: Buffer[String], nuotinKuva: Buffer[String]) = {
       }     
 }
 
-//////  M O C K   C L A S S E S: ///////////////////////////////////////////////////////////////////////
+//////  S T U B    C L A S S E S:  ///////////////////////////////////////////////////////////////////////
 
 
 
@@ -365,7 +395,7 @@ class TiedostonLukeminenStub (tiedostojenNimet: Buffer[String]) {
  
  
   
- ///// F U N K T I O T: ///////////////////////////////////////////////////////////////////////// 
+ /////  M E T O D I T ///////////////////////////////////////////////////////////////////////// 
   
  
   
@@ -465,7 +495,7 @@ class TiedostonLukeminenStub (tiedostojenNimet: Buffer[String]) {
 //                        "\n Virhe on rivillä " + (nuottiDatanRivinumerot(ind)+1)  +
 //                        "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu. ")
    
-  // Stub START: alla olevat  4 riviä korvaavat yllä olevat kommentoidut 3                 
+  // Stub START: alla olevat  4 riviä korvaavat yllä olevat kommentoidut 3                                                            ////    S T U B   H E R E !!!
                         this.stubMessage = "löydettiin virhe rivillä " + (nuottiDatanRivinumerot(ind)+1) 
                         stubMessages += this.stubMessage
                         stubMoneskokerta += 1

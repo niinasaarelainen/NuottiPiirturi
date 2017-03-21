@@ -160,7 +160,7 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
    }
  
    
-   def tehdaanKahdeksasosaParit() = {      // TODO  1/8-sointu !?!?!?!?
+   def tehdaanKahdeksasosaParit() = {      
     
      iskujaMennyt =  0.0
      var minutOnJoKasitelty = false
@@ -180,22 +180,7 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
                  nuottiDataParitettu += nuottiData(i)     // 1/8 talteen, jos se ei löytänyt paria
               }
           }
-          
-          
-      /*    
-          else if(nuottiData(i).isInstanceOf[Sointu] && nuottiData(i).asInstanceOf[Sointu].pituus == 0.5 && (iskujaMennyt % 1== 0.5)){
-              if(nuottiData(i+1).isInstanceOf[KahdeksasosaNuotti]){
-                 nuottiDataParitettu += new KahdeksasosaPariSointuNuotti(nuottiData(i).asInstanceOf[Sointu], nuottiData(i+1).asInstanceOf[KahdeksasosaNuotti])
-                 minutOnJoKasitelty = true  
-                 iskujaMennyt += nuottiData(i+1).pituus
-                 if(nuottiData.last.eq(nuottiData(i+1))) paastiinTiedostonloppuun = true
-              } else {
-                 nuottiDataParitettu += nuottiData(i)     // 1/8 talteen, jos se ei löytänyt paria
-              } 
-             
-          }   */
-          
-          
+      
           
           else {
              nuottiDataParitettu += nuottiData(i)     // ei-1/8:kin talteen
@@ -209,6 +194,5 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
      if(!paastiinTiedostonloppuun)    
           nuottiDataParitettu += nuottiData(nuottiData.size-1)   // viimeinenkin nuottiolio messiin, jos se ei ollut 1/8-parin puolisko
    }  
-  
   
 }

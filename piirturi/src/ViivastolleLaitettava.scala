@@ -35,6 +35,36 @@ trait ViivastolleLaitettava {
 }
   
 
+////////////////////////////////    A B S T R A C T    C L A S S E S  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ 
+
+abstract class Nuotti extends ViivastolleLaitettava {
+     def nuppi = "()"   
+     def soiva = true
+     def korkeus: String
+     def nimiMapissa: String
+     def etumerkki: String
+     def extraetumerkkiDef: String
+       
+     def piirraAlaApuviiva() = {                       
+           viivasto(y("c1")) = viivasto(y("c1")).substring(0, 1) + "--" +  viivasto(y("c1")).substring(4, 6) + "--" + viivasto(y("c1")).substring(7)         
+     }
+     
+      def piirraYlaApuviiva() = {                       
+           viivasto(y("a2")) = viivasto(y("a2")).substring(0, 1) + "--" +  viivasto(y("a2")).substring(4, 6) + "--"   + viivasto(y("a2")).substring(7)         
+     }
+}
+ 
+
+abstract class Tauko extends ViivastolleLaitettava{
+     def korkeus = "c2"    // piirtokorkeus
+     def soiva = false
+}
+
+////////////////////////////////    S  O  I  N  T   U   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 class Sointu(aanet: Buffer[ViivastolleLaitettava]) extends ViivastolleLaitettava{
   
      viivasto = piirraTyhjaViivasto(kuvanLeveys)
@@ -83,7 +113,6 @@ class Sointu(aanet: Buffer[ViivastolleLaitettava]) extends ViivastolleLaitettava
          // piste
          if(aani.pituus== 1.5 || aani.pituus == 3)
             viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 5) + "." + viivasto(y(nimiMapissa)).substring(6)  
-
       }  // end for
       
       if (pituus < 4)   // kokonuottiin ei vartta 
@@ -107,31 +136,8 @@ class Sointu(aanet: Buffer[ViivastolleLaitettava]) extends ViivastolleLaitettava
             }        
      }     
 }
- 
 
-abstract class Nuotti extends ViivastolleLaitettava {
-     def nuppi = "()"   
-     def soiva = true
-     def korkeus: String
-     def nimiMapissa: String
-     def etumerkki: String
-     def extraetumerkkiDef: String
-       
-     def piirraAlaApuviiva() = {                       
-           viivasto(y("c1")) = viivasto(y("c1")).substring(0, 1) + "--" +  viivasto(y("c1")).substring(4, 6) + "--" + viivasto(y("c1")).substring(7)         
-     }
-     
-      def piirraYlaApuviiva() = {                       
-           viivasto(y("a2")) = viivasto(y("a2")).substring(0, 1) + "--" +  viivasto(y("a2")).substring(4, 6) + "--"   + viivasto(y("a2")).substring(7)         
-     }
-}
- 
-
-abstract class Tauko extends ViivastolleLaitettava{
-     def korkeus = "c2"    // piirtokorkeus
-     def soiva = false
-}
-
+////////////////////////////////    N  U  O  T  I  T  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
  
 class KokoNuotti(nuotinNimi: String, extraetumerkki: String = "") extends Nuotti{   
@@ -313,26 +319,7 @@ class KahdeksasosaPari (eka: ViivastolleLaitettava, toka: ViivastolleLaitettava)
     
 }
 
-//TODO ehkä vasta versioon 2.0 ?
-class KahdeksasosaPariSointuNuotti  (ekaNuotti: Sointu, tokaNuotti: KahdeksasosaPari)  extends Sointu(ekaNuotti.nuotit){
-  
-     def korkeus2 =  tokaNuotti.korkeus 
-     override def pituus = 1.0
-     override def kuvanLeveys = 12
-     def nuppi = "@@"
-     var ekanVarrenPit, tokanVarrenPit = 0
-     ylospain = true
-     
-   //  val korkeudet = Array( y(ekaNuotti.nimiMapissa),  y(tokaNuotti.nimiMapissa))
-    
-     override def kuva = {
-         
-         viivasto
-     }     
-     
-}
-
- 
+/////////////////////////////////     T  A  U  O  T  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
 class NeljasosaTauko extends Tauko { 
   
