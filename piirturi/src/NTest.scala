@@ -319,14 +319,14 @@ class NTest extends FlatSpec with Matchers {
   }
      
 
-//#13   TODO  soitto pois/soiton loop pois/stub-arvo 0, jotta päästään luupista
+//#13   
 "simpleMIDIPlayerAdapter" should "transform nuottiData to correct Tuple Buffer[(Buffer[Int], Double)] " in {
   
       val luk = new TiedostonLukeminen()
       luk.lueTiedosto("jaakko")   // (kansiosta input_virheita)
       val n = new NuottiPiirturi(luk)
       n.execute()                                   // MIDI-Patch 3 valittu käyttäjän puolesta
-      val MIDIAdapter = new simpleMIDIPlayerAdapter(n.nuottiData, 3, n.viivasto.kappale, luk.tahtilaji.toInt)
+      val MIDIAdapter = new simpleMIDIPlayerAdapter(n.nuottiData, 3, n.viivasto.kappale, luk.tahtilaji.toInt, false)  // false= ei varsinaisesti haluta kuunnella Jaakko-kultaa
       
      /* Jaakko-kulta, tarkoituksella sointuja(2 ääntäkin on määritelty soinnuksi) ja taukoja seassa, 
         jotta testidatassa on kaikki 3 pääkategoriaa: nuotti, tauko, sointu 
