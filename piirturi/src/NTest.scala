@@ -146,7 +146,7 @@ it should "find valid note names and lengths" in {
       assert(luk.tahtilaji == "5", "***tahtilajin pitäisi olla 5 (eli 5/4 määritelty ohjelmassa 5)")
 } 
 
-it should "find tahtilaji and kappaleenNimi when neither hash-tagged in inputfile" in {
+it should "use defaul values for tahtilaji and kappaleenNimi when neither hash-tagged in inputfile" in {
       val luk = new TiedostonLukeminen()
       luk.lueTiedosto("jaakko")
       
@@ -230,7 +230,7 @@ it should "have right hights(=note names)" in {
 
     
 
-"TiedostonLukeminen.tarkistaVirheet() (as stub)" should "find 3 syntax errors(= wrongly formulated note data) in file '3errors'" in {
+"TiedostonLukeminen.tarkistaVirheet() --as stub--" should "find 3 syntax errors(= wrongly formulated note data) in file '3errors'" in {
      /*
        Simuloidaan käyttäjän virheidenkorjausprosessia. Ensin annetaan syöte, jossa on 3 syntaksivirhettä 
        nuottidatassa.
@@ -267,7 +267,7 @@ it should "have right hights(=note names)" in {
 
 
 
-"UI.kayttajaValitseeMIDIPatchin() (as stub)" should "accept user key presses 1-7 and ENTER, nothing else" in {
+"UI.kayttajaValitseeMIDIPatchin() --as stub--" should "accept user key presses 1-7 and ENTER, nothing else" in {
  
      /* alkuperäinen koodi luokassa UI:
        do {
@@ -329,7 +329,7 @@ it should "have right hights(=note names)" in {
 
 "The program" should "produce song 'Flight of the Bumble Bee' similarily as in correctly printed file 'bumble.txt'" in {
   // tämä testi on ylläpitoa varten, eli integraatiotesti, monien ohjelman osien tulee toimia oikein, jotta oikea output saadaa aikaan. 
-  // only excludes classes UI, SimpleMIDIPlayer and SimpleMIDIAdapter, and some of Note Values, which are tested in the following test
+  // only excludes classes UI, SimpleMIDIPlayer and SimpleMIDIPlayerAdapter, and some of Note Values, which are tested in the following test
   
   // musiikin maisterin koulutuksella ja silmilläni olen todennut tiedoston bumble.txt oikeaksi.
   // jos ohjelmaa tulevaisuudessa muutetaan, voi tämä testi lakata toimimasta.
@@ -365,15 +365,28 @@ it should "produce test file 'allViivastolleLaitettavaClasses' similarily as in 
 
 
 
-"Lyrics handling @Viivasto" should " ...  more lyrics than notes" in {
+"Viivasto.kasitteleLyriikat()" should "cope with more lyrics than notes" in {
   
+  // vaihteeksi luodaan lyriikat ja nuottiData manuaalisesti (hankalasti), jotta aina ei jouduta kutsumaan luokkia 
+  // TiedostonLukeminen & NuottiPiirturi
+      
+     // case: 4 syllables & 3 notes 
+      val sanat = Buffer("Jaak-", "ko", "kul-", "ta,")    
+      assertLyricsDifferentSizeThanNoteData(sanat)
+      
+ 
 }
 
-it should  "....  less lyrics than notes" in {
+it should  "cope with less lyrics than notes" in {
   
+   // case: 2 syllables & 3 notes 
+      val sanat = Buffer("Jaak-", "ko")    
+      assertLyricsDifferentSizeThanNoteData(sanat)
+      
 }
 
 it should  "  more letters in syllables than print area" in {
+  
   
 }
 
@@ -432,8 +445,24 @@ def assertFileVersusKappale(ohjelmanGeneroimakappale: Buffer[Buffer[String]], ti
      } finally {
         tiedostostaLuettuKapple.close()
      }
-  
 }
+
+def  assertLyricsDifferentSizeThanNoteData(sanat: Buffer[String]) = {
+      
+      var nuottiData = Buffer(new NeljasosaNuotti("c2").asInstanceOf[ViivastolleLaitettava], new NeljasosaNuotti("d2").asInstanceOf[ViivastolleLaitettava], new NeljasosaNuotti("e2").asInstanceOf[ViivastolleLaitettava])   
+      val v = new Viivasto(nuottiData, sanat, "4") //vika parametri = tahtilaji
+      v.piirraNuotit()   // käskyttää metodia kasitteleLyriikat()
+      
+      // v.kappale.kappale should include third syllable, as nuottiData has 3 notes; 4.syllable "ta" should not be included
+      if(sanat.size == 4) assert(v.kappale.kappale(0).last.contains("kul-") && !v.kappale.kappale(0).last.contains("ta,")) // lyriikat ovat vikassa indeksissä
+      else if(sanat.size == 2) assert(v.kappale.kappale(0).last.contains("ko") )
+      
+      // unitTestLiitosCounter counts how many times a note was added to Staff, should be 3 also when lyrics.size was 2 => testing 
+      // that less lyrics didn't prevent adding more notes to the song 
+      assert(v.unitTestLiitosCounter == 3, "nuottiolioita liitettiin 3 kpl viivastoon")
+    // actually the real test here is that the program did not throw exception
+}      
+      
 //////  S T U B    C L A S S E S:  ///////////////////////////////////////////////////////////////////////
 
 

@@ -12,6 +12,7 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
    var riviaMennytMontakoTahtia = 0             // halutaan max 4 tahtia riville
    var backUpPituuslaskuri = 0.0     // vaihdetaan riviä jos ei löydy tahtiviivalle paikkaa ja pituus on melkoinen 
    var lyricsInd = 0
+   var unitTestLiitosCounter = 0
    var kappale = new Kappale
   
  
@@ -97,6 +98,7 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
   
   
    def liita(liitosOlio: ViivastolleLaitettava) = {
+       unitTestLiitosCounter += 1
        for (i <- 0 until this.viivasto.size)
           viivasto(i) += liitosOlio.kuva(i)
    }
