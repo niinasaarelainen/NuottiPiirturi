@@ -386,9 +386,18 @@ it should  "cope with less lyrics than notes" in {
 }
 
 it should  "cope with more letters in syllables than print area" in {
-  
-  // TODO 1/8-pari ja lyriikat joissa ei tavutusta
-}
+  // situation with actually long words or the situation where user has forgotten to make syllables  (should be f.ex for-ward, a-head)
+   val sanat = Buffer("Straight", "forward", "straight", "ahead!!!")  
+   
+   // 1/8-note couple has the smallest print area for lyrics: 6  per note
+   val pari = new KahdeksasosaPari(new KahdeksasosaNuotti("c1"), new KahdeksasosaNuotti("d1")).asInstanceOf[ViivastolleLaitettava]
+   var nuottiData = Buffer(pari, pari)
+   
+   val v = new Viivasto(nuottiData, sanat, "4")
+   v.piirraNuotit()
+   assert(v.unitTestLiitosCounter == 2, "***adding 2 eight couples FAIL")
+   assert(v.kappale.kappale(0).last.contains("Straigforwarstraigahead!"), "***wrong lyrics")  // joka sanasta 6 ekaa kirjainta
+} 
 
 
 "TiedostonLukeminen.lueTiedosto__Recovering Badly Formulated Input" should "#case1: too much white space" in {
@@ -403,7 +412,7 @@ it should "#case2: empty chords" in {
       val luk = new TiedostonLukeminen()
       luk.lueTiedosto("_emptyChords")
       
-      assert(luk.nuottiAlkiot.size == 0, "***syötetiedostossa on 0 nuottitapahtumaa")  
+      assert(luk.nuottiAlkiot.size == 0, "***syötetiedostossa pitäisi olla 0 nuottitapahtumaa")  
       // tyhjiä sointuja ei laiteta nuottiAlkiot:hin, koska sitä ei voi soittaa. Point: ohjelma ei kaatunut
 }
 
@@ -413,22 +422,20 @@ it should "#case3:  chords written together without space" in {
       
       // the note/chord data is split from white space, so it is crucial to add space if user
       // didn't do it in case <c1,d1><e1,f1>   =>  must be correscted to  <c1,d1> <e1,f1>
-      assert(luk.nuottiAlkiot.size == 3, "***syötetiedostossa on 3 sointua")  
-      // tyhjiä sointuja ei laiteta nuottiAlkiot:hin, koska sitä ei voi soittaa. Point: ohjelma ei kaatunut
+      assert(luk.nuottiAlkiot.size == 3, "***syötetiedostossa pitäisi olla 3 sointua")  
 }
 
-it should "#case3: use of tabulator" in {
+it should "#case4: use of tabulator" in {
       val luk = new TiedostonLukeminen()
       luk.lueTiedosto("_tabs")   // the file is full of tabs (hard to see)
       
       // the note/chord data is split from white space, so it is crucial to add space if user
       // didn't do it in case <c1,d1><e1,f1>   =>  must be correscted to  <c1,d1> <e1,f1>
-      assert(luk.nuottiAlkiot.size == 6, "***syötetiedostossa on 6 nuottia/sointua")  
-      // tyhjiä sointuja ei laiteta nuottiAlkiot:hin, koska sitä ei voi soittaa. Point: ohjelma ei kaatunut
+      assert(luk.nuottiAlkiot.size == 6, "***syötetiedostossa pitäisi olla 6 nuottia/sointua")  
 }
 
 /* 
-// TODO ScalaTest jää "Play"-tilaan eli ei pääse testin loppuun, samoin ohjelmassa ei voi 
+// TODO ScalaTest jää "Play"-tilaan eli ei pääse testin loppuun, liittynee siihen että ohjelmassa ei voi 
  * esim konsolille kirjoittaa mitään System.exit(1):n jälkeen
 "TiedostonLukeminen.lueTiedosto" should "exit with empty file and with empty note data" in {
       val luk = new TiedostonLukeminen()
@@ -496,8 +503,8 @@ def  assertLyricsDifferentSizeThanNoteData(sanat: Buffer[String]) = {
       
       // v.kappale.kappale should include third syllable, as nuottiData has 3 notes; 4.syllable "ta" should not be included
       if(sanat.size == 4){
-        assert(v.kappale.kappale(0).last.contains("kul-") , "***last syllable not found")
-        assert(!v.kappale.kappale(0).last.contains("ta,"), "***too much lyrics in output") // lyriikat ovat vikassa indeksissä
+        assert(v.kappale.kappale(0).last.contains("kul-") , "***last syllable not found")  // lyriikat ovat vikassa indeksissä
+        assert(!v.kappale.kappale(0).last.contains("ta,"), "***too much lyrics in output") 
       }
       else if(sanat.size == 2) assert(v.kappale.kappale(0).last.contains("ko"), "***lessLyrics ei toimi" )
       
