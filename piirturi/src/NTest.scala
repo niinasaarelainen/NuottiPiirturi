@@ -385,14 +385,55 @@ it should  "cope with less lyrics than notes" in {
       
 }
 
-it should  "  more letters in syllables than print area" in {
+it should  "cope with more letters in syllables than print area" in {
   
-  
+  // TODO 1/8-pari ja lyriikat joissa ei tavutusta
 }
 
-"TiedostonLukeminen" should "exit with empty file and with empty note data" in {
-  
+
+"TiedostonLukeminen.lueTiedosto__Recovering Badly Formulated Input" should "#case1: too much white space" in {
+      val luk = new TiedostonLukeminen()
+      luk.lueTiedosto("_spaces")
+      
+      assert(luk.nuottiAlkiot.size == 6, "***syötetiedostossa on 6 nuottitapahtumaa")  // sointu on 1 tapahtuma. 
+      //Jos välilyönneistä ei oltaisi selvitty, ei nuottialkiota olisi lisätty nuottiAlkiot:hin, vaan vaadittu käyttäjää korjaamaan virhe
 }
+
+it should "#case2: empty chords" in {
+      val luk = new TiedostonLukeminen()
+      luk.lueTiedosto("_emptyChords")
+      
+      assert(luk.nuottiAlkiot.size == 0, "***syötetiedostossa on 0 nuottitapahtumaa")  
+      // tyhjiä sointuja ei laiteta nuottiAlkiot:hin, koska sitä ei voi soittaa. Point: ohjelma ei kaatunut
+}
+
+it should "#case3:  chords written together without space" in {
+      val luk = new TiedostonLukeminen()
+      luk.lueTiedosto("_chordsWrittenTogetherWithoutSpace")
+      
+      // the note/chord data is split from white space, so it is crucial to add space if user
+      // didn't do it in case <c1,d1><e1,f1>   =>  must be correscted to  <c1,d1> <e1,f1>
+      assert(luk.nuottiAlkiot.size == 3, "***syötetiedostossa on 3 sointua")  
+      // tyhjiä sointuja ei laiteta nuottiAlkiot:hin, koska sitä ei voi soittaa. Point: ohjelma ei kaatunut
+}
+
+it should "#case3: use of tabulator" in {
+      val luk = new TiedostonLukeminen()
+      luk.lueTiedosto("_tabs")   // the file is full of tabs (hard to see)
+      
+      // the note/chord data is split from white space, so it is crucial to add space if user
+      // didn't do it in case <c1,d1><e1,f1>   =>  must be correscted to  <c1,d1> <e1,f1>
+      assert(luk.nuottiAlkiot.size == 6, "***syötetiedostossa on 6 nuottia/sointua")  
+      // tyhjiä sointuja ei laiteta nuottiAlkiot:hin, koska sitä ei voi soittaa. Point: ohjelma ei kaatunut
+}
+
+/* 
+// TODO ScalaTest jää "Play"-tilaan eli ei pääse testin loppuun, samoin ohjelmassa ei voi 
+ * esim konsolille kirjoittaa mitään System.exit(1):n jälkeen
+"TiedostonLukeminen.lueTiedosto" should "exit with empty file and with empty note data" in {
+      val luk = new TiedostonLukeminen()
+      luk.lueTiedosto("tyhja")
+} */
 
 ////////   A P U M E T O D I T :    /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -454,13 +495,17 @@ def  assertLyricsDifferentSizeThanNoteData(sanat: Buffer[String]) = {
       v.piirraNuotit()   // käskyttää metodia kasitteleLyriikat()
       
       // v.kappale.kappale should include third syllable, as nuottiData has 3 notes; 4.syllable "ta" should not be included
-      if(sanat.size == 4) assert(v.kappale.kappale(0).last.contains("kul-") && !v.kappale.kappale(0).last.contains("ta,")) // lyriikat ovat vikassa indeksissä
-      else if(sanat.size == 2) assert(v.kappale.kappale(0).last.contains("ko") )
+      if(sanat.size == 4){
+        assert(v.kappale.kappale(0).last.contains("kul-") , "***last syllable not found")
+        assert(!v.kappale.kappale(0).last.contains("ta,"), "***too much lyrics in output") // lyriikat ovat vikassa indeksissä
+      }
+      else if(sanat.size == 2) assert(v.kappale.kappale(0).last.contains("ko"), "***lessLyrics ei toimi" )
       
       // unitTestLiitosCounter counts how many times a note was added to Staff, should be 3 also when lyrics.size was 2 => testing 
       // that less lyrics didn't prevent adding more notes to the song 
-      assert(v.unitTestLiitosCounter == 3, "nuottiolioita liitettiin 3 kpl viivastoon")
-    // actually the real test here is that the program did not throw exception
+      assert(v.unitTestLiitosCounter == 3, "***nuottiolioita liitettiin 3 kpl viivastoon")
+    
+      // actually, also a test here is that the program did not throw exception. Could have with bad code.
 }      
       
 //////  S T U B    C L A S S E S:  ///////////////////////////////////////////////////////////////////////
