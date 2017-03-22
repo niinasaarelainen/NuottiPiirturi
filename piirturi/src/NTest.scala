@@ -12,43 +12,34 @@ class NTest extends FlatSpec with Matchers {
   
   
 
- // #1  
+
 "TiedostonLukeminen.oikeellisuusTesti()" should "find non-valid note names and lengths" in {
      
      val luk = new TiedostonLukeminen
-  
      val nuottejaVaarin = Buffer("t1-", "d3-", "f",  "p", "1c", "2f", "f2f2", "f2f", "f2g----", "hb22----", "c11", "d#b", "db#","b#", 
-         "ddd", "d1d",  "#c", "dd1", "g##", "abb", "dis", "c1.", "c1---.", "c1-----", "c1----." )  // neljä vikaa virheelliset pituudet
+         "ddd", "d1d", "-.", "----", "#c", "dd1", "g##", "abb", "dis", "c1.", "c1---.", "c1-----", "c1------------","c1----." )  // viisi vikaa virheelliset pituudet
          
-     val nuottejaOikein = Buffer("d#1---", "c1-.", "g1-", "H#2", "Gb1----", "Ab1--",  "f#1---", "d2b", "a----#1",
-         "--c1", "----g2", "ab2", "a#2----", "b1", "bb1", "b2", "bb2", "b#2")  
-  
      val taukojaVaarin= Buffer("za", "z#--", "zz", "zz-top", "tauko", " z", "az")     
      
-     val taukojaOikein = Buffer( "z", "z-", "z-.", "z--",  "z--.", "z---", "z----")  // kaikki sallitut pituudet
-         
-     var virheitaHylattavillaNuoteilla, virheitaHyvaksyttavillaNuoteilla, virheitaHylattavillaTauoilla, virheitaHyvaksyttavillaTauoilla = 0
-     virheitaHylattavillaNuoteilla     = laskeVirheet(nuottejaVaarin)
-     virheitaHyvaksyttavillaNuoteilla  = laskeVirheet(nuottejaOikein)
-     virheitaHylattavillaTauoilla      = laskeVirheet(taukojaVaarin)
-     virheitaHyvaksyttavillaTauoilla   = laskeVirheet(taukojaOikein)
-     
-     
-     def laskeVirheet(syotteet: Buffer[String]) = {   
-        var virheita = 0 
-        for (syote <- syotteet) {
-          if (luk.oikeellisuusTesti(syote) != "")
-             virheita += 1
-        }  
-        virheita
-     }
-     
-      assert(virheitaHyvaksyttavillaNuoteilla == 0  &&  virheitaHylattavillaNuoteilla == nuottejaVaarin.size && 
-          virheitaHyvaksyttavillaTauoilla == 0 &&  virheitaHylattavillaTauoilla == taukojaVaarin.size)  
-   } 
-  
+    
+      assert(laskeVirheet(luk, nuottejaVaarin) == nuottejaVaarin.size, "***nuottejaVaarin has a problem")
+      assert(laskeVirheet(luk, taukojaVaarin) == taukojaVaarin.size, "***taukojaVaarin has a problem")  
+} 
 
-// #2 
+it should "find valid note names and lengths" in {
+  
+     val luk = new TiedostonLukeminen
+     val nuottejaOikein = Buffer("d#1---", "c1-.", "g1-", "H#2", "Gb1----", "Ab1--",  "f#1---", "d2b", "a----#1",
+         "--c1", "----g2", "ab2", "a#2----", "b1", "bb1", "b2", "bb2", "b#2")  
+         
+     val taukojaOikein = Buffer( "z", "z-", "z-.", "z--",  "z--.", "z---", "z----")  // kaikki sallitut pituudet
+    
+ 
+      assert(laskeVirheet(luk, nuottejaOikein) == 0 , "***nuottejaOikein has a problem")
+      assert(laskeVirheet(luk, taukojaOikein) == 0, "***taukojaOikein has a problem")  
+}
+  
+ 
 "NuottiPiirturi.lyricsBuffer" should "have right lyrics" in {
   
     val sanat = Buffer("Jaak-", "ko", "kul-", "ta,", "Jaak-", "ko", "kul-", "ta,", "he-", "rää", "jo,", "he-", "rää", "jo.", "Kel-", "lo-", "ja-", "si", "soi-", "ta,", "kel-", "lo-", "ja-", "si", "soi-", "ta,", "pium", "paum", "poum,","pium", "paum", "poum.")
@@ -58,18 +49,18 @@ class NTest extends FlatSpec with Matchers {
     val piirturi = new NuottiPiirturi(luk)
     piirturi.execute()
     
-    println("piirturi.lyricsBuffer: " + piirturi.lyricsBuffer.size)
-    println("sanat.size" + sanat.size)
+    assertResult(sanat.size){  
+        piirturi.lyricsBuffer.size
+    }
     
     for (i <-0 until sanat.size) {
-        val success = sanat(i).equals(piirturi.lyricsBuffer(i))
-        assert(success && sanat.size == piirturi.lyricsBuffer.size) // jälkimmäinen ehto tarvitaan tarkistamaan ettei pari.kuvan lopussa ole jotain ylimääräistä
+        assert( sanat(i).equals(piirturi.lyricsBuffer(i)) ) 
     }  
   
 }
 
 
- // #3
+
 "NeljasosaNuotti" should "have right nuppi, nimiMapissa, etumerkki and extraetumerkki" in {
   
      val neljasOsa = new NeljasosaNuotti("c#2")
@@ -77,7 +68,7 @@ class NTest extends FlatSpec with Matchers {
    
 }
 
-// #4
+
 "KahdeksasosaPari" should "draw eight note couple stems down and ignore second flat" in {
     
     var kuva = Buffer[String]()	
@@ -115,7 +106,7 @@ class NTest extends FlatSpec with Matchers {
 } 
 
 
- // #5
+
 "Pisteellinen NeljasosaNuotti" should "draw dotted quarter note stem up" in {
       
       var odotettu = Buffer[String]()	
@@ -145,17 +136,25 @@ class NTest extends FlatSpec with Matchers {
 
 
 
- // #6
-"TiedostonLukeminen.kasitteleKappaleenNimiJaTahtilaji()" should "find tahtilaji and kappaleenNimi" in {
+
+"TiedostonLukeminen.kasitteleKappaleenNimiJaTahtilaji()" should "find tahtilaji and kappaleenNimi when both hash-tagged in inputfile" in {
   
       val luk = new TiedostonLukeminen()
       luk.lueTiedosto("kalevala")
       
-       assert(luk.kappaleenNimi == " Kalevala - kuudestoista runo (ote)" && luk.tahtilaji == "5")
+      assert(luk.kappaleenNimi == " Kalevala - kuudestoista runo (ote)", "***kappaleenNimi-muuttuja väärin")
+      assert(luk.tahtilaji == "5", "***tahtilajin pitäisi olla 5 (eli 5/4 määritelty ohjelmassa 5)")
 } 
+
+it should "find tahtilaji and kappaleenNimi when neither hash-tagged in inputfile" in {
+      val luk = new TiedostonLukeminen()
+      luk.lueTiedosto("jaakko")
+      
+      assert(luk.kappaleenNimi == "", "***kappaleenNimi-muuttuja väärin")
+      assert(luk.tahtilaji == "4", "***tahtilajin pitäisi olla oletusarvo eli 4")
+}
  
 
- // #7
 "Viivasto.kappale" should "have Title + 2 staffs" in {
   
       val luk = new TiedostonLukeminen()
@@ -170,8 +169,7 @@ class NTest extends FlatSpec with Matchers {
  
 
 
-// #8
-"NuottiData and NuottiDataParitettu" should "have right info in them" in {
+"NuottiData and NuottiDataParitettu" should "be of right length" in {
   // tutkitaan nuottidatan säilyttäjiä, molemmat tyyppiä Buffer[ViivastolleLaitettava]
   // NuottiDataParitettua ei voi luoda ennen NuottiData:n luontia. Kätevää tutkia molempia samalla.
   
@@ -184,8 +182,14 @@ class NTest extends FlatSpec with Matchers {
       
       assert(piirturi.nuottiData.size== 16, "***nuottiDatan pituus ei ollut oikein")
       assert(piirturi.nuottiDataParitettu.size== 10, "***nuottiDataParitettu pituus ei ollut oikein")
+}      
+
+it should "have right lengths" in {
       
-      
+      val luk = new TiedostonLukeminen()
+      luk.lueTiedosto("kahdeksasosia")
+      val piirturi = new NuottiPiirturi(luk)
+      piirturi.execute()
       for(nuottiTaiTauko <- piirturi.nuottiData)
         assert(nuottiTaiTauko.pituus == 0.5, "***nuottiDatassa kaikkien elementtien pituus pitäisi olla 0.5")
         
@@ -193,7 +197,15 @@ class NTest extends FlatSpec with Matchers {
       val pariDatanPituudet = Buffer(1.0, 1.0, 1.0, 1.0, 0.5, 0.5, 1.0, 1.0, 0.5, 0.5)  
       for(i <- 0 until piirturi.nuottiDataParitettu.size)
         assert(piirturi.nuottiDataParitettu(i).pituus == pariDatanPituudet(i), "***nuottiDataParitettu: pituusvirhe")  
-      
+}      
+
+it should "have right hights(=note names)" in {
+  
+      val luk = new TiedostonLukeminen()
+      luk.lueTiedosto("kahdeksasosia")
+      val piirturi = new NuottiPiirturi(luk)
+      piirturi.execute()
+        
       val nuottiDatanKorkeudet = Buffer("c#1", "d#1", "e#1",  "f#1", "g#1", "a#1", "h#1", "c#2", "z", "cb2", "db2", "eb2", "fb2", "gb2", "ab2", "b2" )  
       for(i <- 0 until piirturi.nuottiData.size)
          piirturi.nuottiData(i) match{
@@ -216,9 +228,8 @@ class NTest extends FlatSpec with Matchers {
          }
 }    
 
+    
 
-     
-//#9
 "TiedostonLukeminen.tarkistaVirheet() (as stub)" should "find 3 syntax errors(= wrongly formulated note data) in file '3errors'" in {
      /*
        Simuloidaan käyttäjän virheidenkorjausprosessia. Ensin annetaan syöte, jossa on 3 syntaksivirhettä 
@@ -244,7 +255,7 @@ class NTest extends FlatSpec with Matchers {
      assert(lukStub.stubMoneskokerta == 3, "lueTiedosto()-metodia kutsuttiin 4 kertaa")
 }           // stubMoneskokerta alkuarvo oli 0 => arvo 3 = 4.kutsukerta
    
-//#10
+
 "TiedostonLukeminen.loytyykoInputHakemistosta" should "give false when file not found and true otherwice" in {
     val luk = new TiedostonLukeminen
      
@@ -255,7 +266,7 @@ class NTest extends FlatSpec with Matchers {
 }
 
 
-//#11
+
 "UI.kayttajaValitseeMIDIPatchin() (as stub)" should "accept user key presses 1-7 and ENTER, nothing else" in {
  
      /* alkuperäinen koodi luokassa UI:
@@ -266,33 +277,24 @@ class NTest extends FlatSpec with Matchers {
      */
       
    // stubina, case 1, jossa käyttäjä syöttää 2 hylättävää ja kolmantena hyväksyttävän arvon:  
-     var i = 0;  var MIDIPatch = "alkuarvo"
-      MIDIPatchinValinta( Array("8", "11", "3"))   // "3" on hyväksyttävä arvo
+      var MIDIPatch = "alkuarvo"
+      MIDIPatch = MIDIPatchinValinta(Array("8", "11", "3"), MIDIPatch)   // "3" on hyväksyttävä arvo
       assert (MIDIPatch == "3", "käyttäjän syoteSekvenssi 1:n jälkeen MIDIPatch pitäisi olla 3")   
      
    // case 2:   käyttäjä painaa ENTER (=ei halua kuunnella kappaletta)
-      i = 0; MIDIPatch = "alkuarvo"
-      MIDIPatchinValinta(Array(""))   
+      MIDIPatch = "alkuarvo"
+      MIDIPatch = MIDIPatchinValinta(Array(""), MIDIPatch)   
       assert (MIDIPatch == "", "käyttäjän syoteSekvenssi2:n jälkeen MIDIPatch pitäisi olla tyhjä merkkijono eli painettiin ENTER")   
      
-    // case 3: simuloi tilannetta, jossa pelkkiä virheellisiä syötteitä "loputtomasti", i kasvaa Array:n indeksin ulkopuolelle, koska while-looppi vain pyörii
-       i = 0; MIDIPatch = "alkuarvo"
+    // case 3: simuloi tilannetta, jossa pelkkiä virheellisiä syötteitä "loputtomasti", i kasvaa Array:n pituuden ulkopuolelle, koska while-looppi vain pyörii
+      MIDIPatch = "alkuarvo"
        intercept[IndexOutOfBoundsException] { 
-           MIDIPatchinValinta(Array("9", "-1", "t", "0", " ", "77", "moi", "#", "."))
-       }
-       assert (MIDIPatch == ".", "käyttäjän syötesekvenssin jälkeen muistiin jää Array:n vika arvo")
-       
-       
-       def MIDIPatchinValinta(sekvenssi: Array[String]) = {
-           do {
-             MIDIPatch = sekvenssi(i)
-             i += 1
-           } while (!"1234567".contains(MIDIPatch) ) 
+           MIDIPatch= MIDIPatchinValinta(Array("9", "-1", "t", "0", " ", "77", "moi", "#", "."), MIDIPatch)
        }
   }
      
 
-//#12
+
 "simpleMIDIPlayerAdapter" should "transform nuottiData to correct Buffer[(Buffer[Int], Double)]" in {
   
       val luk = new TiedostonLukeminen()
@@ -308,7 +310,7 @@ class NTest extends FlatSpec with Matchers {
  						<g2,c2> a2 g2 f2 e2- c2- 	<g2,c2> a2 g2 f2 e2- c2-
  						c2- g1- c2-. z 						c2- g1- c2-- 
  			* 
- 			*   huom! koodi järjestää soinnut nousevaan järjestykseen .sorted, eli <e2-, c2-> onkin (72,76)   
+ 			*   huom! koodi stää soinnut nousevaan stykseen .sorted, eli <e2-, c2-> onkin (72,76)   
  			*   tauon olen määritellyt MIDI-korkeudeksi 0 */ 
       val jaakkoKullanMIDINumbers= Array(Array(72),Array(74),Array(76),Array(72),Array(72),Array(74),Array(76),Array(72),  
           Array(72,76),Array(77),Array(79),Array(0),Array(72,76),Array(77),Array(79),Array(0),  
@@ -318,16 +320,17 @@ class NTest extends FlatSpec with Matchers {
       for(i <- 0 until MIDIAdapter.nuotitJaPituudet.size){ 
           for (korkeus<- 0 until MIDIAdapter.nuotitJaPituudet(i)._1.size){  // Tuple._1 = Buffer[Int]  eventin korkeus tai korkeudet soinnun tapauksessa
              assert(MIDIAdapter.nuotitJaPituudet(i)._1(korkeus) == jaakkoKullanMIDINumbers(i)(korkeus), "***virhe : " + (i+1) + ". eventti, " + (korkeus+1) + ". korkeus eventissä")
-             assert(MIDIAdapter.nuotitJaPituudet(i)._2 == n.nuottiData(i).pituus, "pituusongelmaa pukkasi: "+ (i+1) + ". eventti") // Tuple._2 = Double, sama kuin nuottiolion pituus-kenttä
+             assert(MIDIAdapter.nuotitJaPituudet(i)._2 == n.nuottiData(i).pituus, "***pituusongelmaa pukkasi: "+ (i+1) + ". eventti") // Tuple._2 = Double, sama kuin nuottiolion pituus-kenttä
           }   
-         
       }    
 }
 
 
-//#13
+
 "The program" should "produce song 'Flight of the Bumble Bee' similarily as in correctly printed file 'bumble.txt'" in {
-  // tämä testi on ylläpitoa varten, eli järjestelmätesti: 
+  // tämä testi on ylläpitoa varten, eli integraatiotesti, monien ohjelman osien tulee toimia oikein, jotta oikea output saadaa aikaan. 
+  // only excludes classes UI, SimpleMIDIPlayer and SimpleMIDIAdapter, and some of Note Values, which are tested in the following test
+  
   // musiikin maisterin koulutuksella ja silmilläni olen todennut tiedoston bumble.txt oikeaksi.
   // jos ohjelmaa tulevaisuudessa muutetaan, voi tämä testi lakata toimimasta.
   
@@ -341,13 +344,16 @@ class NTest extends FlatSpec with Matchers {
          
       
 }
-//#14
-it should "produce testfile 'allViivastolleLaitettavaClasses' similarily as in correctly printed file 'all.txt'" in {
-          // in this test file there are all the different classes that inherit trait ViivastolleLaitettava,
+
+it should "produce test file 'allViivastolleLaitettavaClasses' similarily as in correctly printed file 'all.txt'" in {
+          // in test file there are all the different classes that inherit trait ViivastolleLaitettava,
           // both stem up and down from each type - excluding rests which don't have stems and are always placed in constant height in staff  
+          
           // class Sointu is tested with all the note values as well, and 2-13 notes in chord
-          // And still, the last row of music in all.txt is correct in terms of program logic. It cannot find place for bar line, since 
-          // time signature is 4/4 and no note ends on 4, the closest is 4 and half beats. So no bar line there, which is also good sign for the user that the rhythm he/she thought probably is wrong
+  
+          // The last row of music in all.txt is correct in terms of program logic. It cannot find place for bar line, since 
+          // time signature is 4/4 and no note ends on 4, the closest is 4 and half beats. So no bar line is possible to draw, 
+          // which is actually good indicator for the user that the rhythm he/she thought probably is wrong, or that she/he made an error in input file by accident
       val luk = new TiedostonLukeminen()
       luk.lueTiedosto("allViivastolleLaitettavaClasses")   // (kansiosta input_virheita)
       val nuottipiirturi = new NuottiPiirturi(luk)
@@ -371,7 +377,20 @@ it should  "  more letters in syllables than print area" in {
   
 }
 
+"TiedostonLukeminen" should "exit with empty file and with empty note data" in {
+  
+}
+
 ////////   A P U M E T O D I T :    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+def laskeVirheet(luk: TiedostonLukeminen, syotteet: Buffer[String]) = {   
+        var virheita = 0 
+        for (syote <- syotteet) {
+          if (luk.oikeellisuusTesti(syote) != "")
+             virheita += 1
+        }  
+        virheita
+     }
 
 def assertKuva(odotettuKuva: Buffer[String], nuotinKuva: Buffer[String]) = {
   
@@ -383,6 +402,16 @@ def assertKuva(odotettuKuva: Buffer[String], nuotinKuva: Buffer[String]) = {
         assert(odotettuKuva(i).equals(nuotinKuva(i)))
       }     
 }
+
+def MIDIPatchinValinta(sekvenssi: Array[String], MIDIPatchParametrina:String) = {
+           var i = 0;  
+           var MIDIPatch = MIDIPatchParametrina
+           do {
+             MIDIPatch = sekvenssi(i)
+             i += 1
+           } while (!"1234567".contains(MIDIPatch) )
+       MIDIPatch      
+       }
 
 
 def assertFileVersusKappale(ohjelmanGeneroimakappale: Buffer[Buffer[String]], tiedostostaLuettuKapple: Source) = {
