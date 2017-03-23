@@ -96,7 +96,7 @@ class TiedostonLukeminen {
          for (i <- 0 until nuottiDataRiveina.size) {
            
                 val ylimaaraisetValilyonnitPois = nuottiDataRiveina(i).trim().replaceAll(" +", " ");
-                val splitattuRivi = ylimaaraisetValilyonnitPois.replaceAll(", " , ",").replaceAll(" ," , ",").replaceAll("< " , "<").replaceAll(" >" , ">").replaceAll("<>", "").replaceAll("><", "> <").replaceAll(" -", "-").split(" ") 
+                val splitattuRivi = ylimaaraisetValilyonnitPois.replaceAll(", " , ",").replaceAll(" ," , ",").replaceAll("<>", "").replaceAll("< " , "<").replaceAll(" >" , ">").replaceAll("><", "> <").replaceAll(" -", "-").split(" ") 
                 
                 for (alkio <- splitattuRivi) {
                    if(virheitaNolla){

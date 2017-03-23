@@ -7,31 +7,24 @@ class UI {
   
     var tiedostonNimi = ""
     var MIDIPatch = ""
-    val lukija = new TiedostonLukeminen
-    
-    
-    lukija.helppiTeksti()
-    lukija.listaaTiedostot()
-    kayttajaValitseeTiedoston()
-    lukija.lueTiedosto(tiedostonNimi.trim())
-    kayttajaValitseeMIDIPatchin()
-    val n = new NuottiPiirturi(lukija)
-    n.execute()
-    if(!MIDIPatch.equals(""))  // kuunnellaan  
-         new simpleMIDIPlayerAdapter(n.nuottiData, MIDIPatch.toInt, n.viivasto.kappale, lukija.tahtilaji.toInt)
-    else {        // käyttäjä valitsi että ei kuunnella
-         n.viivasto.kappale.printtaaRuudulleIlmanAjastusta()
-    }  
-    kayttajaValitseeTiedostonTallennusnimen()
-    
-    //// The End ////
     
     
     
-    def kayttajaValitseeTiedoston() = {
+    
+    def kayttajaValitseeTiedoston(lukija: TiedostonLukeminen) = {
         do {
            tiedostonNimi = readLine("\n\nMinkä nimisen tiedoston haluat nuoteiksi? Valitse ylläolevista. ")
-        } while (!lukija.loytyykoInputHakemistosta(tiedostonNimi.trim()))      
+        } while (!lukija.loytyykoInputHakemistosta(tiedostonNimi.trim()))   
+        
+    }
+    
+    def valitetaanKayttajalleTyhjastaNuottiDatasta(lukija: TiedostonLukeminen) = {
+      do{
+          if(lukija.nuottiAlkiot.isEmpty)     // case: tiedostossa on dataa, jota yritetään tulkita nuoteiksi/soinnuiksi, esim. pelkkä <>, eli ei ole tyhjä tiedosto. Mutta lopputulos on: ei saatu yhtään nuottia aikaiseksi
+        println("\nValitsemassasi tiedostossa ei ollut yhtään hyväksyttävää nuottia. Ei voi piirtää.\n" +
+                 "Valitse jokin toinen tiedosto tai muokkaa äsken valitsemaasi tiedostoa.\n\n")
+        }while(!lukija.nuottiAlkiot.isEmpty)  
+        
     }
     
     
@@ -45,8 +38,8 @@ class UI {
     def kayttajaValitseeTiedostonTallennusnimen() = {
           val nimi = readLine("\nMillä nimellä talletetaan? Pelkkä ENTER ei tallenna mitään.")
           val kohdetiedosto = new PrintWriter("output/" + nimi+".txt")
-          new TiedostonTallennus(n.viivasto.kappale, kohdetiedosto)    
           println("muista painaa F5, jotta tiedosto päivittyy Package Explorerissa.")
+          kohdetiedosto
     }
     
 }
