@@ -7,11 +7,7 @@ object test extends App{
      
     
     lukija.helppiTeksti()
-    
-    lukija.listaaTiedostot()
-    ui.kayttajaValitseeTiedoston(lukija)
-    lukija.lueTiedosto(ui.tiedostonNimi.trim())
-    ui.valitetaanKayttajalleTyhjastaNuottiDatasta(lukija)
+    kelvollisenTiedostonKysyminenJaTarkistusLoop()
     ui.kayttajaValitseeMIDIPatchin()
    
                  
@@ -26,6 +22,17 @@ object test extends App{
     
     new TiedostonTallennus(n.viivasto.kappale, ui.kayttajaValitseeTiedostonTallennusnimen())    
     
-    //// The End ////
+    //// Happy End ////
+    
+    def kelvollisenTiedostonKysyminenJaTarkistusLoop():Unit = {
+       lukija.listaaTiedostot()
+       ui.kayttajaValitseeTiedoston(lukija)
+       lukija.lueTiedosto(ui.tiedostonNimi.trim())
+       println("lukija.nuottiAlkiot: " +lukija.nuottiAlkiot.size)
+       if(lukija.lukemisenJalkeenEiNuottiDataa || lukija.nuottiAlkiot.isEmpty ){   // 
+          println("\nvalitsemassasi tiedostossa ei ollut nuottidataa. Valitse toinen tiedosto tai muokkaa äsken valitsemaasi.\n\n")
+          kelvollisenTiedostonKysyminenJaTarkistusLoop()
+       }   
+    }
   
 }  

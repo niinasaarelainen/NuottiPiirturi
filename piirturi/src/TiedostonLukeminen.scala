@@ -22,7 +22,7 @@ class TiedostonLukeminen {
   
   var ekaKerta = true
   var tahtilajiOnJoLuettu = false
-    
+  var lukemisenJalkeenEiNuottiDataa =  false  
  
  
   
@@ -60,6 +60,11 @@ class TiedostonLukeminen {
      this.nuottiAlkiot = Array[String]() 
      val kayttajanValitsemaTiedosto = Source.fromFile(inputhakemistonNimi + tiedostonNimi)
      tahtilajiOnJoLuettu = false
+     lukemisenJalkeenEiNuottiDataa =  false  
+     ekaKerta = true
+     this.tahtilaji = "4"
+     this.kappaleenNimi = ""   // joudutaan alustamaan uudestaan, mutten voi jäädä vanha nimi tiedostosta jossa ei ollut dataa
+    
       
      try {
         for (rivi <- kayttajanValitsemaTiedosto.getLines) {
@@ -71,13 +76,16 @@ class TiedostonLukeminen {
           
      if (this.inputFromFile.size != 0){
          kasitteleTunnisteet(this.inputFromFile) 
-         if(nuottiDataRiveina.size ==0) {println("\n\nei nuottidataa, ei tehdä mitään."); System.exit(1)}
+         if(nuottiDataRiveina.size ==0) {        // case: esim pelkkä nimi, mutta ei nuotteja
+             lukemisenJalkeenEiNuottiDataa= true 
+             return}
          else if(ekaKerta) tarkistaVirheet()     // loput virheidentarkistukset do while-loopissa, kutsu rivillä 94
      }
      else {
-       println("\n\ntyhjästä tiedostosta ei voi tehdä nuotteja")
-       System.exit(1)
+         lukemisenJalkeenEiNuottiDataa= true  // case: täysin tyhjä file
+         return
      }
+     
   }   
   
   
