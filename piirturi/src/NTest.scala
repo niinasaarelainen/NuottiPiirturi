@@ -434,6 +434,11 @@ it should "#case4: use of tabulator" in {
       assert(luk.nuottiAlkiot.size == 6, "***syötetiedostossa pitäisi olla 6 nuottia/sointua")  
 }
 
+"NuottiPiirturi.tutkiEtumerkit()" should "give out right accidentals" in {
+      val luk = new TiedostonLukeminen()
+      luk.lueTiedosto("_testAccidentals")
+}
+
 /* 
 // TODO ScalaTest jää "Play"-tilaan eli ei pääse testin loppuun, liittynee siihen että ohjelmassa ei voi 
  * esim konsolille kirjoittaa mitään System.exit(1):n jälkeen

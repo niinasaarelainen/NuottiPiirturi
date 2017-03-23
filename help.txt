@@ -1,3 +1,7 @@
+
+O H J E E T :
+-------------
+
 Ihan ensiksi luo uusi tiedosto input -hakemistoon.
 
 Sitten voit ruveta kirjoittamaan nuotteja G-avaimelle. Alin mahdollinen ääni on keski-c, ylin kaksiviivainen h.
@@ -79,5 +83,4 @@ Ylimääräisiä kommentteja voi tehdä tyyliin
 # kertosäe       tai   
 #sopisikohan tähän paremmin c2?
 
-________________________________________________________________________________________________________________
-____________________________________TIEDOSTOJA:_________________________________________________________________
+_________________________________________________________________________________________________

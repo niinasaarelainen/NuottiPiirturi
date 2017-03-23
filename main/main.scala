@@ -7,21 +7,26 @@ object test extends App{
      
     
     lukija.helppiTeksti()
-    kelvollisenTiedostonKysyminenJaTarkistusLoop()
-    ui.kayttajaValitseeMIDIPatchin()
-    val n = new NuottiPiirturi(lukija)
- println(n.inputBuffer.size)
-    n.execute()
-    if(!ui.MIDIPatch.equals(""))  // kuunnellaan  
-         new simpleMIDIPlayerAdapter(n.nuottiData, ui.MIDIPatch.toInt, n.viivasto.kappale, lukija.tahtilaji.toInt)
-    else {        // käyttäjä valitsi että ei kuunnella
-         n.viivasto.kappale.printtaaRuudulleIlmanAjastusta()
-    }  
+    ohjelmanRunko()
     
-    new TiedostonTallennus(n.viivasto.kappale, ui.kayttajaValitseeTiedostonTallennusnimen())    
-    System.exit(0)
+   
     
     //// Happy End ////
+     
+    def  ohjelmanRunko():Unit = {
+        kelvollisenTiedostonKysyminenJaTarkistusLoop()
+        ui.kayttajaValitseeMIDIPatchin()
+        val n = new NuottiPiirturi(lukija)
+        println(n.inputBuffer.size)
+        n.execute()
+        if(!ui.MIDIPatch.equals(""))  // kuunnellaan  
+            new simpleMIDIPlayerAdapter(n.nuottiData, ui.MIDIPatch.toInt, n.viivasto.kappale, lukija.tahtilaji.toInt)
+        else         // käyttäjä valitsi että ei kuunnella
+            n.viivasto.kappale.printtaaRuudulleIlmanAjastusta()
+        new TiedostonTallennus(n.viivasto.kappale, ui.kayttajaValitseeTiedostonTallennusnimen())   
+        
+        valitseToiminto()
+    }    
     
     def kelvollisenTiedostonKysyminenJaTarkistusLoop():Unit = {
        lukija.listaaTiedostot()
@@ -32,6 +37,15 @@ object test extends App{
           println("\nvalitsemassasi tiedostossa ei ollut nuottidataa. Valitse toinen tiedosto tai muokkaa äsken valitsemaasi.\n\n")
           kelvollisenTiedostonKysyminenJaTarkistusLoop()
        }   
+    }
+    
+    def valitseToiminto():Unit = {
+         val valinta = ui.mitaTehdaanSeuraavaksi()
+         valinta match{
+            case ""  => System.exit(0)
+            case "1" => lukija.helppiTeksti(); valitseToiminto()
+            case "2" => ohjelmanRunko()
+         }      
     }
   
 }  

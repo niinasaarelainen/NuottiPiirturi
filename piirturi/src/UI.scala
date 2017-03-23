@@ -32,4 +32,13 @@ class UI {
         kohdetiedosto
     }
     
+    def mitaTehdaanSeuraavaksi() = {
+        var valinta = ""
+        do {
+           valinta = readLine("\n\nMitä tehdään seuraavaksi? \nValitse 1 tai 2 ja paina ENTER. Pelkkä ENTER lopettaa ohjelman.\n" +
+           "ENTER= lopetetaan tältä erää,   1= ohjeet,   2= listaa kappaleet ja nuotinna  ")
+        } while (!"12".contains(valinta))
+        valinta  
+    }
+    
 }
