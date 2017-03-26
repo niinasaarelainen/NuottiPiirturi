@@ -94,7 +94,7 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
         }   // iso else: ei-sointu.
         
         if (iskujaMennyt == tahtilaji) {
-           println("-----------------")
+        //   println("-----------------")
            iskujaMennyt = 0.0  
            tahdinAikaisetEtumerkit = Buffer[String]()
         }
@@ -120,7 +120,7 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
    
    def tutkiEtumerkit(nuotinNimi: String): String = {  
      
-      println(nuotinNimi + ", " + tahdinAikaisetEtumerkit)
+     // println(nuotinNimi + ", " + tahdinAikaisetEtumerkit)
      
       // tutkitaan ylennettyjä ja alennettuja nuotteja
       if(nuotinNimi.contains("#") || nuotinNimi.contains("b")){

@@ -46,6 +46,7 @@ abstract class Nuotti extends ViivastolleLaitettava {
      def nimiMapissa: String
      def etumerkki: String
      def extraetumerkkiDef: String
+     def getExtraetumerkki: String
        
      def piirraAlaApuviiva() = {                       
            viivasto(y("c1")) = viivasto(y("c1")).substring(0, 1) + "--" +  viivasto(y("c1")).substring(4, 6) + "--" + viivasto(y("c1")).substring(7)         
