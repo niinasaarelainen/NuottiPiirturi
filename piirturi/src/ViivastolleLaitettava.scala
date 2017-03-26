@@ -96,14 +96,8 @@ class Sointu(aanet: Buffer[ViivastolleLaitettava]) extends ViivastolleLaitettava
          //ala-apuviiva:
          if(nimiMapissa == "c1")  viivasto(y("c1")) = viivasto(y("c1")).substring(0, 1) + "--" +  viivasto(y("c1")).substring(4, 6) + "--" + viivasto(y("c1")).substring(7)         
          
-         //yläapuviiva:
-         if (!ylospain && Array( "h2", "b2", "bb2").contains(nimiMapissa))
-              viivasto(y("a2")) = viivasto(y("a2")).substring(0, 1) + "--" +  viivasto(y("a2")).substring(4, 5) + "--" + viivasto(y("a2")).substring(6)         
-         if (ylospain && Array( "h2", "b2", "bb2").contains(nimiMapissa))
-              viivasto(y("a2")) = viivasto(y("a2")).substring(0, 2) + "----" + viivasto(y("a2")).substring(6)         
-         if("a2" == nimiMapissa)
-              viivasto(y("a2")) = viivasto(y("a2")).substring(0, 1) + "--" +  viivasto(y("a2")).substring(4, 6) + "--"   + viivasto(y("a2")).substring(7)         
-
+         ylaApuViivaSoinnuissa(nimiMapissa)
+        
          // etumerkki:     
          if(etumerkki.size == 0 && extraetumerkki.size == 0)  // ei etumerkkiä
             viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 3) + nuppi + viivasto(y(nimiMapissa)).substring(5)  
@@ -120,6 +114,14 @@ class Sointu(aanet: Buffer[ViivastolleLaitettava]) extends ViivastolleLaitettava
       viivasto          
     }
      
+    def ylaApuViivaSoinnuissa(nimiMapissa: String) = {
+       if (!ylospain && Array( "h2", "b2", "bb2").contains(nimiMapissa))
+              viivasto(y("a2")) = viivasto(y("a2")).substring(0, 1) + "--" +  viivasto(y("a2")).substring(4, 5) + "--" + viivasto(y("a2")).substring(6)         
+         if (ylospain && Array( "h2", "b2", "bb2").contains(nimiMapissa))
+              viivasto(y("a2")) = viivasto(y("a2")).substring(0, 2) + "----" + viivasto(y("a2")).substring(6)         
+         if("a2" == nimiMapissa)
+              viivasto(y("a2")) = viivasto(y("a2")).substring(0, 1) + "--" +  viivasto(y("a2")).substring(4, 6) + "--"   + viivasto(y("a2")).substring(7)         
+    }
      
      def piirraVarsiJaMahdollisestiVaka(mista: Int, mihin:Int ,ylospain:Boolean) = {                                  ///////// @ Sointu
             if(ylospain){
@@ -172,7 +174,6 @@ class KokoNuotti(nuotinNimi: String, extraetumerkki: String = "") extends Nuotti
       }
      
       def kuva = {
-         
          piirraNuppi()
          viivasto
       }

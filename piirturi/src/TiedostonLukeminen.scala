@@ -2,6 +2,7 @@
 
 import scala.io.Source
 import java.io._
+import scala.io.StdIn._
 import scala.collection.mutable.Buffer
 
 
@@ -30,6 +31,7 @@ class TiedostonLukeminen {
   
   def listaaTiedostot() = {
     var montakoNimeaRiville = 0
+    println("\n")
     for (tiedosto <- inputhakemisto.listFiles()) {     
        if (tiedosto.isFile) {
           print(tiedosto.getName + '\t')
@@ -265,7 +267,7 @@ class TiedostonLukeminen {
               else if(filtteredNote.tail.contains("#b") ||  filtteredNote.tail.contains("b#"))    
                   return "nuotissa on ylennys- ja alennusmerkki"   
               else if( !(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   
-                 return "sallitut oktaavialat ovat 1 ja 2"   
+                 return "nuotissa tulee olla oktaaviala: 1 ja 2"   
               else if(filtteredNote.size == 3 && !(filtteredNote.tail.contains("#") || filtteredNote.tail.contains("b")))   
                       return "väärä formaatti. Muistathan syntaksin: esim. alennettu e on Eb, ei es"   
               else if(filtteredNote.size > 3)

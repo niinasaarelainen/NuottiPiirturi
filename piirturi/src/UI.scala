@@ -36,7 +36,7 @@ class UI {
         var valinta = ""
         do {
            valinta = readLine("\n\nMitä tehdään seuraavaksi? \nValitse 1 tai 2 ja paina ENTER. Pelkkä ENTER lopettaa ohjelman.\n" +
-           "ENTER= lopetetaan tältä erää,   1= ohjeet,   2= listaa kappaleet ja nuotinna  ")
+             "1= ohjeet,  2= listaa kappaleet ja nuotinna,  ENTER= lopetetaan tältä erää, ")
         } while (!"12".contains(valinta))
         valinta  
     }

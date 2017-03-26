@@ -16,7 +16,7 @@ class NTest extends FlatSpec with Matchers {
 "TiedostonLukeminen.oikeellisuusTesti()" should "find non-valid note names and lengths" in {
      
      val luk = new TiedostonLukeminen
-     val nuottejaVaarin = Buffer("t1-", "d3-", "f",  "p", "1c", "2f", "f2f2", "f2f", "f2g----", "hb22----", "c11", "d#b", "db#","b#", 
+     val nuottejaVaarin = Buffer("t1-", "d3-", "f", "dc1", "p", "1c", "2f", "f2f2", "f2f", "f2g----", "hb22----", "c11", "d#b", "db#","b#", 
          "ddd", "d1d", "-.", "----", "#c", "dd1", "g##", "abb", "dis", "c1.", "c1---.", "c1-----", "c1------------","c1----." )  // viisi vikaa virheelliset pituudet
          
      val taukojaVaarin= Buffer("za", "z#--", "zz", "zz-top", "tauko", " z", "az")     
