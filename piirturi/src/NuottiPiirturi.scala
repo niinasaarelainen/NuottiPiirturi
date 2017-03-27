@@ -18,8 +18,7 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
    // P Ä Ä M E T O D I: 
    def execute() = {
        nuottiData = kasitteleNuottiTieto(inputBuffer, nuottiData)    
-       if(lukija.lyriikkadata.size != 0)
-           kasitteleLyriikat() 
+       if(lukija.lyriikkadata.size != 0) kasitteleLyriikat() 
        tehdaanKahdeksasosaParit()
               
        this.viivasto = new Viivasto(nuottiDataParitettu, lyricsBuffer, lukija.tahtilaji )
@@ -112,9 +111,7 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
             ok = 0- sointuBuffer.size +1    
             nuottiData += new Sointu(kasitteleNuottiTieto(sointuBuffer, viivastolleLaitettavaBuffer) ) 
    }
-   
-   
-   palautetaan   // tätä tarvitaan sointuja muodostettaessa
+    palautetaan   // tätä tarvitaan sointuja muodostettaessa
    } 
   
    
@@ -165,8 +162,6 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
                 tahdinAikaisetEtumerkit -= "b2"
                 return "§"  
       }  
-                           
-      
       
       return ""        // muutoin ei tarvita puskuritoimenpiteitä tai extraetumerkkiä
    }

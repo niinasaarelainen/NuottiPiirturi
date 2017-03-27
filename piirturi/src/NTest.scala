@@ -15,10 +15,15 @@ class NTest extends FlatSpec with Matchers {
     val nuottejaVaarin = Buffer("t1-", "d3-", "f", "dc1", "p", "1c", "2f", "f2f2", "f2f", "f2g----", "hb22----", "c11", "d#b", "db#", "b#",
       "ddd", "d1d", "-.", "----", "#c", "dd1", "g##", "abb", "dis", "c1.", "c1---.", "c1-----", "c1------------", "c1----.") // viisi vikaa virheelliset pituudet
 
-    val taukojaVaarin = Buffer("za", "z#--", "zz", "zz-top", "tauko", " z", "az")
+    assert(laskeVirheet(luk, nuottejaVaarin)(0)  == nuottejaVaarin.size, "***oikeellisuusTesti claims that " + laskeVirheet(luk, nuottejaVaarin)(2) + " is non-valid input, when it isn't")
+   }
+  
+  it should "find non-valid rest names and lengths" in {
 
-    assert(laskeVirheet(luk, nuottejaVaarin) == nuottejaVaarin.size, "***nuottejaVaarin has a problem")
-    assert(laskeVirheet(luk, taukojaVaarin) == taukojaVaarin.size, "***taukojaVaarin has a problem")
+    val luk = new TiedostonLukeminen
+    val taukojaVaarin = Buffer("za", "z#--", "zz", "zz-top", " z", "tauko", "az")
+
+     assert(laskeVirheet(luk, taukojaVaarin)(0) == taukojaVaarin.size, "***oikeellisuusTesti claims that " + laskeVirheet(luk, taukojaVaarin)(2)+ " is non-valid input, when it isn't")
   }
 
   it should "find valid note names and lengths" in {
@@ -27,12 +32,18 @@ class NTest extends FlatSpec with Matchers {
     val nuottejaOikein = Buffer("d#1---", "c1-.", "g1-", "H#2", "Gb1----", "Ab1--", "f#1---", "d2b", "a----#1",
       "--c1", "----g2", "ab2", "a#2----", "b1", "bb1", "b2", "bb2", "b#2")
 
+    assert(laskeVirheet(luk, nuottejaOikein)(0) == 0, "***oikeellisuusTesti claims that " + laskeVirheet(luk, nuottejaOikein)(1)+" is valid input, when it isn't")
+  }
+  
+  it should "find valid rest names and lengths" in {
+
+    val luk = new TiedostonLukeminen
     val taukojaOikein = Buffer("z", "z-", "z-.", "z--", "z--.", "z---", "z----") // kaikki sallitut pituudet
 
-    assert(laskeVirheet(luk, nuottejaOikein) == 0, "***nuottejaOikein has a problem")
-    assert(laskeVirheet(luk, taukojaOikein) == 0, "***taukojaOikein has a problem")
+    assert(laskeVirheet(luk, taukojaOikein)(0) == 0, "***oikeellisuusTesti claims that " + laskeVirheet(luk, taukojaOikein)(1) + " is valid input, when it isn't")
   }
 
+  
   "NuottiPiirturi.lyricsBuffer" should "have right lyrics" in {
 
     val sanat = Buffer("Jaak-", "ko", "kul-", "ta,", "Jaak-", "ko", "kul-", "ta,", "he-", "rää", "jo,", "he-", "rää", "jo.", "Kel-", "lo-", "ja-", "si", "soi-", "ta,", "kel-", "lo-", "ja-", "si", "soi-", "ta,", "pium", "paum", "poum,", "pium", "paum", "poum.")
@@ -235,10 +246,16 @@ class NTest extends FlatSpec with Matchers {
     assert(lukStub.stubMoneskokerta == 3, "lueTiedosto()-metodia kutsuttiin 4 kertaa")
   } // stubMoneskokerta alkuarvo oli 0 => arvo 3 = 4.kutsukerta
 
-  "TiedostonLukeminen.loytyykoInputHakemistosta" should "give false when file not found and true otherwice" in {
+  "TiedostonLukeminen.loytyykoInputHakemistosta" should "give false when file not found in directory" in {
     val luk = new TiedostonLukeminen
 
     assert(luk.loytyykoInputHakemistosta("kkk") == false, "valitussa input-hakemistossa ei ole tiedostoa nimeltä \"kkk\"")
+ 
+  }
+  
+  it should "give true when file found in directory" in {
+    val luk = new TiedostonLukeminen
+
     assert(luk.loytyykoInputHakemistosta("§") == true, "valitussa input-hakemistossa on tiedosto nimeltä \"§\"")
 
   }
@@ -322,7 +339,7 @@ class NTest extends FlatSpec with Matchers {
 
     // class Sointu is tested with all the note values as well, and 2-13 notes in chord
 
-    // The last row of music in all.txt is correct in terms of program logic. It cannot find place for bar line, since 
+    // The last row of music in all.txt is correct in terms of program logic. It cannot find place for bar line (one bar has now 8 beats), since 
     // time signature is 4/4 and no note ends on 4, the closest is 4 and half beats. So no bar line is possible to draw, 
     // which is actually good indicator for the user that the rhythm he/she thought probably is wrong, or that she/he made an error in input file by accident
     val luk = new TiedostonLukeminen()
@@ -354,20 +371,20 @@ class NTest extends FlatSpec with Matchers {
   }
 
   it should "cope with more letters in syllables than print area" in {
-    // situation with actually long words or the situation where user has forgotten to make syllables  (should be f.ex for-ward, a-head)
-    val sanat = Buffer("Straight", "forward", "straight", "ahead!!!")
+    // case: actually long words or case: where user has forgotten to make syllables  (should be f.ex for-ward, a-head)
+    val sanat = Buffer("Straight", "forward,", "straight", "ahead!!!")
 
-    // 1/8-note couple has the smallest print area for lyrics: 6  per note
+    // 1/8-note couple has the smallest print area for lyrics: 6 chars per note
     val pari = new KahdeksasosaPari(new KahdeksasosaNuotti("c1"), new KahdeksasosaNuotti("d1")).asInstanceOf[ViivastolleLaitettava]
     var nuottiData = Buffer(pari, pari)
 
-    val v = new Viivasto(nuottiData, sanat, "4")
+    val v = new Viivasto(nuottiData, sanat, "4")  // "4" refers to Time Signature 4/4
     v.piirraNuotit()
     assert(v.unitTestLiitosCounter == 2, "***adding 2 eight couples FAIL")
     assert(v.kappale.kappale(0).last.contains("Straigforwarstraigahead!"), "***wrong lyrics") // joka sanasta 6 ekaa kirjainta
   }
 
-  "TiedostonLukeminen.lueTiedosto__Recovering Badly Formulated Input" should "#case1: too much white space" in {
+  "TiedostonLukeminen.lueTiedosto__Recover Badly Formulated Input" should "#case1: too much white space" in {
     val luk = new TiedostonLukeminen()
     luk.lueTiedosto("_spaces")
 
@@ -400,23 +417,24 @@ class NTest extends FlatSpec with Matchers {
     // didn't do it in case <c1,d1><e1,f1>   =>  must be correscted to  <c1,d1> <e1,f1>
     assert(luk.nuottiAlkiot.size == 6, "***syötetiedostossa pitäisi olla 6 nuottia/sointua")
   }
+  
 
   "NuottiPiirturi.tutkiEtumerkit()" should "give out right accidentals" in {
-    // testing all the cases for how to draw accidentals within a bar. 
-    // testing how extraEtumerkki behaves. That indicates that some extra rule is in hand when drawing or when omit drawing an b, #, §
-  // § = this sign is needed when note is made neutral after being # or b
-    // n =  is my own syntax for a note that is actually # or b but the sign is not drawn win ce it is only necessary to draw an accidental only once in a bar
-    // assuming it is not overruled by an oppisite sign(#, b) or made natural (§)
+    //  testing all the cases for how to draw accidentals within a bar. 
+    //  testing how extraEtumerkki behaves. That indicates that some extra rule is in hand when drawing or when omit drawing an b, #, §
+    //  § = this sign is needed when note is made natural after being # or b, not needed after bar line
+    //  n =  is my own invented syntax for a note that is actually # or b but the sign is not drawn, since it is only necessary to draw an accidental only once in a bar
+    //  assuming it is not overruled by an oppisite sign(#, b) or made natural (§)
     
-                  // 1.bar:      b2  b2    h2  h2  b2 h2    b2 h2   h#2  b2   h2  h#2
-    var extraEtumerkit = Buffer("", "n", "§", "", "", "§", "", "§", "", "", "§", "")   // indeksit 0-11
-         // 2.bar:    //h2 h#2  b2 h2   h2  b2    b2 h#2   b2  h2  h2   b2
-    extraEtumerkit += ("", "", "", "§", "", "", "n", "", "", "§", "", "")  // indeksit 12-23
-    // 3.bar:          h2  b2  h#2 b2 h#2  h2 	 h2   h2  b2 b2 		h#2 h#2
+                 // 1.bar:      b2  b2    h2  h2  b2 h2    b2  h2   h#2  b2   h2  h#2
+    var extraEtumerkit = Buffer("", "n", "§", "", "", "§", "", "§", "", "",  "§", "")   // indeksit 0-11, Time Signature 6/4, thus one bar consists of 12 eigth notes
+         // 2.bar:    //h2 h#2  b2 h2   h2  b2    b2 h#2   b2  h2   h2  b2
+    extraEtumerkit += ("", "", "", "§", "", "",   "n", "", "", "§", "", "")  // indeksit 12-23
+    // 3.bar:          h2  b2  h#2 b2 h#2  h2 	 h2  h2  b2 b2 		 h#2 h#2
      extraEtumerkit += ("", "", "", "", "", "§", "", "", "", "n",  "", "n")  // indeksit 24-35
-    // 4.bar:          ab2 ab2   a2 a2   ab2 a2    a2 ab2    a2 a#2  ab2 a2
+    // 4.bar:          ab2 ab2   a2 a2   ab2 a2    a2 ab2   a2  a#2   ab2 a2
       extraEtumerkit += ("", "n", "§","", "","§",  "", "",  "§", "",  "", "§")  // indeksit 36-47
-    // 5.bar:         a2 a#2  ab2 a2   a2 ab2    ab2 a#2   ab2  a2  a2    a2
+    // 5.bar:         a2 a#2  ab2 a2   a2 ab2    ab2 a#2   ab2  a2   a2  a2
    extraEtumerkit += ("","",  "", "§", "","",    "n", "",  "",  "§", "", "")  // indeksit 48-59
        
     val luk = new TiedostonLukeminen()
@@ -427,16 +445,29 @@ class NTest extends FlatSpec with Matchers {
     for (i <- 0 until nuottipiirturi.nuottiData.size)
       assert(nuottipiirturi.nuottiData(i).asInstanceOf[Nuotti].getExtraetumerkki == extraEtumerkit(i), "virhe indeksissä: " + i)
   }
+  
+/*  EI NÄIN !!    odottaa testin aikana syötettä
+  "ReadLine" should "work" in {
+  val in = new ByteArrayInputStream("abc".getBytes)
+  System.setIn(in)
+  readLine() === "abc"
+}   */
 
   ////////   A P U M E T O D I T :    /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   def laskeVirheet(luk: TiedostonLukeminen, syotteet: Buffer[String]) = {
     var virheita = 0
+    var huonoSyote = ""
+    var oikeaSyoteVaikkaPitiOllaVainVirheita = ""
     for (syote <- syotteet) {
-      if (luk.oikeellisuusTesti(syote) != "")
-        virheita += 1
+        if (luk.oikeellisuusTesti(syote) != ""){
+          virheita += 1
+          huonoSyote = syote
+        }  
+        else oikeaSyoteVaikkaPitiOllaVainVirheita = syote
     }
-    virheita
+    Buffer(virheita, huonoSyote, oikeaSyoteVaikkaPitiOllaVainVirheita)
+    // only the last huonoSyote and oikeaSyoteVaikkaPitiOllaVainVirheita are kept in memory
   }
 
   def assertKuva(odotettuKuva: Buffer[String], nuotinKuva: Buffer[String]) = {

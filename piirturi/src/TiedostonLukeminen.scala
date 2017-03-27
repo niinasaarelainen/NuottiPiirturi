@@ -13,7 +13,7 @@ class TiedostonLukeminen {
   var nuottiDataRiveina = Buffer[String]()  
   var nuottiAlkiot = Array[String]()         // splitattuna yllä oleva data
   var nuottiDatanRivinumerot = Buffer[Int]() // syötetiedoston nuottidatarivit muistiin, ei tyhjiä rivejä
-  val lyriikkadata = Buffer[String]()        // biisin sanat
+  var lyriikkadata = Buffer[String]()        // biisin sanat
 
   var tahtilaji = "4"
   var kappaleenNimi = ""
@@ -60,6 +60,7 @@ class TiedostonLukeminen {
      this.nuottiDataRiveina = Buffer[String]() 
      this.nuottiDatanRivinumerot = Buffer[Int]()
      this.nuottiAlkiot = Array[String]() 
+     this.lyriikkadata = Buffer[String]() 
      val kayttajanValitsemaTiedosto = Source.fromFile(inputhakemistonNimi + tiedostonNimi)
      tahtilajiOnJoLuettu = false
      lukemisenJalkeenEiNuottiDataa =  false  

@@ -26,7 +26,7 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
             liita(laitettava)
             tahtiaMennyt += laitettava.pituus
             backUpPituuslaskuri += laitettava.pituus
-            if (tahtiaMennyt == tahtilaji.toDouble){
+            if (tahtiaMennyt % tahtilaji.toDouble == 0){
          //     println("laitettava: " + laitettava + ", pit:" + laitettava.pituus + "riviaMennytMontakoTahtia " +riviaMennytMontakoTahtia)
               riviaMennytMontakoTahtia += 1
               tahtiaMennyt = 0.0
