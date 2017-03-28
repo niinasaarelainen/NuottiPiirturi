@@ -1,7 +1,7 @@
-// package piirturi.src
+//package src
 
-  import java.io.PrintWriter
-  import scala.io.StdIn._
+import java.io.PrintWriter
+import scala.io.StdIn._
   
 
 class TiedostonTallennus(biisi: Kappale, kohdetiedosto: PrintWriter) {

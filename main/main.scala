@@ -1,4 +1,4 @@
-// import piirturi.src
+//package src
 
 object main extends App{
   
@@ -24,10 +24,10 @@ object main extends App{
         else         // käyttäjä valitsi että ei kuunnella
             n.viivasto.kappale.printtaaRuudulleIlmanAjastusta()
         new TiedostonTallennus(n.viivasto.kappale, ui.kayttajaValitseeTiedostonTallennusnimen())   
-        
         valitseToiminto()
     }    
     
+     
     def kelvollisenTiedostonKysyminenJaTarkistusLoop():Unit = {
        lukija.listaaTiedostot()
        ui.kayttajaValitseeTiedoston(lukija)
@@ -38,6 +38,7 @@ object main extends App{
           kelvollisenTiedostonKysyminenJaTarkistusLoop()
        }   
     }
+    
     
     def valitseToiminto():Unit = {
          val valinta = ui.mitaTehdaanSeuraavaksi()

@@ -1,4 +1,4 @@
-// package piirturi.src
+//package src
 
 import scala.collection.mutable.Buffer
 

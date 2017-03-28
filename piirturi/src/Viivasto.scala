@@ -1,4 +1,4 @@
-// package piirturi.src
+//package src
 
 import scala.collection.mutable.Buffer
 import scala.collection.mutable.Map
@@ -56,7 +56,7 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
            kasitteleYksiTavu(laitettava.kuvanLeveys)
       else if(lyricsBuffer.size - lyricsInd >= 2 ) 
            kasitteleKaksiTavua()   
-      else kasitteleYksiTavu(laitettava.kuvanLeveys)   
+      else kasitteleYksiTavu(laitettava.kuvanLeveys)   // sanoja vähemmän kuin nuotteja
       
       
       def kasitteleYksiTavu(leveys: Int) = {

@@ -1,4 +1,4 @@
-// package piirturi.src
+//package src
 
 import scala.io.Source
 import java.io._

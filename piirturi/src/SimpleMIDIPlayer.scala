@@ -1,4 +1,4 @@
-// package piirturi.src
+//package src
 
 import javax.sound.midi.MidiSystem
 import scala.collection.mutable.Map
@@ -228,7 +228,7 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPa
    
   
    val nuotitJaPituudet = nuottiNumberit.zip(pituudet)
-   if(soitetaanko)
+   if(soitetaanko)   // tämä on vain UnitTestiä varten
        new simpleMIDIPlayer(nuotitJaPituudet, MIDIPatch, kappale, tahtilaji) 
  
  
