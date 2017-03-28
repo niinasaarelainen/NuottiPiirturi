@@ -212,11 +212,11 @@ class NTest extends FlatSpec with Matchers {
     for (i <- 0 until piirturi.nuottiDataParitettu.size)
       piirturi.nuottiDataParitettu(i) match {
         case n: KahdeksasosaNuotti =>
-          assert(n.asInstanceOf[KahdeksasosaNuotti].korkeus == nuottiDatParitettuKorkeudet(i)(0), "***nuottiDataParitettu: kahdeksasosan korkeusvirhe")
+          assert(n.korkeus == nuottiDatParitettuKorkeudet(i)(0), "***nuottiDataParitettu: kahdeksasosan korkeusvirhe")
         case p: KahdeksasosaPari =>
-          assert(p.asInstanceOf[KahdeksasosaPari].korkeus == nuottiDatParitettuKorkeudet(i)(0) && p.asInstanceOf[KahdeksasosaPari].korkeus2 == nuottiDatParitettuKorkeudet(i)(1), "***nuottiDataParitettu: parin korkeusvirhe")
+          assert(p.korkeus == nuottiDatParitettuKorkeudet(i)(0) && p.korkeus2 == nuottiDatParitettuKorkeudet(i)(1), "***nuottiDataParitettu: parin korkeusvirhe")
         case t: Tauko =>
-          assert(t.asInstanceOf[KahdeksasosaTauko].korkeus == "c2", "***nuottiDataParitettu: tauon korkeusvirhe") // kaikkien taukojen piirtokorkeus on c2
+          assert(t.korkeus == "c2", "***nuottiDataParitettu: tauon korkeusvirhe") // kaikkien taukojen piirtokorkeus on c2
         case _ => fail // FAIL, koska syötteessä ei ole muuta kuin em. 3 kategoriaa
       }
   }
@@ -512,7 +512,8 @@ class NTest extends FlatSpec with Matchers {
 
   def assertLyricsDifferentSizeThanNoteData(sanat: Buffer[String]) = {
 
-    var nuottiData = Buffer(new NeljasosaNuotti("c2").asInstanceOf[ViivastolleLaitettava], new NeljasosaNuotti("d2").asInstanceOf[ViivastolleLaitettava], new NeljasosaNuotti("e2").asInstanceOf[ViivastolleLaitettava])
+    var nuottiData= Buffer[ViivastolleLaitettava]()     
+    nuottiData = Buffer(new NeljasosaNuotti("c2"), new NeljasosaNuotti("d2"), new NeljasosaNuotti("e2"))
     val v = new Viivasto(nuottiData, sanat, "4") //vika parametri = tahtilaji
     v.piirraNuotit() // käskyttää metodia kasitteleLyriikat()
 

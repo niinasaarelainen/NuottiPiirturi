@@ -1,6 +1,6 @@
 // import piirturi.src
 
-object test extends App{
+object main extends App{
   
      val ui = new UI()
      val lukija = new TiedostonLukeminen()
@@ -9,10 +9,10 @@ object test extends App{
     lukija.helppiTeksti()
     ohjelmanRunko()
     
-   
-    
     //// Happy End ////
      
+    
+    
     def  ohjelmanRunko():Unit = {
         kelvollisenTiedostonKysyminenJaTarkistusLoop()
         ui.kayttajaValitseeMIDIPatchin()

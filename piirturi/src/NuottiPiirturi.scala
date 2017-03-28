@@ -111,7 +111,9 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
             ok = 0- sointuBuffer.size +1    
             nuottiData += new Sointu(kasitteleNuottiTieto(sointuBuffer, viivastolleLaitettavaBuffer) ) 
    }
-    palautetaan   // tätä tarvitaan sointuja muodostettaessa
+   
+   //end KasitteleNuottiTieto:
+   palautetaan   // tätä tarvitaan sointuja muodostettaessa
    } 
   
    
@@ -176,6 +178,7 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
          }  
    }
  
+ 
    
    def tehdaanKahdeksasosaParit() = {      
     
@@ -183,31 +186,26 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
      var minutOnJoKasitelty = false
      var paastiinTiedostonloppuun = false
      
-     
      for (i <- 0 until nuottiData.size-1 ){      // vikalle alkiolle ei kannata kysyä seuraajaa
-        if(!minutOnJoKasitelty){
-          iskujaMennyt += nuottiData(i).pituus
-          if(nuottiData(i).isInstanceOf[KahdeksasosaNuotti] && (iskujaMennyt % 1== 0.5)){
-              if(nuottiData(i+1).isInstanceOf[KahdeksasosaNuotti]){
-                 nuottiDataParitettu += new KahdeksasosaPari(nuottiData(i), nuottiData(i+1))
-                 minutOnJoKasitelty = true  
-                 iskujaMennyt += nuottiData(i+1).pituus
-                 if(nuottiData.last.eq(nuottiData(i+1))) paastiinTiedostonloppuun = true
-              } else {
-                 nuottiDataParitettu += nuottiData(i)     // 1/8 talteen, jos se ei löytänyt paria
+          if(!minutOnJoKasitelty){
+              iskujaMennyt += nuottiData(i).pituus
+              
+              nuottiData(i) match {
+                case k1: KahdeksasosaNuotti if(iskujaMennyt % 1 == 0.5) => nuottiData(i+1) match {
+                     case k2: KahdeksasosaNuotti => nuottiDataParitettu += new KahdeksasosaPari(k1, k2)
+                                                    minutOnJoKasitelty = true  
+                                                    iskujaMennyt += k2.pituus
+                                                    if(nuottiData.last.eq(k2)) paastiinTiedostonloppuun = true
+                     case _ =>  nuottiDataParitettu += k1  // 1/8 talteen, jos se ei löytänyt paria
+                }
+                case _ =>  nuottiDataParitettu += nuottiData(i)     // ei-1/8:kin talteen                       
               }
-          }
-      
-          
-          else {
-             nuottiDataParitettu += nuottiData(i)     // ei-1/8:kin talteen
-          }
-        
-          if (iskujaMennyt == tahtilaji) {
-             iskujaMennyt = 0.0  
-          }  
-        }  else  minutOnJoKasitelty=  false
-      }
+            
+              if (iskujaMennyt == tahtilaji) {
+                 iskujaMennyt = 0.0  
+              }  
+            }  else  minutOnJoKasitelty=  false
+     }
      if(!paastiinTiedostonloppuun)    
           nuottiDataParitettu += nuottiData(nuottiData.size-1)   // viimeinenkin nuottiolio messiin, jos se ei ollut 1/8-parin puolisko
    }  
