@@ -8,7 +8,7 @@ import scala.io.StdIn._
 
 class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, kappale: Kappale, tahtilaji: Int) {   // Tuple (korkeus/korkeudet, pituus)
   
-    val ms = 440     // biisin nopeus:  200= nopea, 500 = normaali,  900= hidas
+    val ms = 440     // biisin nopeus millisekunneissa:  200= nopea,  500 = normaali,  900= hidas
     val synth = MidiSystem.getSynthesizer()
     val channels  =  synth.getChannels()
 		val ch1 = channels(0); val ch2 = channels(1);  val ch3 = channels(2);	val ch4 = channels(3);  val ch5 = channels(4);  val ch6 = channels(5)
@@ -20,43 +20,43 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
 //		for(patch <- synth.getAvailableInstruments)
 //	 	  println(patch)
 		
-   do{	
-    synth.open()  
-		
-		MIDIPatch match {
-        case 1 => ch1.programChange(0)    //program #0 = Piano
-        case 2 => ch1.programChange(11)   //program #11 = Vibraphone
-        case 3 => ch1.programChange(18)   //program #19 = Rock Organ
-        case 4 => ch1.programChange(1024, 50)   //program #19 = Syn.Strings3 ,  eri bank:sta
-        case 5 => ch1.programChange(24)    // nylon guitar
-        case 6 => ch1.programChange(30); ch2.programChange(1024, 81); ch3.programChange(35); ch4.programChange(29); ch5.programChange(1024, 81); ch6.programChange(39); 
-        case 7 => ch1.programChange(10)   // music box
-     }
-	
-    olisiAikaSkrollata = 0
-    riviInd = 0
-    println(); println()
-    skrollaaa(riviInd)     // laitetaan näytölle valmiiksi biisin nimi... 
-		riviInd += 1
-		skrollaaa(riviInd)    // ... ja eka rivi
-		riviInd += 1
-		olisiAikaSkrollata += ms     // ja alkuarvo, jotta skrollaus tapahtuu hieman ennen kuin rivi oikeasti vaihtuu
-		
-		Thread.sleep(ms)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
-  
-		
-	  if(MIDIPatch != 6)  //normaali soitto, yksikanavainen
-	     normaalisoitto()
-	  else rocknroll()   // rokkibändi, 6-kanavainen, delay:      
-    
-    Thread.sleep(1900)   // parempi soundi vikaan ääneen
-    synth.close()
-    
-    uudestaan = readLine("\n\nSoitetaanko uudestaan? ENTER = Kyllä,  0 = Ei ")
-	} while (uudestaan != "0")
-    
- //   new TiedostonTallennus(kappale)  
-    
+    def soita() = {
+    		do{	
+        synth.open()  
+    		
+    		MIDIPatch match {
+            case 1 => ch1.programChange(0)    //program #0 = Piano
+            case 2 => ch1.programChange(11)   //program #11 = Vibraphone
+            case 3 => ch1.programChange(18)   //program #19 = Rock Organ
+            case 4 => ch1.programChange(1024, 50)   //program #19 = Syn.Strings3 ,  eri bank:sta
+            case 5 => ch1.programChange(24)    // nylon guitar
+            case 6 => ch1.programChange(30); ch2.programChange(1024, 81); ch3.programChange(35); ch4.programChange(29); ch5.programChange(1024, 81); ch6.programChange(39); 
+            case 7 => ch1.programChange(10)   // music box
+         }
+    	
+        olisiAikaSkrollata = 0
+        riviInd = 0
+        println(); println()
+        skrollaaa(riviInd)     // laitetaan näytölle valmiiksi biisin nimi... 
+    		riviInd += 1
+    		skrollaaa(riviInd)    // ... ja eka rivi
+    		riviInd += 1
+    		olisiAikaSkrollata += ms     // ja alkuarvo, jotta skrollaus tapahtuu hieman ennen kuin rivi oikeasti vaihtuu
+    		
+    		Thread.sleep(ms)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
+      
+    		
+    	  if(MIDIPatch != 6)  //normaali soitto, yksikanavainen
+    	     normaalisoitto()
+    	  else rocknroll()   // rokkibändi, 6-kanavainen, delay:      
+        
+        Thread.sleep(1900)   // parempi soundi vikaan ääneen
+        synth.close()
+        
+        uudestaan = readLine("\n\nSoitetaanko uudestaan? ENTER = Kyllä,  0 = Ei ")
+    	  } while (uudestaan != "0")
+		}  
+ 
     
     def skrollaaa(riviInd: Int)= {
          for (i <- 0 until kappale.kappale(riviInd).size)
@@ -198,39 +198,44 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPa
        "f2" -> 77, "f#2" -> 78, "gb2" -> 78, "g2" -> 79, "g#2" -> 80, "ab2" -> 80, "a2" -> 81, "a#2" -> 82, 
        "b2" -> 82, "hb2" -> 82, "bb2" -> 82, "h2" -> 83, "h#2" -> 84)
 
-   var nuottiNumberit = Buffer[Buffer[Int]]()    // tänne nuottien korkeudet
-   var pituudet = Buffer[Double]()               // [0.5 ... 4.0]
    
-   
-       for (alkio<- nuottiData) {
-         var apubufferInt = Buffer[Int]()   // luodaan aina tyhjä buffer
-         
-           alkio match {
-           case s: Sointu  => 
-                       pituudet += s.pituus         // yhteinen pituus talteen vain kerran
-                       for(nuotti <- s.nuotit){
-                              apubufferInt += MIDINoteNumber(nuotti.asInstanceOf[Nuotti].korkeus)  // Map("nuotinnimi" --> Int)     
-                       }   
-                       nuottiNumberit += apubufferInt.sorted  // melodia menee vikaksi
-                         
-           case n: Nuotti => 
-                       pituudet += n.pituus
-                       apubufferInt += MIDINoteNumber(n.korkeus)
-                       nuottiNumberit += apubufferInt
-                 
-           case t: Tauko =>
-                      pituudet += t.pituus   
-                      apubufferInt += 0  // sovin itseni kanssa että tauon "korkeus" on 0
-                      nuottiNumberit += apubufferInt
-                 
-            } 
-       } // end for
-   
-  
-   val nuotitJaPituudet = nuottiNumberit.zip(pituudet)
-   if(soitetaanko)   // tämä on vain UnitTestiä varten
-       new simpleMIDIPlayer(nuotitJaPituudet, MIDIPatch, kappale, tahtilaji) 
- 
+   def muunnaMIDInuoteiksi() = {    
+       var nuottiNumberit = Buffer[Buffer[Int]]()    // tänne nuottien korkeudet
+       var pituudet = Buffer[Double]()               // [0.5 ... 4.0]
+       
+       
+           for (alkio<- nuottiData) {
+             var apubufferInt = Buffer[Int]()   // luodaan aina tyhjä buffer
+             
+               alkio match {
+               case s: Sointu  => 
+                           pituudet += s.pituus         // yhteinen pituus talteen vain kerran
+                           for(nuotti <- s.nuotit){
+                                  apubufferInt += MIDINoteNumber(nuotti.asInstanceOf[Nuotti].korkeus)  // Map("nuotinnimi" --> Int)     
+                           }   
+                           nuottiNumberit += apubufferInt.sorted  // melodia menee vikaksi
+                             
+               case n: Nuotti => 
+                           pituudet += n.pituus
+                           apubufferInt += MIDINoteNumber(n.korkeus)
+                           nuottiNumberit += apubufferInt
+                     
+               case t: Tauko =>
+                          pituudet += t.pituus   
+                          apubufferInt += 0  // sovin itseni kanssa että tauon "korkeus" on 0
+                          nuottiNumberit += apubufferInt
+                     
+                } 
+           } // end for
+       
+      
+       val nuotitJaPituudet = nuottiNumberit.zip(pituudet)
+       if(soitetaanko){   // tämä on vain UnitTestiä varten
+           val player = new simpleMIDIPlayer(nuotitJaPituudet, MIDIPatch, kappale, tahtilaji) 
+           player.soita()
+       }
+       nuotitJaPituudet  // palautetaan yksikkötestille tämä
+   } 
  
     
 }  ///////////////////// end   simpleMIDIPlayerAdapter  /////////////////////////////////////////////////////////

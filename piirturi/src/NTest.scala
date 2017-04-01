@@ -413,17 +413,14 @@ class NTest extends FlatSpec with Matchers {
           Array(72, 79), Array(81), Array(79), Array(77), Array(76), Array(72), Array(72, 79), Array(81), Array(79), Array(77), Array(76), Array(72),
           Array(72), Array(67), Array(72), Array(0), Array(72), Array(67), Array(72), Array(0))
     
-        for (i <- 0 until MIDIAdapter.nuotitJaPituudet.size) {
-          for (korkeus <- 0 until MIDIAdapter.nuotitJaPituudet(i)._1.size) { // Tuple._1 = Buffer[Int]  eventin korkeus tai korkeudet soinnun tapauksessa
-            assert(MIDIAdapter.nuotitJaPituudet(i)._1(korkeus) == jaakkoKullanMIDINumbers(i)(korkeus), "***virhe : " + (i + 1) + ". eventti, " + (korkeus + 1) + ". korkeus eventissä")
-            assert(MIDIAdapter.nuotitJaPituudet(i)._2 == n.nuottiData(i).pituus, "***pituusongelmaa pukkasi: " + (i + 1) + ". eventti") // Tuple._2 = Double, sama kuin nuottiolion pituus-kenttä
+          
+        for (i <- 0 until MIDIAdapter.muunnaMIDInuoteiksi.size) {
+          for (korkeus <- 0 until MIDIAdapter.muunnaMIDInuoteiksi()(i)._1.size) { // Tuple._1 = Buffer[Int]  eventin korkeus tai korkeudet soinnun tapauksessa
+            assert(MIDIAdapter.muunnaMIDInuoteiksi()(i)._1(korkeus) == jaakkoKullanMIDINumbers(i)(korkeus), "***virhe : " + (i + 1) + ". eventti, " + (korkeus + 1) + ". korkeus eventissä")
+            assert(MIDIAdapter.muunnaMIDInuoteiksi()(i)._2 == n.nuottiData(i).pituus, "***pituusongelmaa pukkasi: " + (i + 1) + ". eventti") // Tuple._2 = Double, sama kuin nuottiolion pituus-kenttä
           }
         }
   }
-
-  
-  
-  
  
   
   "The program (integration test)" should "produce song 'Flight of the Bumble Bee' similarily as in correctly printed file 'bumble.txt'" in {
