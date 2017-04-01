@@ -11,7 +11,7 @@ class Kappale {
       var apuPuskuri = Buffer[String]()
       apuPuskuri += ""
       apuPuskuri += ""
-      apuPuskuri += "\t\t\t\t\t" + kappaleenNimi
+      apuPuskuri += "\t\t\t\t" + kappaleenNimi
       this.kappale += apuPuskuri    
   }
   

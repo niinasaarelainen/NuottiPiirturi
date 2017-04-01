@@ -41,6 +41,97 @@ class NTest extends FlatSpec with Matchers {
     
         assert(laskeVirheet(luk, taukojaOikein)(0) == 0, "***oikeellisuusTesti claims that " + laskeVirheet(luk, taukojaOikein)(1) + " is valid input, when it isn't")
   }
+  
+  
+   "TiedostonLukeminen.lueTiedosto__Recover Badly Formulated Input" should "#case1: too much white space" in {
+        val luk = new TiedostonLukeminen()
+        luk.lueTiedosto("_spaces")
+    
+        assert(luk.nuottiAlkiot.size == 6, "***syötetiedostossa on 6 nuottitapahtumaa") // sointu on 1 tapahtuma. 
+        //Jos välilyönneistä ei oltaisi selvitty, ei nuottialkiota olisi lisätty nuottiAlkiot:hin, vaan vaadittu käyttäjää korjaamaan virhe
+  }
+
+  it should "#case2: empty chords" in {
+        val luk = new TiedostonLukeminen()
+        luk.lueTiedosto("_emptyChords")
+    
+        assert(luk.nuottiAlkiot.size == 0, "***syötetiedostossa pitäisi olla 0 nuottitapahtumaa")
+        // tyhjiä sointuja ei laiteta nuottiAlkiot:hin, koska sitä ei voi soittaa. Point: ohjelma ei kaatunut
+  }
+
+  it should "#case3:  chords written together without space" in {
+        val luk = new TiedostonLukeminen()
+        luk.lueTiedosto("_chordsWrittenTogetherWithoutSpace")
+    
+        // the note/chord data is split from white space, so it is crucial to add space if user
+        // didn't do it in case <c1,d1><e1,f1>   =>  must be correscted to  <c1,d1> <e1,f1>
+        assert(luk.nuottiAlkiot.size == 3, "***syötetiedostossa pitäisi olla 3 sointua")
+  }
+
+  it should "#case4: use of tabulator" in {
+        val luk = new TiedostonLukeminen()
+        luk.lueTiedosto("_tabs") // the file is full of tabs (hard to see)
+    
+        // the note/chord data is split from white space, so it is crucial to add space if user
+        // didn't do it in case <c1,d1><e1,f1>   =>  must be correscted to  <c1,d1> <e1,f1>
+        assert(luk.nuottiAlkiot.size == 6, "***syötetiedostossa pitäisi olla 6 nuottia/sointua")
+  }
+  
+  
+  "TiedostonLukeminen.tarkistaVirheet() --as stub--" should "find 3 syntax errors(= wrongly formulated note data) in file '3errors'" in {
+        /*
+           Simuloidaan käyttäjän virheidenkorjausprosessia. Ensin annetaan syöte, jossa on 3 syntaksivirhettä 
+           nuottidatassa.
+           Sitten kuvitellaan tilanne jossa käyttäjä korjaa yhden, tallettaa tiedoston ja nyt syötteessä on 2 virhettä jne.
+           Testattava ohjelma löytää syötetiedoston ensimmäisen virheen ja odottaa käyttäjän korjaavan sen,
+           tutkii talletetun tiedoston ja joko löytää uuden virheen tai voi aloittaa nuottidatan jatkokäsittelyn.
+          
+           Syötteessä pelkkiä sointuja, TiedostonLukeminenStub-luokassa muutettu vain sointuja
+           käsittelevää koodia metodissa tarkistaSoinnunVirheet(), joka on metodin tarkistaVirheet()-sisällä
+         * 
+         */
+        val syotteet = Buffer("3errors", "2errors", "1error", "0errors", "0errors")
+        // viimeinen 0errors ohjelman kannalta ylimääräinen, mutta testaa ettei lueTiedostoa lueta 5 kertaa, vaan 4, koska virheettömän tiedoston jälkeen pitäisi poistua virheenkorjaus-luupista
+    
+        val lukStub = new TiedostonLukeminenStub(syotteet) // TiedostonLukeminenStub löytyy tämän tiedoston lopusta
+    
+        // kuten tiedostosta 3errors voi havaita, on rivi 1 virheetön, sen jälkeen yksi virhe riveillä 2, 3 ja 4
+        assert(lukStub.stubMessages(0) == "löydettiin virhe rivillä 2", "eka syötevirhe-ongelma")
+        assert(lukStub.stubMessages(1) == "löydettiin virhe rivillä 3", "toka syötevirhe-ongelma")
+        assert(lukStub.stubMessages(2) == "löydettiin virhe rivillä 4", "kolmas syötevirhe-ongelma")
+        intercept[IndexOutOfBoundsException] { lukStub.stubMessages(3) } // tällä testataan, että tiedostolla "0errors" ei generoidu virheilmoitusta, eli stubMessages on kolmen alkoin mittainen
+        assert(lukStub.stubMoneskokerta == 3, "lueTiedosto()-metodia kutsuttiin 4 kertaa")
+  } // stubMoneskokerta alkuarvo oli 0 => arvo 3 = 4.kutsukerta
+
+  
+  "TiedostonLukeminen.loytyykoInputHakemistosta" should "give false when file not found in directory" in {
+        val luk = new TiedostonLukeminen
+        assert(luk.loytyykoInputHakemistosta("kkk") == false, "valitussa input-hakemistossa ei ole tiedostoa nimeltä \"kkk\"")
+  }
+  
+  it should "give true when file found in directory" in {
+        val luk = new TiedostonLukeminen
+        assert(luk.loytyykoInputHakemistosta("§") == true, "valitussa input-hakemistossa pitäisi olla tiedosto nimeltä \"§\"")
+  }
+  
+  
+   "TiedostonLukeminen.kasitteleKappaleenNimiJaTahtilaji()" should "find tahtilaji and kappaleenNimi when both hash-tagged in inputfile" in {
+
+        val luk = new TiedostonLukeminen()
+        luk.lueTiedosto("kalevala")
+    
+        assert(luk.kappaleenNimi == " Kalevala - kuudestoista runo (ote)", "***kappaleenNimi-muuttuja väärin")
+        assert(luk.tahtilaji == "5", "***tahtilajin pitäisi olla 5 (eli 5/4 määritelty ohjelmassa 5)")
+  }
+
+  it should "use default values for tahtilaji and kappaleenNimi when neither hash-tagged in inputfile" in {
+        val luk = new TiedostonLukeminen()
+        luk.lueTiedosto("jaakko")
+    
+        assert(luk.kappaleenNimi == "", "***kappaleenNimi-muuttuja väärin")
+        assert(luk.tahtilaji == "4", "***tahtilajin pitäisi olla oletusarvo eli 4")
+  }
+
 
   
   "NuottiPiirturi.lyricsBuffer" should "have right lyrics" in {
@@ -59,108 +150,9 @@ class NTest extends FlatSpec with Matchers {
           assert(sanat(i).equals(piirturi.lyricsBuffer(i)))
         }
   }
-
   
-  "NeljasosaNuotti" should "have right nuppi, nimiMapissa, etumerkki and extraetumerkki" in {
-        val neljasOsa = new NeljasosaNuotti("c#2")
-        assert(neljasOsa.nuppi == "@@" && neljasOsa.nimiMapissa == "c2" && neljasOsa.etumerkki == "#" && neljasOsa.getExtraetumerkki == "")
-  }
-
   
-  "KahdeksasosaPari" should "draw eight note couple stems down and ignore second flat" in {
-
-        var odotettu = Buffer[String]()
-    
-        odotettu += "            "
-        odotettu += "            "
-        odotettu += "            "
-        odotettu += "  b@@   @@  " // etumerkkilogiikan mukaan toista alennusta ei saa piirtää
-        odotettu += " --|----|-- "
-        odotettu += "   |    |   "
-        odotettu += "---======---"
-        odotettu += "            "
-        odotettu += "------------"
-        odotettu += "            "
-        odotettu += "------------"
-        odotettu += "            "
-        odotettu += "------------"
-        odotettu += "            "
-        odotettu += "------------"
-        odotettu += "            "
-        odotettu += "            "
-        odotettu += "            "
-        odotettu += "            "
-    
-        val piirturi = new NuottiPiirturi(new TiedostonLukeminen)
-        val nuottiAlkiot = Buffer("b2", "b2")
-        var nuottiData = Buffer[ViivastolleLaitettava]()
-        nuottiData = piirturi.kasitteleNuottiTieto(nuottiAlkiot, nuottiData)
-        val pari = new KahdeksasosaPari(nuottiData(0), nuottiData(1))
-    
-        println(pari.kuva) // TODO   ei toimi jos tämän rivin ottaa pois ?!?!?
-    
-        assertKuva(odotettu, pari.kuva)
-  }
-
-  
-  "Pisteellinen NeljasosaNuotti" should "draw dotted quarter note stem up" in {
-
-        var odotettu = Buffer[String]()
-    
-        odotettu += "           "
-        odotettu += "           "
-        odotettu += "           "
-        odotettu += "           "
-        odotettu += "           "
-        odotettu += "           "
-        odotettu += "-----------"
-        odotettu += "    |      "
-        odotettu += "----|------"
-        odotettu += "    |      "
-        odotettu += "---@@.-----"
-        odotettu += "           "
-        odotettu += "-----------"
-        odotettu += "           "
-        odotettu += "-----------"
-        odotettu += "           "
-        odotettu += "           "
-        odotettu += "           "
-        odotettu += "           "
-    
-        assertKuva(odotettu, new PisteellinenNeljasosaNuotti("h1").kuva)
-  }
-
-  "TiedostonLukeminen.kasitteleKappaleenNimiJaTahtilaji()" should "find tahtilaji and kappaleenNimi when both hash-tagged in inputfile" in {
-
-        val luk = new TiedostonLukeminen()
-        luk.lueTiedosto("kalevala")
-    
-        assert(luk.kappaleenNimi == " Kalevala - kuudestoista runo (ote)", "***kappaleenNimi-muuttuja väärin")
-        assert(luk.tahtilaji == "5", "***tahtilajin pitäisi olla 5 (eli 5/4 määritelty ohjelmassa 5)")
-  }
-
-  it should "use default values for tahtilaji and kappaleenNimi when neither hash-tagged in inputfile" in {
-        val luk = new TiedostonLukeminen()
-        luk.lueTiedosto("jaakko")
-    
-        assert(luk.kappaleenNimi == "", "***kappaleenNimi-muuttuja väärin")
-        assert(luk.tahtilaji == "4", "***tahtilajin pitäisi olla oletusarvo eli 4")
-  }
-
-  
-  "Viivasto.kappale" should "have Title + 2 staffs" in {
-        val luk = new TiedostonLukeminen()
-        luk.lueTiedosto("jaakko_2rivia") // kappaleessa on 4 kpl 4/4-tahteja ja ohjelma jakaa sen tasan kahdelle riville
-        val piirturi = new NuottiPiirturi(luk)
-        piirturi.execute()
-    
-        assert(piirturi.viivasto.kappale.kappale.size == 3, "***kappale.size not 3") // kappaleen nimi on eka entry  + 2 riviä musaa
-        assert(piirturi.viivasto.kappale.kappale(0).last.contains("Jaakko") == true, "***kappaleen Title puuttuu/väärä")
-                         // ennen nimeä on tyhjiä rivejä muotoilun vuoksi 
-  }
-
-  
-  "NuottiData and NuottiDataParitettu" should "be of right length" in {
+  "NuottiPiirturi.NuottiData and NuottiDataParitettu" should "be of right length" in {
         // tutkitaan nuottidatan säilyttäjiä, molemmat tyyppiä Buffer[ViivastolleLaitettava]
         // NuottiDataParitettua ei voi luoda ennen NuottiData:n luontia. Kätevää tutkia molempia samalla.
     
@@ -218,44 +210,157 @@ class NTest extends FlatSpec with Matchers {
   }
 
   
-  "TiedostonLukeminen.tarkistaVirheet() --as stub--" should "find 3 syntax errors(= wrongly formulated note data) in file '3errors'" in {
-        /*
-           Simuloidaan käyttäjän virheidenkorjausprosessia. Ensin annetaan syöte, jossa on 3 syntaksivirhettä 
-           nuottidatassa.
-           Sitten kuvitellaan tilanne jossa käyttäjä korjaa yhden, tallettaa tiedoston ja nyt syötteessä on 2 virhettä jne.
-           Testattava ohjelma löytää syötetiedoston ensimmäisen virheen ja odottaa käyttäjän korjaavan sen,
-           tutkii talletetun tiedoston ja joko löytää uuden virheen tai voi aloittaa nuottidatan jatkokäsittelyn.
-          
-           Syötteessä pelkkiä sointuja, TiedostonLukeminenStub-luokassa muutettu vain sointuja
-           käsittelevää koodia metodissa tarkistaSoinnunVirheet(), joka on metodin tarkistaVirheet()-sisällä
-         * 
-         */
-        val syotteet = Buffer("3errors", "2errors", "1error", "0errors", "0errors")
-        // viimeinen 0errors ohjelman kannalta ylimääräinen, mutta testaa ettei lueTiedostoa lueta 5 kertaa, vaan 4, koska virheettömän tiedoston jälkeen pitäisi poistua virheenkorjaus-luupista
+  
+  "NuottiPiirturi.tutkiEtumerkit()" should "give out right accidentals" in {
+        //  testing all the cases for how to draw accidentals within a bar. 
+        //  testing how extraEtumerkki behaves. That indicates that some extra rule is in hand when drawing or when omit drawing an b, #, §
+        //  § = this sign is needed when note is made natural after being # or b, not needed after bar line
+        //  n =  is my own invented syntax for a note that is actually # or b but the sign is not drawn, since it is only necessary to draw an accidental only once in a bar
+        //  assuming it is not overruled by an oppisite sign(#, b) or made natural (§)
+        
+                     // 1.bar:      b2  b2    h2  h2  b2 h2    b2  h2   h#2  b2   h2  h#2
+        var extraEtumerkit = Buffer("", "n", "§", "", "", "§", "", "§", "", "",  "§", "")   // indeksit 0-11, Time Signature 6/4, thus one bar consists of 12 eigth notes
+             // 2.bar:    //h2 h#2  b2 h2   h2  b2    b2 h#2   b2  h2   h2  b2
+        extraEtumerkit += ("", "", "", "§", "", "",   "n", "", "", "§", "", "")  // indeksit 12-23
+        // 3.bar:          h2  b2  h#2 b2 h#2  h2 	 h2  h2  b2 b2 		 h#2 h#2
+         extraEtumerkit += ("", "", "", "", "", "§", "", "", "", "n",  "", "n")  // indeksit 24-35
+        // 4.bar:          ab2 ab2   a2 a2   ab2 a2    a2 ab2   a2  a#2   ab2 a2
+          extraEtumerkit += ("", "n", "§","", "","§",  "", "",  "§", "",  "", "§")  // indeksit 36-47
+        // 5.bar:         a2 a#2  ab2 a2   a2 ab2    ab2 a#2   ab2  a2   a2  a2
+       extraEtumerkit += ("","",  "", "§", "","",    "n", "",  "",  "§", "", "")  // indeksit 48-59
+           
+        val luk = new TiedostonLukeminen()
+        luk.lueTiedosto("_testAccidentals")
+        val nuottipiirturi = new NuottiPiirturi(luk)
+        nuottipiirturi.execute()
     
-        val lukStub = new TiedostonLukeminenStub(syotteet) // TiedostonLukeminenStub löytyy tämän tiedoston lopusta
-    
-        // kuten tiedostosta 3errors voi havaita, on rivi 1 virheetön, sen jälkeen yksi virhe riveillä 2, 3 ja 4
-        assert(lukStub.stubMessages(0) == "löydettiin virhe rivillä 2", "eka syötevirhe-ongelma")
-        assert(lukStub.stubMessages(1) == "löydettiin virhe rivillä 3", "toka syötevirhe-ongelma")
-        assert(lukStub.stubMessages(2) == "löydettiin virhe rivillä 4", "kolmas syötevirhe-ongelma")
-        intercept[IndexOutOfBoundsException] { lukStub.stubMessages(3) } // tällä testataan, että tiedostolla "0errors" ei generoidu virheilmoitusta, eli stubMessages on kolmen alkoin mittainen
-        assert(lukStub.stubMoneskokerta == 3, "lueTiedosto()-metodia kutsuttiin 4 kertaa")
-  } // stubMoneskokerta alkuarvo oli 0 => arvo 3 = 4.kutsukerta
+        for (i <- 0 until nuottipiirturi.nuottiData.size)
+          assert(nuottipiirturi.nuottiData(i).asInstanceOf[Nuotti].getExtraetumerkki == extraEtumerkit(i), "virhe indeksissä: " + i)
+  }
+ 
 
   
-  "TiedostonLukeminen.loytyykoInputHakemistosta" should "give false when file not found in directory" in {
-        val luk = new TiedostonLukeminen
-        assert(luk.loytyykoInputHakemistosta("kkk") == false, "valitussa input-hakemistossa ei ole tiedostoa nimeltä \"kkk\"")
-  }
-  
-  it should "give true when file found in directory" in {
-        val luk = new TiedostonLukeminen
-        assert(luk.loytyykoInputHakemistosta("§") == true, "valitussa input-hakemistossa pitäisi olla tiedosto nimeltä \"§\"")
+  "NeljasosaNuotti" should "have right nuppi, nimiMapissa, etumerkki and extraetumerkki" in {
+        val neljasOsa = new NeljasosaNuotti("c#2")
+        assert(neljasOsa.nuppi == "@@" && neljasOsa.nimiMapissa == "c2" && neljasOsa.etumerkki == "#" && neljasOsa.getExtraetumerkki == "")
   }
 
   
-  "UI.kayttajaValitseeMIDIPatchin() --as stub--___accept user only key presses 1-7 and ENTER" should "#case1: 2 non-acceptable, 1 acceptable value " in {
+  "KahdeksasosaPari.kuva" should "draw eight note couple stems down and ignore second flat" in {
+
+        var odotettu = Buffer[String]()
+    
+        odotettu += "            "
+        odotettu += "            "
+        odotettu += "            "
+        odotettu += "  b@@   @@  " // etumerkkilogiikan mukaan toista alennusta ei saa piirtää
+        odotettu += " --|----|-- "
+        odotettu += "   |    |   "
+        odotettu += "---======---"
+        odotettu += "            "
+        odotettu += "------------"
+        odotettu += "            "
+        odotettu += "------------"
+        odotettu += "            "
+        odotettu += "------------"
+        odotettu += "            "
+        odotettu += "------------"
+        odotettu += "            "
+        odotettu += "            "
+        odotettu += "            "
+        odotettu += "            "
+    
+        val piirturi = new NuottiPiirturi(new TiedostonLukeminen)
+        val nuottiAlkiot = Buffer("b2", "b2")
+        var nuottiData = Buffer[ViivastolleLaitettava]()
+        nuottiData = piirturi.kasitteleNuottiTieto(nuottiAlkiot, nuottiData)
+        val pari = new KahdeksasosaPari(nuottiData(0), nuottiData(1))
+    
+        println(pari.kuva) // TODO   ei toimi jos tämän rivin ottaa pois ?!?!?
+    
+        assertKuva(odotettu, pari.kuva)
+  }
+
+  
+  "PisteellinenNeljasosaNuotti.kuva" should "draw dotted quarter note stem up" in {
+
+        var odotettu = Buffer[String]()
+    
+        odotettu += "           "
+        odotettu += "           "
+        odotettu += "           "
+        odotettu += "           "
+        odotettu += "           "
+        odotettu += "           "
+        odotettu += "-----------"
+        odotettu += "    |      "
+        odotettu += "----|------"
+        odotettu += "    |      "
+        odotettu += "---@@.-----"
+        odotettu += "           "
+        odotettu += "-----------"
+        odotettu += "           "
+        odotettu += "-----------"
+        odotettu += "           "
+        odotettu += "           "
+        odotettu += "           "
+        odotettu += "           "
+    
+        assertKuva(odotettu, new PisteellinenNeljasosaNuotti("h1").kuva)
+  }
+
+ 
+  
+  "Viivasto.kappale" should "have Title + 2 staffs" in {
+        val luk = new TiedostonLukeminen()
+        luk.lueTiedosto("jaakko_2rivia") // kappaleessa on 4 kpl 4/4-tahteja ja ohjelma jakaa sen tasan kahdelle riville
+        val piirturi = new NuottiPiirturi(luk)
+        piirturi.execute()
+    
+        assert(piirturi.viivasto.kappale.kappale.size == 3, "***kappale.size not 3") // kappaleen nimi on eka entry  + 2 riviä musaa
+        assert(piirturi.viivasto.kappale.kappale(0).last.contains("Jaakko") == true, "***kappaleen Title puuttuu/väärä")
+                         // ennen nimeä on tyhjiä rivejä muotoilun vuoksi 
+  }
+
+  
+   "Viivasto.kasitteleLyriikat()" should "cope with more lyrics than notes" in {
+        // vaihteeksi luodaan lyriikat ja nuottiData manuaalisesti (hankalasti), jotta aina ei jouduta kutsumaan luokkia 
+        // TiedostonLukeminen & NuottiPiirturi
+    
+        // case: 4 syllables & 3 notes 
+        val sanat = Buffer("Jaak-", "ko", "kul-", "ta,")
+        assertLyricsDifferentSizeThanNoteData(sanat)
+  }
+
+  it should "cope with less lyrics than notes" in {
+        // case: 2 syllables & 3 notes 
+        val sanat = Buffer("Jaak-", "ko")
+        assertLyricsDifferentSizeThanNoteData(sanat)
+  }
+
+  it should "cope with more letters in syllables than print area" in {
+        // case: actually long words or case: where user has forgotten to make syllables  (should be f.ex for-ward, a-head)
+        val sanat = Buffer("Straight", "forward,", "straight", "ahead!!!")
+    
+        // 1/8-note couple has the smallest print area for lyrics: 6 chars per note
+        val pari = new KahdeksasosaPari(new KahdeksasosaNuotti("c1"), new KahdeksasosaNuotti("d1"))
+        var nuottiData= Buffer[ViivastolleLaitettava]()  
+        nuottiData = Buffer(pari, pari)
+    
+        val v = new Viivasto(nuottiData, sanat, "4")  // "4" refers to Time Signature 4/4
+        v.piirraNuotit()
+        assert(v.unitTestLiitosCounter == 2, "***adding 2 eight couples FAIL")
+        assert(v.kappale.kappale(0).last.contains("Straigforwarstraigahead!"), "***wrong lyrics") // joka sanasta 6 ekaa kirjainta
+  }
+
+    
+
+  
+  
+  
+
+  
+  "UI.kayttajaValitseeMIDIPatchin() --as stub--___accept only key presses 1-7 and ENTER" should "#case1: 2 non-acceptable, 1 acceptable value " in {
 
         /* alkuperäinen koodi luokassa UI:
            do {
@@ -319,98 +424,6 @@ class NTest extends FlatSpec with Matchers {
   
   
   
-  "Viivasto.kasitteleLyriikat()" should "cope with more lyrics than notes" in {
-        // vaihteeksi luodaan lyriikat ja nuottiData manuaalisesti (hankalasti), jotta aina ei jouduta kutsumaan luokkia 
-        // TiedostonLukeminen & NuottiPiirturi
-    
-        // case: 4 syllables & 3 notes 
-        val sanat = Buffer("Jaak-", "ko", "kul-", "ta,")
-        assertLyricsDifferentSizeThanNoteData(sanat)
-  }
-
-  it should "cope with less lyrics than notes" in {
-        // case: 2 syllables & 3 notes 
-        val sanat = Buffer("Jaak-", "ko")
-        assertLyricsDifferentSizeThanNoteData(sanat)
-  }
-
-  it should "cope with more letters in syllables than print area" in {
-        // case: actually long words or case: where user has forgotten to make syllables  (should be f.ex for-ward, a-head)
-        val sanat = Buffer("Straight", "forward,", "straight", "ahead!!!")
-    
-        // 1/8-note couple has the smallest print area for lyrics: 6 chars per note
-        val pari = new KahdeksasosaPari(new KahdeksasosaNuotti("c1"), new KahdeksasosaNuotti("d1"))
-        var nuottiData= Buffer[ViivastolleLaitettava]()  
-        nuottiData = Buffer(pari, pari)
-    
-        val v = new Viivasto(nuottiData, sanat, "4")  // "4" refers to Time Signature 4/4
-        v.piirraNuotit()
-        assert(v.unitTestLiitosCounter == 2, "***adding 2 eight couples FAIL")
-        assert(v.kappale.kappale(0).last.contains("Straigforwarstraigahead!"), "***wrong lyrics") // joka sanasta 6 ekaa kirjainta
-  }
-
-  
-  "TiedostonLukeminen.lueTiedosto__Recover Badly Formulated Input" should "#case1: too much white space" in {
-        val luk = new TiedostonLukeminen()
-        luk.lueTiedosto("_spaces")
-    
-        assert(luk.nuottiAlkiot.size == 6, "***syötetiedostossa on 6 nuottitapahtumaa") // sointu on 1 tapahtuma. 
-        //Jos välilyönneistä ei oltaisi selvitty, ei nuottialkiota olisi lisätty nuottiAlkiot:hin, vaan vaadittu käyttäjää korjaamaan virhe
-  }
-
-  it should "#case2: empty chords" in {
-        val luk = new TiedostonLukeminen()
-        luk.lueTiedosto("_emptyChords")
-    
-        assert(luk.nuottiAlkiot.size == 0, "***syötetiedostossa pitäisi olla 0 nuottitapahtumaa")
-        // tyhjiä sointuja ei laiteta nuottiAlkiot:hin, koska sitä ei voi soittaa. Point: ohjelma ei kaatunut
-  }
-
-  it should "#case3:  chords written together without space" in {
-        val luk = new TiedostonLukeminen()
-        luk.lueTiedosto("_chordsWrittenTogetherWithoutSpace")
-    
-        // the note/chord data is split from white space, so it is crucial to add space if user
-        // didn't do it in case <c1,d1><e1,f1>   =>  must be correscted to  <c1,d1> <e1,f1>
-        assert(luk.nuottiAlkiot.size == 3, "***syötetiedostossa pitäisi olla 3 sointua")
-  }
-
-  it should "#case4: use of tabulator" in {
-        val luk = new TiedostonLukeminen()
-        luk.lueTiedosto("_tabs") // the file is full of tabs (hard to see)
-    
-        // the note/chord data is split from white space, so it is crucial to add space if user
-        // didn't do it in case <c1,d1><e1,f1>   =>  must be correscted to  <c1,d1> <e1,f1>
-        assert(luk.nuottiAlkiot.size == 6, "***syötetiedostossa pitäisi olla 6 nuottia/sointua")
-  }
-  
-
-  "NuottiPiirturi.tutkiEtumerkit()" should "give out right accidentals" in {
-        //  testing all the cases for how to draw accidentals within a bar. 
-        //  testing how extraEtumerkki behaves. That indicates that some extra rule is in hand when drawing or when omit drawing an b, #, §
-        //  § = this sign is needed when note is made natural after being # or b, not needed after bar line
-        //  n =  is my own invented syntax for a note that is actually # or b but the sign is not drawn, since it is only necessary to draw an accidental only once in a bar
-        //  assuming it is not overruled by an oppisite sign(#, b) or made natural (§)
-        
-                     // 1.bar:      b2  b2    h2  h2  b2 h2    b2  h2   h#2  b2   h2  h#2
-        var extraEtumerkit = Buffer("", "n", "§", "", "", "§", "", "§", "", "",  "§", "")   // indeksit 0-11, Time Signature 6/4, thus one bar consists of 12 eigth notes
-             // 2.bar:    //h2 h#2  b2 h2   h2  b2    b2 h#2   b2  h2   h2  b2
-        extraEtumerkit += ("", "", "", "§", "", "",   "n", "", "", "§", "", "")  // indeksit 12-23
-        // 3.bar:          h2  b2  h#2 b2 h#2  h2 	 h2  h2  b2 b2 		 h#2 h#2
-         extraEtumerkit += ("", "", "", "", "", "§", "", "", "", "n",  "", "n")  // indeksit 24-35
-        // 4.bar:          ab2 ab2   a2 a2   ab2 a2    a2 ab2   a2  a#2   ab2 a2
-          extraEtumerkit += ("", "n", "§","", "","§",  "", "",  "§", "",  "", "§")  // indeksit 36-47
-        // 5.bar:         a2 a#2  ab2 a2   a2 ab2    ab2 a#2   ab2  a2   a2  a2
-       extraEtumerkit += ("","",  "", "§", "","",    "n", "",  "",  "§", "", "")  // indeksit 48-59
-           
-        val luk = new TiedostonLukeminen()
-        luk.lueTiedosto("_testAccidentals")
-        val nuottipiirturi = new NuottiPiirturi(luk)
-        nuottipiirturi.execute()
-    
-        for (i <- 0 until nuottipiirturi.nuottiData.size)
-          assert(nuottipiirturi.nuottiData(i).asInstanceOf[Nuotti].getExtraetumerkki == extraEtumerkit(i), "virhe indeksissä: " + i)
-  }
  
   
   "The program (integration test)" should "produce song 'Flight of the Bumble Bee' similarily as in correctly printed file 'bumble.txt'" in {
@@ -437,7 +450,6 @@ class NTest extends FlatSpec with Matchers {
     
         // The last row of music in all.txt is correct in terms of program logic. It cannot find place for bar line (one bar has now 8 beats), since 
         // time signature is 4/4 and no note ends on 4, the closest is 4 and half beats. So no bar line is possible to draw, 
-        // which is actually good indicator for the user that the rhythm he/she thought probably is wrong, or that she/he made an error in input file by accident
         val luk = new TiedostonLukeminen()
         luk.lueTiedosto("allViivastolleLaitettavaClasses") // (kansiosta input_virheita)
         val nuottipiirturi = new NuottiPiirturi(luk)
@@ -529,7 +541,7 @@ class NTest extends FlatSpec with Matchers {
     if (sanat.size == 4) {
       assert(v.kappale.kappale(0).last.contains("kul-"), "***last syllable not found") // lyriikat ovat vikassa indeksissä
       assert(!v.kappale.kappale(0).last.contains("ta,"), "***too much lyrics in output")
-    } else if (sanat.size == 2) assert(v.kappale.kappale(0).last.contains("ko"), "***lessLyrics ei toimi")
+    } else if (sanat.size == 2) assert(v.kappale.kappale(0).last.contains("ko"), "***lessLyrics not working")
 
     // unitTestLiitosCounter counts how many times a note was added to Staff, should be 3 also when lyrics.size was 2 => testing 
     // that less lyrics didn't prevent adding more notes to the song 

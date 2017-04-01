@@ -191,7 +191,7 @@ class TiedostonLukeminen {
       var seuraavatrivitLyriikkaan = false
       for (i <- 0 until inputFromFile.size) {
         if (inputFromFile(i).trim.size != 0){  
-           var kelvollinenSyoteRivi = inputFromFile(i).replaceAll("\t", "")
+           var kelvollinenSyoteRivi = inputFromFile(i).replaceAll("\t", " ") // jos korvaa pelkällä "", niin voi lopputulos olla esim "e2e2", jos nuotit oli erotelut toisitaan vain tabulaattorilla
            
            if (kelvollinenSyoteRivi.head == '#') {    //  T U N N I S T E E T
               if (kelvollinenSyoteRivi.tail.toLowerCase().trim.contains("sanat")){
@@ -223,7 +223,7 @@ class TiedostonLukeminen {
                 kappaleenNimi = kelvollinenSyoteRivi.tail.substring(5, kelvollinenSyoteRivi.tail.size)
                
            }
-           else if (!tahtilajiOnJoLuettu && "2345678".contains(kelvollinenSyoteRivi(1))){  // boolean onjoLuettu ?? TODO
+           else if (!tahtilajiOnJoLuettu && "2345678".contains(kelvollinenSyoteRivi(1)) && ind < 2){  // jos ei OLE ind < 2, voidaan vahingossa kommentti "#2.teema" tuktkita tahtilajiksi 2/4 
                 tahtilaji = kelvollinenSyoteRivi(1).toString      // tahtilaji pilalla jos myöhemmässä kommentissa on numero heti #:n jälkeen TODO
                    // varaudutaan siihen että joku kirjoittaa nuotteja jo samalle riville kuin missä tahtilaji-tunniste:
                 if(kelvollinenSyoteRivi.tail.trim.substring(1) != 0)  {
