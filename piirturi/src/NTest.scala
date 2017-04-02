@@ -11,9 +11,10 @@ import scala.io.StdIn._
 
 class NTest extends FlatSpec with Matchers {
 
+   val inputhakemistonNimi =  "./input_yksikkoTestaus/"
   
   "TiedostonLukeminen.oikeellisuusTesti()" should "find non-valid note names and lengths" in {
-        val luk = new TiedostonLukeminen
+        val luk = new TiedostonLukeminen(inputhakemistonNimi)
         val nuottejaVaarin = Buffer("t1-", "d3-", "f", "dc1", "p", "1c", "2f", "f2f2", "f2f", "f2g----", "hb22----", "c11", "d#b", "db#", "b#",
           "ddd", "d1d", "-.", "----", "#c", "dd1", "g##", "abb", "dis", "c1.", "c1---.", "c1-----", "c1------------", "c1----.") // viisi vikaa virheellisiä pituuksia
     
@@ -21,14 +22,14 @@ class NTest extends FlatSpec with Matchers {
        }
       
       it should "find non-valid rest names and lengths" in {
-        val luk = new TiedostonLukeminen
+        val luk = new TiedostonLukeminen(inputhakemistonNimi)
         val taukojaVaarin = Buffer("za", "z#--", "zz", "zz-top", " z", "tauko", "az")
     
          assert(laskeVirheet(luk, taukojaVaarin)(0) == taukojaVaarin.size, "***oikeellisuusTesti claims that " + laskeVirheet(luk, taukojaVaarin)(2)+ " is non-valid input, when it isn't")
       }
     
       it should "find valid note names and lengths" in {
-        val luk = new TiedostonLukeminen
+        val luk = new TiedostonLukeminen(inputhakemistonNimi)
         val nuottejaOikein = Buffer("d#1---", "c1-.", "g1-", "H#2", "Gb1----", "Ab1--", "f#1---", "d2b", "a----#1",
           "--c1", "----g2", "ab2", "a#2----", "b1", "bb1", "b2", "bb2", "b#2")
     
@@ -36,15 +37,15 @@ class NTest extends FlatSpec with Matchers {
   }
   
   it should "find valid rest names and lengths" in {
-        val luk = new TiedostonLukeminen
+        val luk = new TiedostonLukeminen(inputhakemistonNimi)
         val taukojaOikein = Buffer("z", "z-", "z-.", "z--", "z--.", "z---", "z----") // kaikki sallitut pituudet
     
         assert(laskeVirheet(luk, taukojaOikein)(0) == 0, "***oikeellisuusTesti claims that " + laskeVirheet(luk, taukojaOikein)(1) + " is valid input, when it isn't")
   }
   
   
-   "TiedostonLukeminen.lueTiedosto__Recover Badly Formulated Input" should "#case1: too much white space" in {
-        val luk = new TiedostonLukeminen()
+   "TiedostonLukeminen.lueTiedosto()__Recovering Badly Formulated Input" should "#case1: too much white space" in {
+        val luk = new TiedostonLukeminen(inputhakemistonNimi)
         luk.lueTiedosto("_spaces")
     
         assert(luk.nuottiAlkiot.size == 6, "***syötetiedostossa on 6 nuottitapahtumaa") // sointu on 1 tapahtuma. 
@@ -52,7 +53,7 @@ class NTest extends FlatSpec with Matchers {
   }
 
   it should "#case2: empty chords" in {
-        val luk = new TiedostonLukeminen()
+        val luk = new TiedostonLukeminen(inputhakemistonNimi)
         luk.lueTiedosto("_emptyChords")
     
         assert(luk.nuottiAlkiot.size == 0, "***syötetiedostossa pitäisi olla 0 nuottitapahtumaa")
@@ -60,7 +61,7 @@ class NTest extends FlatSpec with Matchers {
   }
 
   it should "#case3:  chords written together without space" in {
-        val luk = new TiedostonLukeminen()
+        val luk = new TiedostonLukeminen(inputhakemistonNimi)
         luk.lueTiedosto("_chordsWrittenTogetherWithoutSpace")
     
         // the note/chord data is split from white space, so it is crucial to add space if user
@@ -69,7 +70,7 @@ class NTest extends FlatSpec with Matchers {
   }
 
   it should "#case4: use of tabulator" in {
-        val luk = new TiedostonLukeminen()
+        val luk = new TiedostonLukeminen(inputhakemistonNimi)
         luk.lueTiedosto("_tabs") // the file is full of tabs (hard to see)
     
         // the note/chord data is split from white space, so it is crucial to add space if user
@@ -93,7 +94,7 @@ class NTest extends FlatSpec with Matchers {
         val syotteet = Buffer("3errors", "2errors", "1error", "0errors", "0errors")
         // viimeinen 0errors ohjelman kannalta ylimääräinen, mutta testaa ettei lueTiedostoa lueta 5 kertaa, vaan 4, koska virheettömän tiedoston jälkeen pitäisi poistua virheenkorjaus-luupista
     
-        val lukStub = new TiedostonLukeminenStub(syotteet) // TiedostonLukeminenStub löytyy tämän tiedoston lopusta
+        val lukStub = new TiedostonLukeminenStub(syotteet, inputhakemistonNimi) // TiedostonLukeminenStub löytyy tämän tiedoston lopusta
     
         // kuten tiedostosta 3errors voi havaita, on rivi 1 virheetön, sen jälkeen yksi virhe riveillä 2, 3 ja 4
         assert(lukStub.stubMessages(0) == "löydettiin virhe rivillä 2", "eka syötevirhe-ongelma")
@@ -104,20 +105,21 @@ class NTest extends FlatSpec with Matchers {
   } // stubMoneskokerta alkuarvo oli 0 => arvo 3 = 4.kutsukerta
 
   
-  "TiedostonLukeminen.loytyykoInputHakemistosta" should "give false when file not found in directory" in {
-        val luk = new TiedostonLukeminen
-        assert(luk.loytyykoInputHakemistosta("kkk") == false, "valitussa input-hakemistossa ei ole tiedostoa nimeltä \"kkk\"")
+  
+  "TiedostonLukeminen.loytyykoInputHakemistosta()" should "give false when file not found in directory" in {
+        val ui = new UI(inputhakemistonNimi)
+        assert(ui.loytyykoInputHakemistosta("kkk") == false, "valitussa input-hakemistossa ei ole tiedostoa nimeltä \"kkk\"")
   }
   
   it should "give true when file found in directory" in {
-        val luk = new TiedostonLukeminen
-        assert(luk.loytyykoInputHakemistosta("§") == true, "valitussa input-hakemistossa pitäisi olla tiedosto nimeltä \"§\"")
+        val ui = new UI(inputhakemistonNimi)
+        assert(ui.loytyykoInputHakemistosta("kalevala") == true, "valitussa input-hakemistossa pitäisi olla tiedosto nimeltä \"§\"")
   }
   
   
    "TiedostonLukeminen.kasitteleKappaleenNimiJaTahtilaji()" should "find tahtilaji and kappaleenNimi when both hash-tagged in inputfile" in {
 
-        val luk = new TiedostonLukeminen()
+        val luk = new TiedostonLukeminen(inputhakemistonNimi)
         luk.lueTiedosto("kalevala")
     
         assert(luk.kappaleenNimi == " Kalevala - kuudestoista runo (ote)", "***kappaleenNimi-muuttuja väärin")
@@ -125,7 +127,7 @@ class NTest extends FlatSpec with Matchers {
   }
 
   it should "use default values for tahtilaji and kappaleenNimi when neither hash-tagged in inputfile" in {
-        val luk = new TiedostonLukeminen()
+        val luk = new TiedostonLukeminen(inputhakemistonNimi)
         luk.lueTiedosto("jaakko")
     
         assert(luk.kappaleenNimi == "", "***kappaleenNimi-muuttuja väärin")
@@ -136,7 +138,7 @@ class NTest extends FlatSpec with Matchers {
   
   "NuottiPiirturi.lyricsBuffer" should "have right lyrics" in {
         val sanat = Buffer("Jaak-", "ko", "kul-", "ta,", "Jaak-", "ko", "kul-", "ta,", "he-", "rää", "jo,", "he-", "rää", "jo.", "Kel-", "lo-", "ja-", "si", "soi-", "ta,", "kel-", "lo-", "ja-", "si", "soi-", "ta,", "pium", "paum", "poum,", "pium", "paum", "poum.")
-        val luk = new TiedostonLukeminen
+        val luk = new TiedostonLukeminen(inputhakemistonNimi)
     
         luk.lueTiedosto("jaakko")
         val piirturi = new NuottiPiirturi(luk)
@@ -156,7 +158,7 @@ class NTest extends FlatSpec with Matchers {
         // tutkitaan nuottidatan säilyttäjiä, molemmat tyyppiä Buffer[ViivastolleLaitettava]
         // NuottiDataParitettua ei voi luoda ennen NuottiData:n luontia. Kätevää tutkia molempia samalla.
     
-        val luk = new TiedostonLukeminen()
+        val luk = new TiedostonLukeminen(inputhakemistonNimi)
         // tiedostossa on pelkkiä kahdeksasosan mittaisia "eventtejä" 2 tahtia = 8*2 = 16 nuottia/taukoa
         luk.lueTiedosto("kahdeksasosia")
         val piirturi = new NuottiPiirturi(luk)
@@ -168,7 +170,7 @@ class NTest extends FlatSpec with Matchers {
 
   it should "have right lengths" in {
 
-        val luk = new TiedostonLukeminen()
+        val luk = new TiedostonLukeminen(inputhakemistonNimi)
         luk.lueTiedosto("kahdeksasosia")
         val piirturi = new NuottiPiirturi(luk)
         piirturi.execute()
@@ -181,8 +183,8 @@ class NTest extends FlatSpec with Matchers {
           assert(piirturi.nuottiDataParitettu(i).pituus == pariDatanPituudet(i), "***nuottiDataParitettu: pituusvirhe")
   }
 
-  it should "have right hights(=note names)" in {
-      val luk = new TiedostonLukeminen()
+  it should "have right note names" in {
+      val luk = new TiedostonLukeminen(inputhakemistonNimi)
       luk.lueTiedosto("kahdeksasosia")
       val piirturi = new NuottiPiirturi(luk)
       piirturi.execute()
@@ -229,7 +231,7 @@ class NTest extends FlatSpec with Matchers {
         // 5.bar:         a2 a#2  ab2 a2   a2 ab2    ab2 a#2   ab2  a2   a2  a2
        extraEtumerkit += ("","",  "", "§", "","",    "n", "",  "",  "§", "", "")  // indeksit 48-59
            
-        val luk = new TiedostonLukeminen()
+        val luk = new TiedostonLukeminen(inputhakemistonNimi)
         luk.lueTiedosto("_testAccidentals")
         val nuottipiirturi = new NuottiPiirturi(luk)
         nuottipiirturi.execute()
@@ -240,7 +242,7 @@ class NTest extends FlatSpec with Matchers {
  
 
   
-  "NeljasosaNuotti" should "have right nuppi, nimiMapissa, etumerkki and extraetumerkki" in {
+  "NeljasosaNuotti" should "have correct nuppi, nimiMapissa, etumerkki and extraetumerkki" in {
         val neljasOsa = new NeljasosaNuotti("c#2")
         assert(neljasOsa.nuppi == "@@" && neljasOsa.nimiMapissa == "c2" && neljasOsa.etumerkki == "#" && neljasOsa.getExtraetumerkki == "")
   }
@@ -270,7 +272,7 @@ class NTest extends FlatSpec with Matchers {
         odotettu += "            "
         odotettu += "            "
     
-        val piirturi = new NuottiPiirturi(new TiedostonLukeminen)
+        val piirturi = new NuottiPiirturi(new TiedostonLukeminen(inputhakemistonNimi))
         val nuottiAlkiot = Buffer("b2", "b2")
         var nuottiData = Buffer[ViivastolleLaitettava]()
         nuottiData = piirturi.kasitteleNuottiTieto(nuottiAlkiot, nuottiData)
@@ -312,7 +314,7 @@ class NTest extends FlatSpec with Matchers {
  
   
   "Viivasto.kappale" should "have Title + 2 staffs" in {
-        val luk = new TiedostonLukeminen()
+        val luk = new TiedostonLukeminen(inputhakemistonNimi)
         luk.lueTiedosto("jaakko_2rivia") // kappaleessa on 4 kpl 4/4-tahteja ja ohjelma jakaa sen tasan kahdelle riville
         val piirturi = new NuottiPiirturi(luk)
         piirturi.execute()
@@ -354,12 +356,7 @@ class NTest extends FlatSpec with Matchers {
   }
 
     
-
-  
-  
-  
-
-  
+ 
   "UI.kayttajaValitseeMIDIPatchin() --as stub--___accept only key presses 1-7 and ENTER" should "#case1: 2 non-acceptable, 1 acceptable value " in {
 
         /* alkuperäinen koodi luokassa UI:
@@ -373,7 +370,7 @@ class NTest extends FlatSpec with Matchers {
         var MIDIPatch = "alkuarvo"
         MIDIPatch = MIDIPatchinValinta(Array("8", "11", "3"), MIDIPatch) // "3" on hyväksyttävä arvo
         assert(MIDIPatch == "3", "käyttäjän syoteSekvenssi 1:n jälkeen MIDIPatch pitäisi olla 3")
-   }
+    }
     
     it should "#case2: only ENTER" in {
         var MIDIPatch = "alkuarvo"
@@ -391,9 +388,9 @@ class NTest extends FlatSpec with Matchers {
   
 
   
-  "simpleMIDIPlayerAdapter" should "transform nuottiData to correct Buffer[(Buffer[Int], Double)]" in {
+  "simpleMIDIPlayerAdapter.muunnaMIDInuoteiksi()" should "transform Nuottipiirturi.nuottiData to correct Buffer[(Buffer[Int], Double)]" in {
 
-        val luk = new TiedostonLukeminen()
+        val luk = new TiedostonLukeminen(inputhakemistonNimi)
         luk.lueTiedosto("jaakko") // (kansiosta input_virheita)
         val n = new NuottiPiirturi(luk)
         n.execute() // MIDI-Patch 3 valittu käyttäjän puolesta
@@ -430,7 +427,7 @@ class NTest extends FlatSpec with Matchers {
         // musiikin maisterin koulutuksella ja silmilläni olen todennut tiedoston bumble.txt oikeaksi.
         // jos ohjelmaa tulevaisuudessa muutetaan, voi tämä testi lakata toimimasta.
     
-        val luk = new TiedostonLukeminen()
+        val luk = new TiedostonLukeminen(inputhakemistonNimi)
         luk.lueTiedosto("bumble") // (kansiosta input_virheita)
         val nuottipiirturi = new NuottiPiirturi(luk)
         nuottipiirturi.execute()
@@ -447,7 +444,7 @@ class NTest extends FlatSpec with Matchers {
     
         // The last row of music in all.txt is correct in terms of program logic. It cannot find place for bar line (one bar has now 8 beats), since 
         // time signature is 4/4 and no note ends on 4, the closest is 4 and half beats. So no bar line is possible to draw, 
-        val luk = new TiedostonLukeminen()
+        val luk = new TiedostonLukeminen(inputhakemistonNimi)
         luk.lueTiedosto("allViivastolleLaitettavaClasses") // (kansiosta input_virheita)
         val nuottipiirturi = new NuottiPiirturi(luk)
         nuottipiirturi.execute()
@@ -549,7 +546,7 @@ class NTest extends FlatSpec with Matchers {
 
   //////  S T U B    C L A S S E S:  ///////////////////////////////////////////////////////////////////////
 
-  class TiedostonLukeminenStub(tiedostojenNimet: Buffer[String]) {    // TODO 
+  class TiedostonLukeminenStub(tiedostojenNimet: Buffer[String], inputhakemistonNimi:String) {    // TODO 
 
     var inputFromFile = Buffer[String]() // kaikki input, paitsi tyhjät rivit
     var nuottiDataRiveina = Buffer[String]()
@@ -560,7 +557,6 @@ class NTest extends FlatSpec with Matchers {
     var tahtilaji = "4"
     var kappaleenNimi = ""
 
-    val inputhakemistonNimi = "./input_virheita/"
     val inputhakemisto = new File(inputhakemistonNimi)
 
     var ekaKerta = true

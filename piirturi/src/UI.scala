@@ -2,10 +2,13 @@
 
 import scala.io.StdIn._
 import java.io.PrintWriter
+import java.io._
 
 
-class UI {
+class UI(inputhakemistonNimi: String) {
   
+  //  val inputhakemistonNimi =  "./input_virheita/"
+    val inputhakemisto = new File(inputhakemistonNimi)
     var tiedostonNimi = ""
     var MIDIPatch = ""
     
@@ -14,9 +17,32 @@ class UI {
     def kayttajaValitseeTiedoston(lukija: TiedostonLukeminen) = {
         do {
            tiedostonNimi = readLine("\n\nMinkä nimisen tiedoston haluat nuoteiksi? Valitse ylläolevista. ")
-        } while (!lukija.loytyykoInputHakemistosta(tiedostonNimi.trim()))   
+        } while (!loytyykoInputHakemistosta(tiedostonNimi.trim()))   
         
     }
+    
+    def listaaTiedostot() = {
+    var montakoNimeaRiville = 0
+    println("\n")
+    for (tiedosto <- inputhakemisto.listFiles()) {     
+       if (tiedosto.isFile) {
+          print(tiedosto.getName + '\t')
+          montakoNimeaRiville += 1
+          if (montakoNimeaRiville == 8){
+            println()
+            montakoNimeaRiville = 0
+          }
+       }    
+    }
+  } 
+
+  
+  def loytyykoInputHakemistosta(nimi: String): Boolean = {
+    for (tiedosto <- inputhakemisto.listFiles())
+      if (tiedosto.isFile && tiedosto.getName.toLowerCase() == nimi.toLowerCase().trim())
+        return true
+    false
+  }
     
     
     def kayttajaValitseeMIDIPatchin() = {

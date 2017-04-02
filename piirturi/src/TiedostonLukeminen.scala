@@ -7,7 +7,7 @@ import scala.collection.mutable.Buffer
 
 
 
-class TiedostonLukeminen {
+class TiedostonLukeminen(inputhakemistonNimi: String) {
 
   var inputFromFile = Buffer[String]()       // kaikki input, paitsi tyhjät rivit
   var nuottiDataRiveina = Buffer[String]()  
@@ -18,8 +18,7 @@ class TiedostonLukeminen {
   var tahtilaji = "4"
   var kappaleenNimi = ""
   var tiedostonNimi = ""
-  val inputhakemistonNimi =  "./input_virheita/"
-  val inputhakemisto = new File(inputhakemistonNimi)
+ 
   
   var ekaKerta = true
   var tahtilajiOnJoLuettu = false
@@ -29,28 +28,7 @@ class TiedostonLukeminen {
   
  ///////   M E T O D I T   ///////////////////////////////////////////////////////////////////////// 
   
-  def listaaTiedostot() = {
-    var montakoNimeaRiville = 0
-    println("\n")
-    for (tiedosto <- inputhakemisto.listFiles()) {     
-       if (tiedosto.isFile) {
-          print(tiedosto.getName + '\t')
-          montakoNimeaRiville += 1
-          if (montakoNimeaRiville == 8){
-            println()
-            montakoNimeaRiville = 0
-          }
-       }    
-    }
-  } 
-
   
-  def loytyykoInputHakemistosta(nimi: String): Boolean = {
-    for (tiedosto <- inputhakemisto.listFiles())
-      if (tiedosto.isFile && tiedosto.getName.toLowerCase() == nimi.toLowerCase().trim())
-        return true
-    false
-  }
 
   
   def lueTiedosto(tiedostonNimi: String): Unit = {  

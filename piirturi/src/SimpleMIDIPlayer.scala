@@ -203,29 +203,25 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPa
        var nuottiNumberit = Buffer[Buffer[Int]]()    // tänne nuottien korkeudet
        var pituudet = Buffer[Double]()               // [0.5 ... 4.0]
        
-       
            for (alkio<- nuottiData) {
-             var apubufferInt = Buffer[Int]()   // luodaan aina tyhjä buffer
-             
+               pituudet += alkio.pituus         
+               var apubufferInt = Buffer[Int]()   // luodaan aina tyhjä buffer
+               
                alkio match {
                case s: Sointu  => 
-                           pituudet += s.pituus         // yhteinen pituus talteen vain kerran
-                           for(nuotti <- s.nuotit){
+                           for(nuotti <- s.nuotit)
                                   apubufferInt += MIDINoteNumber(nuotti.asInstanceOf[Nuotti].korkeus)  // Map("nuotinnimi" --> Int)     
-                           }   
                            nuottiNumberit += apubufferInt.sorted  // melodia menee vikaksi
                              
                case n: Nuotti => 
-                           pituudet += n.pituus
                            apubufferInt += MIDINoteNumber(n.korkeus)
                            nuottiNumberit += apubufferInt
                      
-               case t: Tauko =>
-                          pituudet += t.pituus   
+               case t: Tauko =>  
                           apubufferInt += 0  // sovin itseni kanssa että tauon "korkeus" on 0
                           nuottiNumberit += apubufferInt
-                     
-                } 
+                } // end match
+               
            } // end for
        
       

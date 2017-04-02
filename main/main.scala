@@ -2,8 +2,9 @@
 
 object main extends App{
   
-     val ui = new UI()
-     val lukija = new TiedostonLukeminen()
+     val inputhakemistonNimi =  "./input_virheita/"
+     val ui = new UI(inputhakemistonNimi)
+     val lukija = new TiedostonLukeminen(inputhakemistonNimi)
      
     
     lukija.helppiTeksti()
@@ -30,7 +31,7 @@ object main extends App{
     
      
     def kelvollisenTiedostonKysyminenJaTarkistusLoop():Unit = {
-       lukija.listaaTiedostot()
+       ui.listaaTiedostot()
        ui.kayttajaValitseeTiedoston(lukija)
        lukija.lueTiedosto(ui.tiedostonNimi.trim())
        if(lukija.nuottiAlkiot.isEmpty ){     // case: oli pelkkää virheellistä nuottidataa, esim. <>, joista generoitui kuitenkin "", eli ei sama asia kuin tyhjä tiedosto
