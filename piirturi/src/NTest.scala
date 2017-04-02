@@ -6,8 +6,7 @@ import org.scalatest._
 import scala.collection.mutable.Buffer
 import scala.io.Source
 import java.io._
-import java.io.Console._
-import scala.io.StdIn._
+
 
 class NTest extends FlatSpec with Matchers {
 

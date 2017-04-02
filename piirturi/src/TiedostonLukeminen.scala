@@ -18,11 +18,8 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
   var tahtilaji = "4"
   var kappaleenNimi = ""
   var tiedostonNimi = ""
- 
-  
   var ekaKerta = true
-  var tahtilajiOnJoLuettu = false
-  var lukemisenJalkeenEiNuottiDataa =  false  
+  var tahtilajiOnJoLuettu = false 
  
  
   
@@ -33,19 +30,18 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
   
   def lueTiedosto(tiedostonNimi: String): Unit = {  
     
+     val kayttajanValitsemaTiedosto = Source.fromFile(inputhakemistonNimi + tiedostonNimi)
+     // pitää nollata, jos tänne tullaan virheidentarkistuksesta:
      this.tiedostonNimi = tiedostonNimi
-     this.inputFromFile = Buffer[String]()       // pitää nollata, jos tänne tullaan virheidentarkistuksesta
+     this.inputFromFile = Buffer[String]()       
      this.nuottiDataRiveina = Buffer[String]() 
      this.nuottiDatanRivinumerot = Buffer[Int]()
      this.nuottiAlkiot = Array[String]() 
      this.lyriikkadata = Buffer[String]() 
-     val kayttajanValitsemaTiedosto = Source.fromFile(inputhakemistonNimi + tiedostonNimi)
-     tahtilajiOnJoLuettu = false
-     lukemisenJalkeenEiNuottiDataa =  false  
-     ekaKerta = true
+     this.tahtilajiOnJoLuettu = false
+     this.ekaKerta = true
      this.tahtilaji = "4"
-     this.kappaleenNimi = ""   // joudutaan alustamaan uudestaan, mutten voi jäädä vanha nimi tiedostosta jossa ei ollut dataa
-    
+     this.kappaleenNimi = ""   
       
      try {
         for (rivi <- kayttajanValitsemaTiedosto.getLines) {
@@ -58,15 +54,12 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
      if (this.inputFromFile.size != 0){
          kasitteleTunnisteet(this.inputFromFile) 
          if(nuottiDataRiveina.size ==0) {        // case: esim pelkkä nimi, mutta ei nuotteja
-             lukemisenJalkeenEiNuottiDataa= true 
              return}
          else if(ekaKerta) tarkistaVirheet()     // loput virheidentarkistukset do while-loopissa, kutsu rivillä 94
      }
-     else {
-         lukemisenJalkeenEiNuottiDataa= true  // case: täysin tyhjä file
+     else {       // case: täysin tyhjä file
          return
      }
-     
   }   
   
   
@@ -190,8 +183,7 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
             nuottiDataRiveina += kelvollinenSyoteRivi.toLowerCase() 
           }
         }// if   .size != 0 
-      } 
-    //  println("kappaleenNimi: " + kappaleenNimi + ", tahtilaji" + tahtilaji)
+      }
   }
   
   

@@ -191,14 +191,14 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
               iskujaMennyt += nuottiData(i).pituus
               
               nuottiData(i) match {
-                case k1: KahdeksasosaNuotti if(iskujaMennyt % 1 == 0.5) => nuottiData(i+1) match {
-                     case k2: KahdeksasosaNuotti => nuottiDataParitettu += new KahdeksasosaPari(k1, k2)
-                                                    minutOnJoKasitelty = true  
-                                                    iskujaMennyt += k2.pituus
-                                                    if(nuottiData.last.eq(k2)) paastiinTiedostonloppuun = true
-                     case _ =>  nuottiDataParitettu += k1  // 1/8 talteen, jos se ei löytänyt paria
-                }
-                case _ =>  nuottiDataParitettu += nuottiData(i)     // ei-1/8:kin talteen                       
+                  case k1: KahdeksasosaNuotti if(iskujaMennyt % 1 == 0.5) => nuottiData(i+1) match {
+                       case k2: KahdeksasosaNuotti => nuottiDataParitettu += new KahdeksasosaPari(k1, k2)
+                                                      minutOnJoKasitelty = true  
+                                                      iskujaMennyt += k2.pituus
+                                                      if(nuottiData.last.eq(k2)) paastiinTiedostonloppuun = true
+                       case _ =>  nuottiDataParitettu += k1  // 1/8 talteen, jos se ei löytänyt paria
+                  }
+                  case _ =>  nuottiDataParitettu += nuottiData(i)     // ei-1/8:kin talteen                       
               }
             
               if (iskujaMennyt == tahtilaji) {

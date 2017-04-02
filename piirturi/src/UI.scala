@@ -7,11 +7,27 @@ import java.io._
 
 class UI(inputhakemistonNimi: String) {
   
-  //  val inputhakemistonNimi =  "./input_virheita/"
     val inputhakemisto = new File(inputhakemistonNimi)
     var tiedostonNimi = ""
     var MIDIPatch = ""
     
+    
+    
+    
+    def listaaTiedostot() = {
+        var montakoNimeaRiville = 0
+        println("\n")
+        for (tiedosto <- inputhakemisto.listFiles()) {     
+           if (tiedosto.isFile) {
+              print(tiedosto.getName + '\t')
+              montakoNimeaRiville += 1
+              if (montakoNimeaRiville == 8){
+                println()
+                montakoNimeaRiville = 0
+              }
+           }    
+        }
+    } 
     
     
     def kayttajaValitseeTiedoston(lukija: TiedostonLukeminen) = {
@@ -20,29 +36,14 @@ class UI(inputhakemistonNimi: String) {
         } while (!loytyykoInputHakemistosta(tiedostonNimi.trim()))   
         
     }
-    
-    def listaaTiedostot() = {
-    var montakoNimeaRiville = 0
-    println("\n")
-    for (tiedosto <- inputhakemisto.listFiles()) {     
-       if (tiedosto.isFile) {
-          print(tiedosto.getName + '\t')
-          montakoNimeaRiville += 1
-          if (montakoNimeaRiville == 8){
-            println()
-            montakoNimeaRiville = 0
-          }
-       }    
-    }
-  } 
 
   
-  def loytyykoInputHakemistosta(nimi: String): Boolean = {
-    for (tiedosto <- inputhakemisto.listFiles())
-      if (tiedosto.isFile && tiedosto.getName.toLowerCase() == nimi.toLowerCase().trim())
-        return true
-    false
-  }
+    def loytyykoInputHakemistosta(nimi: String): Boolean = {
+        for (tiedosto <- inputhakemisto.listFiles())
+          if (tiedosto.isFile && tiedosto.getName.toLowerCase() == nimi.toLowerCase().trim())
+            return true
+        false
+    }
     
     
     def kayttajaValitseeMIDIPatchin() = {
@@ -59,6 +60,7 @@ class UI(inputhakemistonNimi: String) {
         println("muista painaa F5, jotta tiedosto päivittyy Package Explorerissa.")
         kohdetiedosto
     }
+    
     
     def mitaTehdaanSeuraavaksi() = {
         var valinta = ""

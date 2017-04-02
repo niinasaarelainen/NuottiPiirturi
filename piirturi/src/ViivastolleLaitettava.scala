@@ -1,5 +1,3 @@
-//package src
-
 import scala.collection.mutable.Buffer
 import scala.collection.mutable.Map
 
@@ -16,12 +14,12 @@ trait ViivastolleLaitettava {
    def soiva: Boolean    // tarvitaan tieto sanoja laitettaessa, tauko= false
   
   
-   def piirraTyhjaViivasto(pituus: Int) = {
+   def piirraTyhjaViivasto(leveys: Int) = {
     
       var viiva = ""
-      for ( i <- 1 to pituus) viiva += "-"  // muodostetaan oikean mittainen viiva
+      for ( i <- 1 to leveys) viiva += "-"  // muodostetaan oikean mittainen viiva
       var vali = ""
-      for ( i <- 1 to pituus) vali += " "   // muodostetaan oikean mittainen väli
+      for ( i <- 1 to leveys) vali += " "   // muodostetaan oikean mittainen väli
     
       for ( i <- 1 to 5) viivasto += vali      // ylös tyhjää varsia varten   
       for(i <- 1 to 5){
@@ -239,7 +237,7 @@ class PisteellinenNeljasosaNuotti(nuotinNimi: String, extraetumerkki: String = "
 class KahdeksasosaNuotti(nuotinNimi: String, extraetumerkki: String = "") extends NeljasosaNuotti(nuotinNimi: String, extraetumerkki: String){
      override def korkeus = nuotinNimi
      override def pituus = 0.5
-     override def kuvanLeveys = 8
+     override def kuvanLeveys = 7
     
      override def kuva = {
         super.kuva
