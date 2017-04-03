@@ -78,6 +78,26 @@ class NTest extends FlatSpec with Matchers {
   }
   
   
+  
+  
+   "TiedostonLukeminen.kasitteleKappaleenNimiJaTahtilaji()" should "find tahtilaji and kappaleenNimi when both hash-tagged in inputfile" in {
+
+        val luk = new TiedostonLukeminen(inputhakemistonNimi)
+        luk.lueTiedosto("kalevala")
+    
+        assert(luk.kappaleenNimi == " Kalevala - kuudestoista runo (ote)", "***kappaleenNimi-muuttuja väärin")
+        assert(luk.tahtilaji == "5", "***tahtilajin pitäisi olla 5 (eli 5/4 määritelty ohjelmassa 5)")
+  }
+
+  it should "use default values for tahtilaji and kappaleenNimi when neither hash-tagged in inputfile" in {
+        val luk = new TiedostonLukeminen(inputhakemistonNimi)
+        luk.lueTiedosto("jaakko")
+    
+        assert(luk.kappaleenNimi == "", "***kappaleenNimi-muuttuja väärin")
+        assert(luk.tahtilaji == "4", "***tahtilajin pitäisi olla oletusarvo eli 4")
+  }
+  
+  
   "TiedostonLukeminen.tarkistaVirheet() --as stub--" should "find 3 syntax errors(= wrongly formulated note data) in file '3errors'" in {
         /*
            Simuloidaan käyttäjän virheidenkorjausprosessia. Ensin annetaan syöte, jossa on 3 syntaksivirhettä 
@@ -102,36 +122,7 @@ class NTest extends FlatSpec with Matchers {
         intercept[IndexOutOfBoundsException] { lukStub.stubMessages(3) } // tällä testataan, että tiedostolla "0errors" ei generoidu virheilmoitusta, eli stubMessages on kolmen alkoin mittainen
         assert(lukStub.stubMoneskokerta == 3, "lueTiedosto()-metodia kutsuttiin 4 kertaa")
   } // stubMoneskokerta alkuarvo oli 0 => arvo 3 = 4.kutsukerta
-
   
-  
-  "TiedostonLukeminen.loytyykoInputHakemistosta()" should "give false when file not found in directory" in {
-        val ui = new UI(inputhakemistonNimi)
-        assert(ui.loytyykoInputHakemistosta("kkk") == false, "valitussa input-hakemistossa ei ole tiedostoa nimeltä \"kkk\"")
-  }
-  
-  it should "give true when file found in directory" in {
-        val ui = new UI(inputhakemistonNimi)
-        assert(ui.loytyykoInputHakemistosta("kalevala") == true, "valitussa input-hakemistossa pitäisi olla tiedosto nimeltä \"§\"")
-  }
-  
-  
-   "TiedostonLukeminen.kasitteleKappaleenNimiJaTahtilaji()" should "find tahtilaji and kappaleenNimi when both hash-tagged in inputfile" in {
-
-        val luk = new TiedostonLukeminen(inputhakemistonNimi)
-        luk.lueTiedosto("kalevala")
-    
-        assert(luk.kappaleenNimi == " Kalevala - kuudestoista runo (ote)", "***kappaleenNimi-muuttuja väärin")
-        assert(luk.tahtilaji == "5", "***tahtilajin pitäisi olla 5 (eli 5/4 määritelty ohjelmassa 5)")
-  }
-
-  it should "use default values for tahtilaji and kappaleenNimi when neither hash-tagged in inputfile" in {
-        val luk = new TiedostonLukeminen(inputhakemistonNimi)
-        luk.lueTiedosto("jaakko")
-    
-        assert(luk.kappaleenNimi == "", "***kappaleenNimi-muuttuja väärin")
-        assert(luk.tahtilaji == "4", "***tahtilajin pitäisi olla oletusarvo eli 4")
-  }
 
 
   
@@ -210,7 +201,6 @@ class NTest extends FlatSpec with Matchers {
         }
   }
 
-  
   
   "NuottiPiirturi.tutkiEtumerkit()" should "give out right accidentals" in {
         //  testing all the cases for how to draw accidentals within a bar. 
@@ -354,6 +344,16 @@ class NTest extends FlatSpec with Matchers {
         assert(v.kappale.kappale(0).last.contains("Straigforwarstraigahead!"), "***wrong lyrics") // joka sanasta 6 ekaa kirjainta
   }
 
+  
+   "UI.loytyykoInputHakemistosta()" should "give false when file not found in directory" in {
+        val ui = new UI(inputhakemistonNimi)
+        assert(ui.loytyykoInputHakemistosta("kkk") == false, "valitussa input-hakemistossa ei ole tiedostoa nimeltä \"kkk\"")
+   }
+  
+   it should "give true when file found in directory" in {
+        val ui = new UI(inputhakemistonNimi)
+        assert(ui.loytyykoInputHakemistosta("kalevala") == true, "valitussa input-hakemistossa pitäisi olla tiedosto nimeltä \"§\"")
+   }
     
  
   "UI.kayttajaValitseeMIDIPatchin() --as stub--___accept only key presses 1-7 and ENTER" should "#case1: 2 non-acceptable, 1 acceptable value " in {
@@ -448,6 +448,22 @@ class NTest extends FlatSpec with Matchers {
         val nuottipiirturi = new NuottiPiirturi(luk)
         nuottipiirturi.execute()
         val allPrinted = Source.fromFile("./output/all.txt")
+    
+        assertFileVersusKappale(nuottipiirturi.viivasto.kappale.kappale, allPrinted)
+  }
+  
+  it should "produce test file '_testAccidentals' similarily as in correctly printed file 'accidentals.txt'" in {
+        // in test file there are all the possible cases I could think of how a note behaves
+        // when accidentals (#,b,§) are introduced in many different sequences.
+    
+        // they are tested in the note height: h2 represents a note with extra coding because of it's
+        // name "b2" as flatten, which has the char "b" which is the same as the symbol of flattening  a note "Gb2"
+        // a2 represents a normal case
+        val luk = new TiedostonLukeminen(inputhakemistonNimi)
+        luk.lueTiedosto("_testAccidentals") // (kansiosta input_virheita)
+        val nuottipiirturi = new NuottiPiirturi(luk)
+        nuottipiirturi.execute()
+        val allPrinted = Source.fromFile("./output/accidentals.txt")
     
         assertFileVersusKappale(nuottipiirturi.viivasto.kappale.kappale, allPrinted)
   }
@@ -547,20 +563,18 @@ class NTest extends FlatSpec with Matchers {
 
   class TiedostonLukeminenStub(tiedostojenNimet: Buffer[String], inputhakemistonNimi:String) {    // TODO 
 
-    var inputFromFile = Buffer[String]() // kaikki input, paitsi tyhjät rivit
-    var nuottiDataRiveina = Buffer[String]()
-    var nuottiAlkiot = Array[String]() // splitattuna yllä oleva data
+    var inputFromFile = Buffer[String]()       // kaikki input, paitsi tyhjät rivit
+    var nuottiDataRiveina = Buffer[String]()  
+    var nuottiAlkiot = Array[String]()         // splitattuna yllä oleva data
     var nuottiDatanRivinumerot = Buffer[Int]() // syötetiedoston nuottidatarivit muistiin, ei tyhjiä rivejä
-    var lyriikkadata = Buffer[String]() // biisin sanat
-
+    var lyriikkadata = Buffer[String]()        // biisin sanat
+  
     var tahtilaji = "4"
     var kappaleenNimi = ""
-
-    val inputhakemisto = new File(inputhakemistonNimi)
-
     var ekaKerta = true
-    var tahtilajiOnJoLuettu = false
+    var tahtilajiOnJoLuettu = false 
 
+// stubs, not in original class:
     var stubMessage = "stubMessagen alustusteksti"
     var stubMessages = Buffer[String]()
     var stubMoneskokerta = 0
@@ -571,34 +585,37 @@ class NTest extends FlatSpec with Matchers {
     /////  M E T O D I T ///////////////////////////////////////////////////////////////////////// 
 
     def lueTiedosto(tiedostonNimi: String): Unit = {
-
-      //  stubMoneskokerta += 1
-
-      this.tiedostonNimi = tiedostonNimi
-      this.inputFromFile = Buffer[String]() // pitää nollata, jos tänne tullaan virheidentarkistuksesta
-      this.nuottiDataRiveina = Buffer[String]()
-      this.nuottiDatanRivinumerot = Buffer[Int]()
-      this.nuottiAlkiot = Array[String]()
-      this.lyriikkadata = Buffer[String]() 
-      val kayttajanValitsemaTiedosto = Source.fromFile(inputhakemistonNimi + tiedostonNimi)
-      tahtilajiOnJoLuettu = false
-
-      try {
-        for (rivi <- kayttajanValitsemaTiedosto.getLines) {
-          this.inputFromFile += rivi.trim
-        }
-      } finally {
-        kayttajanValitsemaTiedosto.close()
-      }
-
-      if (this.inputFromFile.size != 0) {
-        kasitteleTunnisteet(this.inputFromFile)
-        if (nuottiDataRiveina.size == 0) { println("\n\nei nuottidataa, ei tehdä mitään."); System.exit(1) }
-        else if (ekaKerta) tarkistaVirheet() // loput virheidentarkistukset do while-loopissa, kutsu rivillä 94
-      } else {
-        println("\n\ntyhjästä tiedostosta ei voi tehdä nuotteja")
-        System.exit(1)
-      }
+      
+       val kayttajanValitsemaTiedosto = Source.fromFile(inputhakemistonNimi + tiedostonNimi)
+       // pitää nollata, jos tänne tullaan virheidentarkistuksesta:
+       this.tiedostonNimi = tiedostonNimi
+       this.inputFromFile = Buffer[String]()       
+       this.nuottiDataRiveina = Buffer[String]() 
+       this.nuottiDatanRivinumerot = Buffer[Int]()
+       this.nuottiAlkiot = Array[String]() 
+       this.lyriikkadata = Buffer[String]() 
+       this.tahtilajiOnJoLuettu = false
+       this.ekaKerta = true
+       this.tahtilaji = "4"
+       this.kappaleenNimi = ""   
+        
+       try {
+          for (rivi <- kayttajanValitsemaTiedosto.getLines) {
+             this.inputFromFile += rivi.trim
+          }
+       } finally {
+          kayttajanValitsemaTiedosto.close()
+       }
+            
+       if (this.inputFromFile.size != 0){
+           kasitteleTunnisteet(this.inputFromFile) 
+           if(nuottiDataRiveina.size ==0) {        // case: esim pelkkä nimi, mutta ei nuotteja
+               return}
+           else if(ekaKerta) tarkistaVirheet()     // loput virheidentarkistukset do while-loopissa, kutsu rivillä 94
+       }
+       else {       // case: täysin tyhjä file
+           return
+       }
     }
 
     def tarkistaVirheet() = {
