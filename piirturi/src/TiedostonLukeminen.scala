@@ -1,5 +1,3 @@
-//package src
-
 import scala.io.Source
 import java.io._
 import scala.io.StdIn._

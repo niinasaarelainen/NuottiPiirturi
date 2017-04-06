@@ -1,5 +1,3 @@
-//package src
-
 import javax.sound.midi.MidiSystem
 import scala.collection.mutable.Map
 import scala.collection.mutable.Buffer
@@ -232,7 +230,5 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPa
        }
        nuotitJaPituudet  // palautetaan yksikkötestille tämä
    } 
- 
-    
+  
 }  ///////////////////// end   simpleMIDIPlayerAdapter  /////////////////////////////////////////////////////////
-

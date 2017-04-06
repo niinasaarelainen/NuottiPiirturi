@@ -1,6 +1,4 @@
-
- #6
- # virheitä, virheitä
+#6
  
  b1  c1    c1  f1  <b2,   b2> h2   b2  h2   < h#2 ,  b2 ,   a2 ,  a#2 >  z z f2 
  
@@ -10,15 +8,15 @@
  #2.säe
 
  f2 d1  h1 
- c1 c-1 c#1 h#1 b1 
+ c1 c-1 c#1 h#1 b1  z-
  
- z---- c1-. c1 b1
+ z--- c1-. c1 b1
  
  #sanat 
- trol-lol-lol
+  jos z-
+  z---
+  
+  tilalla on z----, tulee c1:een §, ei ehkä kovin vaarallista?
  
  
- if(lukija.nuottiAlkiot.isEmpty)     // case: tiedostossa on dataa, jota yritetään tulkita nuoteiksi/soinnuiksi, esim. pelkkä <>, eli ei ole tyhjä tiedosto. Mutta lopputulos on: ei saatu yhtään nuottia aikaiseksi
-        println("\nValitsemassasi tiedostossa ei ollut yhtään hyväksyttävää nuottia. Ei voi piirtää.\n" +
-                 "Valitse jokin toinen tiedosto tai muokkaa äsken valitsemaasi tiedostoa.\n\n")
-    }while(lukija.nuottiAlkiot.isEmpty)    
+ 

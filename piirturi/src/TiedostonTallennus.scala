@@ -1,5 +1,3 @@
-//package src
-
 import java.io.PrintWriter
 import scala.io.StdIn._
   

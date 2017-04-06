@@ -207,21 +207,21 @@ class NTest extends FlatSpec with Matchers {
         //  testing how extraEtumerkki behaves. That indicates that some extra rule is in hand when drawing or when omit drawing an b, #, §
         //  § = this sign is needed when note is made natural after being # or b, not needed after bar line
         //  n =  is my own invented syntax for a note that is actually # or b but the sign is not drawn, since it is only necessary to draw an accidental only once in a bar
-        //  assuming it is not overruled by an oppisite sign(#, b) or made natural (§)
+        //  assuming it is not overruled by an opposite sign(#, b) or made natural (§)
         
-                     // 1.bar:      b2  b2    h2  h2  b2 h2    b2  h2   h#2  b2   h2  h#2
+        
+                     // 1.bar:      b1  b1   h1 h1    b1 h1    h#1  h1  h1  b1   h1  h#1
         var extraEtumerkit = Buffer("", "n", "§", "", "", "§", "", "§", "", "",  "§", "")   // indeksit 0-11, Time Signature 6/4, thus one bar consists of 12 eigth notes
-             // 2.bar:    //h2 h#2  b2 h2   h2  b2    b2 h#2   b2  h2   h2  b2
-        extraEtumerkit += ("", "", "", "§", "", "",   "n", "", "", "§", "", "")  // indeksit 12-23
-        // 3.bar:          h2  b2  h#2 b2 h#2  h2 	 h2  h2  b2 b2 		 h#2 h#2
-         extraEtumerkit += ("", "", "", "", "", "§", "", "", "", "n",  "", "n")  // indeksit 24-35
-        // 4.bar:          ab2 ab2   a2 a2   ab2 a2    a2 ab2   a2  a#2   ab2 a2
-          extraEtumerkit += ("", "n", "§","", "","§",  "", "",  "§", "",  "", "§")  // indeksit 36-47
-        // 5.bar:         a2 a#2  ab2 a2   a2 ab2    ab2 a#2   ab2  a2   a2  a2
-       extraEtumerkit += ("","",  "", "§", "","",    "n", "",  "",  "§", "", "")  // indeksit 48-59
-           
+             // 2.bar:     h1 h#1   b1   h1   h1 b1     b1  h#1   b1  h1  h1   b1
+        extraEtumerkit += ("", "",  "", "§",  "", "",   "n", "",  "", "§", "", "")  // indeksit 12-23
+        
+        // 3.bar:         ab1 ab1   a1 a1   ab1 a1    a#1 a1    a1 ab1  a1  a#1
+        extraEtumerkit += ("", "n", "§", "", "", "§", "", "§", "", "",  "§", "")  // indeksit 24-35
+        // 4.bar:          a1 a#1  ab1 a1   a1 ab1    ab1 a#1   ab1  a1  a1  ab1
+        extraEtumerkit += ("", "",  "", "§",  "", "",   "n", "",  "", "§", "", "")  // indeksit 36-47
+               
         val luk = new TiedostonLukeminen(inputhakemistonNimi)
-        luk.lueTiedosto("_testAccidentals")
+        luk.lueTiedosto("_accidentals")
         val nuottipiirturi = new NuottiPiirturi(luk)
         nuottipiirturi.execute()
     
@@ -452,7 +452,7 @@ class NTest extends FlatSpec with Matchers {
         assertFileVersusKappale(nuottipiirturi.viivasto.kappale.kappale, allPrinted)
   }
   
-  it should "produce test file '_testAccidentals' similarily as in correctly printed file 'accidentals.txt'" in {
+  it should "produce test file '_accidentals' similarily as in correctly printed file 'accidentals.txt'" in {
         // in test file there are all the possible cases I could think of how a note behaves
         // when accidentals (#,b,§) are introduced in many different sequences.
     
@@ -460,7 +460,7 @@ class NTest extends FlatSpec with Matchers {
         // name "b2" as flatten, which has the char "b" which is the same as the symbol of flattening  a note "Gb2"
         // a2 represents a normal case
         val luk = new TiedostonLukeminen(inputhakemistonNimi)
-        luk.lueTiedosto("_testAccidentals") // (kansiosta input_virheita)
+        luk.lueTiedosto("_accidentals") // (kansiosta input_virheita)
         val nuottipiirturi = new NuottiPiirturi(luk)
         nuottipiirturi.execute()
         val allPrinted = Source.fromFile("./output/accidentals.txt")
