@@ -18,7 +18,6 @@ object main extends App{
         kelvollisenTiedostonKysyminenJaTarkistusLoop()
         ui.kayttajaValitseeMIDIPatchin()
         val n = new NuottiPiirturi(lukija)
-        println(n.inputBuffer.size)
         n.execute()
         if(!ui.MIDIPatch.equals("")){  // kuunnellaan  
             val adapter = new simpleMIDIPlayerAdapter(n.nuottiData, ui.MIDIPatch.toInt, n.viivasto.kappale, lukija.tahtilaji.toInt)
