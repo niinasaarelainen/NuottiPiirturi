@@ -34,85 +34,81 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
   
   def kasitteleNuottiTieto(inputBuffer: Buffer[String], palautetaan: Buffer[ViivastolleLaitettava] ): Buffer[ViivastolleLaitettava] = {   
   
-    for ( alkio <- inputBuffer ){      // alkio esim. "g#1--"   tai   "<f1,d1>"
-   
-      // S O I N N U T
-        if (alkio.head == '<')
-            kasitteleSoinnut(alkio)
-       
-      // N U O T I T  J A   T A U O T 
-        else {                                                            
-            var nuotinNimi = alkio.filter(_ != '-').filter(_ != '.')  
-            var pituus = alkio.count(_ == '-')     
-            var extraetumerkki = tutkiEtumerkit(nuotinNimi)  
-           
-            /* jos tauot yrittää siirtää omaksi sisäkkäiseksi funktioksi, tulee valitus reassignment to val palautetaan */
-            
-            if (nuotinNimi == "z"){                                 //   T A U O T
-               pituus match{
-                  case 0 =>  palautetaan += new KahdeksasosaTauko;  iskujaMennyt += 0.5
-                  case 1 =>  if(alkio.contains(".")) {palautetaan += new PisteellinenNeljasosaTauko; iskujaMennyt += 1.5 }  
-                             else {palautetaan += new NeljasosaTauko;  iskujaMennyt += 1.0}
-                  case 2 =>  if(alkio.contains(".")) {for (i<- 1 to 3) palautetaan += new NeljasosaTauko;  iskujaMennyt += 3.0; } 
-                             else {for (i<- 1 to 2) palautetaan += new NeljasosaTauko;  iskujaMennyt += 2.0; }                          
-                  case 3 =>  for (i<- 1 to 3) palautetaan += new NeljasosaTauko; iskujaMennyt += 3.0
-                  case 4 =>  for (i<- 1 to 4) palautetaan += new NeljasosaTauko; iskujaMennyt += 4.0
-            }
-           
-            } else if(pituus == 1 ){                                  // N U O T I T
-                 if(alkio.contains(".")){
-                    palautetaan += new PisteellinenNeljasosaNuotti(nuotinNimi, extraetumerkki) 
-                    if(kasvataIskuja >= 0) iskujaMennyt += 1.5
-                 }   
-                 else {
-                   palautetaan += new NeljasosaNuotti(nuotinNimi, extraetumerkki)    
-                   if(kasvataIskuja >= 0) iskujaMennyt += 1.0
-                 }
-            } else if (pituus == 2 ){
-                if(alkio.contains(".")){
-                   palautetaan += new PisteellinenPuoliNuotti(nuotinNimi,extraetumerkki)  
-                   if(kasvataIskuja >= 0) iskujaMennyt += 3.0
-                }   
-                else {
-                  palautetaan += new PuoliNuotti (nuotinNimi, extraetumerkki)  
-                  if(kasvataIskuja >= 0) iskujaMennyt += 2.0
-                }
-            } else if (pituus == 3 ){
-                  palautetaan += new PisteellinenPuoliNuotti(nuotinNimi,extraetumerkki) 
-                  if(kasvataIskuja >= 0) iskujaMennyt += 3.0
-            } else if (pituus == 4 ){
-                  palautetaan += new KokoNuotti(nuotinNimi,extraetumerkki)     
-                  if(kasvataIskuja >= 0) iskujaMennyt += 4.0
-            } else if (pituus == 0 ){           
-                  palautetaan +=  new KahdeksasosaNuotti (nuotinNimi, extraetumerkki)     
-                  if(kasvataIskuja >= 0) iskujaMennyt += 0.5
-            }    
-        //     println(nuotinNimi + " " + iskujaMennyt + " tahdinAikaisetEtumerkit: " + tahdinAikaisetEtumerkit + "tahtilaji: " + tahtilaji + "extraetumerkki: " + extraetumerkki)
-        }   // iso else: ei-sointu.
-        
-        if (iskujaMennyt == tahtilaji) {
-        //   println("-----------------")
-           iskujaMennyt = 0.0  
-           tahdinAikaisetEtumerkit = Buffer[String]()
-        }
-        kasvataIskuja += 1
-     }  // for 
-  
-   
-   
-   def kasitteleSoinnut(alkio: String) = {     
-            val sointu =  alkio.tail.substring(0, alkio.size -2).split(",")    
-            var sointuBuffer = Buffer[String]()
-            var viivastolleLaitettavaBuffer = Buffer[ViivastolleLaitettava]()
-            for(aani <- sointu) 
-               sointuBuffer += aani
-            kasvataIskuja = 0- sointuBuffer.size +1    
-            nuottiData += new Sointu(kasitteleNuottiTieto(sointuBuffer, viivastolleLaitettavaBuffer) ) 
-   }
-   
-   //end KasitteleNuottiTieto:
-   palautetaan   // tätä tarvitaan sointuja muodostettaessa
-   } 
+      for ( alkio <- inputBuffer ){      // alkio esim. "g#1--"   tai   "<f1,d1>"
+     
+        // S O I N N U T
+          if (alkio.head == '<')
+              kasitteleSoinnut(alkio)
+         
+        // N U O T I T  J A   T A U O T 
+          else {                                                            
+              var nuotinNimi = alkio.filter(_ != '-').filter(_ != '.')  
+              var pituus = alkio.count(_ == '-')     
+              var extraetumerkki = tutkiEtumerkit(nuotinNimi)  
+             
+              /* jos tauot yrittää siirtää omaksi sisäkkäiseksi funktioksi, tulee valitus reassignment to val palautetaan */
+              
+              if (nuotinNimi == "z"){                                 //   T A U O T
+                 pituus match{
+                    case 0 =>  palautetaan += new KahdeksasosaTauko;  iskujaMennyt += 0.5
+                    case 1 =>  if(alkio.contains(".")) {palautetaan += new PisteellinenNeljasosaTauko; iskujaMennyt += 1.5 }  
+                               else {palautetaan += new NeljasosaTauko;  iskujaMennyt += 1.0}
+                    case 2 =>  if(alkio.contains(".")) {for (i<- 1 to 3) palautetaan += new NeljasosaTauko;  iskujaMennyt += 3.0; } 
+                               else {for (i<- 1 to 2) palautetaan += new NeljasosaTauko;  iskujaMennyt += 2.0; }                          
+                    case 3 =>  for (i<- 1 to 3) palautetaan += new NeljasosaTauko; iskujaMennyt += 3.0
+                    case 4 =>  for (i<- 1 to 4) palautetaan += new NeljasosaTauko; iskujaMennyt += 4.0
+              }
+             
+              } else if(pituus == 1 ){                                  // N U O T I T
+                   if(alkio.contains(".")){
+                      palautetaan += new PisteellinenNeljasosaNuotti(nuotinNimi, extraetumerkki) 
+                      if(kasvataIskuja >= 0) iskujaMennyt += 1.5
+                   }   
+                   else {
+                     palautetaan += new NeljasosaNuotti(nuotinNimi, extraetumerkki)    
+                     if(kasvataIskuja >= 0) iskujaMennyt += 1.0
+                   }
+              } else if (pituus == 2 ){
+                  if(alkio.contains(".")){
+                     palautetaan += new PisteellinenPuoliNuotti(nuotinNimi,extraetumerkki)  
+                     if(kasvataIskuja >= 0) iskujaMennyt += 3.0
+                  }   
+                  else {
+                    palautetaan += new PuoliNuotti (nuotinNimi, extraetumerkki)  
+                    if(kasvataIskuja >= 0) iskujaMennyt += 2.0
+                  }
+              } else if (pituus == 3 ){
+                    palautetaan += new PisteellinenPuoliNuotti(nuotinNimi,extraetumerkki) 
+                    if(kasvataIskuja >= 0) iskujaMennyt += 3.0
+              } else if (pituus == 4 ){
+                    palautetaan += new KokoNuotti(nuotinNimi,extraetumerkki)     
+                    if(kasvataIskuja >= 0) iskujaMennyt += 4.0
+              } else if (pituus == 0 ){           
+                    palautetaan +=  new KahdeksasosaNuotti (nuotinNimi, extraetumerkki)     
+                    if(kasvataIskuja >= 0) iskujaMennyt += 0.5
+              }    
+          //     println(nuotinNimi + " " + iskujaMennyt + " tahdinAikaisetEtumerkit: " + tahdinAikaisetEtumerkit + "tahtilaji: " + tahtilaji + "extraetumerkki: " + extraetumerkki)
+          }   // iso else: ei-sointu.
+          
+          if (iskujaMennyt == tahtilaji) {
+          //   println("-----------------")
+             iskujaMennyt = 0.0  
+             tahdinAikaisetEtumerkit = Buffer[String]()
+          }
+          kasvataIskuja += 1
+       }  // for 
+    
+     
+     
+       def kasitteleSoinnut(alkio: String) = {  
+              var sointuBuffer = alkio.tail.substring(0, alkio.size -2).split(",").toBuffer   
+              var viivastolleLaitettavaBuffer = Buffer[ViivastolleLaitettava]()           
+              kasvataIskuja = 0- sointuBuffer.size +1    
+              nuottiData += new Sointu(kasitteleNuottiTieto(sointuBuffer, viivastolleLaitettavaBuffer) ) 
+       }
+      
+   palautetaan   
+   } //end KasitteleNuottiTieto
   
    
    def tutkiEtumerkit(nuotinNimi: String): String = {  

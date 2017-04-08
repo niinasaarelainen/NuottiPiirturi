@@ -213,12 +213,12 @@ class NTest extends FlatSpec with Matchers {
                      // 1.bar:      b1  b1   h1 h1    b1 h1    h#1  h1  h1  b1   h1  h#1
         var extraEtumerkit = Buffer("", "n", "§", "", "", "§", "", "§", "", "",  "§", "")   // indeksit 0-11, Time Signature 6/4, thus one bar consists of 12 eigth notes
              // 2.bar:     h1 h#1   b1   h1   h1 b1     b1  h#1   b1  h1  h1   b1
-        extraEtumerkit += ("", "",  "", "§",  "", "",   "n", "",  "", "§", "", "")  // indeksit 12-23
+        extraEtumerkit += ("", "",  "", "§",  "", "",   "n", "",  "", "§", "", "")   // indeksit 12-23
         
         // 3.bar:         ab1 ab1   a1 a1   ab1 a1    a#1 a1    a1 ab1  a1  a#1
-        extraEtumerkit += ("", "n", "§", "", "", "§", "", "§", "", "",  "§", "")  // indeksit 24-35
+        extraEtumerkit += ("", "n", "§", "", "", "§", "", "§", "", "",  "§", "")     // indeksit 24-35
         // 4.bar:          a1 a#1  ab1 a1   a1 ab1    ab1 a#1   ab1  a1  a1  ab1
-        extraEtumerkit += ("", "",  "", "§",  "", "",   "n", "",  "", "§", "", "")  // indeksit 36-47
+        extraEtumerkit += ("", "",  "", "§",  "", "",   "n", "",  "", "§", "", "")   // indeksit 36-47
                
         val luk = new TiedostonLukeminen(inputhakemistonNimi)
         luk.lueTiedosto("_accidentals")
