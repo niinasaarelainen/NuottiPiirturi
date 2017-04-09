@@ -10,8 +10,8 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
    var lyricsBuffer = Buffer[String]()  
    val tahtilaji = lukija.tahtilaji.toDouble 
    val inputBuffer = lukija.nuottiAlkiot.toBuffer  
-   var viivasto = new Viivasto(nuottiDataParitettu, lyricsBuffer, lukija.tahtilaji)
-   
+  // var viivasto = new Viivasto (nuottiDataParitettu, lyricsBuffer, lukija.tahtilaji)
+   var viivasto:Viivasto = _
  
    // P Ä Ä M E T O D I: 
    def execute() = {

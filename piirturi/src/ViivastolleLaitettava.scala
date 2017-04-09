@@ -5,7 +5,7 @@ import scala.collection.mutable.Map
 trait ViivastolleLaitettava {   
   
    var viivasto = Buffer[String]()   
-   val y = Map("lyr" -> 18, "alatila" ->17, "c1" -> 16, "d1" -> 15,  "e1" -> 14,  "f1" -> 13,  "g1"-> 12,  "a1"->11,  "h1" -> 10, "b1" -> 10, "bb1" -> 10, "c2" -> 9, "d2" -> 8,  "e2" -> 7,  "f2" -> 6,  "g2"-> 5,  "a2"-> 4, "h2" -> 3, "b2" -> 3, "bb2" -> 3, "ylatila2" -> 2, "ylatila3" -> 1, "ylatila4" -> 0)
+   val y = Map("lyr" -> 18, "alatila" ->17, "c1" -> 16, "d1" -> 15,  "e1" -> 14,  "f1" -> 13,  "g1"-> 12,  "a1"->11,  "h1" -> 10, "b1" -> 10, "bb1" -> 10, "c2" -> 9, "d2" -> 8,  "e2" -> 7,  "f2" -> 6,  "g2"-> 5,  "a2"-> 4, "h2" -> 3, "b2" -> 3, "bb2" -> 3, "ylatila1" -> 2, "ylatila2" -> 1, "ylatila3" -> 0)
 
    
    def kuva: Buffer[String]   
@@ -141,9 +141,8 @@ class Sointu(aanet: Buffer[ViivastolleLaitettava]) extends ViivastolleLaitettava
 ////////////////////////////////    N  U  O  T  I  T  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
  
-class KokoNuotti(nuotinNimi: String, extraetumerkki: String = "") extends Nuotti{   
+class KokoNuotti(nuotinNimi: String, extraetumerkki: String = "") extends Nuotti {   
   
-   // jos tämä kuva-metodin sisällä, appendaa aina tyhjän viivaston, jos kuvaa kutsutaan
      viivasto = piirraTyhjaViivasto(kuvanLeveys) 
    
      def korkeus = nuotinNimi

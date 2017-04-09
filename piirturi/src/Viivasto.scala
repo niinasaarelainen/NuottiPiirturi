@@ -5,7 +5,7 @@ import scala.collection.mutable.Map
 class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[String], tahtilaji:String) {
   
    var viivasto = piirraGavain()   //Buffer[String]()
-   val nuotitYAkselilla = Map("lyr" -> 18, "alatila" ->17, "c1" -> 16, "d1" -> 15,  "e1" -> 14,  "f1" -> 13,  "g1"-> 12,  "a1"->11,  "h1" -> 10, "b1" -> 10, "c2" -> 9, "d2" -> 8,  "e2" -> 7,  "f2" -> 6,  "g2"-> 5,  "a2"-> 4, "h2" -> 3, "b2" -> 3, "ylatila2" -> 2, "ylatila3" -> 1, "ylatila4" -> 0)
+   val nuotitYAkselilla = Map("lyr" -> 18, "alatila" ->17, "c1" -> 16, "d1" -> 15,  "e1" -> 14,  "f1" -> 13,  "g1"-> 12,  "a1"->11,  "h1" -> 10, "b1" -> 10, "c2" -> 9, "d2" -> 8,  "e2" -> 7,  "f2" -> 6,  "g2"-> 5,  "a2"-> 4, "h2" -> 3, "b2" -> 3, "ylatila1" -> 2, "ylatila2" -> 1, "ylatila3" -> 0)
    var tahtiaMennyt = 0.0        // laskee iskuja
    var riviaMennytMontakoTahtia = 0             // halutaan max 4 tahtia riville
    var backUpPituuslaskuri = 0.0     // vaihdetaan riviä jos ei löydy tahtiviivalle paikkaa ja pituus on melkoinen 
@@ -104,7 +104,7 @@ class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[S
   
    
    def lisaaTahtiviiva() = {
-       for(i<-nuotitYAkselilla("ylatila4") to nuotitYAkselilla("g2"))   
+       for(i<-nuotitYAkselilla("ylatila3") to nuotitYAkselilla("g2"))   
          viivasto(i) += " "                                       // tänne tyhjää, jotta mahdollisesti tänne tuleva nuotti/varsi asemoituu oikein    
        for(i<-nuotitYAkselilla("f2") to nuotitYAkselilla("e1"))   // tahtiviiva menee ylimmästä viivasta alimpaan
          viivasto(i) += "|"  
