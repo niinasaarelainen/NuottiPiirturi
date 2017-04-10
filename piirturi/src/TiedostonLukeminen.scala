@@ -222,36 +222,35 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
     // ALUKSI TUTKITAAN  N U O T T I E N   S Y N T A K SI ,  _EI_ PITUUDET
          val filtteredNote = syote.filter(_ != '-').filter(_ != '.')
          
-         if(filtteredNote == "") return "pelkkä pituustieto, puuttuu nuotin nimi"
-         else if(filtteredNote == "z") {}  // taukojen syntaksi helppo, tehdään pituustesti myöhemmin
-         else{
-              if(filtteredNote.count(_ == 'z') > 1)
-                 return "taukojen pituudet merkitään viivoilla, esim puolitauko z--"
-              if(!"cdefgahb".contains(filtteredNote.toLowerCase().head.toString()))
-                 return "nuotin pitää alkaa kirjaimilla c,C, d,D e,E f,F g,G a,A h,H, b tai B"   // väärä teksti jos "zz"
-              else if(filtteredNote.size == 1 )   
-                 return "tarkoititko "+ syote + "1 vai " + syote + "2?"   
-              else if(filtteredNote.size == 2 && (filtteredNote.tail.contains("#") || filtteredNote.tail.contains("b")) && !(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   
-                 return "tarkoititko "+ syote + "1 vai " + syote + "2?"      
-              else if(filtteredNote.tail.contains("#b") ||  filtteredNote.tail.contains("b#"))    
-                  return "nuotissa on ylennys- ja alennusmerkki"   
-              else if( !(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   
-                 return "nuotissa tulee olla oktaaviala: 1 ja 2"   
-              else if(filtteredNote.size == 3 && !(filtteredNote.tail.contains("#") || filtteredNote.tail.contains("b")))   
-                      return "väärä formaatti. Muistathan syntaksin: esim. alennettu e on Eb, ei es"   
-              else if(filtteredNote.size > 3)
-                  return "liian pitkä nuotin nimi" 
-          } // iso else
-     
+         if(filtteredNote == "z") {}  // taukojen syntaksi helppo, tehdään pituustesti myöhemmin
+         else {
+             if(filtteredNote == "") return "pelkkä pituustieto, puuttuu nuotin nimi"
+             if(filtteredNote.count(_ == 'z') > 1)
+                return "taukojen pituudet merkitään viivoilla, esim puolitauko z--"
+             if(!"cdefgahb".contains(filtteredNote.toLowerCase().head.toString()))
+                return "nuotin pitää alkaa kirjaimilla c,C, d,D e,E f,F g,G a,A h,H, b tai B"   
+             if(filtteredNote.size == 1 )   
+                return "tarkoititko "+ syote + "1 vai " + syote + "2?"   
+             if(filtteredNote.size == 2 && (filtteredNote.tail.contains("#") || filtteredNote.tail.contains("b")) && !(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   
+                return "tarkoititko "+ syote + "1 vai " + syote + "2?"      
+             if(filtteredNote.tail.contains("#b") ||  filtteredNote.tail.contains("b#"))    
+                return "nuotissa on ylennys- ja alennusmerkki"   
+             if( !(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   
+                return "nuotissa tulee olla oktaaviala: 1 ja 2"   
+             if(filtteredNote.size == 3 && !(filtteredNote.tail.contains("#") || filtteredNote.tail.contains("b")))   
+                return "väärä formaatti. Muistathan syntaksin: esim. alennettu e on Eb, ei es"   
+             if(filtteredNote.size > 3)
+                return "liian pitkä nuotin nimi" 
+         }     
      //  P I T U U D E T  
          val lkm = syote.count(_ == '-')
          if(lkm > 4)
             return "maksimipituus nuotille on 4, eli viivoja korkeintaan ----"
-         else if(lkm == 3 && syote.contains("."))    // ohjelmassa ei määritelty pisteellistä pisteellistä puolinuottia
+         if(lkm == 3 && syote.contains("."))    // ohjelmassa ei määritelty pisteellistä pisteellistä puolinuottia
             return "väärä pituus"
-         else if(lkm == 4 && syote.contains("."))   // max pituus 4
+         if(lkm == 4 && syote.contains("."))   // max pituus 4
             return "pisteellistä kokonuottia ei ole määritelty, tee kokonuotti ja 2 taukoa"
-         else if(lkm == 0 && syote.contains("."))    // ei pisteellistä kahdeksasosaa
+         if(lkm == 0 && syote.contains("."))    // ei pisteellistä kahdeksasosaa
             return "tämä ohjelma ei osaa käsitellä pisteellistä kahdeksasosaa"
     
         else ""     

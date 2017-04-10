@@ -2,7 +2,8 @@
 O H J E E T :
 -------------
 
-Ihan ensiksi luo uusi tiedosto input -hakemistoon. Tiedostopäätteeksi .txt tai ei päätettä ollenkaan. 
+Ihan ensiksi luo uusi tiedosto input -hakemistoon (hiiren oikealla New > File). 
+Tiedostopäätteeksi .txt tai ei päätettä ollenkaan. 
 
 Sitten voit ruveta kirjoittamaan nuotteja G-avaimelle. Alin mahdollinen ääni on keski-c, ylin kaksiviivainen h.
 Erottele äänet toisistaan välilyönnillä (saa olla useitakin). Tahtiviivoja ei merkitä.

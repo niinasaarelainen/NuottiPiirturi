@@ -5,17 +5,13 @@ object main extends App{
      val inputhakemistonNimi =  "./input_virheita/"
      val ui = new UI(inputhakemistonNimi)
      val lukija = new TiedostonLukeminen(inputhakemistonNimi)
-     
     
-    val alkuvalinta = ui.terveTuloa()
-    alkuvalinta match{
+     
+       
+    ui.terveTuloa() match {
             case "1" => lukija.helppiTeksti(); valitseToiminto()
             case "2" => ohjelmanRunko()
-    }      
-//    lukija.helppiTeksti()
-  //  ohjelmanRunko()
-    
-    //// Happy End ////
+    }    
      
     
     

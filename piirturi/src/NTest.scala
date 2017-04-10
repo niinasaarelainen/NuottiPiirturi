@@ -196,7 +196,7 @@ class NTest extends FlatSpec with Matchers {
           case p: KahdeksasosaPari =>
             assert(p.korkeus == nuottiDatParitettuKorkeudet(i)(0) && p.korkeus2 == nuottiDatParitettuKorkeudet(i)(1), "***nuottiDataParitettu: error in 1/8-noteCouple note name")
           case t: Tauko =>
-            assert(t.korkeus == "c2", "***nuottiDataParitettu: tauon korkeusvirhe") // kaikkien taukojen piirtokorkeus on c2
+            assert(t.korkeus == "c2", "***nuottiDataParitettu: error in rest") // kaikkien taukojen piirtokorkeus on c2
           case _ => fail // FAIL, koska syötteessä ei ole muuta kuin em. 3 kategoriaa
         }
   }
@@ -226,7 +226,7 @@ class NTest extends FlatSpec with Matchers {
         nuottipiirturi.execute()
     
         for (i <- 0 until nuottipiirturi.nuottiData.size)
-          assert(nuottipiirturi.nuottiData(i).asInstanceOf[Nuotti].getExtraetumerkki == extraEtumerkit(i), "virhe indeksissä: " + i)
+          assert(nuottipiirturi.nuottiData(i).asInstanceOf[Nuotti].getExtraetumerkki == extraEtumerkit(i), "error in index: " + i)
   }
  
 
@@ -309,7 +309,7 @@ class NTest extends FlatSpec with Matchers {
         piirturi.execute()
     
         assert(piirturi.viivasto.kappale.kappale.size == 3, "***kappale.size not 3") // kappaleen nimi on eka entry  + 2 riviä musaa
-        assert(piirturi.viivasto.kappale.kappale(0).last.contains("Jaakko") == true, "***kappaleen Title puuttuu/väärä")
+        assert(piirturi.viivasto.kappale.kappale(0).last.contains("Jaakko") == true, "***the song has no Title or it is wrong")
                          // ennen nimeä on tyhjiä rivejä muotoilun vuoksi 
   }
 
@@ -347,12 +347,12 @@ class NTest extends FlatSpec with Matchers {
   
    "UI.loytyykoInputHakemistosta()" should "give false when file not found in directory" in {
         val ui = new UI(inputhakemistonNimi)
-        assert(ui.loytyykoInputHakemistosta("kkk") == false, "valitussa input-hakemistossa ei ole tiedostoa nimeltä \"kkk\"")
+        assert(ui.loytyykoInputHakemistosta("kkk") == false, "input-directory does not have file \"kkk\"")
    }
   
    it should "give true when file found in directory" in {
         val ui = new UI(inputhakemistonNimi)
-        assert(ui.loytyykoInputHakemistosta("kalevala") == true, "valitussa input-hakemistossa pitäisi olla tiedosto nimeltä \"§\"")
+        assert(ui.loytyykoInputHakemistosta("kalevala") == true, "input-directory has file \"§\"")
    }
     
  
@@ -368,13 +368,13 @@ class NTest extends FlatSpec with Matchers {
         // stubina, case 1, jossa käyttäjä syöttää 2 hylättävää ja kolmantena hyväksyttävän arvon:  
         var MIDIPatch = "alkuarvo"
         MIDIPatch = MIDIPatchinValinta(Array("8", "11", "3"), MIDIPatch) // "3" on hyväksyttävä arvo
-        assert(MIDIPatch == "3", "käyttäjän syoteSekvenssi 1:n jälkeen MIDIPatch pitäisi olla 3")
+        assert(MIDIPatch == "3", "after input 8, 11, 3 MIDIPatch should be 3")
     }
     
     it should "#case2: only ENTER" in {
         var MIDIPatch = "alkuarvo"
         MIDIPatch = MIDIPatchinValinta(Array(""), MIDIPatch)
-        assert(MIDIPatch == "", "käyttäjän syoteSekvenssi2:n jälkeen MIDIPatch pitäisi olla tyhjä merkkijono eli painettiin ENTER")
+        assert(MIDIPatch == "", "after empty input MIDIPatch should be \"\" (only ENTER was pressed)")
     }
     
     it should "#case3: only non-acceptable values" in {
@@ -405,15 +405,15 @@ class NTest extends FlatSpec with Matchers {
      			*   huom! koodi järjestää soinnut nousevaan järjestykseen .sorted, eli <e2-, c2-> onkin (72,76)   
      			*   tauon olen määritellyt MIDI-korkeudeksi 0 (ei soiteta) */
         val jaakkoKullanMIDINumbers = Array(Array(72), Array(74), Array(76), Array(72), Array(72), Array(74), Array(76), Array(72),
-          Array(72, 76), Array(77), Array(79), Array(0), Array(72, 76), Array(77), Array(79), Array(0),
+          Array(72, 77), Array(77), Array(79), Array(0), Array(72, 76), Array(77), Array(79), Array(0),
           Array(72, 79), Array(81), Array(79), Array(77), Array(76), Array(72), Array(72, 79), Array(81), Array(79), Array(77), Array(76), Array(72),
           Array(72), Array(67), Array(72), Array(0), Array(72), Array(67), Array(72), Array(0))
     
           
         for (i <- 0 until MIDIAdapter.muunnaMIDInuoteiksi.size) {
           for (korkeus <- 0 until MIDIAdapter.muunnaMIDInuoteiksi()(i)._1.size) { // Tuple._1 = Buffer[Int]  eventin korkeus tai korkeudet soinnun tapauksessa
-            assert(MIDIAdapter.muunnaMIDInuoteiksi()(i)._1(korkeus) == jaakkoKullanMIDINumbers(i)(korkeus), "***virhe : " + (i + 1) + ". eventti, " + (korkeus + 1) + ". korkeus eventissä")
-            assert(MIDIAdapter.muunnaMIDInuoteiksi()(i)._2 == n.nuottiData(i).pituus, "***pituusongelmaa pukkasi: " + (i + 1) + ". eventti") // Tuple._2 = Double, sama kuin nuottiolion pituus-kenttä
+            assert(MIDIAdapter.muunnaMIDInuoteiksi()(i)._1(korkeus) == jaakkoKullanMIDINumbers(i)(korkeus), "***error in event number : " + (i + 1) + ", in " + (korkeus + 1) + ". number of Array")
+            assert(MIDIAdapter.muunnaMIDInuoteiksi()(i)._2 == n.nuottiData(i).pituus, "***error in length in: " + (i + 1) + ". event") // Tuple._2 = Double, sama kuin nuottiolion pituus-kenttä
           }
         }
   }
@@ -550,11 +550,11 @@ class NTest extends FlatSpec with Matchers {
     if (sanat.size == 4) {
       assert(v.kappale.kappale(0).last.contains("kul-"), "***last syllable not found") // lyriikat ovat vikassa indeksissä
       assert(!v.kappale.kappale(0).last.contains("ta,"), "***too much lyrics in output")
-    } else if (sanat.size == 2) assert(v.kappale.kappale(0).last.contains("ko"), "***lessLyrics not working")
+    } else if (sanat.size == 2) assert(v.kappale.kappale(0).last.contains("ko"), "***less lyrics than notes not working")
 
     // unitTestLiitosCounter counts how many times a note was added to Staff, should be 3 also when lyrics.size was 2 => testing 
     // that less lyrics didn't prevent adding more notes to the song 
-    assert(v.unitTestLiitosCounter == 3, "***nuottiolioita liitettiin 3 kpl viivastoon")
+    assert(v.unitTestLiitosCounter == 3, "*** 3 note objects were joined to staff")
 
     // actually, also a test here is that the program did not throw exception. Could have with bad code.
   }

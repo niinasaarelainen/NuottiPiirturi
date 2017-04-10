@@ -11,6 +11,17 @@ class UI(inputhakemistonNimi: String) {
     
     
     
+    def terveTuloa() = {
+         var valinta = ""
+        do {
+           valinta = readLine( "\n\n\t !! Tervetuloa käyttämään nuotinnusohjelmaa !! \n\nValitse 1, jos haluat itse tehdä syötetiedoston, eli kirjoittaa kappaleen nuotit  "+
+                               "\nValitse 2, jos haluat nähdä nuotteina jonkin valmiiksikirjoitetun kappaleen " +
+                               "\nja paina ENTER. \n" +
+             "\neli 1(+ENTER)= ohjeet,  2(+ENTER)= listaa kappaleet ja nuotinna ")
+        } while (!"12".contains(valinta))
+        valinta  
+    }
+    
     
     def listaaTiedostot() = {
         var montakoNimeaRiville = 0
@@ -27,18 +38,7 @@ class UI(inputhakemistonNimi: String) {
         }
     } 
     
-    def terveTuloa() = {
-         var valinta = ""
-        do {
-           valinta = readLine( "\n\n\t !! Tervetuloa käyttämään nuotinnusohjelmaa !! \n\nValitse 1, jos haluat itse tehdä syötetiedoston, eli kirjoittaa kappaleen nuotit.  "+
-                               "\nValitse 2, jos haluat nähdä nuotteina jonkin valmiiksikirjoitetun kappaleen " +
-                               "\nja paina ENTER. \n" +
-             "\neli 1= ohjeet,  2= listaa kappaleet ja nuotinna ")
-        } while (!"12".contains(valinta))
-        valinta  
-    }
-    
-    
+          
     def kayttajaValitseeTiedoston(lukija: TiedostonLukeminen) = {
         do {
            tiedostonNimi = readLine("\n\nMinkä nimisen tiedoston haluat nuoteiksi? Valitse ylläolevista. ")
@@ -62,14 +62,6 @@ class UI(inputhakemistonNimi: String) {
     }
 
     
-    def kayttajaValitseeTiedostonTallennusnimen() = {
-        val nimi = readLine("\nMillä nimellä talletetaan? Pelkkä ENTER ei tallenna mitään.")
-        val kohdetiedosto = new PrintWriter("output/" + nimi+".txt")
-        println("muista painaa F5, jotta tiedosto päivittyy Package Explorerissa.")
-        kohdetiedosto
-    }
-    
-    
     def mitaTehdaanSeuraavaksi() = {
         var valinta = ""
         do {
@@ -78,5 +70,14 @@ class UI(inputhakemistonNimi: String) {
         } while (!"12".contains(valinta))
         valinta  
     }
+     
+    
+    def kayttajaValitseeTiedostonTallennusnimen() = {
+        val nimi = readLine("\nMillä nimellä talletetaan? Pelkkä ENTER ei tallenna mitään.")
+        val kohdetiedosto = new PrintWriter("output/" + nimi+".txt")
+        println("muista painaa F5, jotta tiedosto päivittyy Package Explorerissa.")
+        kohdetiedosto
+    }
+    
     
 }

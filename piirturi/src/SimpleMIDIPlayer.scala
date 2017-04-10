@@ -48,7 +48,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
     	     normaalisoitto()
     	  else rocknroll()   // rokkibändi, 6-kanavainen, delay:      
         
-        Thread.sleep(1900)   // parempi soundi vikaan ääneen
+        Thread.sleep(1100)   // parempi soundi vikaan ääneen
         synth.close()
         
         uudestaan = readLine("\n\nSoitetaanko uudestaan? ENTER = Kyllä,  0 = Ei ")
