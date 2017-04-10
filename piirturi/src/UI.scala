@@ -27,12 +27,22 @@ class UI(inputhakemistonNimi: String) {
         }
     } 
     
+    def terveTuloa() = {
+         var valinta = ""
+        do {
+           valinta = readLine( "\n\n\t !! Tervetuloa käyttämään nuotinnusohjelmaa !! \n\nValitse 1, jos haluat itse tehdä syötetiedoston, eli kirjoittaa kappaleen nuotit.  "+
+                               "\nValitse 2, jos haluat nähdä nuotteina jonkin valmiiksikirjoitetun kappaleen " +
+                               "\nja paina ENTER. \n" +
+             "\neli 1= ohjeet,  2= listaa kappaleet ja nuotinna ")
+        } while (!"12".contains(valinta))
+        valinta  
+    }
+    
     
     def kayttajaValitseeTiedoston(lukija: TiedostonLukeminen) = {
         do {
            tiedostonNimi = readLine("\n\nMinkä nimisen tiedoston haluat nuoteiksi? Valitse ylläolevista. ")
-        } while (!loytyykoInputHakemistosta(tiedostonNimi.trim()))   
-        
+        } while (!loytyykoInputHakemistosta(tiedostonNimi.trim()))  
     }
 
   

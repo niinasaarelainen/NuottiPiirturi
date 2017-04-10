@@ -7,8 +7,13 @@ object main extends App{
      val lukija = new TiedostonLukeminen(inputhakemistonNimi)
      
     
-    lukija.helppiTeksti()
-    ohjelmanRunko()
+    val alkuvalinta = ui.terveTuloa()
+    alkuvalinta match{
+            case "1" => lukija.helppiTeksti(); valitseToiminto()
+            case "2" => ohjelmanRunko()
+    }      
+//    lukija.helppiTeksti()
+  //  ohjelmanRunko()
     
     //// Happy End ////
      

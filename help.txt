@@ -3,15 +3,12 @@ O H J E E T :
 -------------
 
 Ihan ensiksi luo uusi tiedosto input -hakemistoon. Tiedostopäätteeksi .txt tai ei päätettä ollenkaan. 
-rtf tai muu hienompi on ohjelmalle liian vaikea.
 
 Sitten voit ruveta kirjoittamaan nuotteja G-avaimelle. Alin mahdollinen ääni on keski-c, ylin kaksiviivainen h.
-Erottele äänet toisistaan välilyönnillä (saa olla useitakin).
-Tahtiviivoja ei merkitä.
+Erottele äänet toisistaan välilyönnillä (saa olla useitakin). Tahtiviivoja ei merkitä.
 
 Rivinvaihtoja saa käyttää vapaasti. Rivinvaihto ei vaihda riviä nuottiviivastolla, eli käytä
 rivinvaihtoa esim. tahdin tai fraasin lopussa, kunhan itse tiedät miten löydät haluamasi kohdan kappaleessa.
-
 
 Tässä esimerkki kuinka kirjoitat Ukko Nooan alun alkaen keski-c:stä:
 c1- c1- c1- e1- 
@@ -31,7 +28,7 @@ Tässä kaikki käytettävissä olevat pituudet:
 () = ----     () = --      (). = --- tai --.     @@ = -     @@. = -.     @@ = (ei tarvita viivoja)
 
 
-Etumerkit: ylennä nuotti näin: g#1, alenna näin: gb1. Älä siis kirjoita gis tai ges
+Etumerkit: ylennä nuotti näin: g#1, alenna näin: gb1. Älä siis kirjoita gis tai ges.
 Palautusmerkkejä ei tarvita, eli jos on yksiviivainen fis ja f ovat peräkkäin, kirjoita f#1 f1. 
 
 
@@ -42,9 +39,7 @@ puolitauko merkitään z--
 Muista aina oktaaviala (1 tai 2), muutoin ohjelma ei tiedä, kumpaa nuottia tarkoitat.  
 
 
-Kannattaa katsoa mallia valmiista kappaleista, eli avaa vaikkapa kappale jaakko
-kirjoittamalla komentoriville: notepad input/jaakko tai nano input/jaakko
-
+Kannattaa katsoa mallia valmiista kappaleista, eli voit tuplaklikata auki minkä tahanasa input-kansion tiedoston.
 
 
 _______ JO NÄILLÄ OHJEILLA KANNATTAA KOKEILLA OHJELMAN KÄYTTÖÄ, _________________________________
@@ -65,13 +60,14 @@ Muista pilkut !
 
 
 Jos haluat kappaleeseen sanat, toimi seuraavasti: 
-1) tee ensin kaikki nuottidata(nuotit, tauot, soinnut) eli biisi valmiiksi 
-2) seuraavalle riville tunniste #Sanat ja sen perään sanoja, joko uudelle tai samalle riville, tavutettuna:
+1) tee ensin kaikki nuottidata (nuotit, tauot, soinnut) eli biisi valmiiksi 
+2) seuraavalle riville tunniste #sanat ja sen perään sanoja, joko uudelle tai samalle riville, tavutettuina:
    Jaak-ko kul-ta Jaak-ko kul-ta
 
    
 Jos haluat kappaleelle nimen, kirjoita esim. 
-#nimi Säkkijärven polkka
+#nimi Säkkijärven polkka      tai
+#NIMI Sibelius: Finlandia     (isoilla ja pienillä kirjaimilla ei ole väliä tunnisteissa)
 
 
 Jos kappale ei mene 4/4-tahtilajissa, tulee merkitä (jonkin) rivin alkuun moneenko lasketaan seuraavasti: 
@@ -79,9 +75,13 @@ Jos kappale ei mene 4/4-tahtilajissa, tulee merkitä (jonkin) rivin alkuun monee
 
 
 Huomaa siis tunnisteen # käyttö, jos teet nimen, tahtilajin tai sanat. 
+Kaikki edellä mainitut voi myös jättää pois.
 
 Ylimääräisiä kommentteja voi tehdä tyyliin
 # kertosäe       tai   
 #sopisikohan tähän paremmin c2?
 
-_________________________________________________________________________________________________
+Esimerkkinä kappaleesta, jossa paljon tunnisteita voit avata input-kansiosta tiedoston fürElise.
+
+_____________________________TÄHÄN LOPPUIVAT OHJEET___________________________________________________________
+___________________ ALKUUN PÄÄSET SKROLLAAMALLA OIKEALLA OLEVALLA PALKILLA____________________________________
