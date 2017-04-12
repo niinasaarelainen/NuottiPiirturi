@@ -57,7 +57,7 @@ class UI(inputhakemistonNimi: String) {
     def kayttajaValitseeMIDIPatchin() = {
         do {
            MIDIPatch = readLine("\n\nMillä soundilla haluat kuulla kappaleen? \nValitse 1-7 ja paina ENTER. Pelkkä ENTER ei tuota mitään ääntä.\n" +
-           "ENTER= en millään,  1= piano,  2= vibrafoni,  3= rock-urut,  4= syna,  5= akustinen kitara,  6= rokkibändi,  7=music box  ")
+           "ENTER= en millään,  1= piano,  2= vibrafoni,  3= rock-urut,  4= syna,  5= akustinen kitara,  6= rokkibändi,  7= music box  ")
         } while (!"1234567".contains(MIDIPatch))
     }
 

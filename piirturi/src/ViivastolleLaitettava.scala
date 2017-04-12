@@ -45,6 +45,7 @@ abstract class Nuotti extends ViivastolleLaitettava {
      def etumerkki: String
      def extraetumerkkiDef: String
      def getExtraetumerkki: String
+     def piirraNuppi: Unit 
        
      def piirraAlaApuviiva() = {                       
            viivasto(y("c1")) = viivasto(y("c1")).substring(0, 1) + "--" +  viivasto(y("c1")).substring(4, 6) + "--" + viivasto(y("c1")).substring(7)         
@@ -64,12 +65,12 @@ abstract class Tauko extends ViivastolleLaitettava{
 ////////////////////////////////    S  O  I  N  T   U   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-class Sointu(aanet: Buffer[ViivastolleLaitettava]) extends ViivastolleLaitettava{
+class Sointu(aanet: Buffer[ViivastolleLaitettava]) extends ViivastolleLaitettava {
   
      viivasto = piirraTyhjaViivasto(kuvanLeveys)
   
      def nuotit = aanet   // korkeuden joutuu laskemaan jokaiselle nuotille erikseen
-     def soiva =  true
+     def soiva = true
      def pituus = aanet(0).pituus   // kaikkien soinnun sävelten tulee olla samanpituisia 
      def kuvanLeveys =  aanet(0).kuvanLeveys     
      var korkeudet = Buffer[Int]()
@@ -240,20 +241,15 @@ class KahdeksasosaNuotti(nuotinNimi: String, extraetumerkki: String = "") extend
     
      override def kuva = {
         super.kuva
-        piirraVarsiJaVaka
+        piirraVaka()
         viivasto
      }
     
-     def piirraVarsiJaVaka = {
-         if(y(nimiMapissa) >= y("h1")){  // varsi ylös  
-            for (i <- 1 to 3)
-               viivasto(y(nimiMapissa)-i) = viivasto(y(nimiMapissa)-i).substring(0, 4) + "|" + viivasto(y(nimiMapissa)-i).substring(5)  
+     def piirraVaka() = {
+         if(y(nimiMapissa) >= y("h1"))   // if varsi ylös            
             viivasto(y(nimiMapissa)-3) = viivasto(y(nimiMapissa)-3).substring(0, 5) + "\\" + viivasto(y(nimiMapissa)-3).substring(6)  
-         } else {  // varsi alas 
-            for (i <- 1 to 3)
-                viivasto(y(nimiMapissa)+i) = viivasto(y(nimiMapissa)+i).substring(0, 3) + "|" + viivasto(y(nimiMapissa)+i).substring(4)  
+         else      // if varsi alas  
             viivasto(y(nimiMapissa)+3) = viivasto(y(nimiMapissa)+3).substring(0, 4) + "/" + viivasto(y(nimiMapissa)+3).substring(5)  
-         }
      } 
 }   
   

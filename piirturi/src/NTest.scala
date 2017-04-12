@@ -77,7 +77,19 @@ class NTest extends FlatSpec with Matchers {
         assert(luk.nuottiAlkiot.size == 6, "***input file should have 6 events (notes)")
   }
   
+  it should "#case5: not throw exception if input file empty " in {
+        val luk = new TiedostonLukeminen(inputhakemistonNimi)
+        luk.lueTiedosto("tyhja") // the file is full of tabs (hard to see)
+    
+        assert(true)  // did not throw exception, if the test can make it until here
+  }
   
+  it should "#case6: not throw exception if input file has only #name-field but no note data" in {
+        val luk = new TiedostonLukeminen(inputhakemistonNimi)
+        luk.lueTiedosto("vainNimi") // the file is full of tabs (hard to see)
+    
+        assert(true) // did not throw exception, if the test can make it until here
+  }
   
   
    "TiedostonLukeminen.kasitteleKappaleenNimiJaTahtilaji()" should "find tahtilaji and kappaleenNimi when both hash-tagged in inputfile" in {
@@ -405,14 +417,14 @@ class NTest extends FlatSpec with Matchers {
      			*   huom! koodi järjestää soinnut nousevaan järjestykseen .sorted, eli <e2-, c2-> onkin (72,76)   
      			*   tauon olen määritellyt MIDI-korkeudeksi 0 (ei soiteta) */
         val jaakkoKullanMIDINumbers = Array(Array(72), Array(74), Array(76), Array(72), Array(72), Array(74), Array(76), Array(72),
-          Array(72, 77), Array(77), Array(79), Array(0), Array(72, 76), Array(77), Array(79), Array(0),
+          Array(72, 76), Array(77), Array(79), Array(0), Array(72, 76), Array(77), Array(79), Array(0),
           Array(72, 79), Array(81), Array(79), Array(77), Array(76), Array(72), Array(72, 79), Array(81), Array(79), Array(77), Array(76), Array(72),
           Array(72), Array(67), Array(72), Array(0), Array(72), Array(67), Array(72), Array(0))
     
           
         for (i <- 0 until MIDIAdapter.muunnaMIDInuoteiksi.size) {
           for (korkeus <- 0 until MIDIAdapter.muunnaMIDInuoteiksi()(i)._1.size) { // Tuple._1 = Buffer[Int]  eventin korkeus tai korkeudet soinnun tapauksessa
-            assert(MIDIAdapter.muunnaMIDInuoteiksi()(i)._1(korkeus) == jaakkoKullanMIDINumbers(i)(korkeus), "***error in event number : " + (i + 1) + ", in " + (korkeus + 1) + ". number of Array")
+            assert(MIDIAdapter.muunnaMIDInuoteiksi()(i)._1(korkeus) == jaakkoKullanMIDINumbers(i)(korkeus), "***error in event number: " + (i + 1) + ", in " + (korkeus + 1) + ". number of Array")
             assert(MIDIAdapter.muunnaMIDInuoteiksi()(i)._2 == n.nuottiData(i).pituus, "***error in length in: " + (i + 1) + ". event") // Tuple._2 = Double, sama kuin nuottiolion pituus-kenttä
           }
         }
