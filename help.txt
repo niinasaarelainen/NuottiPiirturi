@@ -24,9 +24,11 @@ Viivojen (----) määrä viittaa pituuteen, eli neljäsosanuotti on yhden iskun 
 
 Tässä kaikki käytettävissä olevat pituudet:
 
-               |            |                     |          |            |\
-               |            |                     |          |            |
-() = ----     () = --      (). = --- tai --.     @@ = -     @@. = -.     @@ = (ei tarvita viivoja)
+               |            |                     |            |              |\
+               |            |                     |            |              |
+() = ----     () = --      (). = --- tai --.     @@ = -       @@. = -.       @@ = (ei tarvita viivoja)
+Kokonuotti    puolinuotti  pisteellinen         neljäsosa    pist.neljäsosa  kahdeksasosaosanuotti
+                           puolinuotti 
 
 
 Etumerkit: ylennä nuotti näin: g#1, alenna näin: gb1. Älä siis kirjoita gis tai ges.
@@ -40,7 +42,7 @@ puolitauko merkitään z--
 Muista aina oktaaviala (1 tai 2), muutoin ohjelma ei tiedä, kumpaa nuottia tarkoitat.  
 
 
-Kannattaa katsoa mallia valmiista kappaleista, eli voit tuplaklikata auki minkä tahanasa input-kansion tiedoston.
+Kannattaa katsoa mallia valmiista kappaleista, eli voit tuplaklikata auki minkä tahansa input-kansion tiedoston.
 
 
 _______ JO NÄILLÄ OHJEILLA KANNATTAA KOKEILLA OHJELMAN KÄYTTÖÄ, _________________________________

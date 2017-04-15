@@ -249,7 +249,7 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
          if(lkm == 3 && syote.contains("."))    // ohjelmassa ei määritelty pisteellistä pisteellistä puolinuottia
             return "väärä pituus"
          if(lkm == 4 && syote.contains("."))   // max pituus 4
-            return "pisteellistä kokonuottia ei ole määritelty, tee kokonuotti ja 2 taukoa"
+            return "pisteellistä kokonuottia ei ole määritelty, tee kokonuotti ja tauko"
          if(lkm == 0 && syote.contains("."))    // ei pisteellistä kahdeksasosaa
             return "tämä ohjelma ei osaa käsitellä pisteellistä kahdeksasosaa"
     

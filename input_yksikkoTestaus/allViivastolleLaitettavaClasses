@@ -1,13 +1,16 @@
 
 c1---- h#2---- d1--- z- a2--- z z 
 
-# testataan että varret piirtyvät oikeain piirtoalueen reunoilla ja kohdassa jossa varren suunta kääntyy
+# testataan että varret piirtyvät oikein piirtoalueen reunoilla ja kohdassa jossa varren suunta kääntyy
+
 cb1 z hb2 z c2 z h#1 z
 eb1-- g2-- f1-. f#2-. g1- 
 e2- a1 d2 h1 h2 c1 a2
 cb2 c2  a2 g2 z.- z
 
 <c1----,h#2----> <d1---, a2---> z z 
+
 <eb1--, a1--, g2--> <g1-,e2-,d2,c2> 
- <f1-., f#2-.,a1-.> <a2, d2> <h1,c2, h1,c2> <f2-,g2-,h1-> <cb1,g1,h#2><cb1,h#2,e1,f1,g1,a1,h1,c2,d2,e2,f2,g2,a2>
- z----
+ <a2, d2> <h1,c2, h1,c2> 
+  <f1-., f#2-.,a1-.> <f2-,g2-,h1-> <cb1,g1,h#2><cb1,h#2,e1,f1,g1,a1,h1,c2,d2,e2,f2,g2,a2> 
+ z---- z

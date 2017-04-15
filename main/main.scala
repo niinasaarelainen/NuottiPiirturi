@@ -1,4 +1,4 @@
-//package src
+
 
 object main extends App{
   
@@ -11,6 +11,7 @@ object main extends App{
     ui.terveTuloa() match {
             case "1" => lukija.helppiTeksti(); valitseToiminto()
             case "2" => ohjelmanRunko()
+            case _ =>
     }    
      
     
