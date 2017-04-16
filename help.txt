@@ -84,7 +84,7 @@ Ylimääräisiä kommentteja voi tehdä tyyliin
 # kertosäe       tai   
 #sopisikohan tähän paremmin c2?
 
-Esimerkkinä kappaleesta, jossa paljon tunnisteita voit avata input-kansiosta tiedoston fürElise.
+Esimerkkinä kappaleesta, jossa paljon tunnisteita voit avata input-kansiosta tiedoston FürElise.
 
 _____________________________TÄHÄN LOPPUIVAT OHJEET___________________________________________________________
 ___________________ ALKUUN PÄÄSET SKROLLAAMALLA OIKEALLA OLEVALLA PALKILLA____________________________________

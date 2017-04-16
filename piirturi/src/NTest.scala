@@ -1,4 +1,3 @@
-//package src
 
 import org.scalatest.Assertions._
 import org.scalatest._

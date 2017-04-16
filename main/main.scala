@@ -2,7 +2,7 @@
 
 object main extends App{
   
-     val inputhakemistonNimi =  "./input_virheita/"
+     val inputhakemistonNimi =  "./input/"
      val ui = new UI(inputhakemistonNimi)
      val lukija = new TiedostonLukeminen(inputhakemistonNimi)
     
@@ -43,8 +43,7 @@ object main extends App{
     
     
     def valitseToiminto():Unit = {
-         val valinta = ui.mitaTehdaanSeuraavaksi()
-         valinta match{
+         ui.mitaTehdaanSeuraavaksi() match{
             case ""  => System.exit(0)
             case "1" => lukija.helppiTeksti(); valitseToiminto()
             case "2" => ohjelmanRunko()

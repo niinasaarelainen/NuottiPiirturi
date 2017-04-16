@@ -28,9 +28,9 @@ class UI(inputhakemistonNimi: String) {
         println("\n")
         for (tiedosto <- inputhakemisto.listFiles()) {     
            if (tiedosto.isFile) {
-              print(tiedosto.getName + '\t')
+              print(tiedosto.getName + "       ")
               montakoNimeaRiville += 1
-              if (montakoNimeaRiville == 8){
+              if (montakoNimeaRiville == 6){
                 println()
                 montakoNimeaRiville = 0
               }
