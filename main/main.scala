@@ -7,13 +7,21 @@ object main extends App{
      val lukija = new TiedostonLukeminen(inputhakemistonNimi)
     
      
-       
-    ui.terveTuloa() match {
-            case "1" => lukija.helppiTeksti(); valitseToiminto()
-            case "2" => ohjelmanRunko()
-            case _ =>
-    }    
+     terveTuloa()
      
+     
+       
+    def terveTuloa(): Unit = {
+        var valinta = ""
+        do {
+           ui.terveTuloa() match {
+              case "1" => lukija.helppiTeksti(); valitseToiminto()
+              case "2" => ohjelmanRunko()
+              case _   =>  terveTuloa()
+           } 
+        } while (!"12".contains(valinta))
+    }
+  
     
     
     def  ohjelmanRunko():Unit = {
@@ -44,7 +52,7 @@ object main extends App{
     
     def valitseToiminto():Unit = {
          ui.mitaTehdaanSeuraavaksi() match{
-            case ""  => System.exit(0)
+            case ""  => println("\nKiitos ja näkemiin."); System.exit(0)
             case "1" => lukija.helppiTeksti(); valitseToiminto()
             case "2" => ohjelmanRunko()
          }      

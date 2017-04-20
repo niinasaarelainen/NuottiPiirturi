@@ -9,7 +9,7 @@ import java.io._
 
 class NTest extends FlatSpec with Matchers {
 
-   val inputhakemistonNimi =  "./input_yksikkoTestaus/"
+   val inputhakemistonNimi =  "./piirturi/src/input_yksikkoTestaus/"
   
   "TiedostonLukeminen.oikeellisuusTesti()" should "find non-valid note names and lengths" in {
         val luk = new TiedostonLukeminen(inputhakemistonNimi)

@@ -75,7 +75,7 @@ class UI(inputhakemistonNimi: String) {
     def kayttajaValitseeTiedostonTallennusnimen() = {
         val nimi = readLine("\nMillä nimellä talletetaan? Pelkkä ENTER ei tallenna mitään.")
         val kohdetiedosto = new PrintWriter("output/" + nimi+".txt")
-        println("muista painaa F5, jotta tiedosto päivittyy Package Explorerissa.")
+        println("Kappale löytyy nyt output-kansiosta. \nMuista painaa F5, jotta tiedosto päivittyy Package Explorerissa.")
         kohdetiedosto
     }
     
