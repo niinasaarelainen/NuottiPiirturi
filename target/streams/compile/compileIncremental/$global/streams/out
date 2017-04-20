@@ -1,132 +1,15 @@
 [0m[[0mdebug[0m] [0m[naha] [0m
 [0m[[0mdebug[0m] [0m[naha] Initial source changes: [0m
 [0m[[0mdebug[0m] [0m[naha] 	removed:Set()[0m
-[0m[[0mdebug[0m] [0m[naha] 	added: Set(C:\Users\Niina S\workspace\Nuottipiirturi\test1.java)[0m
+[0m[[0mdebug[0m] [0m[naha] 	added: Set()[0m
 [0m[[0mdebug[0m] [0m[naha] 	modified: Set()[0m
 [0m[[0mdebug[0m] [0m[naha] Invalidated products: Set()[0m
 [0m[[0mdebug[0m] [0m[naha] External API changes: API Changes: Set()[0m
 [0m[[0mdebug[0m] [0m[naha] Modified binary dependencies: Set()[0m
-[0m[[0mdebug[0m] [0m[naha] Initial directly invalidated sources: Set(C:\Users\Niina S\workspace\Nuottipiirturi\test1.java)[0m
+[0m[[0mdebug[0m] [0m[naha] Initial directly invalidated sources: Set()[0m
 [0m[[0mdebug[0m] [0m[naha] [0m
 [0m[[0mdebug[0m] [0m[naha] Sources indirectly invalidated by:[0m
 [0m[[0mdebug[0m] [0m[naha] 	product: Set()[0m
 [0m[[0mdebug[0m] [0m[naha] 	binary dep: Set()[0m
 [0m[[0mdebug[0m] [0m[naha] 	external source: Set()[0m
-[0m[[0mdebug[0m] [0mAll initially invalidated sources: Set(C:\Users\Niina S\workspace\Nuottipiirturi\test1.java)[0m
-[0m[[0mdebug[0m] [0m[naha] Initial set of included nodes: Set(C:\Users\Niina S\workspace\Nuottipiirturi\test1.java)[0m
-[0m[[0mdebug[0m] [0m[naha] Recompiling all 1 sources: invalidated sources (1) exceeded 50.0% of all sources[0m
-[0m[[0minfo[0m] [0mCompiling 1 Java source to C:\Users\Niina S\workspace\Nuottipiirturi\target\scala-2.10\classes...[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:12:  error: not a statement[0m
-[0m[[31merror[0m] [0m		"NuottiPiirturi" should "find non-valid note names (not investigating length)" in {[0m
-[0m[[31merror[0m] [0m		^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:12:  error: ';' expected[0m
-[0m[[31merror[0m] [0m		"NuottiPiirturi" should "find non-valid note names (not investigating length)" in {[0m
-[0m[[31merror[0m] [0m		                ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:12:  error: not a statement[0m
-[0m[[31merror[0m] [0m		"NuottiPiirturi" should "find non-valid note names (not investigating length)" in {[0m
-[0m[[31merror[0m] [0m		                 ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:12:  error: ';' expected[0m
-[0m[[31merror[0m] [0m		"NuottiPiirturi" should "find non-valid note names (not investigating length)" in {[0m
-[0m[[31merror[0m] [0m		                       ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:12:  error: not a statement[0m
-[0m[[31merror[0m] [0m		"NuottiPiirturi" should "find non-valid note names (not investigating length)" in {[0m
-[0m[[31merror[0m] [0m		                                                                               ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:12:  error: ';' expected[0m
-[0m[[31merror[0m] [0m		"NuottiPiirturi" should "find non-valid note names (not investigating length)" in {[0m
-[0m[[31merror[0m] [0m		                                                                                 ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:15:  error: ';' expected[0m
-[0m[[31merror[0m] [0m		         "--c1", "----g2", "ab2", "a#2----", "b1", "bb1", "b#1", "b2", "bb2", "b#2")  // [0m
-[0m[[31merror[0m] [0m		                                                                                    ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:18:  error: ';' expected[0m
-[0m[[31merror[0m] [0m		         "ddd", "d1d",  "#c", "dd1", "g##", "abb", "dis" ) [0m
-[0m[[31merror[0m] [0m		                                                          ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:20:  error: ';' expected[0m
-[0m[[31merror[0m] [0m		     val taukojaOikein= Buffer("z", "z--", "z----", "z.", "-z", "z--.", "--.z", "z.-")   [0m
-[0m[[31merror[0m] [0m		                                                                                      ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:22:  error: ';' expected[0m
-[0m[[31merror[0m] [0m		     val taukojaVaarin= Buffer("za", "z#--", "zz", "zz-top", "tauko", " z", "az")     [0m
-[0m[[31merror[0m] [0m		                                                                                 ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:25:  error: ';' expected[0m
-[0m[[31merror[0m] [0m		     var virheitaHylattavillaNuoteilla, virheitaHyvaksyttavillaNuoteilla, virheitaHylattavillaTauoilla, virheitaHyvaksyttavillaTauoilla = 0[0m
-[0m[[31merror[0m] [0m		                                                                                                                                           ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:27:  error: ';' expected[0m
-[0m[[31merror[0m] [0m		     virheitaHylattavillaNuoteilla     = laskeVirheet(nuottejaVaarin)[0m
-[0m[[31merror[0m] [0m		                                                                     ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:28:  error: ';' expected[0m
-[0m[[31merror[0m] [0m		     virheitaHyvaksyttavillaNuoteilla  = laskeVirheet(nuottejaOikein)[0m
-[0m[[31merror[0m] [0m		                                                                     ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:29:  error: ';' expected[0m
-[0m[[31merror[0m] [0m		     virheitaHylattavillaTauoilla      = laskeVirheet(taukojaVaarin)[0m
-[0m[[31merror[0m] [0m		                                                                    ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:30:  error: ';' expected[0m
-[0m[[31merror[0m] [0m		     virheitaHyvaksyttavillaTauoilla   = laskeVirheet(taukojaOikein)[0m
-[0m[[31merror[0m] [0m		                                                                    ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:33:  error: ';' expected[0m
-[0m[[31merror[0m] [0m		     def laskeVirheet(syotteet: Buffer[String]) = {   [0m
-[0m[[31merror[0m] [0m		                     ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:33:  error: not a statement[0m
-[0m[[31merror[0m] [0m		     def laskeVirheet(syotteet: Buffer[String]) = {   [0m
-[0m[[31merror[0m] [0m		                                      ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:33:  error: ';' expected[0m
-[0m[[31merror[0m] [0m		     def laskeVirheet(syotteet: Buffer[String]) = {   [0m
-[0m[[31merror[0m] [0m		                                              ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:34:  error: ';' expected[0m
-[0m[[31merror[0m] [0m		        var virheita = 0 [0m
-[0m[[31merror[0m] [0m		                        ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:35:  error: illegal start of type[0m
-[0m[[31merror[0m] [0m		        for (syote <- syotteet) {[0m
-[0m[[31merror[0m] [0m		                    ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:35:  error: ';' expected[0m
-[0m[[31merror[0m] [0m		        for (syote <- syotteet) {[0m
-[0m[[31merror[0m] [0m		                              ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:35:  error: ';' expected[0m
-[0m[[31merror[0m] [0m		        for (syote <- syotteet) {[0m
-[0m[[31merror[0m] [0m		                               ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:37:  error: not a statement[0m
-[0m[[31merror[0m] [0m		           val filtteredNote = syote.filter(_ != '-').filter(_ != '.')[0m
-[0m[[31merror[0m] [0m		           ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:37:  error: ')' expected[0m
-[0m[[31merror[0m] [0m		           val filtteredNote = syote.filter(_ != '-').filter(_ != '.')[0m
-[0m[[31merror[0m] [0m		              ^[0m
-[0m[[33mwarn[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:37:  '_' used as an identifier[0m
-[0m[[33mwarn[0m] [0m		           val filtteredNote = syote.filter(_ != '-').filter(_ != '.')[0m
-[0m[[33mwarn[0m] [0m		                                            ^[0m
-[0m[[33mwarn[0m] [0m(use of '_' as an identifier might not be supported in releases after Java SE 8)[0m
-[0m[[33mwarn[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:37:  '_' used as an identifier[0m
-[0m[[33mwarn[0m] [0m		           val filtteredNote = syote.filter(_ != '-').filter(_ != '.')[0m
-[0m[[33mwarn[0m] [0m		                                                             ^[0m
-[0m[[31merror[0m] [0m(use of '_' as an identifier might not be supported in releases after Java SE 8)[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:37:  error: ';' expected[0m
-[0m[[31merror[0m] [0m		           val filtteredNote = syote.filter(_ != '-').filter(_ != '.')[0m
-[0m[[31merror[0m] [0m		                                                                      ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:43:  error: ';' expected[0m
-[0m[[31merror[0m] [0m		                 virheita += 1[0m
-[0m[[31merror[0m] [0m		                              ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:45:  error: ';' expected[0m
-[0m[[31merror[0m] [0m		                 virheita += 1  [0m
-[0m[[31merror[0m] [0m		                              ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:47:  error: ';' expected[0m
-[0m[[31merror[0m] [0m		                 virheita += 1[0m
-[0m[[31merror[0m] [0m		                              ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:49:  error: ';' expected[0m
-[0m[[31merror[0m] [0m		                 virheita += 1  [0m
-[0m[[31merror[0m] [0m		                              ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:51:  error: ';' expected[0m
-[0m[[31merror[0m] [0m		                 virheita += 1 [0m
-[0m[[31merror[0m] [0m		                              ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:53:  error: ';' expected[0m
-[0m[[31merror[0m] [0m		                       virheita += 1  [0m
-[0m[[31merror[0m] [0m		                                    ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:58:  error: not a statement[0m
-[0m[[31merror[0m] [0m		        virheita[0m
-[0m[[31merror[0m] [0m		        ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:58:  error: ';' expected[0m
-[0m[[31merror[0m] [0m		        virheita[0m
-[0m[[31merror[0m] [0m		                ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:61:  error: ';' expected[0m
-[0m[[31merror[0m] [0m		          virheitaHyvaksyttavillaTauoilla == 0 &&  virheitaHylattavillaTauoilla == taukojaVaarin.size)  [0m
-[0m[[31merror[0m] [0m		                                                                                                      ^[0m
-[0m[[31merror[0m] [0mC:\Users\Niina S\workspace\Nuottipiirturi\test1.java:69:  error: class, interface, or enum expected[0m
-[0m[[31merror[0m] [0m}[0m
-[0m[[31merror[0m] [0m^[0m
-[0m[[31merror[0m] [0m(compile:[31mcompileIncremental[0m) javac returned nonzero exit code[0m
+[0m[[0mdebug[0m] [0mAll initially invalidated sources: Set()[0m

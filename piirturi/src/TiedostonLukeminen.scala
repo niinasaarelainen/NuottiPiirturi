@@ -51,13 +51,12 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
           
      if (this.inputFromFile.size != 0){
          kasitteleTunnisteet(this.inputFromFile) 
-         if(nuottiDataRiveina.size ==0) {        // case: esim pelkkä nimi, mutta ei nuotteja
-             return}
+         if(nuottiDataRiveina.size ==0)         // case: esim pelkkä nimi, mutta ei nuotteja
+             return
          else if(ekaKerta) tarkistaVirheet()     // loput virheidentarkistukset do while-loopissa, kutsu rivillä 94
      }
-     else {       // case: täysin tyhjä file
+     else        // case: täysin tyhjä file
          return
-     }
   }   
   
   
