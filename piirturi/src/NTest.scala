@@ -276,7 +276,7 @@ class NTest extends FlatSpec with Matchers {
         nuottiData = piirturi.kasitteleNuottiTieto(nuottiAlkiot, nuottiData)
         val pari = new KahdeksasosaPari(nuottiData(0), nuottiData(1))
     
-        println(pari.kuva) // TODO   ei toimi jos tämän rivin ottaa pois ?!?!?
+        println(pari.kuva) 
     
         assertKuva(odotettu, pari.kuva)
   }
@@ -476,15 +476,6 @@ class NTest extends FlatSpec with Matchers {
         assertFileVersusKappale(nuottipiirturi.viivasto.kappale.kappale, allPrinted)
    }
 
-
-  /*
-  Miten simuloitaisiin käyttäjän inputtia testeissä:
-  EI NÄIN !!    odottaa testin aikana syötettä
-  "ReadLine" should "work" in {
-  val in = new ByteArrayInputStream("abc".getBytes)
-  System.setIn(in)
-  readLine() === "abc"
-}   */
 
   ////////   A P U M E T O D I T :    /////////////////////////////////////////////////////////////////////////////////////////////////////////
 

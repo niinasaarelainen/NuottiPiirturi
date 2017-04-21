@@ -2,7 +2,6 @@ import scala.collection.mutable.Buffer
 
 
 class NuottiPiirturi(lukija: TiedostonLukeminen){
-   
     
    var nuottiData= Buffer[ViivastolleLaitettava]()    
    var nuottiDataParitettu= Buffer[ViivastolleLaitettava]()    
@@ -12,6 +11,7 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
    val inputBuffer = lukija.nuottiAlkiot.toBuffer  
    var viivasto:Viivasto = _   // object variable without initialization
  
+   
    // P Ä Ä M E T O D I: 
    def execute() = {
        nuottiData = kasitteleNuottiTieto(inputBuffer, nuottiData) 
@@ -22,10 +22,9 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
        this.viivasto.kappale.lisaaKappaleenNimi(lukija.kappaleenNimi)
        this.viivasto.piirraNuotit()
    }     
-       
-     
+          
  
-/////  M U U T   M E T O D I T  ja niihin liittyvät muuttujat (ei voi määritellä metodin sisällä rekursion takia): /////////////////////////  
+   /////  M U U T   M E T O D I T  ja niihin liittyvät muuttujat (ei voi määritellä metodin sisällä rekursion takia): /////////////////////////  
    
    var iskujaMennyt =  0.0
    var kasvataIskuja= 0   // nollana/positiivisena ok kasvattaa iskujaMennyt. 
@@ -47,7 +46,7 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
              
               /* jos tauot yrittää siirtää omaksi sisäkkäiseksi funktioksi, tulee valitus reassignment to val palautetaan */
               
-              if (nuotinNimi == "z"){                                 //   T A U O T
+              if (nuotinNimi == "z"){                    //   T A U O T
                  pituus match{
                     case 0 =>  palautetaan += new KahdeksasosaTauko;  iskujaMennyt += 0.5
                     case 1 =>  if(alkio.contains(".")) {palautetaan += new PisteellinenNeljasosaTauko; iskujaMennyt += 1.5 }  
@@ -58,7 +57,7 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
                     case 4 =>  for (i<- 1 to 4) palautetaan += new NeljasosaTauko; iskujaMennyt += 4.0
               }
              
-              } else if(pituus == 1 ){                                  // N U O T I T
+              } else if(pituus == 1 ){                    // N U O T I T
                    if(alkio.contains(".")){
                       palautetaan += new PisteellinenNeljasosaNuotti(nuotinNimi, extraetumerkki) 
                       if(kasvataIskuja >= 0) iskujaMennyt += 1.5
@@ -86,7 +85,6 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
                     palautetaan +=  new KahdeksasosaNuotti (nuotinNimi, extraetumerkki)     
                     if(kasvataIskuja >= 0) iskujaMennyt += 0.5
               }    
-          //     println(nuotinNimi + " " + iskujaMennyt + " tahdinAikaisetEtumerkit: " + tahdinAikaisetEtumerkit + "tahtilaji: " + tahtilaji + "extraetumerkki: " + extraetumerkki)
           }   // iso else: ei-sointu.
           
           if (iskujaMennyt == tahtilaji) {
@@ -111,8 +109,6 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
   
    
    def tutkiEtumerkit(nuotinNimi: String): String = {  
-     
-      //println(nuotinNimi + ", " + tahdinAikaisetEtumerkit)
      
       // tutkitaan ylennettyjä ja alennettuja nuotteja
       if(nuotinNimi.contains("#") || nuotinNimi.contains("b")){
@@ -173,34 +169,33 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
  
  
    
-   def tehdaanKahdeksasosaParit() = {      
-    
-     iskujaMennyt =  0.0
-     var minutOnJoKasitelty = false
-     var paastiinTiedostonloppuun = false
-     
-     for (i <- 0 until nuottiData.size-1 ){      // vikalle alkiolle ei kannata kysyä seuraajaa
-          if(!minutOnJoKasitelty){
-              iskujaMennyt += nuottiData(i).pituus
-              
-              nuottiData(i) match {
-                  case k1: KahdeksasosaNuotti if(iskujaMennyt % 1 == 0.5) => nuottiData(i+1) match {
-                       case k2: KahdeksasosaNuotti => nuottiDataParitettu += new KahdeksasosaPari(k1, k2)
-                                                      minutOnJoKasitelty = true  
-                                                      iskujaMennyt += k2.pituus
-                                                      if(nuottiData.last.eq(k2)) paastiinTiedostonloppuun = true
-                       case _ =>  nuottiDataParitettu += k1  // 1/8 talteen, jos se ei löytänyt paria
+   def tehdaanKahdeksasosaParit() = {   
+         iskujaMennyt =  0.0
+         var minutOnJoKasitelty = false
+         var paastiinTiedostonloppuun = false
+         
+         for (i <- 0 until nuottiData.size-1 ){      // vikalle alkiolle ei kannata kysyä seuraajaa
+              if(!minutOnJoKasitelty){
+                  iskujaMennyt += nuottiData(i).pituus
+                  
+                  nuottiData(i) match {
+                      case k1: KahdeksasosaNuotti if(iskujaMennyt % 1 == 0.5) => nuottiData(i+1) match {
+                           case k2: KahdeksasosaNuotti => nuottiDataParitettu += new KahdeksasosaPari(k1, k2)
+                                                          minutOnJoKasitelty = true  
+                                                          iskujaMennyt += k2.pituus
+                                                          if(nuottiData.last.eq(k2)) paastiinTiedostonloppuun = true
+                           case _ =>  nuottiDataParitettu += k1  // 1/8 talteen, jos se ei löytänyt paria
+                      }
+                      case _ =>  nuottiDataParitettu += nuottiData(i)     // ei-1/8:kin talteen                       
                   }
-                  case _ =>  nuottiDataParitettu += nuottiData(i)     // ei-1/8:kin talteen                       
-              }
-            
-              if (iskujaMennyt == tahtilaji) {
-                 iskujaMennyt = 0.0  
-              }  
-            }  else  minutOnJoKasitelty=  false
-     }
-     if(!paastiinTiedostonloppuun)    
-          nuottiDataParitettu += nuottiData(nuottiData.size-1)   // viimeinenkin nuottiolio messiin, jos se ei ollut 1/8-parin puolisko
+                
+                  if (iskujaMennyt == tahtilaji) {
+                     iskujaMennyt = 0.0  
+                  }  
+                }  else  minutOnJoKasitelty=  false
+         }
+         if(!paastiinTiedostonloppuun)    
+              nuottiDataParitettu += nuottiData(nuottiData.size-1)   // viimeinenkin nuottiolio messiin, jos se ei ollut 1/8-parin puolisko
    }  
   
 }
