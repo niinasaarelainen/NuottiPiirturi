@@ -9,7 +9,7 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
 
   var inputFromFile = Buffer[String]()       // kaikki input, paitsi tyhjät rivit
   var nuottiDataRiveina = Buffer[String]()  
-  var nuottiAlkiot = Array[String]()         // splitattuna yllä oleva data
+  var nuottiAlkiot = Array[String]()         // oikean syntaksin omaavat nuotit
   var nuottiDatanRivinumerot = Buffer[Int]() // syötetiedoston nuottidatarivit muistiin, ei tyhjiä rivejä
   var lyriikkadata = Buffer[String]()        // biisin sanat
 
@@ -19,19 +19,14 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
   var ekaKerta = true
   var tahtilajiOnJoLuettu = false 
   
-  var counter = 0
- 
  
   
  ///////   M E T O D I T   ///////////////////////////////////////////////////////////////////////// 
-  
-  
-
-  
+   
   def lueTiedosto(tiedostonNimi: String): Unit = {  
     
      val kayttajanValitsemaTiedosto = Source.fromFile(inputhakemistonNimi + tiedostonNimi)
-     // pitää nollata, jos tänne tullaan virheidentarkistuksesta:
+     // pitää nollata, jos tänne tullaan virheidentarkistuksesta tai toisesta kappaleesta:
      this.tiedostonNimi = tiedostonNimi
      this.inputFromFile = Buffer[String]()       
      this.nuottiDataRiveina = Buffer[String]() 
@@ -42,8 +37,7 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
      this.ekaKerta = true
      this.tahtilaji = "4"
      this.kappaleenNimi = ""   
-     
-    
+       
       
      try {
         for (rivi <- kayttajanValitsemaTiedosto.getLines) {
@@ -57,15 +51,11 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
          kasitteleTunnisteet(this.inputFromFile) 
          if(nuottiDataRiveina.size ==0)         // case: esim pelkkä nimi, mutta ei nuotteja
              return
-         else if(ekaKerta) {
-           tarkistaVirheet()     // loput virheidentarkistukset do while-loopissa, kutsu rivillä 94
-           
-         }
+         else if(ekaKerta) 
+           tarkistaVirheet()     // loput virheidentarkistukset do while-loopissa, kutsu rivillä 69
          else return
      }
-     else        // case: täysin tyhjä file
-         return
-     println("nuottiAlkiot.size: " + nuottiAlkiot.size)    
+     else  return      // case: täysin tyhjä file
   }   
   
   
@@ -110,7 +100,7 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
          } // end for nuottiDataRiveina
      }
      
-     //nested function:  
+     //nested method:  
      def tarkistaSoinnunVirheet(alkio:String, ind:Int): Unit = {
               if(alkio.last != '>'){
                     virheitaNolla = false
@@ -148,7 +138,7 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
 
   
   
-  def erikoistapauksetNuotinNimessa(alkio:String): String=  {
+  def erikoistapauksetNuotinNimessa(alkio:String): String =  {
        val alkioPituustietoPois = alkio.filter(_ != '-').filter(_ != '.')
        // case  c2# --> c#2
        if(alkioPituustietoPois.size == 3 && (alkio.tail.contains("#")  || alkio.tail.contains("b")) && !alkioPituustietoPois(2).isDigit) 
