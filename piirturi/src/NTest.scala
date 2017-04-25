@@ -7,6 +7,15 @@ import scala.io.Source
 import java.io._
 
 
+/* TESTIEN AJO-OHJE:
+ * 
+ * Package Explorerissa NTest.scala:
+ * hiiren oikealla Run As ei näytä mitään testimahdollisuutta, kuten normaalisti pitäisi. 
+ * 
+ * Mutta kuitenkin pystyy testata:
+ *    valitse Run Configurations:sta ScalaTest(java runner) >  NTest 
+ *    (löytyy vasemmalla olevan valikon ihan alhaalta skrollaamalla)
+ */
 class NTest extends FlatSpec with Matchers {
 
    val inputhakemistonNimi =  "./piirturi/src/input_yksikkoTestaus/"
@@ -153,7 +162,7 @@ class NTest extends FlatSpec with Matchers {
   }
   
   
-  "NuottiPiirturi.NuottiData and NuottiDataParitettu" should "be of right length" in {
+  "NuottiPiirturi.NuottiData and NuottiPiirturi.NuottiDataParitettu" should "be of right length" in {
         // tutkitaan nuottidatan säilyttäjiä, molemmat tyyppiä Buffer[ViivastolleLaitettava]
         // NuottiDataParitettua ei voi luoda ennen NuottiData:n luontia. Kätevää tutkia molempia samalla.
     
@@ -323,7 +332,7 @@ class NTest extends FlatSpec with Matchers {
   }
 
   
-   "Viivasto.kasitteleLyriikat()" should "cope with more lyrics than notes" in {
+  "Viivasto.kasitteleLyriikat()" should "cope with more lyrics than notes" in {
         // vaihteeksi luodaan lyriikat ja nuottiData manuaalisesti (hankalasti), jotta aina ei jouduta kutsumaan luokkia 
         // TiedostonLukeminen & NuottiPiirturi
     
@@ -462,13 +471,13 @@ class NTest extends FlatSpec with Matchers {
   
    it should "produce test file '_accidentals' similarily as in correctly printed file 'accidentals.txt'" in {
         // in test file there are all the possible cases I could think of how a note behaves
-        // when accidentals (#,b,§) are introduced in many different sequences.
+        // when accidentals (#,b,§) are introduced in different sequences.
     
-        // they are tested in the note height: h2 represents a note with extra coding because of it's
+        // they are tested in 2 different note height: 1) h2 represents a note with extra coding because of it's
         // name "b2" as flatten, which has the char "b" which is the same as the symbol of flattening  a note "Gb2"
-        // a2 represents a normal case
+        // 2) a2 represents a normal case
         val luk = new TiedostonLukeminen(inputhakemistonNimi)
-        luk.lueTiedosto("_accidentals") // (kansiosta input_virheita)
+        luk.lueTiedosto("_accidentals")
         val nuottipiirturi = new NuottiPiirturi(luk)
         nuottipiirturi.execute()
         val allPrinted = Source.fromFile("./output/accidentals.txt")
@@ -569,7 +578,7 @@ class NTest extends FlatSpec with Matchers {
     var ekaKerta = true
     var tahtilajiOnJoLuettu = false 
 
-// stubs, not in original class:
+// stubs, not in original class:                                                S T U B    H E R E: 
     var stubMessage = "stubMessagen alustusteksti"
     var stubMessages = Buffer[String]()
     var stubMoneskokerta = 0
@@ -655,8 +664,6 @@ class NTest extends FlatSpec with Matchers {
       //nested function:  
       def tarkistaSoinnunVirheet(alkio: String, ind: Int): Unit = {
 
-        //  println(alkio) 
-
         if (alkio.last != '>') {
           virheitaNolla = false
           readLine("\n\n syöte '" + alkio + "' on virheellinen: soinnun sävelten väliin tulee kirjoittaa pilkku. " +
@@ -675,7 +682,7 @@ class NTest extends FlatSpec with Matchers {
               //                        "\n Virhe on rivillä " + (nuottiDatanRivinumerot(ind)+1)  +
               //                        "\n Korjaa äsken valitsemaasi tiedostoon ja paina ENTER, kun tiedosto on tallennettu. ")
 
-              // Stub START: alla olevat  4 riviä korvaavat yllä olevat kommentoidut 3                                                            ////    S T U B   H E R E !!!
+              // Stub START: alla olevat  4 riviä korvaavat yllä olevat kommentoidut 3                                                 ////    S T U B   H E R E !!!
               this.stubMessage = "löydettiin virhe rivillä " + (nuottiDatanRivinumerot(ind) + 1)
               stubMessages += this.stubMessage
               stubMoneskokerta += 1

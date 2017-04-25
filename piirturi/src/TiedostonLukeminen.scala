@@ -18,6 +18,8 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
   var tiedostonNimi = ""
   var ekaKerta = true
   var tahtilajiOnJoLuettu = false 
+  
+  var counter = 0
  
  
   
@@ -40,6 +42,8 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
      this.ekaKerta = true
      this.tahtilaji = "4"
      this.kappaleenNimi = ""   
+     
+    
       
      try {
         for (rivi <- kayttajanValitsemaTiedosto.getLines) {
@@ -53,14 +57,19 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
          kasitteleTunnisteet(this.inputFromFile) 
          if(nuottiDataRiveina.size ==0)         // case: esim pelkkä nimi, mutta ei nuotteja
              return
-         else if(ekaKerta) tarkistaVirheet()     // loput virheidentarkistukset do while-loopissa, kutsu rivillä 94
+         else if(ekaKerta) {
+           tarkistaVirheet()     // loput virheidentarkistukset do while-loopissa, kutsu rivillä 94
+           
+         }
+         else return
      }
      else        // case: täysin tyhjä file
          return
+     println("nuottiAlkiot.size: " + nuottiAlkiot.size)    
   }   
   
   
-  def tarkistaVirheet() = {
+  def tarkistaVirheet():Unit = {
  
      ekaKerta = false
      var virheitaNolla = true
@@ -68,6 +77,7 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
      do {
        virheitaNolla = true
        tarkistaVirheetForLoop()
+       return
      } while (!virheitaNolla) 
        
        
@@ -226,7 +236,7 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
              if(filtteredNote.tail.contains("#b") ||  filtteredNote.tail.contains("b#"))    
                 return "nuotissa on ylennys- ja alennusmerkki"   
              if( !(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   
-                return "nuotissa tulee olla oktaaviala: 1 ja 2"   
+                return "nuotissa tulee olla oktaaviala: 1 tai 2, muita nuotteja ei osata piirtää"   
              if(filtteredNote.size == 3 && !(filtteredNote.tail.contains("#") || filtteredNote.tail.contains("b")))   
                 return "väärä formaatti. Muistathan syntaksin: esim. alennettu e on Eb, ei es"   
              if(filtteredNote.size > 3)

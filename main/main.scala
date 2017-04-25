@@ -1,5 +1,4 @@
 
-
 object main extends App{
   
      val inputhakemistonNimi =  "./input/"
