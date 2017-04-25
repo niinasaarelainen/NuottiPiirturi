@@ -23,7 +23,7 @@ object main extends App{
   
     
     
-    def  ohjelmanRunko():Unit = {
+    def  ohjelmanRunko(): Unit = {
         kelvollisenTiedostonKysyminenJaTarkistusLoop()
         ui.kayttajaValitseeMIDIPatchin()
         val n = new NuottiPiirturi(lukija)
@@ -38,23 +38,23 @@ object main extends App{
     }    
     
      
-    def kelvollisenTiedostonKysyminenJaTarkistusLoop():Unit = {
-       ui.listaaTiedostot()
-       ui.kayttajaValitseeTiedoston(lukija)
-       lukija.lueTiedosto(ui.tiedostonNimi.trim())
-       if(lukija.nuottiAlkiot.isEmpty ){     // case: oli pelkkää virheellistä nuottidataa, esim. <>, joista generoitui kuitenkin "", eli ei sama asia kuin tyhjä tiedosto
-          println("\nvalitsemassasi tiedostossa ei ollut nuottidataa. Valitse toinen tiedosto tai muokkaa äsken valitsemaasi.\n\n")
-          kelvollisenTiedostonKysyminenJaTarkistusLoop()
-       }   
+    def kelvollisenTiedostonKysyminenJaTarkistusLoop(): Unit = {
+        ui.listaaTiedostot()
+        ui.kayttajaValitseeTiedoston(lukija)
+        lukija.lueTiedosto(ui.tiedostonNimi.trim())
+        if(lukija.nuottiAlkiot.isEmpty ){     // case: oli pelkkää virheellistä nuottidataa, esim. <>, joista generoitui kuitenkin "", eli ei sama asia kuin tyhjä tiedosto
+           println("\nvalitsemassasi tiedostossa ei ollut nuottidataa. Valitse toinen tiedosto tai muokkaa äsken valitsemaasi.\n\n")
+           kelvollisenTiedostonKysyminenJaTarkistusLoop()
+        }   
     }
     
     
-    def valitseToiminto():Unit = {
-         ui.mitaTehdaanSeuraavaksi() match{
+    def valitseToiminto(): Unit = {
+        ui.mitaTehdaanSeuraavaksi() match{
             case ""  => println("\nKiitos ja näkemiin."); System.exit(0)
             case "1" => lukija.helppiTeksti(); valitseToiminto()
             case "2" => ohjelmanRunko()
-         }      
+        }      
     }
   
 }  

@@ -11,9 +11,8 @@ class TiedostonTallennus(biisi: Kappale, kohdetiedosto: PrintWriter) {
           rivi <- viivasto
       } kohdetiedosto.println(rivi)
    
-            
    } finally {
      kohdetiedosto.close()
-  }
+   }
    
 }

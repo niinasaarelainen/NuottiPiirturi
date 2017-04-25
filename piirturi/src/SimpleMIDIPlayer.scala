@@ -30,27 +30,27 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
             case 7 => ch1.programChange(10)   // music box
          }
     	
-        olisiAikaSkrollata = 0
-        riviInd = 0
-        println(); println()
-        skrollaaa(riviInd)     // laitetaan näytölle valmiiksi biisin nimi... 
-    		riviInd += 1
-    		skrollaaa(riviInd)    // ... ja eka rivi
-    		riviInd += 1
-    		olisiAikaSkrollata += ms     // ja alkuarvo, jotta skrollaus tapahtuu hieman ennen kuin rivi oikeasti vaihtuu
+         olisiAikaSkrollata = 0
+         riviInd = 0
+         println(); println()
+         skrollaaa(riviInd)     // laitetaan näytölle valmiiksi biisin nimi... 
+    		 riviInd += 1
+    		 skrollaaa(riviInd)    // ... ja eka rivi
+    		 riviInd += 1
+    		 olisiAikaSkrollata += ms     // ja alkuarvo, jotta skrollaus tapahtuu hieman ennen kuin rivi oikeasti vaihtuu
     		
-    		Thread.sleep(ms)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
+    		 Thread.sleep(ms)   // jos ei tätä, eka nuotti tulee liian pitkänä, kun synalla/MIDISysteemillä käynnistymiskankeutta
       
     		
-    	  if(MIDIPatch != 6)  //normaali soitto, yksikanavainen
-    	     normaalisoitto()
-    	  else rocknroll()   // rokkibändi, 6-kanavainen, delay:      
+    	   if(MIDIPatch != 6)  //normaali soitto, yksikanavainen
+    	      normaalisoitto()
+    	   else rocknroll()   // rokkibändi, 6-kanavainen, delay:      
         
-        Thread.sleep(1100)   // parempi soundi vikaan ääneen
-        synth.close()
+         Thread.sleep(1100)   // parempi soundi vikaan ääneen
+         synth.close()
         
-        uudestaan = readLine("\n\nSoitetaanko uudestaan? ENTER = Kyllä,  0 = Ei ")
-    	  } while (uudestaan != "0")
+         uudestaan = readLine("\n\nSoitetaanko uudestaan? ENTER = Kyllä,  0 = Ei ")
+    	   } while (uudestaan != "0")
 		}  
  
     
@@ -101,7 +101,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
          
 	      else Thread.sleep((nuottiTaiSointu._2 * ms).toInt)
 	      
-    // noteOff:
+      // noteOff:
         if (nuottiTaiSointu._1(0) != 0)
           for (nuotti <- nuottiTaiSointu._1)  {            
              ch1.noteOff(nuotti)
@@ -212,7 +212,6 @@ class simpleMIDIPlayerAdapter (nuottiData: Buffer[ViivastolleLaitettava], MIDIPa
                           apubufferInt += 0  // sovin itseni kanssa että tauon "korkeus" on 0
                           nuottiNumberit += apubufferInt
                } 
-               
           } // end for
       
           val nuotitJaPituudet = nuottiNumberit.zip(pituudet)

@@ -12,7 +12,7 @@ class UI(inputhakemistonNimi: String) {
     
     
     def terveTuloa() = {
-         var valinta = ""
+        var valinta = ""
         do {
            valinta = readLine( "\n\n\t !! Tervetuloa käyttämään nuotinnusohjelmaa !! \n\nValitse 1, jos haluat itse tehdä syötetiedoston, eli kirjoittaa kappaleen nuotit  "+
                                "\nValitse 2, jos haluat nähdä nuotteina jonkin valmiiksikirjoitetun kappaleen " +

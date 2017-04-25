@@ -15,6 +15,9 @@ import java.io._
  * Mutta kuitenkin pystyy testata:
  *    valitse Run Configurations:sta ScalaTest(java runner) >  NTest 
  *    (löytyy vasemmalla olevan valikon ihan alhaalta skrollaamalla)
+ *    
+ *    jos yllä oleva ei toimi, niin NTest pitää varmaankin kääntää paikallisesti uudestaan,
+ *    jotta .class tiedosto(t) löytyvät
  */
 class NTest extends FlatSpec with Matchers {
 

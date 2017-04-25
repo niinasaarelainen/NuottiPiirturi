@@ -15,21 +15,20 @@ trait ViivastolleLaitettava {
   
   
    def piirraTyhjaViivasto(leveys: Int) = {
-    
-      var viiva = ""
-      for ( i <- 1 to leveys) viiva += "-"  // muodostetaan oikean mittainen viiva
-      var vali = ""
-      for ( i <- 1 to leveys) vali += " "   // muodostetaan oikean mittainen väli
-    
-      for ( i <- 1 to 5) viivasto += vali      // ylös tyhjää varsia varten   
-      for(i <- 1 to 5){
-        viivasto += vali       // ylin paikka on g2
-        viivasto += viiva      // 5 viivaa
-      } 
-      for ( i <- 1 to 4) viivasto += vali       // d1, c1, alavali & sanoille tila
-        
-    viivasto      
-  }
+        var viiva = ""
+        for ( i <- 1 to leveys) viiva += "-"  // muodostetaan oikean mittainen viiva
+        var vali = ""
+        for ( i <- 1 to leveys) vali += " "   // muodostetaan oikean mittainen väli
+      
+        for ( i <- 1 to 5) viivasto += vali      // ylös tyhjää varsia varten   
+        for(i <- 1 to 5){
+          viivasto += vali       // ylin paikka on g2
+          viivasto += viiva      // 5 viivaa
+        } 
+        for ( i <- 1 to 4) viivasto += vali       // d1, c1, alavali & sanoille tila
+          
+        viivasto      
+   }
 }
   
 
@@ -60,81 +59,6 @@ abstract class Tauko extends ViivastolleLaitettava {
      def soiva = false
 }
 
-////////////////////////////////    S  O  I  N  T   U   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-class Sointu(aanet: Buffer[ViivastolleLaitettava]) extends ViivastolleLaitettava {
-  
-     viivasto = piirraTyhjaViivasto(kuvanLeveys)
-  
-     def nuotit = aanet   // korkeuden joutuu laskemaan jokaiselle nuotille erikseen
-     def soiva = true
-     def pituus = aanet(0).pituus   // kaikkien soinnun sävelten tulee olla samanpituisia 
-     def kuvanLeveys =  aanet(0).kuvanLeveys     
-     var korkeudet = Buffer[Int]()
-     
-    // lasketaan korkeudet, tieto tarvitaan ennen piirtämistä: varren suunta vaikuttaa apuviivojen piirtoon
-     for (aani <- aanet){
-         val nimiMapissa = aani.asInstanceOf[Nuotti].nimiMapissa 
-         korkeudet += y(nimiMapissa)
-     }    
-     var ylospain = true
-     if (korkeudet.min - 0 < 17 - korkeudet.max )   // 0 on ylin piirtoindeksi, 17 alin, lasketaan missä on enemmän tilaa
-          ylospain = false
- 
-          
-    def kuva = {   
-        for (aani <- aanet){
-           val nimiMapissa = aani.asInstanceOf[Nuotti].nimiMapissa 
-           val etumerkki = aani.asInstanceOf[Nuotti].etumerkki
-           val extraetumerkki = aani.asInstanceOf[Nuotti].extraetumerkkiDef
-           val nuppi = aani.asInstanceOf[Nuotti].nuppi
-           
-           //ala-apuviiva:
-           if(nimiMapissa == "c1")  viivasto(y("c1")) = viivasto(y("c1")).substring(0, 1) + "--" +  viivasto(y("c1")).substring(4, 6) + "--" + viivasto(y("c1")).substring(7)         
-           
-           ylaApuViivaSoinnuissa(nimiMapissa)
-          
-           // etumerkki:     
-           if(etumerkki.size == 0 && extraetumerkki.size == 0)  // ei etumerkkiä
-              viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 3) + nuppi + viivasto(y(nimiMapissa)).substring(5)  
-           else
-              viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 2) + extraetumerkki + etumerkki + nuppi + viivasto(y(nimiMapissa)).substring(5)  
-      
-           // piste
-           if(aani.pituus== 1.5 || aani.pituus == 3)
-              viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 5) + "." + viivasto(y(nimiMapissa)).substring(6)  
-        }  // end for
-      
-        if (pituus < 4)   // kokonuottiin ei vartta 
-            piirraVarsiJaMahdollisestiVaka(korkeudet.min, korkeudet.max, ylospain)
-        viivasto          
-    }
-     
-    def ylaApuViivaSoinnuissa(nimiMapissa: String) = {
-       if (!ylospain && Array( "h2", "b2", "bb2").contains(nimiMapissa))
-              viivasto(y("a2")) = viivasto(y("a2")).substring(0, 1) + "--" +  viivasto(y("a2")).substring(4, 5) + "--" + viivasto(y("a2")).substring(6)         
-         if (ylospain && Array( "h2", "b2", "bb2").contains(nimiMapissa))
-              viivasto(y("a2")) = viivasto(y("a2")).substring(0, 2) + "----" + viivasto(y("a2")).substring(6)         
-         if("a2" == nimiMapissa)
-              viivasto(y("a2")) = viivasto(y("a2")).substring(0, 1) + "--" +  viivasto(y("a2")).substring(4, 6) + "--"   + viivasto(y("a2")).substring(7)         
-    }
-     
-     def piirraVarsiJaMahdollisestiVaka(mista: Int, mihin:Int ,ylospain:Boolean) = {                                  ///////// @ Sointu
-            if(ylospain){
-               for (i <- 1 to mihin-mista+3)   // nuottien väli + kolmen mittainen ylimenevä osuus
-                 if(!korkeudet.contains(mihin-i))  // nuppien kohdalle ei vartta
-                   viivasto(mihin-i) = viivasto(mihin-i).substring(0, 4) + "|" + viivasto(mihin-i).substring(5)  
-            if (pituus == 0.5) viivasto(mista-3) =  viivasto(mista-3).substring(0, 5) + "\\" + viivasto(mista-3).substring(6)  
-         
-            } else {
-              for (i <-  1 to mihin-mista +3)
-                  if(!korkeudet.contains(mista+i))
-                     viivasto(mista+i) = viivasto(mista+i).substring(0, 3) + "|" + viivasto(mista+i).substring(4 )  
-              if (pituus == 0.5) viivasto(mihin + 3) =  viivasto(mihin + 3).substring(0, 4) + "/" + viivasto(mihin + 3).substring(5)                
-            }        
-     }     
-}
 
 
 ////////////////////////////////    N  U  O  T  I  T  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -218,7 +142,6 @@ class NeljasosaNuotti(nuotinNimi: String, extraetumerkki: String = "") extends P
       override def pituus = 1.0
       override def kuvanLeveys = 9
       override def nuppi = "@@"
-    
 }   
   
 
@@ -227,7 +150,6 @@ class PisteellinenNeljasosaNuotti(nuotinNimi: String, extraetumerkki: String = "
     override def pituus = 1.5
     override def kuvanLeveys = 11
     override def nuppi = "@@"
-    
 }   
   
     
@@ -252,7 +174,6 @@ class KahdeksasosaNuotti(nuotinNimi: String, extraetumerkki: String = "") extend
   
   
 class KahdeksasosaPari (eka: ViivastolleLaitettava, toka: ViivastolleLaitettava)  extends KokoNuotti(eka.asInstanceOf[KahdeksasosaNuotti].korkeus: String, eka.asInstanceOf[KahdeksasosaNuotti].getExtraetumerkki: String){
-
      val ekaNuotti = eka.asInstanceOf[KahdeksasosaNuotti]
      val tokaNuotti = toka.asInstanceOf[KahdeksasosaNuotti]
      override def korkeus = ekaNuotti.korkeus
@@ -311,21 +232,99 @@ class KahdeksasosaPari (eka: ViivastolleLaitettava, toka: ViivastolleLaitettava)
 }
 
 
+////////////////////////////////    S  O  I  N  T   U   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+class Sointu(aanet: Buffer[ViivastolleLaitettava]) extends ViivastolleLaitettava {
+  
+    viivasto = piirraTyhjaViivasto(kuvanLeveys)
+  
+    def nuotit = aanet   // korkeuden joutuu laskemaan jokaiselle nuotille erikseen
+    def soiva = true
+    def pituus = aanet(0).pituus   // kaikkien soinnun sävelten tulee olla samanpituisia 
+    def kuvanLeveys =  aanet(0).kuvanLeveys     
+    var korkeudet = Buffer[Int]()
+     
+    // lasketaan korkeudet, tieto tarvitaan ennen piirtämistä: varren suunta vaikuttaa apuviivojen piirtoon
+    for (aani <- aanet){
+         val nimiMapissa = aani.asInstanceOf[Nuotti].nimiMapissa 
+         korkeudet += y(nimiMapissa)
+    }    
+    var ylospain = true
+    if (korkeudet.min - 0 < 17 - korkeudet.max )   // 0 on ylin piirtoindeksi, 17 alin, lasketaan missä on enemmän tilaa
+         ylospain = false
+ 
+          
+    def kuva = {   
+         for (aani <- aanet){
+            val nimiMapissa = aani.asInstanceOf[Nuotti].nimiMapissa 
+            val etumerkki = aani.asInstanceOf[Nuotti].etumerkki
+            val extraetumerkki = aani.asInstanceOf[Nuotti].extraetumerkkiDef
+            val nuppi = aani.asInstanceOf[Nuotti].nuppi
+           
+            //ala-apuviiva:
+            if(nimiMapissa == "c1")  viivasto(y("c1")) = viivasto(y("c1")).substring(0, 1) + "--" +  viivasto(y("c1")).substring(4, 6) + "--" + viivasto(y("c1")).substring(7)         
+            
+            ylaApuViivaSoinnuissa(nimiMapissa)
+          
+            // etumerkki:     
+            if(etumerkki.size == 0 && extraetumerkki.size == 0)  // ei etumerkkiä
+               viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 3) + nuppi + viivasto(y(nimiMapissa)).substring(5)  
+            else
+               viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 2) + extraetumerkki + etumerkki + nuppi + viivasto(y(nimiMapissa)).substring(5)  
+      
+            // piste
+            if(aani.pituus== 1.5 || aani.pituus == 3)
+               viivasto(y(nimiMapissa)) = viivasto(y(nimiMapissa)).substring(0, 5) + "." + viivasto(y(nimiMapissa)).substring(6)  
+         }  // end for
+      
+         if (pituus < 4)   // kokonuottiin ei vartta 
+             piirraVarsiJaMahdollisestiVaka(korkeudet.min, korkeudet.max, ylospain)
+         viivasto          
+    }
+     
+    def ylaApuViivaSoinnuissa(nimiMapissa: String) = {
+          if (!ylospain && Array( "h2", "b2", "bb2").contains(nimiMapissa))
+              viivasto(y("a2")) = viivasto(y("a2")).substring(0, 1) + "--" +  viivasto(y("a2")).substring(4, 5) + "--" + viivasto(y("a2")).substring(6)         
+          if (ylospain && Array( "h2", "b2", "bb2").contains(nimiMapissa))
+              viivasto(y("a2")) = viivasto(y("a2")).substring(0, 2) + "----" + viivasto(y("a2")).substring(6)         
+          if("a2" == nimiMapissa)
+              viivasto(y("a2")) = viivasto(y("a2")).substring(0, 1) + "--" +  viivasto(y("a2")).substring(4, 6) + "--"   + viivasto(y("a2")).substring(7)         
+    }
+     
+     def piirraVarsiJaMahdollisestiVaka(mista: Int, mihin:Int ,ylospain:Boolean) = {                                  ///////// @ Sointu
+          if(ylospain){
+               for (i <- 1 to mihin-mista+3)   // nuottien väli + kolmen mittainen ylimenevä osuus
+                 if(!korkeudet.contains(mihin-i))  // nuppien kohdalle ei vartta
+                   viivasto(mihin-i) = viivasto(mihin-i).substring(0, 4) + "|" + viivasto(mihin-i).substring(5)  
+          if (pituus == 0.5) viivasto(mista-3) =  viivasto(mista-3).substring(0, 5) + "\\" + viivasto(mista-3).substring(6)  
+         
+          } else {
+              for (i <-  1 to mihin-mista +3)
+                  if(!korkeudet.contains(mista+i))
+                     viivasto(mista+i) = viivasto(mista+i).substring(0, 3) + "|" + viivasto(mista+i).substring(4 )  
+              if (pituus == 0.5) viivasto(mihin + 3) =  viivasto(mihin + 3).substring(0, 4) + "/" + viivasto(mihin + 3).substring(5)                
+          }        
+     }     
+}
+
+
+
 /////////////////////////////////     T  A  U  O  T  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
 class NeljasosaTauko extends Tauko { 
   
-    viivasto = piirraTyhjaViivasto(kuvanLeveys) 
+     viivasto = piirraTyhjaViivasto(kuvanLeveys) 
   
-    def pituus = 1.0
-    def kuvanLeveys = 7    
+     def pituus = 1.0
+     def kuvanLeveys = 7    
     
-    def kuva = {                     // korkeus on pelkkä piirtokorkeus
-      viivasto(y(korkeus)) = viivasto(y(korkeus)).substring(0, 3) + "\\" +  viivasto(y(korkeus)).substring(4)
-      viivasto(y(korkeus)+1) = viivasto(y(korkeus)+1).substring(0, 3) + "/" +  viivasto(y(korkeus)+1).substring(4)
-      viivasto(y(korkeus)+2) = viivasto(y(korkeus)+2).substring(0, 3) + "\\" +  viivasto(y(korkeus)+2).substring(4)
-      viivasto(y(korkeus)+3) = viivasto(y(korkeus)+3).substring(0, 3) + "/" +  viivasto(y(korkeus)+3).substring(4)
-      viivasto 
+     def kuva = {                     // korkeus on pelkkä piirtokorkeus
+        viivasto(y(korkeus)) = viivasto(y(korkeus)).substring(0, 3) + "\\" +  viivasto(y(korkeus)).substring(4)
+        viivasto(y(korkeus)+1) = viivasto(y(korkeus)+1).substring(0, 3) + "/" +  viivasto(y(korkeus)+1).substring(4)
+        viivasto(y(korkeus)+2) = viivasto(y(korkeus)+2).substring(0, 3) + "\\" +  viivasto(y(korkeus)+2).substring(4)
+        viivasto(y(korkeus)+3) = viivasto(y(korkeus)+3).substring(0, 3) + "/" +  viivasto(y(korkeus)+3).substring(4)
+        viivasto 
     }
 }   
 

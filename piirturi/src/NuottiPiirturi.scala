@@ -27,7 +27,7 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
    /////  M U U T   M E T O D I T  ja niihin liittyvät muuttujat (ei voi määritellä metodin sisällä rekursion takia): /////////////////////////  
    
    var iskujaMennyt =  0.0
-   var kasvataIskuja= 0   // nollana/positiivisena ok kasvattaa iskujaMennyt. 
+   var kasvataIskuja= 0   // nollana/positiivisena kasvataIskuja kasvattaa iskujaMennyt. 
                 //   Sointu asettaa negatiivisen arvon (soinnunsävelten määrä +1) - pituus halutaan _VAIN_ kerran - 
   
   def kasitteleNuottiTieto(inputBuffer: Buffer[String], palautetaan: Buffer[ViivastolleLaitettava] ): Buffer[ViivastolleLaitettava] = {   
@@ -44,7 +44,7 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
               var pituus = alkio.count(_ == '-')     
               var extraetumerkki = tutkiEtumerkit(nuotinNimi)  
              
-              /* jos tauot yrittää siirtää omaksi sisäkkäiseksi funktioksi, tulee valitus reassignment to val palautetaan */
+              /* jos tauot yrittää siirtää omaksi sisäkkäiseksi metodiksi, tulee valitus reassignment to val palautetaan */
               
               if (nuotinNimi == "z"){                    //   T A U O T
                  pituus match{
@@ -88,7 +88,6 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
           }   // iso else: ei-sointu.
           
           if (iskujaMennyt == tahtilaji) {
-          //   println("-----------------")
              iskujaMennyt = 0.0  
              tahdinAikaisetEtumerkit = Buffer[String]()
           }
@@ -139,13 +138,13 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
               // tai vain lisätään puskuriin:
               else  this.tahdinAikaisetEtumerkit += nuotinNimi   
             
-     // selvitetään tarvitaanko palautusmerkkiä         
+      // selvitetään tarvitaanko palautusmerkkiä         
       } else if ( this.tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last).size > 0  ){
              val tulokset = tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last)
              for(tulos <- tulokset)  tahdinAikaisetEtumerkit -= tulos              // otetaan esim g#1 pois puskurista, koska se on nyt §-tilassa
              return "§"    
       }        
-             // vielä pari poikkeustapausta johtuen epäloogisesta nuotinnimestä b
+      // vielä pari poikkeustapausta johtuen epäloogisesta nuotinnimestä b
       else if ( this.tahdinAikaisetEtumerkit.contains("b1") && nuotinNimi == "h1"){
                 tahdinAikaisetEtumerkit -= "b1"
                 return "§"  

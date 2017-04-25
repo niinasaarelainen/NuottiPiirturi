@@ -151,8 +151,7 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
   }
  
   
-  def kasitteleTunnisteet(inputFromFile: Buffer[String]) = {  // tekstisyöterivejä
-
+  def kasitteleTunnisteet(inputFromFile: Buffer[String]) = {  
        var seuraavatrivitLyriikkaan = false
        for (i <- 0 until inputFromFile.size) {
           if (inputFromFile(i).trim.size != 0){  
@@ -220,9 +219,9 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
              if(!"cdefgahb".contains(filtteredNote.toLowerCase().head.toString()))
                 return "nuotin pitää alkaa kirjaimilla c,C, d,D e,E f,F g,G a,A h,H, b tai B"   
              if(filtteredNote.size == 1 )   
-                return "tarkoititko "+ syote + "1 vai " + syote + "2?"   
+                return "tarkoititko "+ filtteredNote + "1 vai " + filtteredNote + "2?"   
              if(filtteredNote.size == 2 && (filtteredNote.tail.contains("#") || filtteredNote.tail.contains("b")) && !(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   
-                return "tarkoititko "+ syote + "1 vai " + syote + "2?"      
+                return "tarkoititko "+ filtteredNote + "1 vai " + filtteredNote + "2?"      
              if(filtteredNote.tail.contains("#b") ||  filtteredNote.tail.contains("b#"))    
                 return "nuotissa on ylennys- ja alennusmerkki"   
              if( !(filtteredNote.tail.contains("1")|| filtteredNote.tail.contains("2")))   

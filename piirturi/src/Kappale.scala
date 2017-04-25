@@ -5,7 +5,7 @@ class Kappale {
   var kappale =  Buffer[Buffer[String]]()
   
   
-  def lisaaKappaleenNimi(kappaleenNimi: String){
+  def lisaaKappaleenNimi(kappaleenNimi: String){   // nimestä halutaan sama tietotyyppi kuin viivastosta
       var apuPuskuri = Buffer[String]()
       apuPuskuri += ""
       apuPuskuri += ""
