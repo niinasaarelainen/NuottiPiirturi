@@ -206,12 +206,15 @@ class simpleMIDIPlayerNuottiDatasta (nuottiData: Buffer[ViivastolleLaitettava], 
         
         
         
-        def delayJaSkrollaus(alkio: ViivastolleLaitettava) = {
-          var vol = 73
+        def delayJaSkrollaus(alkio: ViivastolleLaitettava) = {                    // R O K K I B Ä N D I  CONTINUES
+          var vol = 73 
           val montakoKertaaEhtiiSoittaaKahdeksasosan = (alkio.pituus / 0.5).toInt
-          olisiAikaSkrollata += (alkio.pituus * ms).toInt                        // R O K K I B Ä N D I  CONTINUES
+                            
           
-        //    if (nuotti != 0) vol = 73      // tauon aikana jatketaan volan "feidautumista"
+            alkio match {
+                case t: Tauko  =>      // tauon aikana jatketaan volan "feidautumista"
+                case _ =>    vol = 73  
+            }      
             
             for( i<- 0 until montakoKertaaEhtiiSoittaaKahdeksasosan){
                 
@@ -223,15 +226,25 @@ class simpleMIDIPlayerNuottiDatasta (nuottiData: Buffer[ViivastolleLaitettava], 
                  
                 }
                 Thread.sleep(ms/2)   // = 1/8-nuotti
+                olisiAikaSkrollata += ms/2
                 
                 Thread.sleep(((alkio.pituus * ms) - (montakoKertaaEhtiiSoittaaKahdeksasosan*ms/2)) .toInt)   
-                if(olisiAikaSkrollata >= ms*tahtilaji*2 ){            
+                if(olisiAikaSkrollata == ms*tahtilaji*2 ){            
                   if ( riviInd < kappale.kappale.size){
                      skrollaaa(riviInd)
                      riviInd += 1
                      olisiAikaSkrollata = 0
                   }
                 }   
+                else if(olisiAikaSkrollata > ms*tahtilaji*2 ){ 
+                  val paljonkoMentiinYliSkrollausRajan = olisiAikaSkrollata - ms*tahtilaji*2
+               //   Thread.sleep((nuottiTaiSointu._2 * ms).toInt - paljonkoMentiinYliSkrollausRajan )  
+                  if ( riviInd < kappale.kappale.size){
+                    skrollaaa(riviInd)
+                    riviInd += 1
+                  }
+                  olisiAikaSkrollata = ms
+                }
             }	   
           
             
