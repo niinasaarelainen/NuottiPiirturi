@@ -9,23 +9,11 @@ import io._
 import ui._
 import sound._
 
-/* TESTIEN AJO-OHJE:
- * 
- * Package Explorerissa NTest.scala:
- * hiiren oikealla Run As ei näytä mitään testimahdollisuutta, kuten normaalisti pitäisi. 
- * 
- * Mutta kuitenkin pystyy testata:
- *    valitse Run Configurations:sta ScalaTest(java runner) >  NTest 
- *    (löytyy vasemmalla olevan valikon ihan alhaalta skrollaamalla)
- *    
- *    jos yllä oleva ei toimi, niin NTest pitää varmaankin kääntää paikallisesti uudestaan,
- *    jotta .class tiedosto(t) löytyvät
- */
+
 class NTest extends FlatSpec with Matchers {
 
-  // val inputhakemistonNimi =  "./piirturi/src/input_yksikkoTestaus/"
-   val inputhakemistonNimi =  "./piirturi/src/input_yksikko/"
-  
+   val inputhakemistonNimi =  "./piirturi/src/input_yksikkoTestaus/"
+   
   "TiedostonLukeminen.oikeellisuusTesti()" should "find non-valid note names and lengths" in {
         val luk = new TiedostonLukeminen(inputhakemistonNimi)
         val nuottejaVaarin = Buffer("t1-", "d3-", "f", "dc1", "p", "1c", "2f", "f2f2", "f2f", "f2g----", "hb22----", "c11", "d#b", "db#", "b#",
@@ -409,38 +397,6 @@ class NTest extends FlatSpec with Matchers {
         }
    }    
   
-
-  
-   "simpleMIDIPlayerAdapter.muunnaMIDInuoteiksi()" should "transform Nuottipiirturi.nuottiData to correct Buffer[(Buffer[Int], Double)]" in {
-
-        val luk = new TiedostonLukeminen(inputhakemistonNimi)
-        luk.lueTiedosto("jaakko") // (kansiosta input_virheita)
-        val n = new NuottiPiirturi(luk)
-        n.execute() // MIDI-Patch 3 valittu käyttäjän puolesta
-        val MIDIAdapter = new simpleMIDIPlayerAdapter(n.nuottiData, 3, n.viivasto.kappale, luk.tahtilaji.toInt, false) // false= ei varsinaisesti haluta kuunnella Jaakko-kultaa
-    
-        /* Jaakko-kulta, tarkoituksella sointuja(2 ääntäkin on määritelty soinnuksi) ja taukoja seassa, 
-            jotta testidatassa on kaikki 3 pääkategoriaa: nuotti, tauko, sointu 
-               	c2- d2- e2- c2-   				c2- d2- e2- c2- 
-     						<e2-, c2-> f2- g2- z-    	<e2-,c2-> f2- g2- z-
-     						<g2,c2> a2 g2 f2 e2- c2- 	<g2,c2> a2 g2 f2 e2- c2-
-     						c2- g1- c2-. z 						c2- g1- c2-- 
-     			* 
-     			*   huom! koodi järjestää soinnut nousevaan järjestykseen .sorted, eli <e2-, c2-> onkin (72,76)   
-     			*   tauon olen määritellyt MIDI-korkeudeksi 0 (ei soiteta) */
-        val jaakkoKullanMIDINumbers = Array(Array(72), Array(74), Array(76), Array(72), Array(72), Array(74), Array(76), Array(72),
-          Array(72, 76), Array(77), Array(79), Array(0), Array(72, 76), Array(77), Array(79), Array(0),
-          Array(72, 79), Array(81), Array(79), Array(77), Array(76), Array(72), Array(72, 79), Array(81), Array(79), Array(77), Array(76), Array(72),
-          Array(72), Array(67), Array(72), Array(0), Array(72), Array(67), Array(72), Array(0))
-          
-        for (i <- 0 until MIDIAdapter.muunnaMIDInuoteiksi.size) {
-          for (korkeus <- 0 until MIDIAdapter.muunnaMIDInuoteiksi()(i)._1.size) { // Tuple._1 = Buffer[Int]  eventin korkeus tai korkeudet soinnun tapauksessa
-            assert(MIDIAdapter.muunnaMIDInuoteiksi()(i)._1(korkeus) == jaakkoKullanMIDINumbers(i)(korkeus), "***error in event number: " + (i + 1) + ", in " + (korkeus + 1) + ". number of Array")
-            assert(MIDIAdapter.muunnaMIDInuoteiksi()(i)._2 == n.nuottiData(i).pituus, "***error in length in: " + (i + 1) + ". event") // Tuple._2 = Double, sama kuin nuottiolion pituus-kenttä
-          }
-        }
-   }
- 
   
    "The program (integration test)" should "produce song 'Flight of the Bumble Bee' similarily as in correctly printed file 'bumble.txt'" in {
         // tämä testi on ylläpitoa varten, eli integraatiotesti, monien ohjelman osien tulee toimia oikein, jotta oikea output saadaa aikaan. 
