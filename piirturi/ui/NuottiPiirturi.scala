@@ -123,53 +123,63 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
    } //end KasitteleNuottiTieto
   
    
-   def tutkiEtumerkit(nuotinNimi: String):String = {  
+   def tutkiEtumerkit(nuotinNimi: String) = {  
+     
+      println(nuotinNimi)      
      
       // tutkitaan ylennettyjä ja alennettuja nuotteja
       if(nuotinNimi.contains("#") || nuotinNimi.contains("b")){
-              if(this.tahdinAikaisetEtumerkit.contains(nuotinNimi))
-                   "n"   // n = nuottikuva neutral, nuotti on ylennetty/alennettu mutta merkkiä ei piirretä
+              if(this.tahdinAikaisetEtumerkit.contains(nuotinNimi)){
+                println(nuotinNimi + "  ennen n")
+                 "n"   // n = nuottikuva neutral, nuotti on ylennetty/alennettu mutta merkkiä ei piirretä
+              }
               
               // case: puskurissa oli sama nuotti eri etumerkillä varustettuna, se pois :   
               else if ( this.tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last).size > 0 ){
                   tahdinAikaisetEtumerkit -= tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last)(0)
                   this.tahdinAikaisetEtumerkit += nuotinNimi 
+                  ""
               } 
               
               // nuotinnimestä b johtuen erikoistapaukset:
               else if ( this.tahdinAikaisetEtumerkit.contains("b1") && nuotinNimi == "h#1"){
                    tahdinAikaisetEtumerkit -= "b1"
                    this.tahdinAikaisetEtumerkit += nuotinNimi   
+                   ""
               } else if ( this.tahdinAikaisetEtumerkit.contains("b2") && nuotinNimi == "h#2"){
                    tahdinAikaisetEtumerkit -= "b2"  
-                   this.tahdinAikaisetEtumerkit += nuotinNimi   
+                   this.tahdinAikaisetEtumerkit += nuotinNimi 
+                   ""
               } else if ( this.tahdinAikaisetEtumerkit.contains("h#1") && nuotinNimi == "b1"){
                    tahdinAikaisetEtumerkit -= "h#1"
-                   this.tahdinAikaisetEtumerkit += nuotinNimi   
+                   this.tahdinAikaisetEtumerkit += nuotinNimi  
+                   ""
               } else if ( this.tahdinAikaisetEtumerkit.contains("h#2") && nuotinNimi == "b2"){
                    tahdinAikaisetEtumerkit -= "h#2"  
-                   this.tahdinAikaisetEtumerkit += nuotinNimi       
+                   this.tahdinAikaisetEtumerkit += nuotinNimi 
+                   ""
               }     
               
               // tai vain lisätään puskuriin:
-              else  this.tahdinAikaisetEtumerkit += nuotinNimi   
-              ""
+              else  {this.tahdinAikaisetEtumerkit += nuotinNimi; ""}
+              
       // selvitetään tarvitaanko palautusmerkkiä         
       } else if ( this.tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last).size > 0  ){
              val tulokset = tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last)
              for(tulos <- tulokset)  tahdinAikaisetEtumerkit -= tulos              // otetaan esim g#1 pois puskurista, koska se on nyt §-tilassa
-             ""    
+             "§"  
       }        
       // vielä pari poikkeustapausta johtuen epäloogisesta nuotinnimestä b
       else if ( this.tahdinAikaisetEtumerkit.contains("b1") && nuotinNimi == "h1"){
                 tahdinAikaisetEtumerkit -= "b1"
-                "\u266D"  
+                "§"  
+                
       } else if ( this.tahdinAikaisetEtumerkit.contains("b2") && nuotinNimi == "h2"){
                 tahdinAikaisetEtumerkit -= "b2"
-                  "\u266D" 
+                "§" 
       }  
       
-      else ""        // muutoin ei tarvita puskuritoimenpiteitä tai extraetumerkkiä
+      else {println(nuotinNimi + " end"); ""}        // muutoin ei tarvita puskuritoimenpiteitä tai extraetumerkkiä
    }
    
    
