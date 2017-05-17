@@ -1,4 +1,5 @@
 package test
+
 import org.scalatest.Assertions._
 import org.scalatest._
 import scala.collection.mutable.Buffer
@@ -7,22 +8,6 @@ import java.io._
 import io._
 import ui._
 import sound._
-import io.TiedostonLukeminen
-import ui.UI
-import ui.ViivastolleLaitettava
-import ui.Tauko
-import ui.PisteellinenNeljasosaNuotti
-import ui.Nuotti
-import ui.NeljasosaNuotti
-import ui.KahdeksasosaPari
-import ui.KahdeksasosaNuotti
-import ui.KahdeksasosaNuotti
-import ui.KahdeksasosaPari
-import ui.Nuotti
-import ui.Tauko
-import ui.ViivastolleLaitettava
-import sound.simpleMIDIPlayerAdapter
-
 
 /* TESTIEN AJO-OHJE:
  * 
@@ -38,7 +23,8 @@ import sound.simpleMIDIPlayerAdapter
  */
 class NTest extends FlatSpec with Matchers {
 
-   val inputhakemistonNimi =  "./piirturi/src/input_yksikkoTestaus/"
+  // val inputhakemistonNimi =  "./piirturi/src/input_yksikkoTestaus/"
+   val inputhakemistonNimi =  "./piirturi/src/input_yksikko/"
   
   "TiedostonLukeminen.oikeellisuusTesti()" should "find non-valid note names and lengths" in {
         val luk = new TiedostonLukeminen(inputhakemistonNimi)
