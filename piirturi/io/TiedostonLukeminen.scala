@@ -165,13 +165,15 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
               if (kelvollinenSyoteRivi.head == '#') {    //  T U N N I S T E E T
                   if (kelvollinenSyoteRivi.tail.toLowerCase().trim.contains("tempo"))
                      tempo = kelvollinenSyoteRivi.tail.trim.substring(6)
-                  if (kelvollinenSyoteRivi.tail.toLowerCase().trim.contains("sanat")){
-                     seuraavatrivitLyriikkaan = true
-                    // varaudutaan siihen että joku kirjoittaa sanoja jo samalle riville kuin missä tunniste:
-                    if(kelvollinenSyoteRivi.tail.trim.substring(5).length > 0) 
+                  else if (kelvollinenSyoteRivi.tail.toLowerCase().trim.contains("sanat")){
+                      seuraavatrivitLyriikkaan = true
+                     // varaudutaan siihen että joku kirjoittaa sanoja jo samalle riville kuin missä tunniste:
+                     if(kelvollinenSyoteRivi.tail.trim.substring(5).length > 0) 
                             lyriikkadata += kelvollinenSyoteRivi.tail.trim.substring(5)
-                  } else if (seuraavatrivitLyriikkaan == false) kasitteleKappaleenNimiJaTahtilaji(kelvollinenSyoteRivi, i)  // end lyriikat false
-              } else if (seuraavatrivitLyriikkaan)    // L Y R I I K K A 
+                  } 
+                  else if (seuraavatrivitLyriikkaan == false) kasitteleKappaleenNimiJaTahtilaji(kelvollinenSyoteRivi, i)  // end lyriikat false
+              } 
+              else if (seuraavatrivitLyriikkaan)    // L Y R I I K K A 
                    lyriikkadata += kelvollinenSyoteRivi
               else {    // L O P U T   ELI   N U O T I T      
                 nuottiDatanRivinumerot += i
@@ -183,11 +185,14 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
   
   
   def kasitteleKappaleenNimiJaTahtilaji(kelvollinenSyoteRivi:String, ind:Int) ={
+    
+         println(kelvollinenSyoteRivi)
+    
          if (kelvollinenSyoteRivi.tail.toLowerCase().contains("nimi")) {
               kappaleenNimi = kelvollinenSyoteRivi.tail.substring(5, kelvollinenSyoteRivi.tail.size)
                
          }
-         else if (!tahtilajiOnJoLuettu && "2345678".contains(kelvollinenSyoteRivi(1)) && ind < 2){  // jos ei OLE ind < 2, voidaan vahingossa kommentti "#2.teema" tuktkita tahtilajiksi 2/4 
+         else if (!tahtilajiOnJoLuettu && "2345678".contains(kelvollinenSyoteRivi(1))){  // jos ei OLE ind < 2, voidaan vahingossa kommentti "#2.teema" tuktkita tahtilajiksi 2/4 
               tahtilaji = kelvollinenSyoteRivi(1).toString      // tahtilaji pilalla jos myöhemmässä kommentissa on numero heti #:n jälkeen TODO
                  // varaudutaan siihen että joku kirjoittaa nuotteja jo samalle riville kuin missä tahtilaji-tunniste:
               if(kelvollinenSyoteRivi.tail.trim.substring(1) != 0)  {
@@ -196,6 +201,7 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
               }   
               tahtilajiOnJoLuettu = true
          }
+         println(tahtilaji)
   }
 
   

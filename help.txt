@@ -79,8 +79,10 @@ Jos haluat kappaleelle nimen, kirjoita esim.
 Jos kappale ei mene 4/4-tahtilajissa, tulee merkitä (jonkin) rivin alkuun moneenko lasketaan seuraavasti: 
 #3 (kolmijakoinen) tai vaikkapa #5 (viisijakoinen)
 
+Viimeinen, täysin vapaaehtoinen, ja ei vaikuta nuottikuvaan, on kappaleen tempo eli metronomilukema (BPM)
+#tempo 120
 
-Huomaa siis tunnisteen # käyttö, jos teet nimen, tahtilajin tai sanat. 
+Huomaa siis tunnisteen # käyttö, jos teet nimen, tahtilajin, tempon tai sanat. 
 Kaikki edellä mainitut voi myös jättää pois.
 
 Ylimääräisiä kommentteja voi tehdä tyyliin
