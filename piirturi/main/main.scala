@@ -2,11 +2,7 @@ package main
 import io._
 import ui._
 import sound._
-import io.TiedostonTallennus
-import io.TiedostonLukeminen
-import ui.UI
-import ui.NuottiPiirturi
-import sound.simpleMIDIPlayerAdapter
+
 
 object main extends App{
   
@@ -38,8 +34,10 @@ object main extends App{
         val n = new NuottiPiirturi(lukija)
         n.execute()
         if(!ui.MIDIPatch.equals("")){  // kuunnellaan  
-            val adapter = new simpleMIDIPlayerAdapter(n.nuottiData, ui.MIDIPatch.toInt, n.viivasto.kappale, lukija.tahtilaji.toInt)
-            adapter.muunnaMIDInuoteiksi
+           // val adapter = new simpleMIDIPlayerAdapter(n.nuottiData, ui.MIDIPatch.toInt, n.viivasto.kappale, lukija.tahtilaji.toInt)
+           // adapter.muunnaMIDInuoteiksi
+           val player = new simpleMIDIPlayerNuottiDatasta(n.nuottiData, ui.MIDIPatch.toInt, n.viivasto.kappale, lukija.tahtilaji.toInt)
+           player.soita()
         } else         // käyttäjä valitsi että ei kuunnella
             n.viivasto.kappale.printtaaRuudulleIlmanAjastusta()
         new TiedostonTallennus(n.viivasto.kappale, ui.kayttajaValitseeTiedostonTallennusnimen())   

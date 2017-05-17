@@ -3,19 +3,7 @@ package ui
 import scala.collection.mutable.Buffer
 import io._
 import io.TiedostonLukeminen
-import ui.ViivastolleLaitettava
-import ui.Sointu
-import ui.PuoliNuotti
-import ui.PisteellinenPuoliNuotti
-import ui.PisteellinenNeljasosaTauko
-import ui.PisteellinenNeljasosaNuotti
-import ui.NeljasosaTauko
-import ui.NeljasosaNuotti
-import ui.KokoNuotti
-import ui.KahdeksasosaTauko
-import ui.KahdeksasosaPari
-import ui.KahdeksasosaNuotti
-import ui.Viivasto
+import ui._
 
 class NuottiPiirturi(lukija: TiedostonLukeminen){
     
@@ -125,12 +113,9 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
    
    def tutkiEtumerkit(nuotinNimi: String) = {  
      
-      println(nuotinNimi)      
-     
       // tutkitaan ylennettyjä ja alennettuja nuotteja
       if(nuotinNimi.contains("#") || nuotinNimi.contains("b")){
               if(this.tahdinAikaisetEtumerkit.contains(nuotinNimi)){
-                println(nuotinNimi + "  ennen n")
                  "n"   // n = nuottikuva neutral, nuotti on ylennetty/alennettu mutta merkkiä ei piirretä
               }
               
@@ -179,7 +164,7 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
                 "§" 
       }  
       
-      else {println(nuotinNimi + " end"); ""}        // muutoin ei tarvita puskuritoimenpiteitä tai extraetumerkkiä
+      else ""        // muutoin ei tarvita puskuritoimenpiteitä tai extraetumerkkiä
    }
    
    

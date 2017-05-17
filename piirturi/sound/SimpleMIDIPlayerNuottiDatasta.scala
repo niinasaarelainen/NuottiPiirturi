@@ -5,11 +5,6 @@ import javax.sound.midi.MidiSystem
 import scala.collection.mutable.Map
 import scala.collection.mutable.Buffer
 import scala.io.StdIn._
-import ui.ViivastolleLaitettava
-import ui.Tauko
-import ui.Sointu
-import ui.Nuotti
-import ui.Kappale
 
 
 class simpleMIDIPlayerNuottiDatasta (nuottiData: Buffer[ViivastolleLaitettava], MIDIPatch:Int, kappale: Kappale, tahtilaji: Int) {   // Tuple (korkeus/korkeudet, pituus)
@@ -77,21 +72,21 @@ class simpleMIDIPlayerNuottiDatasta (nuottiData: Buffer[ViivastolleLaitettava], 
 	  def normaalisoitto() = {
 	     
 	     for (alkio<- nuottiData) {   
-          var apuNumberit =  Buffer[Int]()      
+          var apuNumberit =  Buffer[Int]() 
+          
            alkio match {
+            
+               // noteOn, sointu pitää käsitellä eri tavalla kuin nuotti:
                case s: Sointu  => 
                          for(nuotti <- s.nuotit)
-                             apuNumberit += MIDINoteNumber(nuotti.asInstanceOf[Nuotti].korkeus)  // Map("nuotinnimi" --> Int)     
+                             apuNumberit += MIDINoteNumber(nuotti.asInstanceOf[Nuotti].korkeus)  // Map("nuotinnimi" --> Int)    
                            
-                           
-                         // noteOn:
                          for (nuotti <-  apuNumberit.sorted )   // sorted = melodia menee vikaksi
-              	            if(nuotti !=  apuNumberit.last){
+              	            if(nuotti !=  apuNumberit.sorted.last){
                                ch1.noteOn(nuotti, 75)         // 75 = velocity (127 = max), säestysäänet, jos niitä on
                             }   
-                            else { 
-                               ch1.noteOn(nuotti, 114)  // oltiin sortattu, eli melodia on vikana (ylin ääni = isoin numero)  
-                            }
+                            else 
+                               ch1.noteOn(nuotti, 114)  // melodia on vikana (ylin ääni = isoin numero) 
                              
                case n: Nuotti => 
                            ch1.noteOn(MIDINoteNumber(n.korkeus), 114)
