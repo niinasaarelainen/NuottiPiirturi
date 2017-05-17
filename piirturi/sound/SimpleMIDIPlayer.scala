@@ -7,7 +7,7 @@ import scala.collection.mutable.Buffer
 import scala.io.StdIn._
 
 
-class simpleMIDIPlayer (nuottiData: Buffer[ViivastolleLaitettava], MIDIPatch:Int, kappale: Kappale, tahtilaji: Int) {   
+class simpleMIDIPlayer (nuottiData: Buffer[ViivastolleLaitettava], MIDIPatch:Int, kappale: Kappale, tahtilaji: Int, tempo: Double) {   
     
      val MIDINoteNumber =  Map("cb1" -> 59,  "c1" -> 60, "c#1" ->61, "db1" -> 61, "d1" -> 62, "d#1" -> 63, "eb1" -> 63, "e1" -> 64,  
        "e#1" -> 65, "fb1"-> 64, "f1"-> 65,  "f#1"->66,  "gb1" -> 66, "g1" -> 67,  "g#1" -> 68, "ab1" -> 68, "a1" -> 69, "a#1" -> 70, 
@@ -16,7 +16,10 @@ class simpleMIDIPlayer (nuottiData: Buffer[ViivastolleLaitettava], MIDIPatch:Int
        "g#2" -> 80, "ab2" -> 80, "a2" -> 81, "a#2" -> 82, "b2" -> 82, "hb2" -> 82, "bb2" -> 82, "h2" -> 83, "h#2" -> 84)
  
   
-    val ms = 500     // biisin nopeus millisekunneissa:  300= nopea (BPM 200),  500 = normaali (BPM 120),  800= hidas (BPM 75)
+    println(tempo)   
+    val ms = ((120/tempo) * 500).toInt     // biisin nopeus millisekunneissa:  300= nopea (BPM 200),  500 = normaali (BPM 120),  800= hidas (BPM 75)
+    println(ms)
+    
     val synth = MidiSystem.getSynthesizer()
     val channels  =  synth.getChannels()
 		val ch1 = channels(0); val ch2 = channels(1);  val ch3 = channels(2);	val ch4 = channels(3);  val ch5 = channels(4);  val ch6 = channels(5)

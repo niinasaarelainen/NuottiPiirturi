@@ -36,7 +36,7 @@ object main extends App{
         if(!ui.MIDIPatch.equals("")){  // kuunnellaan  
            // val adapter = new simpleMIDIPlayerAdapter(n.nuottiData, ui.MIDIPatch.toInt, n.viivasto.kappale, lukija.tahtilaji.toInt)
            // adapter.muunnaMIDInuoteiksi
-           val player = new simpleMIDIPlayerNuottiDatasta(n.nuottiData, ui.MIDIPatch.toInt, n.viivasto.kappale, lukija.tahtilaji.toInt)
+           val player = new simpleMIDIPlayer(n.nuottiData, ui.MIDIPatch.toInt, n.viivasto.kappale, lukija.tahtilaji.toInt, lukija.tempo.toDouble)
            player.soita()
         } else         // käyttäjä valitsi että ei kuunnella
             n.viivasto.kappale.printtaaRuudulleIlmanAjastusta()

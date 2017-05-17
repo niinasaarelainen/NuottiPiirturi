@@ -16,6 +16,7 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
   var lyriikkadata = Buffer[String]()        // biisin sanat
 
   var tahtilaji = "4"
+  var tempo = "120"
   var kappaleenNimi = ""
   var tiedostonNimi = ""
   var ekaKerta = true
@@ -38,6 +39,7 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
      this.tahtilajiOnJoLuettu = false
      this.ekaKerta = true
      this.tahtilaji = "4"
+     this.tempo = "120"
      this.kappaleenNimi = ""   
        
       
@@ -161,6 +163,8 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
               var kelvollinenSyoteRivi = inputFromFile(i).replaceAll("\t", " ") // jos korvaa pelkällä "", niin voi lopputulos olla esim "e2e2", jos nuotit oli erotelut toisitaan vain tabulaattorilla
                
               if (kelvollinenSyoteRivi.head == '#') {    //  T U N N I S T E E T
+                  if (kelvollinenSyoteRivi.tail.toLowerCase().trim.contains("tempo"))
+                     tempo = kelvollinenSyoteRivi.tail.trim.substring(6)
                   if (kelvollinenSyoteRivi.tail.toLowerCase().trim.contains("sanat")){
                      seuraavatrivitLyriikkaan = true
                     // varaudutaan siihen että joku kirjoittaa sanoja jo samalle riville kuin missä tunniste:

@@ -1,7 +1,8 @@
 #Nimi John Williams: Imperial March
 #8 
+#tempo 310
 
-# tahti per rivi, 4/4 --> 4/2 -muunnos, tuplatempo (300ms)
+# tahti per rivi, 4/4 --> 4/2 -muunnos
 
 <a1-..,e1-.,c1-.> z <a1-.,e1-.,c1-.> z <a1-.,e1-.,c1-.> z <f1.-,c1-.> c2 
 <a1-.,e1-..,c1-.> z <f1.-,c1-..> c2 <a1---,e1---,c1--->  z- 
