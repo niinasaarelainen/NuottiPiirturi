@@ -147,7 +147,7 @@ class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, ka
             
             for( i<- 0 until montakoKertaaEhtiiSoittaaKahdeksasosan){
                 
-                for (delayedNuotti <- delayedNotes){
+                for (delayedNuotti <- delayedNotes) {
                   ch4.noteOn(delayedNuotti -12, vol)
                   ch5.noteOn(delayedNuotti -24 , vol-10)  
                   if (vol > 30) vol -= 2    // jätetään tauoille hiljainen delay-jumitus

@@ -54,7 +54,7 @@ class simpleMIDIPlayerNuottiDatasta (nuottiData: Buffer[ViivastolleLaitettava], 
     		
     	   if(MIDIPatch != 6)  //normaali soitto, yksikanavainen
     	      normaalisoitto()
-    //	   else rocknroll()   // rokkibändi, 6-kanavainen, delay:      
+    	   else rocknroll()   // rokkibändi, 6-kanavainen, delay:      
         
          Thread.sleep(1100)   // parempi soundi vikaan ääneen
          synth.close()
@@ -93,6 +93,7 @@ class simpleMIDIPlayerNuottiDatasta (nuottiData: Buffer[ViivastolleLaitettava], 
                println(kappale.kappale(riviInd)(i))
     }
 	
+    
 	  def normaalisoitto() = {
 	     
 	     for (alkio<- nuottiData) {   
@@ -137,31 +138,8 @@ class simpleMIDIPlayerNuottiDatasta (nuottiData: Buffer[ViivastolleLaitettava], 
 	  
     def rocknroll() = {                                  // R O K K I B Ä N D I    S T A R T
         var delayedNotes = Buffer[Int]()
-        var vol = 70
         
-        def delay(nuotti:Int, alkio:ViivastolleLaitettava)={
-          val montakoKertaaEhtiiSoittaaKahdeksasosan = (alkio.pituus / 0.5).toInt
-          
-            if (nuotti != 0) vol = 73      // tauon aikana jatketaan volan "feidautumista"
-            
-            for( i<- 0 until montakoKertaaEhtiiSoittaaKahdeksasosan){
-                
-                for (delayedNuotti <- delayedNotes){
-                  ch4.noteOn(delayedNuotti -12, vol)
-                  ch5.noteOn(delayedNuotti -24 , vol-10)  
-                  if (vol > 30) vol -= 2    // jätetään tauoille hiljainen delay-jumitus
-                  else  delayedNotes = Buffer[Int]()   // pitkän nuotin tai tauon jälkeen ei haluta delayata vanhoja ääniä
-                }
-                Thread.sleep(ms/2)   
-          }	   
-          
-        Thread.sleep(((alkio.pituus * ms) - (montakoKertaaEhtiiSoittaaKahdeksasosan*ms/2)) .toInt)       
-        }
-         
-                     
-               
-          
-          
+        
         for (alkio<- nuottiData) {   
           var apuNumberit =  Buffer[Int]() 
           
@@ -171,13 +149,11 @@ class simpleMIDIPlayerNuottiDatasta (nuottiData: Buffer[ViivastolleLaitettava], 
                          for(nuotti <- s.nuotit)
                              apuNumberit += MIDINoteNumber(nuotti.asInstanceOf[Nuotti].korkeus)  // Map("nuotinnimi" --> Int)    
                            
-                         for (nuotti <-  apuNumberit.sorted ){   // sorted = melodia menee vikaksi
+                         for (nuotti <-  apuNumberit.sorted ){   // sorted = melodia menee vikaksi            // R O K K I B Ä N D I  CONTINUES
+                            delayedNotes +=  nuotti 
+                            if (delayedNotes.size > 3)
+                              delayedNotes -= delayedNotes(0)
                            
-                           delayedNotes +=  nuotti 
-                           if (delayedNotes.size > 3)
-                             delayedNotes -= delayedNotes(0)
-                           delay(nuotti, alkio)
-                             
               	            if(nuotti !=  apuNumberit.sorted.last){
                                ch1.noteOn(nuotti, 90)  
                                ch1.noteOn(nuotti, 90)   
@@ -185,43 +161,31 @@ class simpleMIDIPlayerNuottiDatasta (nuottiData: Buffer[ViivastolleLaitettava], 
                                ch2.noteOn(nuotti -12, 85)
                             }   
                             else { 
-                              ch1.noteOn(nuotti, 114)      // guit1
-                              ch1.noteOn(nuotti, 114)      // guit1 , kirkkaampi soundi, kun sama info x 2
-                              ch2.noteOn(nuotti -12, 114)  // guit2
-                              ch3.noteOn(nuotti -24, 127)  // bass,  -2okt., basso tuplaa vain melodian
-                              ch6.noteOn(nuotti -24, 127)  // bass2
-                              ch6.noteOn(nuotti -36, 107)  // bass3
+                              noteOn(nuotti)
                             }
+                            
                 }
                                   
                case n: Nuotti => 
                               val nuotti = MIDINoteNumber(n.korkeus)
-                              
+                           
                               delayedNotes +=  nuotti 
                               if (delayedNotes.size > 3)
-                              delayedNotes -= delayedNotes(0)
-                              delay(nuotti, alkio)
-                           
-                              ch1.noteOn(nuotti, 114)      // guit1
-                              ch1.noteOn(nuotti, 114)      // guit1 , kirkkaampi soundi, kun sama info x 2
-                              ch2.noteOn(nuotti -12, 114)  // guit2
-                              ch3.noteOn(nuotti -24, 127)  // bass,  -2okt., basso tuplaa vain melodian
-                              ch6.noteOn(nuotti -24, 127)  // bass2
-                              ch6.noteOn(nuotti -36, 107)  // bass3           
+                                 delayedNotes -= delayedNotes(0)
+                              
+                              noteOn(nuotti)
+                              
                case _ =>                 
            } 
        
+          delayJaSkrollaus(alkio)
           
-          
-      // oikean mittainen sleep eli nuotti soi  & skrollaus:       			 								 // R O K K I B Ä N D I  CONTINUES
-          
-         
-	      if(alkio !=  nuottiData.last)
-	          skrollausValmistelut(alkio)     
-	      else Thread.sleep((alkio.pituus * ms).toInt)
+      // oikean mittainen sleep eli nuotti soi  & skrollaus:  
+//	      if(alkio !=  nuottiData.last)
+//	          skrollausValmistelut(alkio)     
+//	      else Thread.sleep((alkio.pituus * ms).toInt)
 	      
       // noteOff:
-        
         for (delayedNuotti <- delayedNotes)  {            
                   ch4.noteOff(delayedNuotti -12); ch5.noteOff(delayedNuotti -24)          
         } 
@@ -238,8 +202,56 @@ class simpleMIDIPlayerNuottiDatasta (nuottiData: Buffer[ViivastolleLaitettava], 
                case _ =>       
 	      }
 	      
-       } // end for@rocknroll                
-                     
+       } // end for@rocknroll    
+        
+        
+        
+        def delayJaSkrollaus(alkio: ViivastolleLaitettava) = {
+          var vol = 73
+          val montakoKertaaEhtiiSoittaaKahdeksasosan = (alkio.pituus / 0.5).toInt
+          olisiAikaSkrollata += (alkio.pituus * ms).toInt                        // R O K K I B Ä N D I  CONTINUES
+          
+        //    if (nuotti != 0) vol = 73      // tauon aikana jatketaan volan "feidautumista"
+            
+            for( i<- 0 until montakoKertaaEhtiiSoittaaKahdeksasosan){
+                
+                for (delayedNuotti <- delayedNotes){
+                  ch4.noteOn(delayedNuotti -12, vol)
+                  ch5.noteOn(delayedNuotti -24 , vol-10)  
+                  if (vol > 30) vol -= 2    // jätetään tauoille hiljainen delay-jumitus
+                  else  delayedNotes = Buffer[Int]()   // pitkän nuotin tai tauon jälkeen ei haluta delayata vanhoja ääniä
+                 
+                }
+                Thread.sleep(ms/2)   // = 1/8-nuotti
+                
+                Thread.sleep(((alkio.pituus * ms) - (montakoKertaaEhtiiSoittaaKahdeksasosan*ms/2)) .toInt)   
+                if(olisiAikaSkrollata >= ms*tahtilaji*2 ){            
+                  if ( riviInd < kappale.kappale.size){
+                     skrollaaa(riviInd)
+                     riviInd += 1
+                     olisiAikaSkrollata = 0
+                  }
+                }   
+            }	   
+          
+            
+        }
+        
+        def noteOn(nuotti: Int) = {
+            ch1.noteOn(nuotti, 114)      // guit1
+            ch1.noteOn(nuotti, 114)      // guit1 , kirkkaampi soundi, kun sama info x 2
+            ch2.noteOn(nuotti -12, 114)  // guit2
+            ch3.noteOn(nuotti -24, 127)  // bass,  -2okt., basso tuplaa vain melodian
+            ch6.noteOn(nuotti -24, 127)  // bass2
+            ch6.noteOn(nuotti -36, 107)  // bass3
+        }
+        
+        def noteOnSaestys(nuotti: Int) = {
+            ch1.noteOn(nuotti, 90)  
+            ch1.noteOn(nuotti, 90)   
+            ch2.noteOn(nuotti -12, 85)   // okt. alas
+            ch2.noteOn(nuotti -12, 85)
+        }             
        
     } // end rocknroll
     
