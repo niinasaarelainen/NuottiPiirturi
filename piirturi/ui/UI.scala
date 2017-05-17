@@ -1,6 +1,10 @@
+package ui
+
 import scala.io.StdIn._
 import java.io.PrintWriter
 import java.io._
+import io._
+import io.TiedostonLukeminen
 
 
 class UI(inputhakemistonNimi: String) {

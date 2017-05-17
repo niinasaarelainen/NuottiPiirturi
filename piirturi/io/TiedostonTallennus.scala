@@ -1,5 +1,9 @@
+package io
+
 import java.io.PrintWriter
 import scala.io.StdIn._
+import ui._
+import ui.Kappale
   
 
 class TiedostonTallennus(biisi: Kappale, kohdetiedosto: PrintWriter) {

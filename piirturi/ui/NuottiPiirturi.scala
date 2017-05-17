@@ -1,5 +1,21 @@
-import scala.collection.mutable.Buffer
+package ui
 
+import scala.collection.mutable.Buffer
+import io._
+import io.TiedostonLukeminen
+import ui.ViivastolleLaitettava
+import ui.Sointu
+import ui.PuoliNuotti
+import ui.PisteellinenPuoliNuotti
+import ui.PisteellinenNeljasosaTauko
+import ui.PisteellinenNeljasosaNuotti
+import ui.NeljasosaTauko
+import ui.NeljasosaNuotti
+import ui.KokoNuotti
+import ui.KahdeksasosaTauko
+import ui.KahdeksasosaPari
+import ui.KahdeksasosaNuotti
+import ui.Viivasto
 
 class NuottiPiirturi(lukija: TiedostonLukeminen){
     
@@ -107,12 +123,12 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
    } //end KasitteleNuottiTieto
   
    
-   def tutkiEtumerkit(nuotinNimi: String): String = {  
+   def tutkiEtumerkit(nuotinNimi: String):String = {  
      
       // tutkitaan ylennettyjä ja alennettuja nuotteja
       if(nuotinNimi.contains("#") || nuotinNimi.contains("b")){
               if(this.tahdinAikaisetEtumerkit.contains(nuotinNimi))
-                  return "n"   // n = nuottikuva neutral, nuotti on ylennetty/alennettu mutta merkkiä ei piirretä
+                   "n"   // n = nuottikuva neutral, nuotti on ylennetty/alennettu mutta merkkiä ei piirretä
               
               // case: puskurissa oli sama nuotti eri etumerkillä varustettuna, se pois :   
               else if ( this.tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last).size > 0 ){
@@ -137,23 +153,23 @@ class NuottiPiirturi(lukija: TiedostonLukeminen){
               
               // tai vain lisätään puskuriin:
               else  this.tahdinAikaisetEtumerkit += nuotinNimi   
-            
+              ""
       // selvitetään tarvitaanko palautusmerkkiä         
       } else if ( this.tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last).size > 0  ){
              val tulokset = tahdinAikaisetEtumerkit.filter(_.head == nuotinNimi.head).filter(_.last == nuotinNimi.last)
              for(tulos <- tulokset)  tahdinAikaisetEtumerkit -= tulos              // otetaan esim g#1 pois puskurista, koska se on nyt §-tilassa
-             return "§"    
+             ""    
       }        
       // vielä pari poikkeustapausta johtuen epäloogisesta nuotinnimestä b
       else if ( this.tahdinAikaisetEtumerkit.contains("b1") && nuotinNimi == "h1"){
                 tahdinAikaisetEtumerkit -= "b1"
-                return "§"  
+                "\u266D"  
       } else if ( this.tahdinAikaisetEtumerkit.contains("b2") && nuotinNimi == "h2"){
                 tahdinAikaisetEtumerkit -= "b2"
-                return "§"  
+                  "\u266D" 
       }  
       
-      return ""        // muutoin ei tarvita puskuritoimenpiteitä tai extraetumerkkiä
+      else ""        // muutoin ei tarvita puskuritoimenpiteitä tai extraetumerkkiä
    }
    
    

@@ -1,7 +1,15 @@
+package sound
+
+import ui._
 import javax.sound.midi.MidiSystem
 import scala.collection.mutable.Map
 import scala.collection.mutable.Buffer
 import scala.io.StdIn._
+import ui.ViivastolleLaitettava
+import ui.Tauko
+import ui.Sointu
+import ui.Nuotti
+import ui.Kappale
 
 
 class simpleMIDIPlayer (nuotit: Buffer[(Buffer[Int], Double)], MIDIPatch:Int, kappale: Kappale, tahtilaji: Int) {   // Tuple (korkeus/korkeudet, pituus)

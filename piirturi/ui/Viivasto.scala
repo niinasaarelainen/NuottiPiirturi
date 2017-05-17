@@ -1,5 +1,10 @@
+package ui
+
 import scala.collection.mutable.Buffer
 import scala.collection.mutable.Map
+import ui.ViivastolleLaitettava
+import ui.KahdeksasosaPari
+import ui.Kappale
 
 
 class Viivasto(nuottiData: Buffer[ViivastolleLaitettava], lyricsBuffer: Buffer[String], tahtilaji:String) {

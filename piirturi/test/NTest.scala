@@ -1,10 +1,27 @@
-
+package test
 import org.scalatest.Assertions._
 import org.scalatest._
-
 import scala.collection.mutable.Buffer
 import scala.io.Source
 import java.io._
+import io._
+import ui._
+import sound._
+import io.TiedostonLukeminen
+import ui.UI
+import ui.ViivastolleLaitettava
+import ui.Tauko
+import ui.PisteellinenNeljasosaNuotti
+import ui.Nuotti
+import ui.NeljasosaNuotti
+import ui.KahdeksasosaPari
+import ui.KahdeksasosaNuotti
+import ui.KahdeksasosaNuotti
+import ui.KahdeksasosaPari
+import ui.Nuotti
+import ui.Tauko
+import ui.ViivastolleLaitettava
+import sound.simpleMIDIPlayerAdapter
 
 
 /* TESTIEN AJO-OHJE:

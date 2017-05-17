@@ -1,3 +1,12 @@
+package main
+import io._
+import ui._
+import sound._
+import io.TiedostonTallennus
+import io.TiedostonLukeminen
+import ui.UI
+import ui.NuottiPiirturi
+import sound.simpleMIDIPlayerAdapter
 
 object main extends App{
   

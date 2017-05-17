@@ -1,3 +1,5 @@
+package ui
+
 import scala.collection.mutable.Buffer
 import scala.collection.mutable.Map
 

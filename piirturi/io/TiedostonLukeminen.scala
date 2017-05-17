@@ -1,8 +1,10 @@
+package io
+
 import scala.io.Source
 import java.io._
 import scala.io.StdIn._
 import scala.collection.mutable.Buffer
-
+import io._
 
 
 class TiedostonLukeminen(inputhakemistonNimi: String) {
@@ -23,7 +25,7 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
   
  ///////   M E T O D I T   ///////////////////////////////////////////////////////////////////////// 
    
-  def lueTiedosto(tiedostonNimi: String): Unit = {  
+  def lueTiedosto(tiedostonNimi: String): Unit = {    // olisi järkevää palauttaa luettu tiedosto !! ei unit
     
      val kayttajanValitsemaTiedosto = Source.fromFile(inputhakemistonNimi + tiedostonNimi)
      // pitää nollata, jos tänne tullaan virheidentarkistuksesta tai toisesta kappaleesta:
