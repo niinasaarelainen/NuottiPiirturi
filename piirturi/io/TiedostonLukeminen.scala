@@ -160,16 +160,16 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
        var seuraavatrivitLyriikkaan = false
        for (i <- 0 until inputFromFile.size) {
           if (inputFromFile(i).trim.size != 0){  
-              var kelvollinenSyoteRivi = inputFromFile(i).replaceAll("\t", " ") // jos korvaa pelkällä "", niin voi lopputulos olla esim "e2e2", jos nuotit oli erotelut toisitaan vain tabulaattorilla
+              var kelvollinenSyoteRivi = inputFromFile(i).replaceAll("\t", " ") // jos korvaa pelkällä "", niin voi lopputulos olla esim "e2e2", jos nuotit oli erotelut toisistaan vain tabulaattorilla
                
               if (kelvollinenSyoteRivi.head == '#') {    //  T U N N I S T E E T
                   if (kelvollinenSyoteRivi.tail.toLowerCase().trim.contains("tempo"))
-                     tempo = kelvollinenSyoteRivi.tail.trim.substring(6)
+                      this.tempo = kelvollinenSyoteRivi.tail.trim.substring(6)
                   else if (kelvollinenSyoteRivi.tail.toLowerCase().trim.contains("sanat")){
                       seuraavatrivitLyriikkaan = true
                      // varaudutaan siihen että joku kirjoittaa sanoja jo samalle riville kuin missä tunniste:
                      if(kelvollinenSyoteRivi.tail.trim.substring(5).length > 0) 
-                            lyriikkadata += kelvollinenSyoteRivi.tail.trim.substring(5)
+                        this.lyriikkadata += kelvollinenSyoteRivi.tail.trim.substring(5)
                   } 
                   else if (seuraavatrivitLyriikkaan == false) kasitteleKappaleenNimiJaTahtilaji(kelvollinenSyoteRivi, i)  // end lyriikat false
               } 
@@ -186,7 +186,6 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
   
   def kasitteleKappaleenNimiJaTahtilaji(kelvollinenSyoteRivi:String, ind:Int) ={
     
-         println(kelvollinenSyoteRivi)
     
          if (kelvollinenSyoteRivi.tail.toLowerCase().contains("nimi")) {
               kappaleenNimi = kelvollinenSyoteRivi.tail.substring(5, kelvollinenSyoteRivi.tail.size)
@@ -201,7 +200,6 @@ class TiedostonLukeminen(inputhakemistonNimi: String) {
               }   
               tahtilajiOnJoLuettu = true
          }
-         println(tahtilaji)
   }
 
   

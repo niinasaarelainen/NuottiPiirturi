@@ -16,9 +16,10 @@ class simpleMIDIPlayer (nuottiData: Buffer[ViivastolleLaitettava], MIDIPatch:Int
        "g#2" -> 80, "ab2" -> 80, "a2" -> 81, "a#2" -> 82, "b2" -> 82, "hb2" -> 82, "bb2" -> 82, "h2" -> 83, "h#2" -> 84)
  
   
-    println(tempo)   
-    val ms = ((120/tempo) * 500).toInt     // biisin nopeus millisekunneissa:  300= nopea (BPM 200),  500 = normaali (BPM 120),  800= hidas (BPM 75)
-    println(ms)
+    var ms =  ((60/tempo) * 1000).toInt    // biisin nopeus millisekunneissa:  300= nopea (BPM 200),  500 = normaali (BPM 120),  800= hidas (BPM 75)
+    if(ms%2!= 0) ms += 1   // ms pitää olla parillinen, jotta sen voi kertoa 0.5:llä (1/8-osan pituus) ja luku säilyy Int:inä, 
+                           // jonka Thread.sleep vaatii -- oikeasti Long, mutta ei Double
+    
     
     val synth = MidiSystem.getSynthesizer()
     val channels  =  synth.getChannels()
@@ -163,7 +164,6 @@ class simpleMIDIPlayer (nuottiData: Buffer[ViivastolleLaitettava], MIDIPatch:Int
                             else { 
                                noteOn(nuotti)
                             }
-                            
                 }
                                   
                case n: Nuotti => 
@@ -180,11 +180,6 @@ class simpleMIDIPlayer (nuottiData: Buffer[ViivastolleLaitettava], MIDIPatch:Int
        
           delayJaSkrollaus(alkio)
           
-      // oikean mittainen sleep eli nuotti soi  & skrollaus:  
-//	      if(alkio !=  nuottiData.last)
-//	          skrollausValmistelut(alkio)     
-//	      else Thread.sleep((alkio.pituus * ms).toInt)
-	      
       // noteOff:
         for (delayedNuotti <- delayedNotes)  {            
                   ch4.noteOff(delayedNuotti -12); ch5.noteOff(delayedNuotti -24)          
@@ -207,13 +202,13 @@ class simpleMIDIPlayer (nuottiData: Buffer[ViivastolleLaitettava], MIDIPatch:Int
         
         
         def delayJaSkrollaus(alkio: ViivastolleLaitettava) = {                    // R O K K I B Ä N D I  CONTINUES
-          var vol = 73 
+          var vol = 66 
           val montakoKertaaEhtiiSoittaaKahdeksasosan = (alkio.pituus / 0.5).toInt
                             
           
             alkio match {
                 case t: Tauko  =>      // tauon aikana jatketaan volan "feidautumista"
-                case _ =>    vol = 73  
+                case _ =>    vol = 66  
             }      
             
             for( i<- 0 until montakoKertaaEhtiiSoittaaKahdeksasosan){
